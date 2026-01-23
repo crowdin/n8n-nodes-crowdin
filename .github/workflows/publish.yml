@@ -1,0 +1,38 @@
+name: Publish
+
+on:
+  release:
+    types: [published]
+  repository_dispatch:
+    types: [publish]
+
+jobs:
+  publish-npm:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org/
+
+      - name: Install npm CLI
+        run: |
+          npm install -g npm@latest
+          npm -v
+
+      - name: Install dependencies and build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Publish Dry Run
+        run: npm publish --dry-run
+
+      - name: Publish the package
+        run: npm publish --provenance

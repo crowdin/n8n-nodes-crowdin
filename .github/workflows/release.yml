@@ -1,40 +1,29 @@
 name: Release
+run-name: Release ${{ github.event.inputs.version }} version
 
 on:
   workflow_dispatch:
-
-permissions:
-  id-token: write  # Required for OIDC trusted publishing
-  contents: read
+    inputs:
+      version:
+        type: choice
+        description: Version
+        options:
+          - patch
+          - minor
+          - major
 
 jobs:
+  version:
+    permissions:
+      contents: write
+    uses: crowdin/.github/.github/workflows/bump-version.yml@main
+
   publish:
     runs-on: ubuntu-latest
-
+    needs: version
+    permissions:
+      contents: write
     steps:
-      - uses: actions/checkout@v6
+      - uses: peter-evans/repository-dispatch@v4
         with:
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Use Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: 24
-          registry-url: 'https://registry.npmjs.org'
-
-      - name: git config
-        run: |
-          git config user.name "${GITHUB_ACTOR}"
-          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-
-      - name: Install npm CLI
-        run: |
-          npm install -g npm@latest
-          npm -v
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run release
-        run: npm run release
+          event-type: publish
