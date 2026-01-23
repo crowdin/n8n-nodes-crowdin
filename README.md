@@ -1,5 +1,9 @@
 # @crowdin/n8n-nodes-crowdin
 
+[![npm](https://img.shields.io/npm/v/@crowdin/n8n-nodes-crowdin?logo=npm&cacheSeconds=1800)](https://www.npmjs.com/package/@crowdin/n8n-nodes-crowdin)
+[![npm](https://img.shields.io/npm/dt/@crowdin/n8n-nodes-crowdin?logo=npm&cacheSeconds=1800)](https://www.npmjs.com/package/@crowdin/n8n-nodes-crowdin)
+[![License](https://img.shields.io/github/license/crowdin/n8n-nodes-crowdin?cacheSeconds=3600)](https://github.com/crowdin/n8n-nodes-crowdin/blob/main/LICENSE)
+
 This is an n8n community node. It lets you use [Crowdin](https://crowdin.com/) in your n8n workflows.
 
 Crowdin is an AI-powered localization software designed for teams and businesses. It's a cloud-based solution that streamlines localization management for your product. With 700+ apps and integrations, Crowdin automates the translation process. Its AI translator provides accurate, context-aware translations that continuously improve based on your resources and feedback. Crowdin supports 300+ languages and enables continuous localization for software, mobile apps, websites, marketing content, and help centers.
