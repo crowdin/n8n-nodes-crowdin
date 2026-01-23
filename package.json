@@ -1,6 +1,6 @@
 {
 	"name": "@crowdin/n8n-nodes-crowdin",
-	"version": "0.1.3",
+	"version": "0.1.4",
 	"description": "n8n nodes for Crowdin - a cloud-based localization management platform",
 	"license": "MIT",
 	"homepage": "",
