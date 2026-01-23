@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file. Dates are d
 
 #### 0.1.1
 
-Relase process improvements.
+Release process improvements.
 
 #### 0.1.0
 
