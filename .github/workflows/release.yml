@@ -17,6 +17,8 @@ jobs:
     permissions:
       contents: write
     uses: crowdin/.github/.github/workflows/bump-version.yml@main
+    with:
+      version: ${{ github.event.inputs.version }}
 
   publish:
     runs-on: ubuntu-latest
