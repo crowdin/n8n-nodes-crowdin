@@ -1,5 +1,5 @@
 {
-	"name": "n8n-nodes-crowdin",
+	"name": "@crowdin/n8n-nodes-crowdin",
 	"version": "0.1.0",
 	"description": "n8n nodes for Crowdin - a cloud-based localization management platform",
 	"license": "MIT",
@@ -34,7 +34,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/crowdin/n8n-nodes-crowdin.git"
+		"url": "git+https://github.com/crowdin/n8n-nodes-crowdin.git"
 	},
 	"scripts": {
 		"generate:properties": "node scripts/generate-properties.mjs",
