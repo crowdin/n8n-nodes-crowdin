@@ -1,0 +1,746 @@
+{
+  "name": "JIRA to Crowdin",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## ⚙️ Admin Setup\n\n**Configure:**\n• JIRA Trigger → Set Project and Event\n• Crowdin: Add Project → Set Group ID\n• Crowdin: Add Webhook → Set URL to your \"Crowdin to JIRA\" workflow\n\n**Credentials needed:**\nJIRA API, Crowdin Enterprise API, Anthropic API\n\n**After task is created:**\nAssign linguists to tasks in Crowdin to start translation.\n\n**Customize languages:**\nEdit \"Detect Languages (AI)\" prompt to add/remove languages.\n\n**Tip:** Add Slack node to get notified when projects are created.",
+        "height": 504,
+        "width": 340
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3168,
+        -416
+      ],
+      "id": "a74925d9-51e0-498e-9a6e-e9d8535046d9",
+      "name": "Admin Setup Guide"
+    },
+    {
+      "parameters": {
+        "content": "## 📝 User Guide\n\n**To request translation:**\n1. Create JIRA issue with **@crowdin** in summary/description\n2. Specify languages: \"Translate from English to Spanish\"\n3. Attach files (50+ formats supported)\n\n**Requirements:**\n✓ @crowdin mention\n✓ Source + target language(s)\n✓ At least one file attached",
+        "height": 336,
+        "width": 336
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3168,
+        128
+      ],
+      "id": "acc95a39-57b0-48b6-9994-672456d1abd0",
+      "name": "End User Guide"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "claude-sonnet-4-5-20250929",
+          "cachedResultName": "Claude Sonnet 4.5"
+        },
+        "options": {}
+      },
+      "id": "df3630fa-9239-4aec-8ed1-28e7a2a9ec12",
+      "name": "Claude Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        4048,
+        64
+      ],
+      "credentials": {
+        "anthropicApi": {
+          "id": "",
+          "name": "Anthropic account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"sourceLanguage\": \"en\",\n  \"targetLanguages\": [\"es\", \"fr\"],\n  \"confidence\": \"high\"\n}",
+        "autoFix": true
+      },
+      "id": "15b59397-6687-45b9-ad36-f19d0ba6219e",
+      "name": "Language Parser",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        4288,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "events": [
+          "jira:issue_created"
+        ],
+        "additionalFields": {}
+      },
+      "id": "2cb8c1ec-087d-4813-aa51-b28f92c0b01c",
+      "name": "JIRA: Issue Created",
+      "type": "n8n-nodes-base.jiraTrigger",
+      "typeVersion": 1,
+      "position": [
+        3568,
+        -160
+      ],
+      "webhookId": "jira-webhook-id",
+      "credentials": {
+        "jiraSoftwareCloudApi": {
+          "id": "",
+          "name": "Jira SW Cloud account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "summary-check",
+              "leftValue": "={{ $json.issue.fields.summary }}",
+              "rightValue": "@crowdin",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "desc-check",
+              "leftValue": "={{ $json.issue.fields.description }}",
+              "rightValue": "@crowdin",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "id": "d2cfc3f2-58d6-4437-9c9f-777f382ac1fb",
+      "name": "Mentions @crowdin?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        3808,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Task Title: {{ $('JIRA: Issue Created').first().json.issue.fields.summary }}\n\nTask Description: {{ $('JIRA: Issue Created').first().json.issue.fields.description }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are a language detection assistant. Analyze the task title and description to identify:\n1. Source language (the language of the content to be translated FROM)\n2. Target languages (the languages to translate TO)\n\nLook for explicit mentions like \"translate from English to Spanish\" or implicit context clues.\nIf you cannot determine with confidence, use null.\n\nIMPORTANT: Return ONLY language IDs from this list:\n\n[\n  { \"id\": \"en\", \"name\": \"English\" },\n  { \"id\": \"zh-CN\", \"name\": \"Chinese Simplified\" },\n  { \"id\": \"zh-TW\", \"name\": \"Chinese Traditional\" },\n  { \"id\": \"es\", \"name\": \"Spanish\" },\n  { \"id\": \"ar\", \"name\": \"Arabic\" },\n  { \"id\": \"pt\", \"name\": \"Portuguese\" },\n  { \"id\": \"fr\", \"name\": \"French\" },\n  { \"id\": \"ja\", \"name\": \"Japanese\" },\n  { \"id\": \"ru\", \"name\": \"Russian\" },\n  { \"id\": \"de\", \"name\": \"German\" },\n  { \"id\": \"ko\", \"name\": \"Korean\" },\n  { \"id\": \"it\", \"name\": \"Italian\" },\n  { \"id\": \"nl\", \"name\": \"Dutch\" },\n  { \"id\": \"pl\", \"name\": \"Polish\" },\n  { \"id\": \"uk\", \"name\": \"Ukrainian\" },\n  { \"id\": \"tr\", \"name\": \"Turkish\" },\n  { \"id\": \"vi\", \"name\": \"Vietnamese\" },\n  { \"id\": \"th\", \"name\": \"Thai\" },\n  { \"id\": \"sv\", \"name\": \"Swedish\" },\n  { \"id\": \"da\", \"name\": \"Danish\" },\n  { \"id\": \"fi\", \"name\": \"Finnish\" },\n  { \"id\": \"no\", \"name\": \"Norwegian\" },\n  { \"id\": \"cs\", \"name\": \"Czech\" },\n  { \"id\": \"hu\", \"name\": \"Hungarian\" },\n  { \"id\": \"ro\", \"name\": \"Romanian\" },\n  { \"id\": \"bg\", \"name\": \"Bulgarian\" },\n  { \"id\": \"el\", \"name\": \"Greek\" },\n  { \"id\": \"he\", \"name\": \"Hebrew\" },\n  { \"id\": \"id\", \"name\": \"Indonesian\" },\n  { \"id\": \"ms\", \"name\": \"Malay\" },\n  { \"id\": \"hi\", \"name\": \"Hindi\" }\n]"
+        }
+      },
+      "id": "3ddf7485-1162-418e-b65d-f4e916b12e48",
+      "name": "Detect Languages (AI)",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        4128,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "source-check",
+              "leftValue": "={{ $json.output.sourceLanguage }}",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            },
+            {
+              "id": "target-check",
+              "leftValue": "={{ $json.output.targetLanguages }}",
+              "operator": {
+                "type": "array",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "e4356128-b9d0-4fa2-a1b5-0b149adb20db",
+      "name": "Languages Detected?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        4480,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "accessToken",
+        "resource": "projectsAndGroups",
+        "operation": "api.projects.post",
+        "name": "=JIRA: {{ $('JIRA: Issue Created').first().json.issue.key }} - {{ $('JIRA: Issue Created').first().json.issue.fields.summary.substring(0, 50) }}",
+        "sourceLanguageId": "={{ $json.output.sourceLanguage }}",
+        "targetLanguageIds": "={{ $json.output.targetLanguages }}",
+        "description": "={{ $('JIRA: Issue Created').first().json.issue.key }}",
+        "groupId": ""
+      },
+      "type": "CUSTOM.crowdinEnterpriseFileBased",
+      "typeVersion": 1,
+      "position": [
+        4720,
+        -272
+      ],
+      "id": "71e53956-cad6-49e7-9097-cc0fdd84f2ee",
+      "name": "Crowdin: Add Project",
+      "executeOnce": true,
+      "credentials": {
+        "crowdinEnterpriseApi": {
+          "id": "",
+          "name": "Crowdin Enterprise account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "resource": "issueComment",
+        "issueKey": "={{ $('JIRA: Issue Created').first().json.issue.key }}",
+        "comment": "Could not determine source/target languages. Please create a new issue with clear language info (e.g., \"@crowdin translate from English to Spanish\"). Note: This integration only triggers on new issues, not updates.",
+        "options": {}
+      },
+      "id": "8219f523-cfec-44e5-b635-4a04a044bfca",
+      "name": "Comment: More Info Needed",
+      "type": "n8n-nodes-base.jira",
+      "typeVersion": 1,
+      "position": [
+        4752,
+        -16
+      ],
+      "credentials": {
+        "jiraSoftwareCloudApi": {
+          "id": "",
+          "name": "Jira SW Cloud account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract file attachments from JIRA issue\nconst triggerItem = $('JIRA: Issue Created').first();\nconst attachments = triggerItem.json.issue?.fields?.attachment || [];\n\nif (attachments.length === 0) {\n  return [{ json: { error: 'No files found' } }];\n}\n\nconst files = attachments.map(att => ({\n  json: {\n    url: att.content,\n    fileName: att.filename,\n    mimeType: att.mimeType || 'application/octet-stream'\n  }\n}));\n\n// Remove duplicates by URL\nconst uniqueFiles = files.filter((file, index, self) =>\n  index === self.findIndex(f => f.json.url === file.json.url)\n);\n\nreturn uniqueFiles;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4960,
+        -400
+      ],
+      "id": "2b850375-3f1b-4067-aca6-cd80edc83182",
+      "name": "Extract Attachments",
+      "alwaysOutputData": true,
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "has-files",
+              "leftValue": "={{ $json.url }}",
+              "operator": {
+                "type": "string",
+                "operation": "exists"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        5168,
+        -400
+      ],
+      "id": "0960ca1a-62ba-45be-bbc1-8094e3c4896c",
+      "name": "Has Attachments?"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "jiraSoftwareCloudApi",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          },
+          "timeout": 60000
+        }
+      },
+      "id": "40de1130-e100-4f19-bbde-077f00825dd8",
+      "name": "Download File",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        5392,
+        -416
+      ],
+      "credentials": {
+        "jiraSoftwareCloudApi": {
+          "id": "",
+          "name": "Jira SW Cloud account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "authentication": "accessToken",
+        "resource": "storage",
+        "operation": "api.storages.post",
+        "fileName": "={{ $json.fileName }}"
+      },
+      "type": "CUSTOM.crowdinEnterpriseFileBased",
+      "typeVersion": 1,
+      "position": [
+        5584,
+        -416
+      ],
+      "id": "4e67b69d-99dd-48e2-b478-360acb80401c",
+      "name": "Crowdin: Add Storage",
+      "credentials": {
+        "crowdinEnterpriseApi": {
+          "id": "",
+          "name": "Crowdin Enterprise account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "authentication": "accessToken",
+        "resource": "sourceFiles",
+        "operation": "api.projects.files.post",
+        "projectId": "={{ $('Crowdin: Add Project').first().json.data.id }}",
+        "storageId": "={{ $json.data.id }}",
+        "name": "={{ $json.data.fileName }}"
+      },
+      "type": "CUSTOM.crowdinEnterpriseFileBased",
+      "typeVersion": 1,
+      "position": [
+        5792,
+        -416
+      ],
+      "id": "e0616172-1bd9-4c9c-b77c-078d1682507b",
+      "name": "Crowdin: Add File",
+      "credentials": {
+        "crowdinEnterpriseApi": {
+          "id": "",
+          "name": "Crowdin Enterprise account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "resource": "issueComment",
+        "issueKey": "={{ $('JIRA: Issue Created').first().json.issue.key }}",
+        "comment": "No files found. Please attach files to the issue and try again.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.jira",
+      "typeVersion": 1,
+      "position": [
+        5312,
+        -224
+      ],
+      "id": "122debc6-abd4-4d8b-9367-b2a22011c7e1",
+      "name": "Comment: No Files",
+      "credentials": {
+        "jiraSoftwareCloudApi": {
+          "id": "",
+          "name": "Jira SW Cloud account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const uploadedFiles = items.filter(item => !item.json.error);\n\nif (uploadedFiles.length === 0) {\n  throw new Error('No files were successfully uploaded to Crowdin');\n}\n\nconst fileIds = uploadedFiles.map(item => item.json.data?.id).filter(Boolean);\n\nif (fileIds.length === 0) {\n  throw new Error('Could not extract file IDs from upload responses');\n}\n\nreturn [{\n  json: {\n    fileIds: fileIds,\n    fileCount: fileIds.length,\n    uploadedAt: new Date().toISOString()\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6000,
+        -416
+      ],
+      "id": "176de51a-ee38-4a9f-9a09-2b0721486316",
+      "name": "Collect File IDs"
+    },
+    {
+      "parameters": {
+        "jsCode": "const languageNode = $('Languages Detected?').first();\nconst languages = languageNode.json.output.targetLanguages;\nconst fileIds = items[0].json.fileIds;\n\nif (!languages || languages.length === 0) {\n  throw new Error('No target languages found');\n}\n\nif (!fileIds || fileIds.length === 0) {\n  throw new Error('No file IDs found');\n}\n\n// Create one task per language\nconst tasks = languages.map(lang => ({\n  json: {\n    languageId: lang,\n    fileIds: fileIds,\n    title: `Translation to ${lang.toUpperCase()}`\n  }\n}));\n\nreturn tasks;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6208,
+        -416
+      ],
+      "id": "4097d697-e243-4719-96c2-63bc8ea5fa26",
+      "name": "Create Tasks per Language"
+    },
+    {
+      "parameters": {
+        "authentication": "accessToken",
+        "resource": "tasks",
+        "operation": "api.projects.tasks.post",
+        "projectId": "={{ $('Crowdin: Add Project').first().json.data.id }}",
+        "_body": {
+          "_enterpriseTaskCreateForm": {
+            "_subType": {
+              "_createByFileIdsForm": {
+                "type": 0,
+                "title": "={{ $json.title }}",
+                "languageId": "={{ $json.languageId }}",
+                "fileIds": "={{ $json.fileIds }}"
+              }
+            }
+          }
+        }
+      },
+      "type": "CUSTOM.crowdinEnterpriseFileBased",
+      "typeVersion": 1,
+      "position": [
+        6416,
+        -416
+      ],
+      "id": "59f9a53f-2ae8-4aff-a7ef-3f52736d25dc",
+      "name": "Crowdin: Add Project Task",
+      "credentials": {
+        "crowdinEnterpriseApi": {
+          "id": "",
+          "name": "Crowdin Enterprise account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "authentication": "accessToken",
+        "resource": "webhooks",
+        "operation": "api.projects.webhooks.post",
+        "projectId": "={{ $('Crowdin: Add Project').first().json.data.id }}",
+        "name": "n8n: Task Completion Handler",
+        "url": "",
+        "events": [
+          "task.statusChanged"
+        ],
+        "isActive": true,
+        "headers": "{}"
+      },
+      "type": "CUSTOM.crowdinEnterpriseFileBased",
+      "typeVersion": 1,
+      "position": [
+        5040,
+        -160
+      ],
+      "id": "daea6d72-434e-47b0-8691-266abc84286c",
+      "name": "Crowdin: Add Webhook",
+      "notesInFlow": true,
+      "credentials": {
+        "crowdinEnterpriseApi": {
+          "id": "",
+          "name": "Crowdin Enterprise account"
+        }
+      },
+      "notes": "⚠️ Configure the webhook URL to point to your 'Crowdin to JIRA' workflow"
+    },
+    {
+      "parameters": {
+        "resource": "issueComment",
+        "issueKey": "={{ $('JIRA: Issue Created').first().json.issue.key }}",
+        "comment": "=Translation started: {{ $('Collect File IDs').first().json.fileCount }} file(s) to {{ $('Languages Detected?').first().json.output.targetLanguages.join(', ') }}. You'll be notified when ready.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.jira",
+      "typeVersion": 1,
+      "position": [
+        6624,
+        -416
+      ],
+      "id": "1da91b93-2db9-48ce-be30-ffdf2ca0e880",
+      "name": "Comment: Success",
+      "executeOnce": true,
+      "credentials": {
+        "jiraSoftwareCloudApi": {
+          "id": "",
+          "name": "Jira SW Cloud account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "claude-sonnet-4-5-20250929",
+          "cachedResultName": "Claude Sonnet 4.5"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        4368,
+        272
+      ],
+      "id": "6f79bd7e-3738-4c0f-ae19-917a9cfbcda6",
+      "name": "Anthropic Chat Model",
+      "credentials": {
+        "anthropicApi": {
+          "id": "",
+          "name": "Anthropic account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Claude Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Detect Languages (AI)",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Language Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Detect Languages (AI)",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "JIRA: Issue Created": {
+      "main": [
+        [
+          {
+            "node": "Mentions @crowdin?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mentions @crowdin?": {
+      "main": [
+        [
+          {
+            "node": "Detect Languages (AI)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Detect Languages (AI)": {
+      "main": [
+        [
+          {
+            "node": "Languages Detected?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Languages Detected?": {
+      "main": [
+        [
+          {
+            "node": "Crowdin: Add Project",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Comment: More Info Needed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crowdin: Add Project": {
+      "main": [
+        [
+          {
+            "node": "Extract Attachments",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Crowdin: Add Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Attachments": {
+      "main": [
+        [
+          {
+            "node": "Has Attachments?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Attachments?": {
+      "main": [
+        [
+          {
+            "node": "Download File",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Comment: No Files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download File": {
+      "main": [
+        [
+          {
+            "node": "Crowdin: Add Storage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crowdin: Add Storage": {
+      "main": [
+        [
+          {
+            "node": "Crowdin: Add File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crowdin: Add File": {
+      "main": [
+        [
+          {
+            "node": "Collect File IDs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Collect File IDs": {
+      "main": [
+        [
+          {
+            "node": "Create Tasks per Language",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Tasks per Language": {
+      "main": [
+        [
+          {
+            "node": "Crowdin: Add Project Task",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crowdin: Add Project Task": {
+      "main": [
+        [
+          {
+            "node": "Comment: Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anthropic Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Language Parser",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": ""
+  },
+  "id": "",
+  "tags": []
+}

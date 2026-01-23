@@ -1,0 +1,521 @@
+{
+  "name": "Crowdin AI Translation Teams Bot",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## 🤖 Crowdin AI Translation Bot for Teams\n\nTranslate text instantly using Crowdin's AI translation.\n\n### Features\n- Mention the bot with text to translate\n- Specify one or more target languages\n- Text can be in code blocks or plain\n- Source language auto-detected (or specify it)\n- File translations coming soon!\n\n### Example Messages\n```\n@TranslateBot translate to German:\nHello, how are you?\n```\n\n```\n@TranslateBot to Japanese (from English):\nWelcome to our app!\n```",
+        "height": 520,
+        "width": 460
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -688,
+        2176
+      ],
+      "id": "0337a823-cb84-47d6-8d89-56e55c373224",
+      "name": "Intro"
+    },
+    {
+      "parameters": {
+        "content": "## 🚀 Setup Guide\n\n### 1. Create Outgoing Webhook in Teams\n1. Go to your Teams channel\n2. Click **⋯** → **Connectors**\n3. Search for **Outgoing Webhook**\n4. Configure:\n   - **Name**: TranslateBot\n   - **Callback URL**: Your n8n webhook URL\n5. Save the **Security Token**\n\n### 2. Configure Crowdin AI Translate\n**Option A - Use AI Prompt:**\n- Select `Ai Prompt Id`\n- Find in Crowdin → AI → Prompts\n\n**Option B - Use Provider:**\n- Select `Ai Provider Id`\n- Select `Ai Model Id`\n\n### 3. Add Credentials\n- Crowdin Enterprise API (2 nodes)\n- OpenAI API (for parsing)",
+        "height": 568,
+        "width": 380
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -208,
+        2176
+      ],
+      "id": "f61b6b7f-7dfc-455d-a808-b4550210842e",
+      "name": "Setup Guide"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "crowdin-translate-teams",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -688,
+        1776
+      ],
+      "id": "a5cddb64-fe8b-4e2a-8c3b-d3b83b7eb942",
+      "name": "Teams Webhook",
+      "webhookId": "crowdin-translate-teams"
+    },
+    {
+      "parameters": {
+        "authentication": "accessToken",
+        "resource": "languages",
+        "operation": "api.languages.getMany",
+        "requestOptions": {}
+      },
+      "type": "CUSTOM.crowdinEnterpriseFileBased",
+      "typeVersion": 1,
+      "position": [
+        -464,
+        1776
+      ],
+      "id": "ad2e5dee-6567-4d99-a24a-9abc7ea72b7d",
+      "name": "List Languages"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Build language lookup from Crowdin API response\nconst languages = $input.all().map(item => item.json.data || item.json);\n\n// Create lookup maps\nconst languageNames = {};\nconst languageList = [];\n\nfor (const lang of languages) {\n  languageNames[lang.id] = lang.name;\n  languageList.push(`${lang.name} (${lang.id})`);\n}\n\nreturn [{\n  json: {\n    languageNames,\n    languageList: languageList.join(', ')\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -256,
+        1776
+      ],
+      "id": "83cc4fec-a072-4bd6-92b0-5ffc97c722e0",
+      "name": "Build Language Map"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract message from Teams payload\nconst webhook = $('Teams Webhook').first().json;\nconst languageData = $input.first().json;\n\n// Teams Outgoing Webhook payload structure\nconst body = webhook.body || webhook;\n\n// Get the message text (remove bot mention)\nlet text = body.text || '';\n// Teams includes bot mention as <at>BotName</at>\ntext = text.replace(/<at>.*?<\\/at>/gi, '').trim();\n\n// Check for attachments\nconst hasAttachments = (body.attachments && body.attachments.length > 0) || \n                       (body.attachmentLayout && body.attachments?.length > 0);\n\n// Get conversation info for reply\nconst conversationId = body.conversation?.id || body.channelId || '';\nconst serviceUrl = body.serviceUrl || '';\nconst replyToId = body.id || body.replyToId || '';\nconst from = body.from || {};\n\nreturn [{\n  json: {\n    text,\n    hasAttachments,\n    conversationId,\n    serviceUrl,\n    replyToId,\n    fromId: from.id || '',\n    fromName: from.name || 'User',\n    languageNames: languageData.languageNames,\n    languageList: languageData.languageList\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -32,
+        1776
+      ],
+      "id": "00ffd542-aea1-4d94-809e-0d0bbbc565d3",
+      "name": "Extract Message"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "has-files",
+              "leftValue": "={{ $json.hasAttachments }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        192,
+        1776
+      ],
+      "id": "521f8be6-4007-4a7c-b1d4-69a7f3f90de7",
+      "name": "Has Files?"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"type\": \"message\",\n  \"text\": \"📁 **File translation is coming soon!**\\n\\nFor now, I can only translate text. Please paste your text directly in the message.\\n\\n**Example:**\\n```\\n@TranslateBot to German:\\nYour text here\\n```\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        432,
+        1664
+      ],
+      "id": "b9adc3aa-cdc0-4e19-a06f-5ae60290a146",
+      "name": "Files Coming Soon"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are a translation request parser. Extract the following from the user's message:\n\n1. **text_to_translate**: The actual text the user wants translated. It might be:\n   - Inside triple backticks (```)\n   - After a colon (:)\n   - The main content after the language specification\n   - Remove any bot mentions\n\n2. **target_languages**: List of target language CODES from the supported languages below.\n   - Match user's language names to the closest supported language code\n   - Return as array of language codes (e.g., [\"de\", \"fr\", \"uk\"])\n   - SUPPORTED LANGUAGES: {{ $json.languageList }}\n\n3. **source_language**: If explicitly mentioned (e.g., \"from English\"), return the language CODE.\n   - Return null if not specified\n\n4. **instructions**: Extract ANY translation requirements or context the user provides. Look for:\n   - Tone: \"formal\", \"casual\", \"friendly\", \"professional\", \"technical\"\n   - Style: \"literal\", \"creative\", \"marketing style\", \"legal\"\n   - Context: \"this is for a mobile app\", \"medical context\", \"gaming\"\n   - Audience: \"for children\", \"B2B\", \"teenagers\"\n   - Specific requests: \"keep it short\", \"preserve placeholders\", \"don't translate brand names\"\n   - Return as array of instruction strings, or empty array [] if none found\n\nRespond ONLY with valid JSON:\n```json\n{\n  \"text_to_translate\": \"the extracted text\",\n  \"target_languages\": [\"de\", \"fr\"],\n  \"source_language\": null,\n  \"instructions\": [\"formal tone\", \"technical context\"]\n}\n```\n\nIf you cannot find text to translate, set text_to_translate to null.\nIf you cannot find target languages, set target_languages to empty array []."
+            },
+            {
+              "content": "={{ $json.text }}"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {
+          "temperature": 0.1
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        432,
+        1872
+      ],
+      "id": "cbb9f426-98c4-4334-83d2-d1475c661212",
+      "name": "Parse Request with AI"
+    },
+    {
+      "parameters": {
+        "jsCode": "const extractedData = $('Extract Message').first().json;\nconst languageNames = extractedData.languageNames;\nconst parsed = $('Parse Request with AI').first().json.message?.content || $('Parse Request with AI').first().json;\n\n// Parse the AI response\nlet parsedData;\ntry {\n  if (typeof parsed === 'string') {\n    const jsonMatch = parsed.match(/```(?:json)?\\s*([\\s\\S]*?)```/) || [null, parsed];\n    parsedData = JSON.parse(jsonMatch[1].trim());\n  } else {\n    parsedData = parsed;\n  }\n} catch (e) {\n  parsedData = { text_to_translate: null, target_languages: [], source_language: null, instructions: [] };\n}\n\n// OpenAI now returns language codes directly\nconst targetLanguages = parsedData.target_languages || [];\nconst sourceLanguage = parsedData.source_language || null;\n\n// Keep instructions as array\nconst instructions = Array.isArray(parsedData.instructions) \n  ? parsedData.instructions \n  : (parsedData.instructions ? [parsedData.instructions] : []);\n\nconst hasText = parsedData.text_to_translate && parsedData.text_to_translate.trim().length > 0;\nconst hasLanguages = targetLanguages.length > 0;\n\nreturn [{\n  json: {\n    // Conversation context\n    conversationId: extractedData.conversationId,\n    serviceUrl: extractedData.serviceUrl,\n    replyToId: extractedData.replyToId,\n    fromName: extractedData.fromName,\n    \n    // Parsed data\n    textToTranslate: parsedData.text_to_translate?.trim() || null,\n    targetLanguages,\n    targetLanguageNames: targetLanguages.map(code => languageNames[code] || code),\n    sourceLanguage,\n    instructions,\n    languageNames,\n    \n    // Status\n    hasText,\n    hasLanguages,\n    needsMoreInfo: !hasText || !hasLanguages\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        768,
+        1872
+      ],
+      "id": "2afeafb6-a80c-4021-91ca-f479c8bee7a3",
+      "name": "Process Parsed Request"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "needs-info",
+              "leftValue": "={{ $json.needsMoreInfo }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        976,
+        1872
+      ],
+      "id": "2801e9b0-9851-4b3c-a5c2-34ee6b2a3a5a",
+      "name": "Needs More Info?"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json;\n\nlet message = '';\n\nif (!data.hasText && !data.hasLanguages) {\n  message = `👋 Hi ${data.fromName}! I can help you translate text.\\n\\n**Please tell me:**\\n1. What text to translate\\n2. Which language(s) to translate into\\n\\n**Example:**\\n\\`\\`\\`\\n@TranslateBot to German and French:\\nHello, welcome to our app!\\n\\`\\`\\``;\n} else if (!data.hasText) {\n  message = `🤔 I see you want to translate to **${data.targetLanguageNames.join(', ')}**, but I didn't find any text.\\n\\n**Please include the text to translate:**\\n\\`\\`\\`\\n@TranslateBot to ${data.targetLanguageNames[0]}:\\nYour text here\\n\\`\\`\\``;\n} else if (!data.hasLanguages) {\n  message = `🌍 I found text to translate, but which language(s) should I translate it to?\\n\\n**Reply with the language(s):**\\n\\`\\`\\`\\nGerman, French\\n\\`\\`\\``;\n}\n\nreturn [{\n  json: {\n    type: 'message',\n    text: message\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1200,
+        1776
+      ],
+      "id": "44d432a6-90d0-4eb9-ac78-fc9c65be220e",
+      "name": "Build Follow-up Message"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1408,
+        1776
+      ],
+      "id": "9066d9fc-42de-4327-ad35-55c46734af67",
+      "name": "Ask for More Info"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Split into items per target language\nconst data = $input.first().json;\n\nconst items = data.targetLanguages.map((langCode, index) => ({\n  json: {\n    ...data,\n    currentLanguage: langCode,\n    currentLanguageName: data.languageNames[langCode] || langCode,\n    isFirst: index === 0,\n    isLast: index === data.targetLanguages.length - 1\n  }\n}));\n\nreturn items;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1200,
+        1968
+      ],
+      "id": "8c7a82ac-eb6e-4b69-bd4e-e8fd7ad60d4e",
+      "name": "Split by Language"
+    },
+    {
+      "parameters": {
+        "authentication": "accessToken",
+        "resource": "ai",
+        "operation": "api.ai.translate.strings.post",
+        "strings": {
+          "items": [
+            {
+              "_value": "={{ $json.textToTranslate }}"
+            }
+          ]
+        },
+        "sourceLanguageId": "={{ $json.sourceLanguage || '' }}",
+        "targetLanguageId": "={{ $json.currentLanguage }}",
+        "instructions": {
+          "items": [
+            {
+              "_value": "={{ ($json.instructions || []).join('\\n') }}"
+            }
+          ]
+        },
+        "requestOptions": {}
+      },
+      "type": "CUSTOM.crowdinEnterpriseFileBased",
+      "typeVersion": 1,
+      "position": [
+        1408,
+        1968
+      ],
+      "id": "4a0bb2a1-4f78-444e-b911-bc39a6f8cce8",
+      "name": "AI Translate Strings"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1632,
+        1968
+      ],
+      "id": "dc4fa16a-88a8-41c7-8289-56b562b0315a",
+      "name": "Aggregate Translations"
+    },
+    {
+      "parameters": {
+        "jsCode": "const aggregated = $input.first().json.data;\nconst originalData = $('Process Parsed Request').first().json;\n\n// Build the response message (Teams uses Markdown)\nlet message = '';\n\nfor (const item of aggregated) {\n  // Structure: item.data contains { sourceLanguageId, targetLanguageId, translations }\n  const responseData = item.data || item;\n  const langCode = responseData.targetLanguageId;\n  const langName = originalData.languageNames[langCode] || langCode;\n  const translations = responseData.translations || [];\n  \n  message += `**${langName}**\\n`;\n  \n  if (translations.length > 0) {\n    const translatedText = translations.join('\\n');\n    message += `\\`\\`\\`\\n${translatedText}\\n\\`\\`\\`\\n\\n`;\n  } else {\n    message += `\\`\\`\\`\\nTranslation not available\\n\\`\\`\\`\\n\\n`;\n  }\n}\n\nreturn [{\n  json: {\n    type: 'message',\n    text: message.trim()\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1856,
+        1968
+      ],
+      "id": "e7709fba-635e-4b2b-a947-c007fcd34dec",
+      "name": "Format Response"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        2080,
+        1968
+      ],
+      "id": "8aa967be-177d-4594-bab7-84fbad28f676",
+      "name": "Send Translation"
+    },
+    {
+      "parameters": {
+        "content": "## ⚙️ Configuration Required\n\n**1. Crowdin nodes**\n→ Add Crowdin Enterprise credentials\n→ Configure AI Translate node:\n   • Select `Ai Prompt Id` OR\n   • Select `Ai Provider Id` + `Ai Model Id`\n\n**2. Parse Request with AI**\n→ Add OpenAI credentials",
+        "height": 232,
+        "width": 340
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        192,
+        2176
+      ],
+      "id": "637fb9e6-fb09-481e-a434-41116d0c8239",
+      "name": "Config Note"
+    }
+  ],
+  "connections": {
+    "Teams Webhook": {
+      "main": [
+        [
+          {
+            "node": "List Languages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List Languages": {
+      "main": [
+        [
+          {
+            "node": "Build Language Map",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Language Map": {
+      "main": [
+        [
+          {
+            "node": "Extract Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Message": {
+      "main": [
+        [
+          {
+            "node": "Has Files?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Files?": {
+      "main": [
+        [
+          {
+            "node": "Files Coming Soon",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Parse Request with AI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Request with AI": {
+      "main": [
+        [
+          {
+            "node": "Process Parsed Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Parsed Request": {
+      "main": [
+        [
+          {
+            "node": "Needs More Info?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Needs More Info?": {
+      "main": [
+        [
+          {
+            "node": "Build Follow-up Message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Split by Language",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Follow-up Message": {
+      "main": [
+        [
+          {
+            "node": "Ask for More Info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split by Language": {
+      "main": [
+        [
+          {
+            "node": "AI Translate Strings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Translate Strings": {
+      "main": [
+        [
+          {
+            "node": "Aggregate Translations",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate Translations": {
+      "main": [
+        [
+          {
+            "node": "Format Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Response": {
+      "main": [
+        [
+          {
+            "node": "Send Translation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "instanceId": ""
+  },
+  "id": "",
+  "tags": []
+}

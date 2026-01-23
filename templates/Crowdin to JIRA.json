@@ -1,0 +1,361 @@
+{
+  "name": "Crowdin to JIRA",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## ⚙️ Admin Setup\n\n**Configure:**\n1. Copy Webhook URL from \"Webhook\" node\n2. Use it in \"JIRA to Crowdin\" workflow\n3. Connect JIRA + Crowdin credentials\n4. Activate workflow\n\n**How it works:**\nTask marked \"done\" → file downloaded → attached to JIRA issue\n\n**Tip:** Add Slack node to notify when translations are delivered.",
+        "height": 376,
+        "width": 320
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        6784,
+        1152
+      ],
+      "id": "8ee12afc-6b1a-41fb-a42a-9fa1803800b1",
+      "name": "Admin Setup Guide"
+    },
+    {
+      "parameters": {
+        "content": "## 📝 User Guide\n\nNo user action needed. When linguist marks task \"done\" in Crowdin, translated file automatically appears in JIRA.",
+        "height": 184,
+        "width": 312
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        6784,
+        1552
+      ],
+      "id": "0a855e35-37a7-484f-97ef-6034d7ac373d",
+      "name": "End User Experience"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "crowdin-task-complete-jira",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        7248,
+        1408
+      ],
+      "id": "4cf21b7a-2c41-4c50-ba33-05e35d576da2",
+      "name": "Webhook",
+      "notesInFlow": true,
+      "webhookId": "crowdin-jira-webhook",
+      "notes": "Copy this webhook URL and use it in the 'JIRA to Crowdin' workflow"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ \"success\": true, \"message\": \"Webhook received\" }",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        7472,
+        1408
+      ],
+      "id": "17ca9b21-d139-468b-bb51-7e09e797248c",
+      "name": "Respond OK"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "check-done",
+              "leftValue": "={{ $json.body.task.newStatus }}",
+              "rightValue": "done",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        7696,
+        1408
+      ],
+      "id": "dfda1a49-8964-4fbe-bdd1-7838e01b99ed",
+      "name": "Is Task Done?"
+    },
+    {
+      "parameters": {
+        "jsCode": "const projectData = items[0].json.body.task.project;\nconst taskData = items[0].json.body.task;\n\n// Extract JIRA Issue Key from project description (e.g., PROJ-123)\nconst jiraKey = projectData.description ? projectData.description.trim() : null;\n\nif (!jiraKey) {\n  throw new Error('JIRA Issue Key is missing from the Project Description. Expected format: JIRA Issue Key (e.g., PROJ-123) in description field.');\n}\n\n// Validate JIRA key format (PROJ-123)\nconst jiraKeyRegex = /^[A-Z][A-Z0-9]*-\\d+$/;\nif (!jiraKeyRegex.test(jiraKey)) {\n  console.log('Warning: JIRA key format may be invalid:', jiraKey);\n}\n\nconst fileIds = taskData.fileIds;\nconst languageId = taskData.targetLanguage.id;\n\nif (!fileIds || fileIds.length === 0) {\n  throw new Error('No files found in the completed task.');\n}\n\nreturn fileIds.map(fileId => ({\n  json: {\n    jiraKey,\n    projectId: projectData.id,\n    projectName: projectData.name,\n    fileId,\n    languageId,\n    languageName: taskData.targetLanguage.name,\n    taskTitle: taskData.title,\n    taskId: taskData.id\n  }\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        7920,
+        1408
+      ],
+      "id": "d334a0a5-1239-4cc5-8c9a-ce339450094f",
+      "name": "Validate & Prepare Data"
+    },
+    {
+      "parameters": {
+        "authentication": "accessToken",
+        "resource": "translations",
+        "operation": "api.projects.translations.builds.files.post",
+        "projectId": "={{ $json.projectId }}",
+        "fileId": "={{ $json.fileId }}",
+        "targetLanguageId": "={{ $json.languageId }}",
+        "exportStringsThatPassedWorkflow": false
+      },
+      "type": "CUSTOM.crowdinEnterpriseFileBased",
+      "typeVersion": 1,
+      "position": [
+        8128,
+        1408
+      ],
+      "id": "9977e922-b633-4850-b49d-1e64fd67f732",
+      "name": "Build Project File Translation",
+      "credentials": {
+        "crowdinEnterpriseApi": {
+          "id": "",
+          "name": "Crowdin Enterprise account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.data.url }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          },
+          "timeout": 30000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        8352,
+        1408
+      ],
+      "id": "009b5b6a-169f-44d6-8e66-b14533641e4d",
+      "name": "Fetch Translated File",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const metaItems = $('Validate & Prepare Data').all();\nconst urlItems = $('Build Project File Translation').all();\n\nfunction extractFileName(url) {\n  try {\n    // Extract response-content-disposition parameter from URL\n    const match = url.match(/response-content-disposition=([^&]+)/);\n    if (match) {\n      const disposition = decodeURIComponent(match[1]);\n      const parts = disposition.split('filename=');\n      if (parts[1]) {\n        return parts[1].replace(/^\"|\"$/g, '').split(';')[0].trim();\n      }\n    }\n    // Fallback: get filename from URL path\n    const pathMatch = url.match(/\\/([^\\/\\?]+)\\?/);\n    return pathMatch ? pathMatch[1] : 'translation.txt';\n  } catch (e) {\n    return 'translation.txt';\n  }\n}\n\nconst results = [];\n\nfor (let index = 0; index < items.length; index++) {\n  const item = items[index];\n  const meta = metaItems[index].json;\n  const urlItem = urlItems[index].json;\n  \n  // Get file info - extract filename from URL\n  const downloadUrl = urlItem.data?.url || urlItem.url;\n  const originalFileName = extractFileName(downloadUrl);\n  const finalFileName = `${meta.languageId}_${originalFileName}`;\n\n  // Update binary filename\n  const updatedBinary = {};\n  for (const key of Object.keys(item.binary || {})) {\n    updatedBinary[key] = {\n      ...item.binary[key],\n      fileName: finalFileName\n    };\n  }\n\n  results.push({\n    json: {\n      jiraKey: meta.jiraKey,\n      finalFileName,\n      languageId: meta.languageId,\n      languageName: meta.languageName,\n      taskTitle: meta.taskTitle\n    },\n    binary: updatedBinary\n  });\n}\n\nreturn results;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        8576,
+        1408
+      ],
+      "id": "c38241fc-d1be-4247-a3b3-50ff7ad9c329",
+      "name": "Prepare Upload Data"
+    },
+    {
+      "parameters": {
+        "resource": "issueAttachment",
+        "operation": "add",
+        "issueKey": "={{ $json.jiraKey }}",
+        "binaryPropertyName": "data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.jira",
+      "typeVersion": 1,
+      "position": [
+        8800,
+        1408
+      ],
+      "id": "3b094f71-e45e-4976-8bfb-5faa4a983570",
+      "name": "JIRA: Add Attachment",
+      "credentials": {
+        "jiraSoftwareCloudApi": {
+          "id": "",
+          "name": "Jira SW Cloud account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "resource": "issueComment",
+        "issueKey": "={{ $('Webhook').first().json.body.task.project.description }}",
+        "comment": "=Translation completed: {{ $json.finalFileName }} attached.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.jira",
+      "typeVersion": 1,
+      "position": [
+        9024,
+        1408
+      ],
+      "id": "a32daf62-a73f-4c83-acfd-34562c41ac20",
+      "name": "JIRA: Add Success Comment",
+      "credentials": {
+        "jiraSoftwareCloudApi": {
+          "id": "",
+          "name": "Jira SW Cloud account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "skip",
+              "name": "skipped",
+              "value": true,
+              "type": "boolean"
+            },
+            {
+              "id": "reason",
+              "name": "reason",
+              "value": "Task status is not 'done'",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        7920,
+        1632
+      ],
+      "id": "26ec6c1d-cdde-449e-a401-31bb84d672b4",
+      "name": "Skip: Not Done"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Respond OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond OK": {
+      "main": [
+        [
+          {
+            "node": "Is Task Done?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Task Done?": {
+      "main": [
+        [
+          {
+            "node": "Validate & Prepare Data",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Skip: Not Done",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate & Prepare Data": {
+      "main": [
+        [
+          {
+            "node": "Build Project File Translation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Project File Translation": {
+      "main": [
+        [
+          {
+            "node": "Fetch Translated File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Translated File": {
+      "main": [
+        [
+          {
+            "node": "Prepare Upload Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Upload Data": {
+      "main": [
+        [
+          {
+            "node": "JIRA: Add Attachment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "JIRA: Add Attachment": {
+      "main": [
+        [
+          {
+            "node": "JIRA: Add Success Comment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": ""
+  },
+  "id": "",
+  "tags": []
+}

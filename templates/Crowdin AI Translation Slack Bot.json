@@ -1,0 +1,661 @@
+{
+  "name": "Crowdin AI Translation Slack Bot",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## 🤖 Crowdin AI Translation Bot\n\nTranslate text instantly using Crowdin's AI translation.\n\n### Features\n- Mention the bot with text to translate\n- Specify one or more target languages\n- Text can be in code blocks or plain\n- Source language auto-detected (or specify it)\n- File translations coming soon!\n\n### Example Messages\n```\n@TranslateBot translate to German:\nHello, how are you?\n```\n\n```\n@TranslateBot German, French, Spanish\n```\nThis is my text to translate\n```\n@TranslateBot to Japanese (from English):\nWelcome to our app!\n```",
+        "height": 616,
+        "width": 380
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1216,
+        1712
+      ],
+      "id": "a5601b38-900e-4ec0-8b4d-3677e32b239c",
+      "name": "Intro"
+    },
+    {
+      "parameters": {
+        "content": "## 🚀 Setup Guide\n\n### 1. Create Slack App\n1. Go to [api.slack.com/apps](https://api.slack.com/apps)\n2. Create New App → From scratch\n3. Name it (e.g., \"Crowdin Translate\")\n\n### 2. Event Subscriptions\n1. Enable Events\n2. Set Request URL to your webhook\n3. Subscribe to bot events:\n   - `app_mention`\n   - `message.im` (for DMs)\n\n### 3. OAuth Scopes\n- `chat:write`\n- `files:read` (to detect attachments)\n- `im:history` (for DMs)\n\n### 4. Configure Crowdin AI Translate\n**Option A - Use AI Prompt:**\n- Select `Ai Prompt Id`\n- Find in Crowdin → AI → Prompts\n\n**Option B - Use Provider:**\n- Select `Ai Provider Id`\n- Select `Ai Model Id`\n\n### 5. Add Credentials\n- Crowdin Enterprise API (2 nodes)\n- Slack API (Bot Token)\n- OpenAI API (for parsing)",
+        "height": 780,
+        "width": 380
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1616,
+        1712
+      ],
+      "id": "b4b51f25-c4ac-4c8a-ade5-0485ac0f6f90",
+      "name": "Setup Guide"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "crowdin-translate-bot",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        1344,
+        1392
+      ],
+      "id": "5659cd87-0ff7-4dca-b461-b44646d65306",
+      "name": "Slack Events Webhook",
+      "webhookId": "crowdin-translate-bot"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "url-verify",
+              "leftValue": "={{ $json.body.type }}",
+              "rightValue": "url_verification",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1568,
+        1392
+      ],
+      "id": "ff014137-5203-46cb-9ddb-70bab29375fa",
+      "name": "URL Verification?"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"challenge\": $json.body.challenge } }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1808,
+        1280
+      ],
+      "id": "4193138a-994d-42be-bd1f-af7adbc7eb67",
+      "name": "Respond Challenge"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "ok",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1808,
+        1488
+      ],
+      "id": "0fdd032b-d9e0-48e3-9e39-810e9eee4880",
+      "name": "Respond OK"
+    },
+    {
+      "parameters": {
+        "authentication": "accessToken",
+        "resource": "languages",
+        "operation": "api.languages.getMany",
+        "returnAll": true
+      },
+      "type": "CUSTOM.crowdinEnterpriseFileBased",
+      "typeVersion": 1,
+      "position": [
+        2032,
+        1488
+      ],
+      "id": "8efcc374-ba2d-4ffe-aa07-076e3ebb740d",
+      "name": "List Languages",
+      "credentials": {
+        "crowdinEnterpriseApi": {
+          "id": "",
+          "name": "Crowdin Enterprise account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Build language lookup from Crowdin API response\nconst languages = $input.all().map(item => item.json.data || item.json);\n\n// Create lookup maps\nconst languageNames = {};\nconst languageList = [];\n\nfor (const lang of languages) {\n  languageNames[lang.id] = lang.name;\n  languageList.push(`${lang.name} (${lang.id})`);\n}\n\nreturn [{\n  json: {\n    languageNames,\n    languageList: languageList.join(', ')\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2240,
+        1488
+      ],
+      "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "name": "Build Language Map"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "has-files",
+              "leftValue": "={{ $('Slack Events Webhook').first().json.body.event?.files?.length > 0 }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2448,
+        1488
+      ],
+      "id": "c107c449-3d57-4e4f-91d4-b27e9c363bee",
+      "name": "Has Files?"
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "={{ $('Slack Events Webhook').first().json.body.event.channel }}",
+          "mode": "id"
+        },
+        "text": "📁 *File translation is coming soon!*\n\nFor now, I can only translate text. Please paste your text directly in the message.\n\n*Example:*\n```\n@TranslateBot to German:\nYour text here\n```",
+        "otherOptions": {
+          "includeLinkToWorkflow": false,
+          "thread_ts": {
+            "replyValues": {
+              "thread_ts": "={{ $('Slack Events Webhook').first().json.body.event.thread_ts || $('Slack Events Webhook').first().json.body.event.ts }}"
+            }
+          },
+          "mrkdwn": true
+        }
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.4,
+      "position": [
+        2688,
+        1392
+      ],
+      "id": "88998a6d-10bf-4b4c-8a8f-813c588c4342",
+      "name": "Files Coming Soon",
+      "webhookId": "2bb23aac-e397-475d-a5fc-58894effa1e9",
+      "credentials": {
+        "slackApi": {
+          "id": "",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are a translation request parser. Extract the following from the user's message:\n\n1. **text_to_translate**: The actual text the user wants translated. It might be:\n   - Inside triple backticks (```)\n   - After a colon (:)\n   - The main content after the language specification\n   - Remove any bot mentions like <@U123ABC>\n\n2. **target_languages**: List of target language CODES from the supported languages below.\n   - Match user's language names to the closest supported language code\n   - Return as array of language codes (e.g., [\"de\", \"fr\", \"uk\"])\n   - SUPPORTED LANGUAGES: {{ $('Build Language Map').first().json.languageList }}\n\n3. **source_language**: If explicitly mentioned (e.g., \"from English\"), return the language CODE.\n   - Return null if not specified\n\n4. **instructions**: Extract ANY translation requirements or context the user provides. Look for:\n   - Tone: \"formal\", \"casual\", \"friendly\", \"professional\", \"technical\"\n   - Style: \"literal\", \"creative\", \"marketing style\", \"legal\"\n   - Context: \"this is for a mobile app\", \"medical context\", \"gaming\"\n   - Audience: \"for children\", \"B2B\", \"teenagers\"\n   - Specific requests: \"keep it short\", \"preserve placeholders\", \"don't translate brand names\"\n   - Return as array of instruction strings, or empty array [] if none found\n\nRespond ONLY with valid JSON:\n```json\n{\n  \"text_to_translate\": \"the extracted text\",\n  \"target_languages\": [\"de\", \"fr\"],\n  \"source_language\": null,\n  \"instructions\": [\"formal tone\", \"technical context\"]\n}\n```\n\nIf you cannot find text to translate, set text_to_translate to null.\nIf you cannot find target languages, set target_languages to empty array []."
+            },
+            {
+              "content": "={{ $('Slack Events Webhook').first().json.body.event.text }}"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {
+          "temperature": 0.1
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        2688,
+        1584
+      ],
+      "id": "c4ed7534-dff6-4a54-9023-a9f3dff38c61",
+      "name": "Parse Request with AI",
+      "credentials": {
+        "openAiApi": {
+          "id": "",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const languageNames = $('Build Language Map').first().json.languageNames;\nconst parsed = $('Parse Request with AI').first().json.message?.content || $('Parse Request with AI').first().json;\nconst event = $('Slack Events Webhook').first().json.body.event;\n\n// Parse the AI response\nlet parsedData;\ntry {\n  if (typeof parsed === 'string') {\n    const jsonMatch = parsed.match(/```(?:json)?\\s*([\\s\\S]*?)```/) || [null, parsed];\n    parsedData = JSON.parse(jsonMatch[1].trim());\n  } else {\n    parsedData = parsed;\n  }\n} catch (e) {\n  parsedData = { text_to_translate: null, target_languages: [], source_language: null, instructions: [] };\n}\n\n// OpenAI now returns language codes directly\nconst targetLanguages = parsedData.target_languages || [];\nconst sourceLanguage = parsedData.source_language || null;\n\n// Keep instructions as array\nconst instructions = Array.isArray(parsedData.instructions) \n  ? parsedData.instructions \n  : (parsedData.instructions ? [parsedData.instructions] : []);\n\nconst hasText = parsedData.text_to_translate && parsedData.text_to_translate.trim().length > 0;\nconst hasLanguages = targetLanguages.length > 0;\n\nreturn [{\n  json: {\n    channel: event.channel,\n    user: event.user,\n    threadTs: event.thread_ts || event.ts,\n    \n    // Parsed data\n    textToTranslate: parsedData.text_to_translate?.trim() || null,\n    targetLanguages,\n    targetLanguageNames: targetLanguages.map(code => languageNames[code] || code),\n    sourceLanguage,\n    instructions,\n    languageNames,\n    \n    // Status\n    hasText,\n    hasLanguages,\n    needsMoreInfo: !hasText || !hasLanguages\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2992,
+        1584
+      ],
+      "id": "ef1f547b-bae4-4efa-9f27-a14bfaba6fd8",
+      "name": "Process Parsed Request"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "needs-info",
+              "leftValue": "={{ $json.needsMoreInfo }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        3200,
+        1584
+      ],
+      "id": "af239d24-dd3c-4ee3-80c0-3c63d3fd9d2a",
+      "name": "Needs More Info?"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json;\n\nlet message = '';\n\nif (!data.hasText && !data.hasLanguages) {\n  message = `👋 Hi <@${data.user}>! I can help you translate text.\n\n*Please tell me:*\n1. What text to translate\n2. Which language(s) to translate into\n\n*Example:*\n\\`\\`\\`\n@TranslateBot to German and French:\nHello, welcome to our app!\n\\`\\`\\``;\n} else if (!data.hasText) {\n  message = `🤔 I see you want to translate to *${data.targetLanguageNames.join(', ')}*, but I didn't find any text.\n\n*Please include the text to translate:*\n\\`\\`\\`\n@TranslateBot to ${data.targetLanguageNames[0]}:\nYour text here\n\\`\\`\\``;\n} else if (!data.hasLanguages) {\n  message = `🌍 I found text to translate, but which language(s) should I translate it to?\n\n*Supported languages:* German, French, Spanish, Italian, Portuguese, Japanese, Chinese, Korean, Russian, Ukrainian, Polish, Dutch, Swedish, Norwegian, Danish, Finnish, Arabic, Hebrew, Turkish, Hindi, Thai, Vietnamese, Indonesian, Malay, English\n\n*Reply with the language(s):*\n\\`\\`\\`\nGerman, French\n\\`\\`\\``;\n}\n\nreturn [{\n  json: {\n    channel: data.channel,\n    threadTs: data.threadTs,\n    message\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3440,
+        1488
+      ],
+      "id": "7bfd77ed-7fa9-48dc-848a-6be29f25ab7e",
+      "name": "Build Follow-up Message"
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "={{ $json.channel }}",
+          "mode": "id"
+        },
+        "text": "={{ $json.message }}",
+        "otherOptions": {
+          "includeLinkToWorkflow": false,
+          "thread_ts": {
+            "replyValues": {
+              "thread_ts": "={{ $json.threadTs }}"
+            }
+          },
+          "mrkdwn": true
+        }
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.4,
+      "position": [
+        3616,
+        1488
+      ],
+      "id": "80a64f78-c507-4fdc-afd4-731d82a0ac58",
+      "name": "Ask for More Info",
+      "webhookId": "525d25de-2166-4a86-9a0a-f7825f0b8711",
+      "credentials": {
+        "slackApi": {
+          "id": "",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Split into items per target language\nconst data = $input.first().json;\n\nconst items = data.targetLanguages.map((langCode, index) => ({\n  json: {\n    ...data,\n    currentLanguage: langCode,\n    currentLanguageName: data.languageNames[langCode] || langCode,\n    isFirst: index === 0,\n    isLast: index === data.targetLanguages.length - 1\n  }\n}));\n\nreturn items;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3424,
+        1680
+      ],
+      "id": "5d9a74f3-80a2-4ccb-87d1-6923c1a97daa",
+      "name": "Split by Language"
+    },
+    {
+      "parameters": {
+        "authentication": "accessToken",
+        "resource": "ai",
+        "operation": "api.ai.translate.strings.post",
+        "strings": {
+          "items": [
+            {
+              "_value": "={{ $json.textToTranslate }}"
+            }
+          ]
+        },
+        "targetLanguageId": "={{ $json.currentLanguage }}",
+        "sourceLanguageId": "={{ $json.sourceLanguage || '' }}",
+        "instructions": {
+          "items": [
+            {
+              "_value": "={{ ($json.instructions || []).join('\\n') }}"
+            }
+          ]
+        }
+      },
+      "type": "CUSTOM.crowdinEnterpriseFileBased",
+      "typeVersion": 1,
+      "position": [
+        3616,
+        1680
+      ],
+      "id": "b46c78aa-bcb7-4086-8954-81310fc645df",
+      "name": "AI Translate Strings",
+      "credentials": {
+        "crowdinEnterpriseApi": {
+          "id": "",
+          "name": "Crowdin Enterprise account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        3808,
+        1680
+      ],
+      "id": "20b818bd-8fa7-48ee-b8f0-741f4c27c908",
+      "name": "Aggregate Translations"
+    },
+    {
+      "parameters": {
+        "jsCode": "const aggregated = $input.first().json.data;\nconst originalData = $('Process Parsed Request').first().json;\n\n// Build the response message\nlet message = '';\n\nfor (const item of aggregated) {\n  // Structure: item.data contains { sourceLanguageId, targetLanguageId, translations }\n  const responseData = item.data || item;\n  const langCode = responseData.targetLanguageId;\n  const langName = originalData.languageNames[langCode] || langCode;\n  const translations = responseData.translations || [];\n  \n  message += `*${langName}*\\n`;\n  \n  if (translations.length > 0) {\n    const translatedText = translations.join('\\n');\n    message += `\\`\\`\\`\\n${translatedText}\\n\\`\\`\\`\\n\\n`;\n  } else {\n    message += `\\`\\`\\`\\nTranslation not available\\n\\`\\`\\`\\n\\n`;\n  }\n}\n\nreturn [{\n  json: {\n    channel: originalData.channel,\n    threadTs: originalData.threadTs,\n    message: message.trim()\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4000,
+        1680
+      ],
+      "id": "994563b5-cf17-471b-afa6-e23cf064beeb",
+      "name": "Format Response"
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "={{ $json.channel }}",
+          "mode": "id"
+        },
+        "text": "={{ $json.message }}",
+        "otherOptions": {
+          "includeLinkToWorkflow": false,
+          "thread_ts": {
+            "replyValues": {
+              "thread_ts": "={{ $json.threadTs }}"
+            }
+          },
+          "mrkdwn": true
+        }
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.4,
+      "position": [
+        4192,
+        1680
+      ],
+      "id": "ce631e71-6e5f-4747-b84f-c80a7af2d1c3",
+      "name": "Send Translation",
+      "webhookId": "fc9b4b67-d14a-4d01-9e41-cc7f7c0fb72d",
+      "credentials": {
+        "slackApi": {
+          "id": "",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## ⚙️ Configuration Required\n\n**1. Crowdin nodes**\n→ Add Crowdin Enterprise credentials\n→ Configure AI Translate node:\n   • Select `Ai Prompt Id` OR\n   • Select `Ai Provider Id` + `Ai Model Id`\n\n**2. Slack nodes**\n→ Add Slack API credentials\n\n**3. Parse Request with AI**\n→ Add OpenAI credentials",
+        "height": 300,
+        "width": 320
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2016,
+        1712
+      ],
+      "id": "9735f3e9-51f0-47e7-bcda-4343cf7b7484",
+      "name": "Config Note"
+    }
+  ],
+  "connections": {
+    "Slack Events Webhook": {
+      "main": [
+        [
+          {
+            "node": "URL Verification?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "URL Verification?": {
+      "main": [
+        [
+          {
+            "node": "Respond Challenge",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond OK": {
+      "main": [
+        [
+          {
+            "node": "List Languages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List Languages": {
+      "main": [
+        [
+          {
+            "node": "Build Language Map",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Language Map": {
+      "main": [
+        [
+          {
+            "node": "Has Files?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Files?": {
+      "main": [
+        [
+          {
+            "node": "Files Coming Soon",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Parse Request with AI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Request with AI": {
+      "main": [
+        [
+          {
+            "node": "Process Parsed Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Parsed Request": {
+      "main": [
+        [
+          {
+            "node": "Needs More Info?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Needs More Info?": {
+      "main": [
+        [
+          {
+            "node": "Build Follow-up Message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Split by Language",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Follow-up Message": {
+      "main": [
+        [
+          {
+            "node": "Ask for More Info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split by Language": {
+      "main": [
+        [
+          {
+            "node": "AI Translate Strings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Translate Strings": {
+      "main": [
+        [
+          {
+            "node": "Aggregate Translations",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate Translations": {
+      "main": [
+        [
+          {
+            "node": "Format Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Response": {
+      "main": [
+        [
+          {
+            "node": "Send Translation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

@@ -1,0 +1,506 @@
+{
+  "name": "Crowdin to Linear",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## ⚙️ Admin Setup\n\n**Configure:**\n1. Copy Webhook URL from \"Webhook\" node\n2. Use it in \"Linear to Crowdin\" workflow\n3. Connect Linear + Crowdin credentials\n4. Activate workflow\n\n**How it works:**\nTask marked \"done\" → file downloaded → attached to Linear issue\n\n**Tip:** Add Slack node to notify when translations are delivered.",
+        "height": 376,
+        "width": 320
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        6784,
+        1152
+      ],
+      "id": "8ee12afc-6b1a-41fb-a42a-9fa1803800b1",
+      "name": "Admin Setup Guide"
+    },
+    {
+      "parameters": {
+        "content": "## 📝 User Guide\n\nNo user action needed. When linguist marks task \"done\" in Crowdin, translated file automatically appears in Linear.",
+        "height": 184,
+        "width": 312
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        6784,
+        1552
+      ],
+      "id": "0a855e35-37a7-484f-97ef-6034d7ac373d",
+      "name": "End User Experience"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "crowdin-task-complete",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        7248,
+        1408
+      ],
+      "id": "4cf21b7a-2c41-4c50-ba33-05e35d576da2",
+      "name": "Webhook",
+      "notesInFlow": true,
+      "webhookId": "5056b6f9-be50-4630-b141-f337598c85f9",
+      "notes": "Copy this webhook URL and use it in the 'Linear to Crowdin' workflow"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ \"success\": true, \"message\": \"Webhook received\" }",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        7472,
+        1408
+      ],
+      "id": "17ca9b21-d139-468b-bb51-7e09e797248c",
+      "name": "Respond OK"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "check-done",
+              "leftValue": "={{ $json.body.task.newStatus }}",
+              "rightValue": "done",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        7696,
+        1408
+      ],
+      "id": "dfda1a49-8964-4fbe-bdd1-7838e01b99ed",
+      "name": "Is Task Done?"
+    },
+    {
+      "parameters": {
+        "jsCode": "const projectData = items[0].json.body.task.project;\nconst taskData = items[0].json.body.task;\n\n// Extract Linear ID from project description\nconst linearId = projectData.description ? projectData.description.trim() : null;\n\nif (!linearId) {\n  throw new Error('Linear Issue ID is missing from the Project Description. Expected format: Linear Issue ID in description field.');\n}\n\n// Validate Linear ID format (basic UUID check)\nconst uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;\nif (!uuidRegex.test(linearId) && !linearId.match(/^[A-Z]+-\\d+$/)) {\n  // Allow both UUID format and Linear's short format (ABC-123)\n  console.log('Warning: Linear ID format may be invalid:', linearId);\n}\n\nconst fileIds = taskData.fileIds;\nconst languageId = taskData.targetLanguage.id;\n\nif (!fileIds || fileIds.length === 0) {\n  throw new Error('No files found in the completed task.');\n}\n\nreturn fileIds.map(fileId => ({\n  json: {\n    linearId,\n    projectId: projectData.id,\n    projectName: projectData.name,\n    fileId,\n    languageId,\n    languageName: taskData.targetLanguage.name,\n    taskTitle: taskData.title,\n    taskId: taskData.id\n  }\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        7920,
+        1408
+      ],
+      "id": "d334a0a5-1239-4cc5-8c9a-ce339450094f",
+      "name": "Validate & Prepare Data"
+    },
+    {
+      "parameters": {
+        "authentication": "accessToken",
+        "resource": "translations",
+        "operation": "api.projects.translations.builds.files.post",
+        "projectId": "={{ $json.projectId }}",
+        "fileId": "={{ $json.fileId }}",
+        "targetLanguageId": "={{ $json.languageId }}",
+        "exportStringsThatPassedWorkflow": false
+      },
+      "type": "CUSTOM.crowdinEnterpriseFileBased",
+      "typeVersion": 1,
+      "position": [
+        8128,
+        1408
+      ],
+      "id": "9977e922-b633-4850-b49d-1e64fd67f732",
+      "name": "Build Project File Translation",
+      "credentials": {
+        "crowdinEnterpriseApi": {
+          "id": "",
+          "name": "Crowdin Enterprise account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.data.url }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          },
+          "timeout": 30000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        8352,
+        1408
+      ],
+      "id": "009b5b6a-169f-44d6-8e66-b14533641e4d",
+      "name": "Fetch Translated File",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const metaItems = $('Validate & Prepare Data').all();\nconst urlItems = $('Build Project File Translation').all();\n\nconst MIME_TYPES = {\n  'txt': 'text/plain; charset=utf-8',\n  'json': 'application/json',\n  'xml': 'application/xml',\n  'html': 'text/html',\n  'htm': 'text/html',\n  'md': 'text/markdown',\n  'csv': 'text/csv',\n  'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',\n  'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',\n  'pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',\n  'pdf': 'application/pdf',\n  'png': 'image/png',\n  'jpg': 'image/jpeg',\n  'jpeg': 'image/jpeg',\n  'gif': 'image/gif',\n  'svg': 'image/svg+xml',\n  'zip': 'application/zip',\n  'po': 'text/x-gettext-translation',\n  'pot': 'text/x-gettext-translation',\n  'xliff': 'application/xliff+xml',\n  'xlf': 'application/xliff+xml',\n  'resx': 'application/xml',\n  'strings': 'text/plain; charset=utf-8',\n  'properties': 'text/plain; charset=utf-8',\n  'yaml': 'text/yaml',\n  'yml': 'text/yaml'\n};\n\nfunction getMimeType(fileName) {\n  const ext = fileName.split('.').pop().toLowerCase();\n  return MIME_TYPES[ext] || 'application/octet-stream';\n}\n\nfunction extractFileName(url) {\n  try {\n    // Extract response-content-disposition parameter from URL\n    const match = url.match(/response-content-disposition=([^&]+)/);\n    if (match) {\n      const disposition = decodeURIComponent(match[1]);\n      const parts = disposition.split('filename=');\n      if (parts[1]) {\n        return parts[1].replace(/^\"|\"$/g, '').split(';')[0].trim();\n      }\n    }\n    // Fallback: get filename from URL path\n    const pathMatch = url.match(/\\/([^\\/\\?]+)\\?/);\n    return pathMatch ? pathMatch[1] : 'translation.txt';\n  } catch (e) {\n    return 'translation.txt';\n  }\n}\n\nconst results = [];\n\nfor (let index = 0; index < items.length; index++) {\n  const item = items[index];\n  const meta = metaItems[index].json;\n  const urlItem = urlItems[index].json;\n  \n  // Get file info - extract filename from URL\n  const downloadUrl = urlItem.data?.url || urlItem.url;\n  const originalFileName = extractFileName(downloadUrl);\n  const finalFileName = `${meta.languageId}_${originalFileName}`;\n  const mimeType = getMimeType(originalFileName);\n  \n  // Get accurate file size\n  const buffer = await this.helpers.getBinaryDataBuffer(index, 'data');\n  const fileSize = buffer.length;\n  \n  if (fileSize === 0) {\n    throw new Error(`File ${finalFileName} is empty`);\n  }\n  \n  // Max file size check (50MB)\n  if (fileSize > 50 * 1024 * 1024) {\n    throw new Error(`File ${finalFileName} exceeds 50MB limit`);\n  }\n\n  results.push({\n    json: {\n      linearId: meta.linearId,\n      finalFileName,\n      fileSize,\n      mimeType,\n      languageId: meta.languageId,\n      languageName: meta.languageName,\n      taskTitle: meta.taskTitle\n    },\n    binary: item.binary\n  });\n}\n\nreturn results;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        8576,
+        1408
+      ],
+      "id": "c38241fc-d1be-4247-a3b3-50ff7ad9c329",
+      "name": "Prepare Upload Data"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.linear.app/graphql",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "linearApi",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "query",
+              "value": "mutation FileUpload($contentType: String!, $filename: String!, $size: Int!) { fileUpload(contentType: $contentType, filename: $filename, size: $size) { uploadFile { uploadUrl assetUrl headers { key value } } success } }"
+            },
+            {
+              "name": "variables",
+              "value": "={{ JSON.stringify({ contentType: $json.mimeType, filename: $json.finalFileName, size: $json.fileSize }) }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        8800,
+        1408
+      ],
+      "id": "3b094f71-e45e-4976-8bfb-5faa4a983570",
+      "name": "Linear: Request Upload URL",
+      "credentials": {
+        "linearApi": {
+          "id": "",
+          "name": "Linear account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Combine binary data from Prepare Upload Data with upload URLs from Linear API\nconst prepareItems = $('Prepare Upload Data').all();\nconst results = [];\n\nfor (let index = 0; index < items.length; index++) {\n  const item = items[index];\n  const prepareItem = prepareItems[index];\n  \n  // Validate Linear API response\n  if (!item.json.data?.fileUpload?.uploadFile) {\n    const errorMsg = item.json.errors?.[0]?.message || 'Unknown Linear API error';\n    throw new Error(`Linear API error: ${errorMsg}`);\n  }\n  \n  const uploadFile = item.json.data.fileUpload.uploadFile;\n  \n  if (!uploadFile.uploadUrl || !uploadFile.assetUrl) {\n    throw new Error('Linear did not return valid upload URLs');\n  }\n  \n  // Build headers object for the S3 upload\n  const headers = {};\n  for (const h of uploadFile.headers || []) {\n    headers[h.key] = h.value;\n  }\n  headers['Content-Type'] = prepareItem.json.mimeType;\n  headers['Cache-Control'] = 'public, max-age=31536000';\n  \n  results.push({\n    json: {\n      uploadUrl: uploadFile.uploadUrl,\n      assetUrl: uploadFile.assetUrl,\n      linearId: prepareItem.json.linearId,\n      finalFileName: prepareItem.json.finalFileName,\n      mimeType: prepareItem.json.mimeType,\n      languageName: prepareItem.json.languageName,\n      uploadHeaders: headers\n    },\n    binary: prepareItem.binary\n  });\n}\n\nreturn results;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        9008,
+        1408
+      ],
+      "id": "f580683f-43f5-4a98-a4f2-e9dd1ae2e4b4",
+      "name": "Combine Data & Validate"
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "={{ $json.uploadUrl }}",
+        "sendHeaders": true,
+        "specifyHeaders": "json",
+        "jsonHeaders": "={{ JSON.stringify($json.uploadHeaders) }}",
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        9232,
+        1408
+      ],
+      "id": "11a89730-5871-46e2-a632-ef84ed377dba",
+      "name": "Upload to S3",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const combineItems = $('Combine Data & Validate').all();\nconst uploadResults = items;\nconst results = [];\nconst errors = [];\n\nfor (let index = 0; index < uploadResults.length; index++) {\n  const uploadResult = uploadResults[index];\n  const combine = combineItems[index].json;\n  \n  // Check if upload succeeded (S3 returns empty body on success)\n  // HTTP Request node should have thrown on 4xx/5xx, but let's be safe\n  if (uploadResult.json.error) {\n    errors.push(`Failed to upload ${combine.finalFileName}: ${uploadResult.json.error}`);\n    continue;\n  }\n  \n  results.push({\n    json: {\n      success: true,\n      assetUrl: combine.assetUrl,\n      linearId: combine.linearId,\n      finalFileName: combine.finalFileName,\n      languageName: combine.languageName\n    }\n  });\n}\n\nif (errors.length > 0 && results.length === 0) {\n  throw new Error('All uploads failed: ' + errors.join('; '));\n}\n\nif (errors.length > 0) {\n  console.log('Some uploads failed:', errors);\n}\n\nreturn results;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        9456,
+        1408
+      ],
+      "id": "7d46cbcc-f35d-4ebb-a9bd-6e7e973831a5",
+      "name": "Validate Upload Results"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.linear.app/graphql",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "linearApi",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "query",
+              "value": "mutation AttachmentCreate($issueId: String!, $url: String!, $title: String!) { attachmentCreate(input: { issueId: $issueId, url: $url, title: $title }) { success attachment { id } } }"
+            },
+            {
+              "name": "variables",
+              "value": "={{ JSON.stringify({ issueId: $json.linearId, url: $json.assetUrl, title: $json.finalFileName }) }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        9680,
+        1408
+      ],
+      "id": "b0c0b15e-453a-4aa3-a4ba-fd6a7b5b3121",
+      "name": "Linear: Create Attachment",
+      "credentials": {
+        "linearApi": {
+          "id": "",
+          "name": "Linear account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "comment",
+        "issueId": "={{ $('Webhook').first().json.body.task.project.description }}",
+        "comment": "=Translation completed: {{ $json.finalFileName }} attached.",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.linear",
+      "typeVersion": 1.1,
+      "position": [
+        9888,
+        1408
+      ],
+      "id": "a32daf62-a73f-4c83-acfd-34562c41ac20",
+      "name": "Linear: Add Success Comment",
+      "credentials": {
+        "linearApi": {
+          "id": "",
+          "name": "Linear account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "skip",
+              "name": "skipped",
+              "value": true,
+              "type": "boolean"
+            },
+            {
+              "id": "reason",
+              "name": "reason",
+              "value": "Task status is not 'done'",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        7920,
+        1632
+      ],
+      "id": "26ec6c1d-cdde-449e-a401-31bb84d672b4",
+      "name": "Skip: Not Done"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Respond OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond OK": {
+      "main": [
+        [
+          {
+            "node": "Is Task Done?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Task Done?": {
+      "main": [
+        [
+          {
+            "node": "Validate & Prepare Data",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Skip: Not Done",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate & Prepare Data": {
+      "main": [
+        [
+          {
+            "node": "Build Project File Translation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Project File Translation": {
+      "main": [
+        [
+          {
+            "node": "Fetch Translated File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Translated File": {
+      "main": [
+        [
+          {
+            "node": "Prepare Upload Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Upload Data": {
+      "main": [
+        [
+          {
+            "node": "Linear: Request Upload URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Linear: Request Upload URL": {
+      "main": [
+        [
+          {
+            "node": "Combine Data & Validate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Combine Data & Validate": {
+      "main": [
+        [
+          {
+            "node": "Upload to S3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload to S3": {
+      "main": [
+        [
+          {
+            "node": "Validate Upload Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Upload Results": {
+      "main": [
+        [
+          {
+            "node": "Linear: Create Attachment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Linear: Create Attachment": {
+      "main": [
+        [
+          {
+            "node": "Linear: Add Success Comment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": ""
+  },
+  "id": "",
+  "tags": []
+}

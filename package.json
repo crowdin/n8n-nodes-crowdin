@@ -1,0 +1,69 @@
+{
+	"name": "n8n-nodes-crowdin",
+	"version": "0.1.0",
+	"description": "n8n nodes for Crowdin - a cloud-based localization management platform",
+	"license": "MIT",
+	"homepage": "",
+	"keywords": [
+		"n8n-community-node-package"
+	],
+	"author": {
+		"name": "Crowdin",
+		"email": "support@crowdin.com"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/crowdin/n8n-nodes-crowdin.git"
+	},
+	"scripts": {
+		"generate:properties": "node scripts/generate-properties.mjs",
+		"operations:invalid": "node scripts/show-invalid-operations.mjs",
+		"operations:unimplemented": "node scripts/show-unimplemented-operations.mjs",
+		"build": "n8n-node build",
+		"build:watch": "tsc --watch",
+		"dev": "n8n-node dev",
+		"lint": "n8n-node lint",
+		"lint:fix": "n8n-node lint --fix",
+		"release": "n8n-node release",
+		"prepublishOnly": "n8n-node prerelease"
+	},
+	"files": [
+		"dist"
+	],
+	"n8n": {
+		"n8nNodesApiVersion": 1,
+		"strict": false,
+		"credentials": [
+			"dist/credentials/CrowdinApi.credentials.js",
+			"dist/credentials/CrowdinOAuth2Api.credentials.js",
+			"dist/credentials/CrowdinEnterpriseApi.credentials.js",
+			"dist/credentials/CrowdinEnterpriseOAuth2Api.credentials.js"
+		],
+		"nodes": [
+			"dist/nodes/Crowdin/CrowdinFileBased.node.js",
+			"dist/nodes/Crowdin/CrowdinStringBased.node.js",
+			"dist/nodes/Crowdin/CrowdinEnterpriseFileBased.node.js",
+			"dist/nodes/Crowdin/CrowdinEnterpriseStringBased.node.js",
+			"dist/nodes/Crowdin/CrowdinFileBasedTrigger.node.js",
+			"dist/nodes/Crowdin/CrowdinStringBasedTrigger.node.js",
+			"dist/nodes/Crowdin/CrowdinEnterpriseFileBasedTrigger.node.js",
+			"dist/nodes/Crowdin/CrowdinEnterpriseStringBasedTrigger.node.js"
+		]
+	},
+	"devDependencies": {
+		"@devlikeapro/n8n-openapi-node": "^0.1.4",
+		"@n8n/node-cli": "*",
+		"@types/js-yaml": "^4.0.9",
+		"@types/node": "^20.0.0",
+		"cli-table3": "^0.6.5",
+		"eslint": "9.32.0",
+		"javascript-stringify": "^2.1.0",
+		"js-yaml": "^4.1.1",
+		"prettier": "3.6.2",
+		"release-it": "^19.0.4",
+		"typescript": "5.9.2"
+	},
+	"peerDependencies": {
+		"n8n-workflow": "*"
+	}
+}
