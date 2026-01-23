@@ -33,13 +33,13 @@ export class CrowdinEnterpriseOAuth2Api implements ICredentialType {
       displayName: 'Authorization URL',
       name: 'authUrl',
       type: 'hidden',
-      default: '=https://{{$credentials.organization}}.crowdin.com/oauth/authorize',
+      default: 'https://accounts.crowdin.com/oauth/authorize',
     },
     {
       displayName: 'Access Token URL',
       name: 'accessTokenUrl',
       type: 'hidden',
-      default: '=https://{{$credentials.organization}}.crowdin.com/oauth/token',
+      default: 'https://accounts.crowdin.com/oauth/token',
     },
     {
       displayName: 'Scope',
