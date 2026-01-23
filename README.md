@@ -1,4 +1,4 @@
-# n8n-nodes-crowdin
+# @crowdin/n8n-nodes-crowdin
 
 This is an n8n community node. It lets you use [Crowdin](https://crowdin.com/) in your n8n workflows.
 
