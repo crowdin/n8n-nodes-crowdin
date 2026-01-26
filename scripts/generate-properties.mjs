@@ -282,6 +282,249 @@ const MULTI_SELECT_OPTIONS = {
 };
 
 // ============================================================================
+// TRIGGER EVENTS CONFIGURATION
+// Output directories for auto-generated trigger events
+// ============================================================================
+
+/** Trigger events output configurations (parallel to OPENAPI_CONFIGS) */
+const TRIGGER_EVENTS_CONFIGS = {
+	'Crowdin File-Based': {
+		outputDir: 'triggers/crowdin/fileBased',
+		isEnterprise: false,
+	},
+	'Crowdin String-Based': {
+		outputDir: 'triggers/crowdin/stringBased',
+		isEnterprise: false,
+	},
+	'Crowdin Enterprise File-Based': {
+		outputDir: 'triggers/enterprise/fileBased',
+		isEnterprise: true,
+	},
+	'Crowdin Enterprise String-Based': {
+		outputDir: 'triggers/enterprise/stringBased',
+		isEnterprise: true,
+	},
+};
+
+// ============================================================================
+// TRIGGER EVENTS EXTRACTION & GENERATION
+// Extract events from webhooks schemas and generate events.ts files
+// ============================================================================
+
+/**
+ * Parse event descriptions from OpenAPI field description text.
+ * Format: "'event.name' — description" or "'event.name' - description"
+ * @param {string} descriptionText - Description text from OpenAPI
+ * @returns {Map<string, string>} Map of event value to description
+ */
+function parseEventDescriptions(descriptionText) {
+	const descriptions = new Map();
+	if (!descriptionText) return descriptions;
+	
+	// Match patterns like: 'event.name' — description OR 'event.name' - description
+	const regex = /['"]([^'"]+)['"]\s*[—\-–]\s*(.+?)(?=\n|$)/g;
+	let match;
+	
+	while ((match = regex.exec(descriptionText)) !== null) {
+		const eventValue = match[1].trim();
+		let description = match[2].trim();
+		// Clean up description - remove leading asterisks and extra whitespace
+		description = description.replace(/^\*\s*/, '').trim();
+		descriptions.set(eventValue, description);
+	}
+	
+	return descriptions;
+}
+
+/**
+ * Generate human-readable display name from event value.
+ * @param {string} eventValue - Event value like 'file.added' or 'stringComment.created'
+ * @param {string} [prefix] - Optional prefix like '[Account]' or '[Organization]'
+ * @returns {string} Display name like 'File Added' or '[Account] Project Created'
+ */
+function generateEventDisplayName(eventValue, prefix = '') {
+	// lodash.startCase handles camelCase, dots, etc.: 'stringComment.created' -> 'String Comment Created'
+	const displayName = lodash.startCase(eventValue);
+	return prefix ? `${prefix} ${displayName}` : displayName;
+}
+
+/**
+ * Extract events from webhooks schema in OpenAPI document.
+ * Looks for POST operation on webhooks endpoints and extracts events enum.
+ * @param {object} doc - OpenAPI document
+ * @param {string} pathPattern - Path pattern to match (e.g., '/projects/{projectId}/webhooks' or '/webhooks')
+ * @returns {{events: string[], descriptions: Map<string, string>}|null}
+ */
+function extractEventsFromWebhooksSchema(doc, pathPattern) {
+	if (!doc.paths) return null;
+	
+	// Find the matching path
+	const matchingPath = Object.keys(doc.paths).find(p => p === pathPattern || p.endsWith(pathPattern));
+	if (!matchingPath) return null;
+	
+	const pathItem = doc.paths[matchingPath];
+	const postOp = pathItem?.post;
+	if (!postOp) return null;
+	
+	// Get request body schema
+	const requestBody = postOp.requestBody;
+	if (!requestBody) return null;
+	
+	const content = requestBody.content?.['application/json'];
+	if (!content?.schema) return null;
+	
+	let schema = content.schema;
+	
+	// Resolve $ref if needed
+	if (schema.$ref) {
+		schema = resolveRef(doc, schema.$ref);
+	}
+	if (!schema) return null;
+	
+	// Find events property
+	const eventsProperty = schema.properties?.events;
+	if (!eventsProperty) return null;
+	
+	// Get enum values from items
+	let eventEnums = [];
+	if (eventsProperty.items?.enum) {
+		eventEnums = eventsProperty.items.enum;
+	} else if (eventsProperty.items?.$ref) {
+		const itemsSchema = resolveRef(doc, eventsProperty.items.$ref);
+		if (itemsSchema?.enum) {
+			eventEnums = itemsSchema.enum;
+		}
+	}
+	
+	// Parse descriptions from the events property description
+	const descriptions = parseEventDescriptions(eventsProperty.description);
+	
+	return {
+		events: eventEnums,
+		descriptions,
+	};
+}
+
+/**
+ * Generate TypeScript content for events.ts file.
+ * @param {object} params - Generation parameters
+ * @param {string[]} params.projectEvents - Project-level event values
+ * @param {Map<string, string>} params.projectDescriptions - Project event descriptions
+ * @param {string[]} params.orgEvents - Organization/account-level event values
+ * @param {Map<string, string>} params.orgDescriptions - Org event descriptions
+ * @param {boolean} params.isEnterprise - Whether this is Enterprise (Organization) or Crowdin (Account)
+ * @returns {string} TypeScript file content
+ */
+function generateEventsFileContent({ projectEvents, projectDescriptions, orgEvents, orgDescriptions, isEnterprise }) {
+	const prefix = isEnterprise ? '[Organization]' : '[Account]';
+	const levelName = isEnterprise ? 'ORGANIZATION' : 'ACCOUNT';
+	
+	// Generate org-level events array (string values only - for checking if event is org-level)
+	const orgLevelEventsArray = orgEvents.map(e => `'${e}'`).join(', ');
+	
+	// Generate org events with display names
+	const orgEventsWithNames = orgEvents.map(eventValue => {
+		const displayName = generateEventDisplayName(eventValue, prefix);
+		const description = orgDescriptions.get(eventValue);
+		const descLine = description ? `\n\t\tdescription: '${escapeString(lodash.upperFirst(description))}',` : '';
+		return `\t{\n\t\tname: '${displayName}',\n\t\tvalue: '${eventValue}',${descLine}\n\t}`;
+	});
+	
+	// Generate project events with display names (excluding org events)
+	const projectOnlyEvents = projectEvents.filter(e => !orgEvents.includes(e));
+	const projectEventsWithNames = projectOnlyEvents.map(eventValue => {
+		const displayName = generateEventDisplayName(eventValue);
+		const description = projectDescriptions.get(eventValue);
+		const descLine = description ? `\n\t\tdescription: '${escapeString(lodash.upperFirst(description))}',` : '';
+		return `\t{\n\t\tname: '${displayName}',\n\t\tvalue: '${eventValue}',${descLine}\n\t}`;
+	});
+	
+	return `// Auto-generated - do not edit manually
+
+export interface WebhookEvent {
+\tname: string;
+\tvalue: string;
+\tdescription?: string;
+}
+
+/** ${isEnterprise ? 'Organization' : 'Account'}-level events (no project required) */
+export const ${levelName}_LEVEL_EVENTS: string[] = [${orgLevelEventsArray}];
+
+/** ${isEnterprise ? 'Organization' : 'Account'}-level events with display names */
+export const ${levelName}_EVENTS: WebhookEvent[] = [
+${orgEventsWithNames.join(',\n')}
+];
+
+/** Project-level events with display names */
+export const PROJECT_EVENTS: WebhookEvent[] = [
+${projectEventsWithNames.join(',\n')}
+];
+
+/** All events combined for trigger node options */
+export const ALL_EVENTS: WebhookEvent[] = [...${levelName}_EVENTS, ...PROJECT_EVENTS];
+`;
+}
+
+/**
+ * Escape string for TypeScript output (handle quotes and special chars).
+ * @param {string} str - String to escape
+ * @returns {string} Escaped string
+ */
+function escapeString(str) {
+	if (!str) return '';
+	return str
+		.replace(/\\/g, '\\\\')
+		.replace(/'/g, "\\'")
+		.replace(/\n/g, '\\n');
+}
+
+
+/**
+ * Generate trigger events file for a config.
+ * @param {object} doc - OpenAPI document
+ * @param {object} config - OpenAPI config (name, url, outputDir)
+ */
+function generateTriggerEvents(doc, config) {
+	const triggerConfig = TRIGGER_EVENTS_CONFIGS[config.name];
+	if (!triggerConfig) {
+		console.log(`  No trigger config for ${config.name}, skipping events generation`);
+		return;
+	}
+	
+	// Extract project webhooks events
+	const projectWebhooks = extractEventsFromWebhooksSchema(doc, '/projects/{projectId}/webhooks');
+	if (!projectWebhooks || projectWebhooks.events.length === 0) {
+		console.log(`  No project webhook events found for ${config.name}`);
+		return;
+	}
+	
+	// Extract organization/account webhooks events
+	const orgWebhooks = extractEventsFromWebhooksSchema(doc, '/webhooks');
+	const orgEvents = orgWebhooks?.events || [];
+	const orgDescriptions = orgWebhooks?.descriptions || new Map();
+	
+	// Generate events file content
+	const content = generateEventsFileContent({
+		projectEvents: projectWebhooks.events,
+		projectDescriptions: projectWebhooks.descriptions,
+		orgEvents,
+		orgDescriptions,
+		isEnterprise: triggerConfig.isEnterprise,
+	});
+	
+	// Write events file
+	const outputDir = path.join(nodesDir, triggerConfig.outputDir);
+	if (!fs.existsSync(outputDir)) {
+		fs.mkdirSync(outputDir, { recursive: true });
+	}
+	
+	const outputPath = path.join(outputDir, 'events.ts');
+	fs.writeFileSync(outputPath, content);
+	
+	console.log(`  Generated ${triggerConfig.outputDir}/events.ts (${projectWebhooks.events.length} project events, ${orgEvents.length} org events)`);
+}
+
+// ============================================================================
 // EXTENSION OPERATIONS DETECTION
 // Scan extension files to find manually defined operations to skip
 // ============================================================================
@@ -5691,7 +5934,11 @@ async function processConfig(config) {
 
 	console.log(`  Generated ${config.outputDir}/ with ${resourceCount} resource files`);
 	console.log(`  Transformed ${oneOfCount} oneOf schemas, ${patchCount} PATCH operations, ${batchCount} batch operations`);
-	console.log(`  Skipped ${configUnsupported.size} endpoints with oneOf/anyOf\n`);
+	console.log(`  Skipped ${configUnsupported.size} endpoints with oneOf/anyOf`);
+
+	// Generate trigger events from webhooks schemas
+	generateTriggerEvents(doc, config);
+	console.log();
 }
 
 /**

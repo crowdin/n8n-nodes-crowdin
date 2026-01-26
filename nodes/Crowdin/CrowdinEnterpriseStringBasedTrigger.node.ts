@@ -14,145 +14,7 @@ import {
 	crowdinApiRequestAllItems,
 } from './utils/api';
 import { loadOptions } from './methods/enterprise';
-
-// Organization-level events that don't require a project (Enterprise only)
-const ORGANIZATION_EVENTS = ['project.created', 'project.deleted', 'group.created', 'group.deleted'];
-
-// String-based project events from OpenAPI specification (no file.* events)
-const STRING_BASED_EVENTS = [
-	// Organization-level events (Enterprise only)
-	{
-		name: '[Organization] Project created',
-		value: 'project.created',
-		description: 'A project is created',
-	},
-	{
-		name: '[Organization] Project deleted',
-		value: 'project.deleted',
-		description: 'A project is deleted',
-	},
-	{
-		name: '[Organization] Group created',
-		value: 'group.created',
-		description: 'A group is created',
-	},
-	{
-		name: '[Organization] Group deleted',
-		value: 'group.deleted',
-		description: 'A group is deleted',
-	},
-	// Project events
-	{
-		name: 'Project fully translated',
-		value: 'project.translated',
-		description: 'All files are translated into one of the target languages',
-	},
-	{
-		name: 'Project fully reviewed',
-		value: 'project.approved',
-		description: 'Translations in all files are approved for one of the target languages',
-	},
-	{
-		name: 'Project successfully built',
-		value: 'project.built',
-		description: 'A project is built successfully',
-	},
-	{
-		name: 'Project QA check finished',
-		value: 'project.qa.finished',
-		description: 'QA check for all strings in the project is finished',
-	},
-	// Source string events
-	{
-		name: 'Source string added',
-		value: 'string.added',
-		description: 'A new string is added to the project',
-	},
-	{
-		name: 'Source string updated',
-		value: 'string.updated',
-		description: 'A string in the project is updated',
-	},
-	{
-		name: 'Source string deleted',
-		value: 'string.deleted',
-		description: 'A string is deleted',
-	},
-	// String comment/issue events
-	{
-		name: 'String comment/issue created',
-		value: 'stringComment.created',
-		description: 'A comment or issue is added to the string',
-	},
-	{
-		name: 'String comment/issue updated',
-		value: 'stringComment.updated',
-		description: 'A comment or issue is updated',
-	},
-	{
-		name: 'String comment/issue deleted',
-		value: 'stringComment.deleted',
-		description: 'A comment or issue is deleted',
-	},
-	{
-		name: 'String comment/issue restored',
-		value: 'stringComment.restored',
-		description: 'A comment or issue is restored',
-	},
-	// Suggested translation events
-	{
-		name: 'Suggested translation added',
-		value: 'suggestion.added',
-		description: 'A string in the project is translated',
-	},
-	{
-		name: 'Suggested translation updated',
-		value: 'suggestion.updated',
-		description: 'A translation for a string in the project is updated',
-	},
-	{
-		name: 'Suggested translation deleted',
-		value: 'suggestion.deleted',
-		description: 'One of the translations is deleted',
-	},
-	{
-		name: 'Suggested translation approved',
-		value: 'suggestion.approved',
-		description: 'A translation for a string is approved',
-	},
-	{
-		name: 'Suggested translation disapproved',
-		value: 'suggestion.disapproved',
-		description: 'Approval for a previously added translation is removed',
-	},
-	// Task events
-	{
-		name: 'Task added',
-		value: 'task.added',
-		description: 'A task is added to the project',
-	},
-	{
-		name: 'Task status changed',
-		value: 'task.statusChanged',
-		description: 'A task status is changed',
-	},
-	{
-		name: 'Task updated',
-		value: 'task.updated',
-		description: 'A task is updated',
-	},
-	{
-		name: 'Task deleted',
-		value: 'task.deleted',
-		description: 'A task is deleted',
-	},
-	// Translation events
-	{
-		name: 'Exported translation updated',
-		value: 'translation.updated',
-		description: 'Final translation of a string is updated',
-	},
-];
+import { ALL_EVENTS, ORGANIZATION_LEVEL_EVENTS } from './triggers/enterprise/stringBased/events';
 
 export class CrowdinEnterpriseStringBasedTrigger implements INodeType {
 	description: INodeTypeDescription = {
@@ -222,7 +84,7 @@ export class CrowdinEnterpriseStringBasedTrigger implements INodeType {
 				required: true,
 				default: 'project.translated',
 				description: 'The event to listen for',
-				options: STRING_BASED_EVENTS,
+				options: ALL_EVENTS,
 			},
 			{
 				displayName: 'Project Id',
@@ -234,7 +96,7 @@ export class CrowdinEnterpriseStringBasedTrigger implements INodeType {
 				required: true,
 				displayOptions: {
 					hide: {
-						event: ORGANIZATION_EVENTS,
+						event: ORGANIZATION_LEVEL_EVENTS,
 					},
 				},
 				default: '',
@@ -251,7 +113,7 @@ export class CrowdinEnterpriseStringBasedTrigger implements INodeType {
 			async checkExists(this: IHookFunctions): Promise<boolean> {
 				const webhookUrl = this.getNodeWebhookUrl('default') as string;
 				const event = this.getNodeParameter('event') as string;
-				const isOrganizationEvent = ORGANIZATION_EVENTS.includes(event);
+				const isOrganizationEvent = ORGANIZATION_LEVEL_EVENTS.includes(event);
 
 				try {
 					if (isOrganizationEvent) {
@@ -300,7 +162,7 @@ export class CrowdinEnterpriseStringBasedTrigger implements INodeType {
 			async create(this: IHookFunctions): Promise<boolean> {
 				const webhookUrl = this.getNodeWebhookUrl('default') as string;
 				const event = this.getNodeParameter('event') as string;
-				const isOrganizationEvent = ORGANIZATION_EVENTS.includes(event);
+				const isOrganizationEvent = ORGANIZATION_LEVEL_EVENTS.includes(event);
 
 				try {
 					if (isOrganizationEvent) {
