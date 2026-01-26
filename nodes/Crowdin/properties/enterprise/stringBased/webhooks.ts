@@ -361,6 +361,10 @@ export const webhooksProperties: INodeProperties[] = [
 				value: 'project.approved'
 			},
 			{
+				name: 'project.qa.finished',
+				value: 'project.qa.finished'
+			},
+			{
 				name: 'project.built',
 				value: 'project.built'
 			},
@@ -842,6 +846,10 @@ export const webhooksProperties: INodeProperties[] = [
 					{
 						name: 'project.approved',
 						value: 'project.approved'
+					},
+					{
+						name: 'project.qa.finished',
+						value: 'project.qa.finished'
 					},
 					{
 						name: 'project.built',

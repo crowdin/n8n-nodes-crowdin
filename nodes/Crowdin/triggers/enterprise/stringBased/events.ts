@@ -42,6 +42,11 @@ export const PROJECT_EVENTS: WebhookEvent[] = [
 		description: 'All strings in project are approved',
 	},
 	{
+		name: 'Project Qa Finished',
+		value: 'project.qa.finished',
+		description: 'All strings in project QA check are finished',
+	},
+	{
 		name: 'Project Built',
 		value: 'project.built',
 		description: 'Project are successfully built',
