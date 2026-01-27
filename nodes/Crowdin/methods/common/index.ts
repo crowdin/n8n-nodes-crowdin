@@ -6,6 +6,7 @@ import {
 	getScreenshotId,
 	getFileId,
 	getCommentId,
+	getApplicationIdentifier,
 } from './helpers';
 
 export * from './types';
@@ -102,11 +103,14 @@ const MAX_LOAD_OPTIONS_ITEMS = 5000;
 /**
  * Fetch all pages of a resource from the API (raw data)
  * Limited to MAX_LOAD_OPTIONS_ITEMS for performance
+ * @param flat - If true, expects flat response { data: [item] } instead of nested { data: [{ data: item }] }
  */
 async function fetchAllPagesRaw<T = ApiItem>(
 	context: ILoadOptionsFunctions,
 	config: ApiConfig,
 	endpoint: string,
+	extraQs?: Record<string, unknown>,
+	flat = false,
 ): Promise<T[]> {
 	const credentialName = config.getCredentialName(context);
 	const baseUrl = await config.getBaseUrl(context);
@@ -122,12 +126,16 @@ async function fetchAllPagesRaw<T = ApiItem>(
 				{
 					method: 'GET',
 					url: `${baseUrl}${endpoint}`,
-					qs: { limit: PAGE_SIZE, offset },
+					qs: { limit: PAGE_SIZE, offset, ...extraQs },
 					json: true,
 				},
-			) as { data: Array<ApiDataWrapper<T>> };
+			) as { data: Array<ApiDataWrapper<T>> | T[] };
 
-			results.push(...response.data.map((item) => item.data));
+			if (flat) {
+				results.push(...(response.data as T[]));
+			} else {
+				results.push(...(response.data as Array<ApiDataWrapper<T>>).map((item) => item.data));
+			}
 			hasMore = response.data.length === PAGE_SIZE;
 			offset += PAGE_SIZE;
 			
@@ -306,6 +314,40 @@ export function createCommonLoadOptions(config: ApiConfig): LoadOptionsMethods {
 	// Screenshot-scoped resources
 	const screenshotTags = createDynamicMethodPair(config, (ctx) => `/projects/${getProjectId(ctx)}/screenshots/${getScreenshotId(ctx)}/tags`, { nameField: 'id' });
 
+	// Integration-scoped resources (Crowdin Apps API)
+	// Uses flat response format { data: [item] } instead of { data: [{ data: item }] }
+	const integrationCrowdinFiles = {
+		regular: async function (this: ILoadOptionsFunctions) {
+			const appId = getApplicationIdentifier(this);
+			const projectId = getProjectId(this);
+			if (!appId || !projectId) {
+				return [{ name: '-', value: '' }];
+			}
+			const items = await fetchAllPagesRaw<ApiItem>(this, config, `/applications/${appId}/api/crowdin-files`, { projectId }, true);
+			const options = items
+				.filter((item) => item.type !== undefined)
+				.map((item) => ({
+					name: String(item.name),
+					value: item.id as string | number,
+				}));
+			return [{ name: '-', value: '' }, ...options];
+		},
+		multi: async function (this: ILoadOptionsFunctions) {
+			const appId = getApplicationIdentifier(this);
+			const projectId = getProjectId(this);
+			if (!appId || !projectId) {
+				return [];
+			}
+			const items = await fetchAllPagesRaw<ApiItem>(this, config, `/applications/${appId}/api/crowdin-files`, { projectId }, true);
+			return items
+				.filter((item) => item.type !== undefined)
+				.map((item) => ({
+					name: String(item.name),
+					value: item.id as string | number,
+				}));
+		},
+	};
+
 	// Text-formatted resources (need "{text} (ID: {id})" format because text can be non-unique)
 	const projectStrings = createTextFormattedMethodPair(
 		config,
@@ -398,6 +440,10 @@ export function createCommonLoadOptions(config: ApiConfig): LoadOptionsMethods {
 		// ===== Screenshot-scoped resources =====
 		getScreenshotTags: screenshotTags.regular,
 		getScreenshotTagsMulti: screenshotTags.multi,
+
+		// ===== Integration-scoped resources (Crowdin Apps API) =====
+		getIntegrationCrowdinFiles: integrationCrowdinFiles.regular,
+		getIntegrationCrowdinFilesMulti: integrationCrowdinFiles.multi,
 
 		// ===== Text-formatted resources =====
 		getProjectStrings: projectStrings.regular,

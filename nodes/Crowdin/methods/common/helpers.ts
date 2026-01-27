@@ -54,3 +54,8 @@ export function getTeamId(context: ILoadOptionsFunctions): number | null {
 	const value = context.getNodeParameter('teamId', 0) as number;
 	return value || null;
 }
+
+export function getApplicationIdentifier(context: ILoadOptionsFunctions): string | null {
+	const value = context.getNodeParameter('applicationIdentifier', 0) as string;
+	return value || null;
+}

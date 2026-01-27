@@ -143,7 +143,7 @@ const SINGLE_SELECT_OPTIONS = {
 	organizationWebhookId: { method: 'getOrganizationWebhooks' },
 	reportSettingsTemplateId: { method: 'getReportSettingsTemplates' },
 	identifier: { method: 'getApplicationInstallations', matchResource: 'applications', expectedType: 'string' },
-	applicationIdentifier: { method: 'getApplicationInstallations', matchResource: 'applications', expectedType: 'string' },
+	applicationIdentifier: { method: 'getApplicationInstallations', expectedType: 'string' },
 	savingsReportSettingsTemplateId: { method: 'getReportSettingsTemplates' },
 	vendorId: { method: 'getVendors' },
 	securityLogId: { method: 'getSecurityLogs' },
@@ -160,6 +160,12 @@ const SINGLE_SELECT_OPTIONS = {
 	parentId: { 
 		method: 'getGroups', 
 		matchOperation: ['api.groups.getMany', 'api.groups.post', 'api.groups.patch']
+	},
+	integrationCrowdinFileId: { 
+		method: 'getIntegrationCrowdinFiles', 
+		dependsOn: ['applicationIdentifier', 'projectId'], 
+		matchResource: 'integrations',
+		targetField: 'fileId'
 	},
 
 	// AI Provider scoped
@@ -3719,6 +3725,12 @@ function convertPolymorphicArraysToFixedCollection(properties, doc) {
 							if (prop.routing.send.property) {
 								prop.routing.send.property = `flatten:${prop.routing.send.property}`;
 							}
+							// Add preSend to process flatten: prefix
+							const existingPreSend = prop.routing.send.preSend || [];
+							prop.routing.send.preSend = [
+								'__PRESEND_NORMALIZE_FIELD__',
+								...existingPreSend,
+							];
 						}
 					}
 					
@@ -4020,6 +4032,20 @@ function convertOneOfToFixedCollection(properties, doc) {
 		
 		// Convert to fixedCollection
 		const fixedCollection = buildFixedCollectionFromMetadata(prop, metadata, doc);
+		
+		// For variants with empty values, add a JSON field as fallback
+		for (const opt of fixedCollection.options || []) {
+			if (!opt.values || opt.values.length === 0) {
+				opt.values = [{
+					displayName: 'JSON Data',
+					name: 'json',
+					type: 'json',
+					default: '{}',
+					description: 'Enter data as JSON'
+				}];
+			}
+		}
+		
 		convertedCount++;
 		result.push(fixedCollection);
 	}
@@ -4711,6 +4737,7 @@ function buildFieldFromSchema(name, schema, parentPath, doc = null, depth = 0) {
 					options: fixedOptions,
 					routing: {
 						send: {
+							preSend: ['__PRESEND_NORMALIZE_FIELD__'], // Process flatten: prefix
 							property: `flatten:${routingPath}`, // Include prefix so normalizeValue sees it
 							propertyInDotNotation: false,
 							type: 'body',
@@ -5097,9 +5124,9 @@ function addNonPaginatedListPostReceive(properties) {
 		if (prop.name !== 'operation' || !prop.options) continue;
 		
 		for (const option of prop.options) {
-			// Check if this is a GET list operation (ends with .getMany)
+			// Check if this is a GET list operation (ends with .getMany or name starts with "List")
 			const isGetMethod = option.routing?.request?.method === 'GET';
-			const isListOperation = option.value?.endsWith('.getMany');
+			const isListOperation = option.value?.endsWith('.getMany') || option.name?.startsWith('List');
 			
 			if (!isGetMethod || !isListOperation) continue;
 			
