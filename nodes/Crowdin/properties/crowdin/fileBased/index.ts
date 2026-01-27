@@ -16,17 +16,18 @@ import { translationMemoryProperties } from './translationMemory';
 import { machineTranslationEnginesProperties } from './machineTranslationEngines';
 import { translationStatusProperties } from './translationStatus';
 import { reportsProperties } from './reports';
+import { tasksProperties } from './tasks';
 import { usersProperties } from './users';
 import { webhooksProperties } from './webhooks';
 import { organizationWebhooksProperties } from './organizationWebhooks';
-import { applicationsProperties } from './applications';
-import { bundlesProperties } from './bundles';
 import { dictionariesProperties } from './dictionaries';
+import { applicationsProperties } from './applications';
+import { integrationsProperties } from './integrations';
+import { bundlesProperties } from './bundles';
 import { distributionsProperties } from './distributions';
 import { labelsProperties } from './labels';
 import { notificationsProperties } from './notifications';
 import { securityLogsProperties } from './securityLogs';
-import { tasksProperties } from './tasks';
 
 const resourceProperty: INodeProperties = {
 	displayName: 'Resource',
@@ -109,6 +110,11 @@ const resourceProperty: INodeProperties = {
 			description: '\nReports help to estimate costs, calculate translation costs, and identify the top members.\n\nUse API to generate Cost Estimate, Translation Cost, and Top Members reports. You can then export reports in .xlsx or .csv file formats. Report generation is an [asynchronous operation](#section/Introduction/Asynchronous-Operations) and shall be completed with a sequence of API methods.'
 		},
 		{
+			name: 'Tasks',
+			value: 'tasks',
+			description: '\nCreate and assign tasks to get files translated or proofread by specific people. You can set the due dates, split words between people, and receive notifications about the changes and updates on tasks. Tasks are project-specific, so you’ll have to create them within a project.\n\nUse API to create, modify, and delete specific tasks.\n'
+		},
+		{
 			name: 'Users',
 			value: 'users',
 			description: '\nUsers API gives you the possibility to get profile information about the currently authenticated user.\n'
@@ -124,18 +130,23 @@ const resourceProperty: INodeProperties = {
 			description: '\nWebhooks allow you to collect information about events that happen in your Crowdin account. You can select the request type, content type, and add a custom payload, which allows you to create integrations with other systems on your own.\n\nYou can configure webhooks for the following events:\n * project is created\n * project is deleted\n\nUse API to create, modify, and delete specific webhooks.'
 		},
 		{
+			name: 'Dictionaries',
+			value: 'dictionaries',
+			description: '\nDictionaries allow you to create a storage of words that should be skipped by the spell checker.\n\nUse API to get the list of organization dictionaries and to edit a specific dictionary.'
+		},
+		{
 			name: 'Applications',
 			value: 'applications',
 			description: '\nCrowdin Apps are web applications that can be integrated with Crowdin to extend its functionality.\n\nUse the API to manage the necessary app data.\n'
 		},
 		{
-			name: 'Bundles',
-			value: 'bundles'
+			name: 'Integrations',
+			value: 'integrations',
+			description: '\nIntegration applications provide synchronization between Crowdin and external content management systems.\n\nUse the API to manage integration files, jobs, settings, and authentication.'
 		},
 		{
-			name: 'Dictionaries',
-			value: 'dictionaries',
-			description: '\nDictionaries allow you to create a storage of words that should be skipped by the spell checker.\n\nUse API to get the list of organization dictionaries and to edit a specific dictionary.'
+			name: 'Bundles',
+			value: 'bundles'
 		},
 		{
 			name: 'Distributions',
@@ -152,11 +163,6 @@ const resourceProperty: INodeProperties = {
 		{
 			name: 'Security Logs',
 			value: 'securityLogs'
-		},
-		{
-			name: 'Tasks',
-			value: 'tasks',
-			description: '\nCreate and assign tasks to get files translated or proofread by specific people. You can set the due dates, split words between people, and receive notifications about the changes and updates on tasks. Tasks are project-specific, so you’ll have to create them within a project.\n\nUse API to create, modify, and delete specific tasks.\n'
 		}
 	],
 	default: 'ai'
@@ -179,15 +185,16 @@ export const properties: INodeProperties[] = [
 	...machineTranslationEnginesProperties,
 	...translationStatusProperties,
 	...reportsProperties,
+	...tasksProperties,
 	...usersProperties,
 	...webhooksProperties,
 	...organizationWebhooksProperties,
-	...applicationsProperties,
-	...bundlesProperties,
 	...dictionariesProperties,
+	...applicationsProperties,
+	...integrationsProperties,
+	...bundlesProperties,
 	...distributionsProperties,
 	...labelsProperties,
 	...notificationsProperties,
 	...securityLogsProperties,
-	...tasksProperties,
 ];
