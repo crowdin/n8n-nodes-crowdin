@@ -1291,7 +1291,10 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 				property: 'flatten:steps',
 				propertyInDotNotation: false,
 				type: 'body',
-				value: '={{ $value }}'
+				value: '={{ $value }}',
+				preSend: [
+					normalizeFieldBody
+				]
 			}
 		},
 		displayOptions: {
