@@ -1398,7 +1398,7 @@ export const translationsProperties: INodeProperties[] = [
 		name: 'targetLanguageIds',
 		type: 'multiOptions',
 		default: [],
-		description: 'Specify target languages for build. Get via [List Supported Languages](#operation/api.languages.getMany)\n\n Leave this field empty to build all target languages',
+		description: 'Specify target languages for build. Get via [List Supported Languages](#operation/api.languages.getMany)\n\nLeave this field empty to build all target languages',
 		routing: {
 			send: {
 				property: 'targetLanguageIds',
@@ -1426,7 +1426,7 @@ export const translationsProperties: INodeProperties[] = [
 		name: 'skipUntranslatedStrings',
 		type: 'boolean',
 		default: false,
-		description: 'Defines whether to export only translated strings\n\n__Note:__ `true` value can\'t be used with `skipUntranslatedFiles=true` in same request\n\n [More info](https://support.crowdin.com/project-settings/export/)',
+		description: 'Defines whether to export only translated strings\n\n__Note:__ `true` value can\'t be used with `skipUntranslatedFiles=true` in same request\n\n[More info](https://support.crowdin.com/project-settings/export/)',
 		routing: {
 			send: {
 				property: 'skipUntranslatedStrings',
@@ -1451,7 +1451,7 @@ export const translationsProperties: INodeProperties[] = [
 		name: 'skipUntranslatedFiles',
 		type: 'boolean',
 		default: false,
-		description: 'Defines whether to export only translated file\n\n__Note:__ `true` value can\'t be used with `skipUntranslatedStrings=true` in same request\n\n [More info](https://support.crowdin.com/project-settings/export/)',
+		description: 'Defines whether to export only translated file\n\n__Note:__ `true` value can\'t be used with `skipUntranslatedStrings=true` in same request\n\n[More info](https://support.crowdin.com/project-settings/export/)',
 		routing: {
 			send: {
 				property: 'skipUntranslatedFiles',
@@ -1476,7 +1476,7 @@ export const translationsProperties: INodeProperties[] = [
 		name: 'exportApprovedOnly',
 		type: 'boolean',
 		default: false,
-		description: 'Defines whether to export only approved strings\n\n [More info](https://support.crowdin.com/project-settings/export/)',
+		description: 'Defines whether to export only approved strings\n\n[More info](https://support.crowdin.com/project-settings/export/)',
 		routing: {
 			send: {
 				property: 'exportApprovedOnly',
@@ -1846,7 +1846,7 @@ export const translationsProperties: INodeProperties[] = [
 						name: 'skipUntranslatedStrings',
 						type: 'boolean',
 						default: false,
-						description: 'Defines whether to export only translated strings\n\n__Note:__ `true` value can\'t be used with `skipUntranslatedFiles=true` in same request\n\n [More info](https://support.crowdin.com/project-settings/export/)',
+						description: 'Defines whether to export only translated strings\n\n__Note:__ `true` value can\'t be used with `skipUntranslatedFiles=true` in same request\n\n[More info](https://support.crowdin.com/project-settings/export/)',
 						placeholder: 'false'
 					},
 					{
@@ -1854,7 +1854,7 @@ export const translationsProperties: INodeProperties[] = [
 						name: 'skipUntranslatedFiles',
 						type: 'boolean',
 						default: false,
-						description: 'Defines whether to export only translated files\n\n__Note:__ `true` value can\'t be used with `skipUntranslatedStrings=true` in same request\n\n [More info](https://support.crowdin.com/project-settings/export/)',
+						description: 'Defines whether to export only translated files\n\n__Note:__ `true` value can\'t be used with `skipUntranslatedStrings=true` in same request\n\n[More info](https://support.crowdin.com/project-settings/export/)',
 						placeholder: 'false'
 					},
 					{
@@ -1862,7 +1862,7 @@ export const translationsProperties: INodeProperties[] = [
 						name: 'exportApprovedOnly',
 						type: 'boolean',
 						default: false,
-						description: 'Defines whether to export only approved strings\n\n [More info](https://support.crowdin.com/project-settings/export/)',
+						description: 'Defines whether to export only approved strings\n\n[More info](https://support.crowdin.com/project-settings/export/)',
 						placeholder: 'false'
 					}
 				]
@@ -2297,7 +2297,7 @@ export const translationsProperties: INodeProperties[] = [
 		name: 'skipUntranslatedStrings',
 		type: 'boolean',
 		default: false,
-		description: 'Defines whether to export only translated strings\n\n__Note:__ Can\'t be used with `skipUntranslatedFiles` in same request\n\n [More info](https://support.crowdin.com/project-settings/export/)',
+		description: 'Defines whether to export only translated strings\n\n__Note:__ Can\'t be used with `skipUntranslatedFiles` in same request\n\n[More info](https://support.crowdin.com/project-settings/export/)',
 		routing: {
 			send: {
 				property: 'skipUntranslatedStrings',
@@ -2322,7 +2322,7 @@ export const translationsProperties: INodeProperties[] = [
 		name: 'skipUntranslatedFiles',
 		type: 'boolean',
 		default: false,
-		description: 'Defines whether to export only translated file\n\n__Note:__ Can\'t be used with `skipUntranslatedStrings` in same request\n\n [More info](https://support.crowdin.com/project-settings/export/)',
+		description: 'Defines whether to export only translated file\n\n__Note:__ Can\'t be used with `skipUntranslatedStrings` in same request\n\n[More info](https://support.crowdin.com/project-settings/export/)',
 		routing: {
 			send: {
 				property: 'skipUntranslatedFiles',
@@ -2347,7 +2347,7 @@ export const translationsProperties: INodeProperties[] = [
 		name: 'exportApprovedOnly',
 		type: 'boolean',
 		default: false,
-		description: 'Defines whether to export only approved strings\n\n [More info](https://support.crowdin.com/project-settings/export/)',
+		description: 'Defines whether to export only approved strings\n\n[More info](https://support.crowdin.com/project-settings/export/)',
 		routing: {
 			send: {
 				property: 'exportApprovedOnly',

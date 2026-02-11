@@ -856,7 +856,7 @@ export const applicationsProperties: INodeProperties[] = [
 		displayName: 'Application Identifier',
 		name: 'applicationIdentifier',
 		required: true,
-		description: 'Identifier of the application.',
+		description: 'Identifier of the application. Get via [List Application Installations](#operation/api.applications.installations.getMany)',
 		default: '',
 		type: 'options',
 		displayOptions: {
@@ -895,7 +895,7 @@ export const applicationsProperties: INodeProperties[] = [
 		displayName: 'Application Identifier',
 		name: 'applicationIdentifier',
 		required: true,
-		description: 'Identifier of the application.',
+		description: 'Identifier of the application. Get via [List Application Installations](#operation/api.applications.installations.getMany)',
 		default: '',
 		type: 'options',
 		displayOptions: {
@@ -934,7 +934,7 @@ export const applicationsProperties: INodeProperties[] = [
 		displayName: 'Application Identifier',
 		name: 'applicationIdentifier',
 		required: true,
-		description: 'Identifier of the application.',
+		description: 'Identifier of the application. Get via [List Application Installations](#operation/api.applications.installations.getMany)',
 		default: '',
 		type: 'options',
 		displayOptions: {
@@ -973,7 +973,7 @@ export const applicationsProperties: INodeProperties[] = [
 		displayName: 'Application Identifier',
 		name: 'applicationIdentifier',
 		required: true,
-		description: 'Identifier of the application.',
+		description: 'Identifier of the application. Get via [List Application Installations](#operation/api.applications.installations.getMany)',
 		default: '',
 		type: 'options',
 		displayOptions: {
@@ -1012,7 +1012,7 @@ export const applicationsProperties: INodeProperties[] = [
 		displayName: 'Application Identifier',
 		name: 'applicationIdentifier',
 		required: true,
-		description: 'Identifier of the application.',
+		description: 'Identifier of the application. Get via [List Application Installations](#operation/api.applications.installations.getMany)',
 		default: '',
 		type: 'options',
 		displayOptions: {

@@ -107,6 +107,76 @@ export const aiProperties: INodeProperties[] = [
 				}
 			},
 			{
+				name: 'AI File Translations',
+				value: 'api.ai.file-translations.post',
+				action: 'AI File Translations',
+				description: '**Required scopes:** `ai.translate` (Read and Write).',
+				routing: {
+					request: {
+						method: 'POST',
+						url: '=/ai/file-translations'
+					}
+				}
+			},
+			{
+				name: 'Get File Translations Status',
+				value: 'api.ai.file-translations.get',
+				action: 'Get File Translations Status',
+				description: '**Required scopes:** `ai.translate` (Read and Write).',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/ai/file-translations/{{$parameter["jobIdentifier"]}}'
+					}
+				}
+			},
+			{
+				name: 'Cancel File Translations',
+				value: 'api.ai.file-translations.delete',
+				action: 'Cancel File Translations',
+				description: '**Required scopes:** `ai.translate` (Read and Write).',
+				routing: {
+					request: {
+						method: 'DELETE',
+						url: '=/ai/file-translations/{{$parameter["jobIdentifier"]}}'
+					},
+					output: {
+						postReceive: [
+							{
+								type: 'set',
+								properties: {
+									value: '={{ { "success": true } }}'
+								}
+							}
+						]
+					}
+				}
+			},
+			{
+				name: 'Download Translated File',
+				value: 'api.ai.file-translations.download',
+				action: 'Download Translated File',
+				description: '**Required scopes:** `ai.translate` (Read and Write).',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/ai/file-translations/{{$parameter["jobIdentifier"]}}/download'
+					}
+				}
+			},
+			{
+				name: 'Download File Strings',
+				value: 'api.ai.file-translations.download-strings',
+				action: 'Download File Strings',
+				description: '**Required scopes:** `ai.translate` (Read and Write).',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/ai/file-translations/{{$parameter["jobIdentifier"]}}/translations'
+					}
+				}
+			},
+			{
 				name: 'Clone AI Prompt',
 				value: 'api.ai.prompts.clones.post',
 				action: 'Clone AI Prompt',
@@ -532,6 +602,101 @@ export const aiProperties: INodeProperties[] = [
 				],
 				operation: [
 					'api.ai.prompts.snippets.patch'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'POST /ai/file-translations',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.file-translations.post'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'GET /ai/file-translations/{jobIdentifier}',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.file-translations.get'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'DELETE /ai/file-translations/{jobIdentifier}',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.file-translations.delete'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'GET /ai/file-translations/{jobIdentifier}/download',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.file-translations.download'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'GET /ai/file-translations/{jobIdentifier}/translations',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.file-translations.download-strings'
 				]
 			}
 		}
@@ -1089,6 +1254,711 @@ export const aiProperties: INodeProperties[] = [
 		},
 		typeOptions: {
 			loadOptionsMethod: 'getAiSnippets'
+		}
+	},
+	{
+		displayName: 'Storage Id',
+		required: true,
+		name: 'storageId',
+		type: 'options',
+		default: '',
+		description: 'Storage Identifier of the file to translate. Get via [List Storages](#operation/api.storages.getMany)',
+		routing: {
+			send: {
+				property: 'storageId',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.file-translations.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getStorages'
+		}
+	},
+	{
+		displayName: 'Source Language Id',
+		name: 'sourceLanguageId',
+		type: 'options',
+		default: '',
+		description: 'Source Language Identifier. Get via [List Supported Languages](#operation/api.languages.getMany). If not specified, auto-detection will be used.',
+		routing: {
+			send: {
+				property: 'sourceLanguageId',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.file-translations.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getLanguages'
+		}
+	},
+	{
+		displayName: 'Target Language Id',
+		required: true,
+		name: 'targetLanguageId',
+		type: 'options',
+		default: '',
+		description: 'Target Language Identifier. Get via [List Supported Languages](#operation/api.languages.getMany)',
+		routing: {
+			send: {
+				property: 'targetLanguageId',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.file-translations.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getLanguages'
+		}
+	},
+	{
+		displayName: 'Type',
+		name: 'type',
+		type: 'options',
+		default: '',
+		description: 'Values available:\n- empty value or \'auto\' — Try to detect file type by extension or MIME type\n- \'android\' — Android (*.xml)\n- \'macosx\' — Mac OS X / iOS (*.strings)\n- \'resx\' — .NET, Windows Phone (*.resx)\n- \'properties\' — Java (*.properties)\n- \'gettext\' — GNU GetText (*.po, *.pot)\n- \'yaml\' — Ruby On Rails (*.yaml, *.yml)\n- \'php\' — Hypertext Preprocessor (*.php)\n- \'json\' — Generic JSON (*.json)\n- \'xml\' — Generic XML (*.xml)\n- \'ini\' — Generic INI (*.ini)\n- \'rc\' — Windows Resources (*.rc)\n- \'resw\' — Windows 8 Metro (*.resw)\n- \'resjson\' — Windows 8 Metro (*.resjson)\n- \'qtts\' — Nokia Qt (*.ts)\n- \'joomla\' — Joomla localizable resources (*.ini)\n- \'chrome\' — Google Chrome Extension (*.json)\n- \'dtd\' — Mozilla DTD (*.dtd)\n- \'dklang\' — Delphi DKLang (*.dklang)\n- \'flex\' — Flex (*.properties)\n- \'nsh\' — NSIS Installer Resources (*.nsh)\n- \'wxl\' — WiX Installer (*.wxl)\n- \'xliff\' — XLIFF (*.xliff, *.xlf)\n- \'xliff_two\' — XLIFF 2.0 (*.xliff, *.xlf)\n- \'html\' — HTML (*.html, *.htm, *.xhtml, *.xhtm, *.xht, *.hbs, *.liquid)\n- \'haml\' — Haml (*.haml)\n- \'txt\' — Plain Text (*.txt)\n- \'csv\' — Comma Separated Values (*.csv)\n- \'md\' — Markdown (*.md, *.text, *.markdown...)\n- \'flsnp\' — MadCap Flare (*.flnsp, .flpgpl .fltoc)\n- \'fm_html\' — Jekyll HTML (*.html)\n- \'fm_md\' — Jekyll Markdown (*.md)\n- \'mediawiki\' — MediaWiki (*.wiki, *.wikitext, *.mediawiki)\n- \'docx\' — Microsoft Office, OpenOffice.org Documents, Adobe InDesign, Adobe FrameMaker(*.docx, *.dotx, *.docm, *.dotm, *.xlsx, *.xltx, *.xlsm, *.xltm, *.pptx, *.potx, *.ppsx, *.pptm, *.potm, *.ppsm, *.odt, *.ods, *.odg, *.odp, *.imdl, *.mif)\n- \'xlsx\' — Microsoft Excel (*.xlsx)\n- \'sbv\' — Youtube .sbv (*.sbv)\n- \'properties_play\' — Play Framework\n- \'properties_xml\' — Java Application (*.xml)\n- \'maxthon\' — Maxthon Browser (*.ini)\n- \'go_json\' — Go (*.gotext.json)\n- \'dita\' — DITA Document (*.dita, *.ditamap)\n- \'mif\' — Adobe FrameMaker (*.mif)\n- \'idml\' — Adobe InDesign (*.idml)\n- \'stringsdict\' — iOS (*.stringsdict)\n- \'plist\' — Mac OS property list (*.plist)\n- \'vtt\' — Video Subtitling and WebVTT (*.vtt)\n- \'vdf\' — Steamworks Localization Valve Data File (*.vdf)\n- \'srt\' — SubRip .srt (*.srt)\n- \'stf\' — Salesforce (*.stf)\n- \'toml\' — Toml (*.toml)\n- \'contentful_rt\' — Contentful (*.json)\n- \'svg\' — SVG (*.svg)\n- \'js\' — JavaScript (*.js)\n- \'coffee\' — CoffeeScript (*.coffee)\n- \'nestjs_i18n\' - NestJS i18n\n- \'loc\' — LOC (*.loc)\n\n__Note__: Use `docx` type to import each cell as a separate source string for XLSX file',
+		options: [
+			{
+				name: '-',
+				value: ''
+			},
+			{
+				name: 'auto',
+				value: 'auto'
+			},
+			{
+				name: 'android',
+				value: 'android'
+			},
+			{
+				name: 'macosx',
+				value: 'macosx'
+			},
+			{
+				name: 'resx',
+				value: 'resx'
+			},
+			{
+				name: 'properties',
+				value: 'properties'
+			},
+			{
+				name: 'gettext',
+				value: 'gettext'
+			},
+			{
+				name: 'yaml',
+				value: 'yaml'
+			},
+			{
+				name: 'php',
+				value: 'php'
+			},
+			{
+				name: 'json',
+				value: 'json'
+			},
+			{
+				name: 'xml',
+				value: 'xml'
+			},
+			{
+				name: 'ini',
+				value: 'ini'
+			},
+			{
+				name: 'rc',
+				value: 'rc'
+			},
+			{
+				name: 'resw',
+				value: 'resw'
+			},
+			{
+				name: 'resjson',
+				value: 'resjson'
+			},
+			{
+				name: 'qtts',
+				value: 'qtts'
+			},
+			{
+				name: 'joomla',
+				value: 'joomla'
+			},
+			{
+				name: 'chrome',
+				value: 'chrome'
+			},
+			{
+				name: 'dtd',
+				value: 'dtd'
+			},
+			{
+				name: 'dklang',
+				value: 'dklang'
+			},
+			{
+				name: 'flex',
+				value: 'flex'
+			},
+			{
+				name: 'nsh',
+				value: 'nsh'
+			},
+			{
+				name: 'wxl',
+				value: 'wxl'
+			},
+			{
+				name: 'xliff',
+				value: 'xliff'
+			},
+			{
+				name: 'xliff_two',
+				value: 'xliff_two'
+			},
+			{
+				name: 'html',
+				value: 'html'
+			},
+			{
+				name: 'haml',
+				value: 'haml'
+			},
+			{
+				name: 'txt',
+				value: 'txt'
+			},
+			{
+				name: 'csv',
+				value: 'csv'
+			},
+			{
+				name: 'md',
+				value: 'md'
+			},
+			{
+				name: 'mdx_v1',
+				value: 'mdx_v1'
+			},
+			{
+				name: 'mdx_v2',
+				value: 'mdx_v2'
+			},
+			{
+				name: 'flsnp',
+				value: 'flsnp'
+			},
+			{
+				name: 'fm_html',
+				value: 'fm_html'
+			},
+			{
+				name: 'fm_md',
+				value: 'fm_md'
+			},
+			{
+				name: 'mediawiki',
+				value: 'mediawiki'
+			},
+			{
+				name: 'docx',
+				value: 'docx'
+			},
+			{
+				name: 'xlsx',
+				value: 'xlsx'
+			},
+			{
+				name: 'sbv',
+				value: 'sbv'
+			},
+			{
+				name: 'properties_play',
+				value: 'properties_play'
+			},
+			{
+				name: 'properties_xml',
+				value: 'properties_xml'
+			},
+			{
+				name: 'maxthon',
+				value: 'maxthon'
+			},
+			{
+				name: 'go_json',
+				value: 'go_json'
+			},
+			{
+				name: 'dita',
+				value: 'dita'
+			},
+			{
+				name: 'idml',
+				value: 'idml'
+			},
+			{
+				name: 'mif',
+				value: 'mif'
+			},
+			{
+				name: 'stringsdict',
+				value: 'stringsdict'
+			},
+			{
+				name: 'plist',
+				value: 'plist'
+			},
+			{
+				name: 'vtt',
+				value: 'vtt'
+			},
+			{
+				name: 'vdf',
+				value: 'vdf'
+			},
+			{
+				name: 'srt',
+				value: 'srt'
+			},
+			{
+				name: 'stf',
+				value: 'stf'
+			},
+			{
+				name: 'toml',
+				value: 'toml'
+			},
+			{
+				name: 'contentful_rt',
+				value: 'contentful_rt'
+			},
+			{
+				name: 'svg',
+				value: 'svg'
+			},
+			{
+				name: 'js',
+				value: 'js'
+			},
+			{
+				name: 'coffee',
+				value: 'coffee'
+			},
+			{
+				name: 'ts',
+				value: 'ts'
+			},
+			{
+				name: 'i18next_json',
+				value: 'i18next_json'
+			},
+			{
+				name: 'xaml',
+				value: 'xaml'
+			},
+			{
+				name: 'arb',
+				value: 'arb'
+			},
+			{
+				name: 'adoc',
+				value: 'adoc'
+			},
+			{
+				name: 'fbt',
+				value: 'fbt'
+			},
+			{
+				name: 'webxml',
+				value: 'webxml'
+			},
+			{
+				name: 'nestjs_i18n',
+				value: 'nestjs_i18n'
+			},
+			{
+				name: 'loc',
+				value: 'loc'
+			}
+		],
+		routing: {
+			send: {
+				property: 'type',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.file-translations.post'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Parser Version',
+		name: 'parserVersion',
+		type: 'number',
+		default: 0,
+		description: 'Using latest parser version by default.\n\n__Note:__ Must be used together with `type`',
+		routing: {
+			send: {
+				property: 'parserVersion',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value !== 0 ? $value : undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.file-translations.post'
+				]
+			}
+		},
+		placeholder: '1'
+	},
+	{
+		displayName: 'Tm Ids',
+		name: 'tmIds',
+		type: 'multiOptions',
+		default: [],
+		description: 'Array of Translation Memory IDs. Get via [List TMs](#operation/api.tms.getMany)',
+		routing: {
+			send: {
+				property: 'tmIds',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.file-translations.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getTranslationMemoriesMulti'
+		}
+	},
+	{
+		displayName: 'Glossary Ids',
+		name: 'glossaryIds',
+		type: 'multiOptions',
+		default: [],
+		description: 'Array of Glossary Identifiers. Get via [List Glossaries](#operation/api.glossaries.getMany)',
+		routing: {
+			send: {
+				property: 'glossaryIds',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.file-translations.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getGlossariesMulti'
+		}
+	},
+	{
+		displayName: 'Ai Prompt Id',
+		name: 'aiPromptId',
+		type: 'options',
+		default: '',
+		description: 'Pre-Translation Prompt Identifier. Get via [List Prompts](#operation/api.ai.prompts.getMany)\n\n__Note:__ Can\'t be used with `aiProviderId` or `aiModelId` in same request',
+		routing: {
+			send: {
+				property: 'aiPromptId',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ typeof $value === \'number\' ? $value : undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.file-translations.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getAiPrompts'
+		}
+	},
+	{
+		displayName: 'Ai Provider Id',
+		name: 'aiProviderId',
+		type: 'options',
+		default: '',
+		description: 'AI Provider Identifier. Get via [List AI Providers](#operation/api.ai.providers.getMany)\n\n__Note:__ Must be used together with `aiModelId`. Can\'t be used with `aiPromptId` in same request',
+		routing: {
+			send: {
+				property: 'aiProviderId',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ typeof $value === \'number\' ? $value : undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.file-translations.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getAiProviders'
+		}
+	},
+	{
+		displayName: 'Ai Model Id',
+		name: 'aiModelId',
+		type: 'options',
+		default: '',
+		description: 'AI Model ID. Get via [List AI Provider Models](#operation/api.ai.providers.models.getMany)\n\n__Note:__ Must be used together with `aiProviderId`. Can\'t be used with `aiPromptId` in same request',
+		routing: {
+			send: {
+				property: 'aiModelId',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.file-translations.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getAiProviderModels',
+			loadOptionsDependsOn: [
+				'aiProviderId'
+			]
+		}
+	},
+	{
+		displayName: 'Instructions',
+		name: 'instructions',
+		type: 'fixedCollection',
+		default: {},
+		description: 'Custom instructions for translation',
+		routing: {
+			send: {
+				property: 'instructions',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value.items?.map(i => i._value) || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.file-translations.post'
+				]
+			}
+		},
+		typeOptions: {
+			multipleValues: true
+		},
+		placeholder: 'Add Item',
+		options: [
+			{
+				displayName: 'Items',
+				name: 'items',
+				values: [
+					{
+						displayName: 'Value',
+						name: '_value',
+						type: 'string',
+						default: ''
+					}
+				]
+			}
+		]
+	},
+	{
+		displayName: 'Attachment Ids',
+		name: 'attachmentIds',
+		type: 'fixedCollection',
+		default: {},
+		description: 'Storage IDs of images to pass to AI as attachments (max 10). Get via [List Storages](#operation/api.storages.getMany)\n\nOnly image files are allowed:\n * jpeg\n * jpg\n * png\n * gif\n * webp',
+		routing: {
+			send: {
+				property: 'attachmentIds',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value.items?.map(i => i._value) || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.file-translations.post'
+				]
+			}
+		},
+		typeOptions: {
+			multipleValues: true
+		},
+		placeholder: 'Add Item',
+		options: [
+			{
+				displayName: 'Items',
+				name: 'items',
+				values: [
+					{
+						displayName: 'Value',
+						name: '_value',
+						type: 'number',
+						default: 0,
+						placeholder: '0'
+					}
+				]
+			}
+		]
+	},
+	{
+		displayName: 'Job Identifier',
+		name: 'jobIdentifier',
+		required: true,
+		description: 'AI File Translations job identifier',
+		default: '',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.file-translations.get'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Job Identifier',
+		name: 'jobIdentifier',
+		required: true,
+		description: 'AI File Translations job identifier',
+		default: '',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.file-translations.delete'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Job Identifier',
+		name: 'jobIdentifier',
+		required: true,
+		description: 'AI File Translations job identifier',
+		default: '',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.file-translations.download'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Job Identifier',
+		name: 'jobIdentifier',
+		required: true,
+		description: 'AI File Translations job identifier',
+		default: '',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.file-translations.download-strings'
+				]
+			}
 		}
 	},
 	{
@@ -2081,6 +2951,10 @@ export const aiProperties: INodeProperties[] = [
 				value: 'google_gemini'
 			},
 			{
+				name: 'google_gemini_ai_studio',
+				value: 'google_gemini_ai_studio'
+			},
+			{
 				name: 'mistral_ai',
 				value: 'mistral_ai'
 			},
@@ -2195,8 +3069,8 @@ export const aiProperties: INodeProperties[] = [
 				]
 			},
 			{
-				displayName: 'Google Gemini',
-				name: '_googleGemini',
+				displayName: 'Google Gemini (Vertex AI)',
+				name: '_googleGeminiVertexAi',
 				values: [
 					{
 						displayName: 'Project',
@@ -2218,6 +3092,23 @@ export const aiProperties: INodeProperties[] = [
 						type: 'json',
 						default: '{}',
 						required: true
+					}
+				]
+			},
+			{
+				displayName: 'Google Gemini (AI Studio)',
+				name: '_googleGeminiAiStudio',
+				values: [
+					{
+						displayName: 'Api Key',
+						name: 'apiKey',
+						type: 'string',
+						default: '',
+						description: 'API key from Google AI Studio',
+						required: true,
+						typeOptions: {
+							password: true
+						}
 					}
 				]
 			},
@@ -2380,7 +3271,7 @@ export const aiProperties: INodeProperties[] = [
 		name: 'useSystemCredentials',
 		type: 'boolean',
 		default: false,
-		description: 'Enables the paid service AI provider via Crowdin.\n\n__Note__: Set to true if `credentials` is not provided. Not supported for `custom_ai`, `x_ai`, `watsonx` and `deepseek` types.',
+		description: 'Enables the paid service AI provider via Crowdin.\n\n__Note__: Set to true if `credentials` is not provided. Not supported for `custom_ai`, `x_ai`, `watsonx`, `deepseek` and `google_gemini_ai_studio` types.',
 		routing: {
 			send: {
 				property: 'useSystemCredentials',
@@ -2814,7 +3705,7 @@ export const aiProperties: INodeProperties[] = [
 		name: 'sourceLanguageId',
 		type: 'options',
 		default: '',
-		description: 'Source Language Identifier. Get via [List Supported Languages](#operation/api.languages.getMany)',
+		description: 'Source Language Identifier. Get via [List Supported Languages](#operation/api.languages.getMany). If not specified, auto-detection will be used.',
 		routing: {
 			send: {
 				property: 'sourceLanguageId',
@@ -3809,6 +4700,10 @@ export const aiProperties: INodeProperties[] = [
 						value: 'google_gemini'
 					},
 					{
+						name: 'google_gemini_ai_studio',
+						value: 'google_gemini_ai_studio'
+					},
+					{
 						name: 'mistral_ai',
 						value: 'mistral_ai'
 					},
@@ -3895,8 +4790,8 @@ export const aiProperties: INodeProperties[] = [
 						]
 					},
 					{
-						name: '_googleGemini',
-						displayName: 'Google Gemini',
+						name: '_googleGeminiVertexAi',
+						displayName: 'Google Gemini (Vertex AI)',
 						values: [
 							{
 								displayName: 'Project',
@@ -3918,6 +4813,23 @@ export const aiProperties: INodeProperties[] = [
 								type: 'json',
 								default: '{}',
 								required: true
+							}
+						]
+					},
+					{
+						name: '_googleGeminiAiStudio',
+						displayName: 'Google Gemini (AI Studio)',
+						values: [
+							{
+								displayName: 'Api Key',
+								name: 'apiKey',
+								type: 'string',
+								default: '',
+								description: 'API key from Google AI Studio',
+								required: true,
+								typeOptions: {
+									password: true
+								}
 							}
 						]
 					},
@@ -4051,7 +4963,7 @@ export const aiProperties: INodeProperties[] = [
 				name: 'useSystemCredentials',
 				type: 'boolean',
 				default: false,
-				description: 'Enables the paid service AI provider via Crowdin.\n\n__Note__: Set to true if `credentials` is not provided. Not supported for `custom_ai`, `x_ai`, `watsonx` and `deepseek` types.'
+				description: 'Enables the paid service AI provider via Crowdin.\n\n__Note__: Set to true if `credentials` is not provided. Not supported for `custom_ai`, `x_ai`, `watsonx`, `deepseek` and `google_gemini_ai_studio` types.'
 			}
 		],
 		routing: {

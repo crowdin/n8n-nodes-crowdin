@@ -520,11 +520,10 @@ export const bundlesProperties: INodeProperties[] = [
 	},
 	{
 		displayName: 'Format',
-		required: true,
 		name: 'format',
 		type: 'string',
 		default: '',
-		description: 'Defines export file format',
+		description: 'Defines export file format. If not provided, files will be exported in their original format.\n\n__Note:__ Required for strings-based projects',
 		routing: {
 			send: {
 				property: 'format',
@@ -632,11 +631,10 @@ export const bundlesProperties: INodeProperties[] = [
 	},
 	{
 		displayName: 'Export Pattern',
-		required: true,
 		name: 'exportPattern',
 		type: 'string',
 		default: '',
-		description: 'Bundle export pattern. Defines bundle name in resulting translations bundle\n\n__Note:__ Can\'t contain `: * ? " < > |` symbols',
+		description: 'Bundle export pattern. Defines bundle name in resulting translations bundle. **Required** if `format` is specified. If `format` is not specified, uses default pattern based on file structure\n\n__Note:__ Can\'t contain `: * ? " < > |` symbols',
 		routing: {
 			send: {
 				property: 'exportPattern',
@@ -763,7 +761,7 @@ export const bundlesProperties: INodeProperties[] = [
 		name: 'labelIds',
 		type: 'multiOptions',
 		default: [],
-		description: 'Label Identifiers. Get via [List Labels](#operation/api.projects.labels.getMany)',
+		description: 'Label Identifiers. Get via [List Labels](#operation/api.projects.labels.getMany)\n\n__Note:__ Can\'t be used when `format` is `null`',
 		routing: {
 			send: {
 				property: 'labelIds',
@@ -794,7 +792,7 @@ export const bundlesProperties: INodeProperties[] = [
 		name: 'excludeLabelIds',
 		type: 'multiOptions',
 		default: [],
-		description: 'Label Identifiers. Get via [List Labels](#operation/api.projects.labels.getMany)',
+		description: 'Label Identifiers. Get via [List Labels](#operation/api.projects.labels.getMany)\n\n__Note:__ Can\'t be used when `format` is `null`',
 		routing: {
 			send: {
 				property: 'excludeLabelIds',
@@ -818,6 +816,112 @@ export const bundlesProperties: INodeProperties[] = [
 			loadOptionsDependsOn: [
 				'projectId'
 			]
+		}
+	},
+	{
+		displayName: 'Label Match Rule',
+		name: 'labelMatchRule',
+		type: 'options',
+		default: '',
+		description: 'Match rule for labels:\n- "all" - all labels must be present in string\n- "any" - any of the labels must be present in string\n\n __Note:__ Can only be used when `labelIds` parameter is provided',
+		options: [
+			{
+				name: '-',
+				value: ''
+			},
+			{
+				name: 'all',
+				value: 'all'
+			},
+			{
+				name: 'any',
+				value: 'any'
+			}
+		],
+		routing: {
+			send: {
+				property: 'labelMatchRule',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'bundles'
+				],
+				operation: [
+					'api.projects.bundles.post'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Exclude Label Match Rule',
+		name: 'excludeLabelMatchRule',
+		type: 'options',
+		default: '',
+		description: 'Match rule for excluded labels:\n - "all" - all labels must be present in string\n - "any" - any of the labels must be present in string\n\n __Note:__ Can only be used when `excludeLabelIds` parameter is provided',
+		options: [
+			{
+				name: '-',
+				value: ''
+			},
+			{
+				name: 'all',
+				value: 'all'
+			},
+			{
+				name: 'any',
+				value: 'any'
+			}
+		],
+		routing: {
+			send: {
+				property: 'excludeLabelMatchRule',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'bundles'
+				],
+				operation: [
+					'api.projects.bundles.post'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Language Ids',
+		name: 'languageIds',
+		type: 'multiOptions',
+		default: [],
+		description: 'Language Identifiers. Get via [List Supported Languages](#operation/api.languages.getMany). If provided, bundle will only export specified languages. If not provided, bundle will export all project target languages.',
+		routing: {
+			send: {
+				property: 'languageIds',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'bundles'
+				],
+				operation: [
+					'api.projects.bundles.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getLanguagesMulti'
 		}
 	},
 	{
@@ -1156,7 +1260,7 @@ export const bundlesProperties: INodeProperties[] = [
 				name: 'format',
 				type: 'string',
 				default: '',
-				description: 'Defines export file format',
+				description: 'Defines export file format. If not provided, files will be exported in their original format.\n\n__Note:__ Required for strings-based projects',
 				placeholder: 'crowdin-resx'
 			},
 			{
@@ -1212,7 +1316,7 @@ export const bundlesProperties: INodeProperties[] = [
 				name: 'exportPattern',
 				type: 'string',
 				default: '',
-				description: 'Bundle export pattern. Defines bundle name in resulting translations bundle\n\n__Note:__ Can\'t contain `: * ? " < > |` symbols',
+				description: 'Bundle export pattern. Defines bundle name in resulting translations bundle. **Required** if `format` is specified. If `format` is not specified, uses default pattern based on file structure\n\n__Note:__ Can\'t contain `: * ? " < > |` symbols',
 				placeholder: 'strings-%two_letter_code%.resx'
 			},
 			{
@@ -1241,7 +1345,7 @@ export const bundlesProperties: INodeProperties[] = [
 				name: 'labelIds',
 				type: 'multiOptions',
 				default: [],
-				description: 'Label Identifiers. Get via [List Labels](#operation/api.projects.labels.getMany)',
+				description: 'Label Identifiers. Get via [List Labels](#operation/api.projects.labels.getMany)\n\n__Note:__ Can\'t be used when `format` is `null`',
 				typeOptions: {
 					loadOptionsMethod: 'getProjectLabelsMulti',
 					loadOptionsDependsOn: [
@@ -1254,13 +1358,55 @@ export const bundlesProperties: INodeProperties[] = [
 				name: 'excludeLabelIds',
 				type: 'multiOptions',
 				default: [],
-				description: 'Label Identifiers. Get via [List Labels](#operation/api.projects.labels.getMany)',
+				description: 'Label Identifiers. Get via [List Labels](#operation/api.projects.labels.getMany)\n\n__Note:__ Can\'t be used when `format` is `null`',
 				typeOptions: {
 					loadOptionsMethod: 'getProjectLabelsMulti',
 					loadOptionsDependsOn: [
 						'projectId'
 					]
 				}
+			},
+			{
+				displayName: 'Label Match Rule',
+				name: 'labelMatchRule',
+				type: 'options',
+				default: '',
+				description: 'Match rule for labels:\n- "all" - all labels must be present in string\n- "any" - any of the labels must be present in string\n\n __Note:__ Can only be used when `labelIds` parameter is provided',
+				options: [
+					{
+						name: '-',
+						value: ''
+					},
+					{
+						name: 'all',
+						value: 'all'
+					},
+					{
+						name: 'any',
+						value: 'any'
+					}
+				]
+			},
+			{
+				displayName: 'Exclude Label Match Rule',
+				name: 'excludeLabelMatchRule',
+				type: 'options',
+				default: '',
+				description: 'Match rule for excluded labels:\n - "all" - all labels must be present in string\n - "any" - any of the labels must be present in string\n\n __Note:__ Can only be used when `excludeLabelIds` parameter is provided',
+				options: [
+					{
+						name: '-',
+						value: ''
+					},
+					{
+						name: 'all',
+						value: 'all'
+					},
+					{
+						name: 'any',
+						value: 'any'
+					}
+				]
 			}
 		],
 		routing: {
