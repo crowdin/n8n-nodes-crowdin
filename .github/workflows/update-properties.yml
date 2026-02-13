@@ -2,9 +2,8 @@ name: Update Properties
 
 on:
   schedule:
-    # Run every day at 17:00 Kyiv time (15:00 UTC in winter, 14:00 UTC in summer)
-    # Using 15:00 UTC which is 17:00 EET (winter) / 18:00 EEST (summer)
-    - cron: '0 15 * * *'
+    # Run every Monday at 08:00 Kyiv time (06:00 UTC in winter, 05:00 UTC in summer)
+    - cron: '0 6 * * 1'
   workflow_dispatch: # Allow manual trigger
 
 permissions:

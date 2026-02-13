@@ -121,7 +121,7 @@
         "targetLanguageId": "={{ $json.languageId }}",
         "exportStringsThatPassedWorkflow": false
       },
-      "type": "CUSTOM.crowdinEnterpriseFileBased",
+      "type": "@crowdin/n8n-nodes-crowdin.crowdinEnterpriseFileBased",
       "typeVersion": 1,
       "position": [
         8128,

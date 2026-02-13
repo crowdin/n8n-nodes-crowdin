@@ -55,7 +55,7 @@
         "operation": "api.languages.getMany",
         "requestOptions": {}
       },
-      "type": "CUSTOM.crowdinEnterpriseFileBased",
+      "type": "@crowdin/n8n-nodes-crowdin.crowdinEnterpriseFileBased",
       "typeVersion": 1,
       "position": [
         -464,
@@ -282,7 +282,7 @@
         },
         "requestOptions": {}
       },
-      "type": "CUSTOM.crowdinEnterpriseFileBased",
+      "type": "@crowdin/n8n-nodes-crowdin.crowdinEnterpriseFileBased",
       "typeVersion": 1,
       "position": [
         1408,

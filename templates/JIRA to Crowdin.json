@@ -206,7 +206,7 @@
         "description": "={{ $('JIRA: Issue Created').first().json.issue.key }}",
         "groupId": ""
       },
-      "type": "CUSTOM.crowdinEnterpriseFileBased",
+      "type": "@crowdin/n8n-nodes-crowdin.crowdinEnterpriseFileBased",
       "typeVersion": 1,
       "position": [
         4720,
@@ -329,7 +329,7 @@
         "operation": "api.storages.post",
         "fileName": "={{ $json.fileName }}"
       },
-      "type": "CUSTOM.crowdinEnterpriseFileBased",
+      "type": "@crowdin/n8n-nodes-crowdin.crowdinEnterpriseFileBased",
       "typeVersion": 1,
       "position": [
         5584,
@@ -354,7 +354,7 @@
         "storageId": "={{ $json.data.id }}",
         "name": "={{ $json.data.fileName }}"
       },
-      "type": "CUSTOM.crowdinEnterpriseFileBased",
+      "type": "@crowdin/n8n-nodes-crowdin.crowdinEnterpriseFileBased",
       "typeVersion": 1,
       "position": [
         5792,
@@ -437,7 +437,7 @@
           }
         }
       },
-      "type": "CUSTOM.crowdinEnterpriseFileBased",
+      "type": "@crowdin/n8n-nodes-crowdin.crowdinEnterpriseFileBased",
       "typeVersion": 1,
       "position": [
         6416,
@@ -467,7 +467,7 @@
         "isActive": true,
         "headers": "{}"
       },
-      "type": "CUSTOM.crowdinEnterpriseFileBased",
+      "type": "@crowdin/n8n-nodes-crowdin.crowdinEnterpriseFileBased",
       "typeVersion": 1,
       "position": [
         5040,

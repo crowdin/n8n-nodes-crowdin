@@ -119,7 +119,7 @@
         "operation": "api.languages.getMany",
         "returnAll": true
       },
-      "type": "CUSTOM.crowdinEnterpriseFileBased",
+      "type": "@crowdin/n8n-nodes-crowdin.crowdinEnterpriseFileBased",
       "typeVersion": 1,
       "position": [
         2032,
@@ -384,7 +384,7 @@
           ]
         }
       },
-      "type": "CUSTOM.crowdinEnterpriseFileBased",
+      "type": "@crowdin/n8n-nodes-crowdin.crowdinEnterpriseFileBased",
       "typeVersion": 1,
       "position": [
         3616,
