@@ -1250,7 +1250,7 @@ export const translationsProperties: INodeProperties[] = [
 		name: 'skipUntranslatedStrings',
 		type: 'boolean',
 		default: false,
-		description: 'Defines whether to export only translated strings\n\n [More info](https://support.crowdin.com/project-settings/export/)',
+		description: 'Defines whether to export only translated strings\n\n[More info](https://support.crowdin.com/project-settings/export/)',
 		routing: {
 			send: {
 				property: 'skipUntranslatedStrings',
@@ -1275,7 +1275,7 @@ export const translationsProperties: INodeProperties[] = [
 		name: 'exportApprovedOnly',
 		type: 'boolean',
 		default: false,
-		description: 'Defines whether to export only approved strings\n\n [More info](https://support.crowdin.com/project-settings/export/)',
+		description: 'Defines whether to export only approved strings\n\n[More info](https://support.crowdin.com/project-settings/export/)',
 		routing: {
 			send: {
 				property: 'exportApprovedOnly',

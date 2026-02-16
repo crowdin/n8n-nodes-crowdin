@@ -1641,7 +1641,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'type',
 										type: 'options',
 										default: '',
-										description: 'Task type:\n *      0 - translate\n *      1 - proofread\n\n__Note:__ One of fields `type` or `workflowStepId` is required. Both cannot be provided simultaneously',
+										description: 'Task type:\n * 0 - translate\n * 1 - proofread\n\n__Note:__ One of fields `type` or `workflowStepId` is required. Both cannot be provided simultaneously',
 										options: [
 											{
 												name: '-',
@@ -1954,11 +1954,19 @@ export const tasksProperties: INodeProperties[] = [
 										placeholder: 'false'
 									},
 									{
+										displayName: 'Generate Translation Cost',
+										name: 'generateTranslationCost',
+										type: 'boolean',
+										default: false,
+										description: 'Generate translation cost report for the task. Requires `reportSettingsTemplateId`',
+										placeholder: 'false'
+									},
+									{
 										displayName: 'Report Settings Template Id',
 										name: 'reportSettingsTemplateId',
 										type: 'options',
 										default: '',
-										description: 'Report Settings Templates Identifier. Get via [List Report Settings Templates](#operation/api.reports.settings-templates.getMany). Required when `generateCostEstimate` is `true`',
+										description: 'Report Settings Templates Identifier. Get via [List Report Settings Templates](#operation/api.reports.settings-templates.getMany). Required when `generateCostEstimate` or `generateTranslationCost` is `true`',
 										typeOptions: {
 											loadOptionsMethod: 'getReportSettingsTemplates'
 										}
@@ -1974,7 +1982,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'type',
 										type: 'options',
 										default: '',
-										description: 'Task type:\n *      0 - translate\n *      1 - proofread\n\n__Note:__ One of fields `type` or `workflowStepId` is required. Both cannot be provided simultaneously',
+										description: 'Task type:\n * 0 - translate\n * 1 - proofread\n\n__Note:__ One of fields `type` or `workflowStepId` is required. Both cannot be provided simultaneously',
 										options: [
 											{
 												name: '-',
@@ -2159,7 +2167,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'includePreTranslatedStringsOnly',
 										type: 'boolean',
 										default: false,
-										description: 'Defines whether to export only pretranslated strings\n *\n * __Note:__ `true` value can\'t be used with `type=0` in same request',
+										description: 'Defines whether to export only pretranslated strings\n\n__Note:__ `true` value can\'t be used with `type=0` in same request',
 										placeholder: 'true'
 									},
 									{
@@ -2219,11 +2227,19 @@ export const tasksProperties: INodeProperties[] = [
 										placeholder: 'false'
 									},
 									{
+										displayName: 'Generate Translation Cost',
+										name: 'generateTranslationCost',
+										type: 'boolean',
+										default: false,
+										description: 'Generate translation cost report for the task. Requires `reportSettingsTemplateId`',
+										placeholder: 'false'
+									},
+									{
 										displayName: 'Report Settings Template Id',
 										name: 'reportSettingsTemplateId',
 										type: 'options',
 										default: '',
-										description: 'Report Settings Templates Identifier. Get via [List Report Settings Templates](#operation/api.reports.settings-templates.getMany). Required when `generateCostEstimate` is `true`',
+										description: 'Report Settings Templates Identifier. Get via [List Report Settings Templates](#operation/api.reports.settings-templates.getMany). Required when `generateCostEstimate` or `generateTranslationCost` is `true`',
 										typeOptions: {
 											loadOptionsMethod: 'getReportSettingsTemplates'
 										}
@@ -2438,11 +2454,19 @@ export const tasksProperties: INodeProperties[] = [
 										placeholder: 'false'
 									},
 									{
+										displayName: 'Generate Translation Cost',
+										name: 'generateTranslationCost',
+										type: 'boolean',
+										default: false,
+										description: 'Generate translation cost report for the task. Requires `reportSettingsTemplateId`',
+										placeholder: 'false'
+									},
+									{
 										displayName: 'Report Settings Template Id',
 										name: 'reportSettingsTemplateId',
 										type: 'options',
 										default: '',
-										description: 'Report Settings Templates Identifier. Get via [List Report Settings Templates](#operation/api.reports.settings-templates.getMany). Required when `generateCostEstimate` is `true`',
+										description: 'Report Settings Templates Identifier. Get via [List Report Settings Templates](#operation/api.reports.settings-templates.getMany). Required when `generateCostEstimate` or `generateTranslationCost` is `true`',
 										typeOptions: {
 											loadOptionsMethod: 'getReportSettingsTemplates'
 										}
@@ -2608,11 +2632,19 @@ export const tasksProperties: INodeProperties[] = [
 										placeholder: 'false'
 									},
 									{
+										displayName: 'Generate Translation Cost',
+										name: 'generateTranslationCost',
+										type: 'boolean',
+										default: false,
+										description: 'Generate translation cost report for the task. Requires `reportSettingsTemplateId`',
+										placeholder: 'false'
+									},
+									{
 										displayName: 'Report Settings Template Id',
 										name: 'reportSettingsTemplateId',
 										type: 'options',
 										default: '',
-										description: 'Report Settings Templates Identifier. Get via [List Report Settings Templates](#operation/api.reports.settings-templates.getMany). Required when `generateCostEstimate` is `true`',
+										description: 'Report Settings Templates Identifier. Get via [List Report Settings Templates](#operation/api.reports.settings-templates.getMany). Required when `generateCostEstimate` or `generateTranslationCost` is `true`',
 										typeOptions: {
 											loadOptionsMethod: 'getReportSettingsTemplates'
 										}
@@ -2646,7 +2678,7 @@ export const tasksProperties: INodeProperties[] = [
 						name: 'type',
 						type: 'options',
 						default: '',
-						description: 'Task type:\n *      1 - proofread\n\n__Note:__ One of fields `type` or `workflowStepId` is required. Both cannot be provided simultaneously',
+						description: 'Task type:\n * 1 - proofread\n\n__Note:__ One of fields `type` or `workflowStepId` is required. Both cannot be provided simultaneously',
 						options: [
 							{
 								name: '-',

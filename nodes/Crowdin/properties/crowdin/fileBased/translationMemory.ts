@@ -1388,7 +1388,7 @@ export const translationMemoryProperties: INodeProperties[] = [
 		name: 'storageId',
 		type: 'options',
 		default: '',
-		description: 'Storage Identifier. Get via [List Storages](#operation/api.storages.getMany)\n\n Supported file formats:\n * TMX\n * CSV\n * XLS/XLSX\n\n See TMX 1.4b Specification',
+		description: 'Storage Identifier. Get via [List Storages](#operation/api.storages.getMany)\n\nSupported file formats:\n* TMX\n* CSV\n* XLS/XLSX\n\nSee TMX 1.4b Specification',
 		routing: {
 			send: {
 				property: 'storageId',
@@ -1441,7 +1441,7 @@ export const translationMemoryProperties: INodeProperties[] = [
 		name: 'scheme',
 		type: 'json',
 		default: '{\n  "en": 0,\n  "de": 1,\n  "pl": 2,\n  "uk": 4\n}',
-		description: 'Defines data columns mapping. The passed value should be an associative array containing both language id and column number:\n * `{languageId}` – Crowdin id for the specified language. Get via [List Supported Languages](#operation/api.languages.getMany)\n * `{columnNumber}` – a column number. Please note, that column numbering starts at 0\n\n __Note:__ Required for CSV or XLS/XLSX files',
+		description: 'Defines data columns mapping. The passed value should be an associative array containing both language id and column number:\n* `{languageId}` – Crowdin id for the specified language. Get via [List Supported Languages](#operation/api.languages.getMany)\n* `{columnNumber}` – a column number. Please note, that column numbering starts at 0\n\n__Note:__ Required for CSV or XLS/XLSX files',
 		routing: {
 			send: {
 				property: 'scheme',
