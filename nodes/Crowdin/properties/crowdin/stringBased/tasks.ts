@@ -1632,7 +1632,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'type',
 										type: 'options',
 										default: 0,
-										description: 'Task type:\n *    0 - translate\n *    1 - proofread',
+										description: 'Task type:\n * 0 - translate\n * 1 - proofread',
 										required: true,
 										options: [
 											{
@@ -1818,7 +1818,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'dateTime:deadline',
 										type: 'dateTime',
 										default: '',
-										description: 'Defines task deadline date\n\n __Format:__ UTC, ISO 8601',
+										description: 'Defines task deadline date\n\n__Format:__ UTC, ISO 8601',
 										placeholder: '2019-09-27T07:00:14+00:00'
 									},
 									{
@@ -1826,7 +1826,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'dateTime:startedAt',
 										type: 'dateTime',
 										default: '',
-										description: 'Defines task started date\n\n __Format:__ UTC, ISO 8601',
+										description: 'Defines task started date\n\n__Format:__ UTC, ISO 8601',
 										placeholder: '2019-09-27T07:00:14+00:00'
 									},
 									{
@@ -1834,7 +1834,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'dateTime:dateFrom',
 										type: 'dateTime',
 										default: '',
-										description: 'Defines start date for interval when strings were modified\n\n __Format:__ UTC, ISO 8601',
+										description: 'Defines start date for interval when strings were modified\n\n__Format:__ UTC, ISO 8601',
 										placeholder: '2019-09-23T07:00:14+00:00'
 									},
 									{
@@ -1842,7 +1842,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'dateTime:dateTo',
 										type: 'dateTime',
 										default: '',
-										description: 'Defines end date for interval when strings were modified\n\n __Format:__ UTC, ISO 8601',
+										description: 'Defines end date for interval when strings were modified\n\n__Format:__ UTC, ISO 8601',
 										placeholder: '2019-09-27T07:00:14+00:00'
 									},
 									{
@@ -1850,7 +1850,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'dateTime:translationsUpdatedDateFrom',
 										type: 'dateTime',
 										default: '',
-										description: 'Defines start date for interval when translation were updated (proofread tasks only)\n\n __Format:__ UTC, ISO 8601',
+										description: 'Defines start date for interval when translation were updated (proofread tasks only)\n\n__Format:__ UTC, ISO 8601',
 										placeholder: '2019-09-23T07:00:14+00:00'
 									},
 									{
@@ -1858,7 +1858,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'dateTime:translationsUpdatedDateTo',
 										type: 'dateTime',
 										default: '',
-										description: 'Defines end date for interval when translation were updated (proofread tasks only)\n\n __Format:__ UTC, ISO 8601',
+										description: 'Defines end date for interval when translation were updated (proofread tasks only)\n\n__Format:__ UTC, ISO 8601',
 										placeholder: '2019-09-27T07:00:14+00:00'
 									},
 									{
@@ -1870,11 +1870,19 @@ export const tasksProperties: INodeProperties[] = [
 										placeholder: 'false'
 									},
 									{
+										displayName: 'Generate Translation Cost',
+										name: 'generateTranslationCost',
+										type: 'boolean',
+										default: false,
+										description: 'Generate translation cost report for the task. Requires `reportSettingsTemplateId`',
+										placeholder: 'false'
+									},
+									{
 										displayName: 'Report Settings Template Id',
 										name: 'reportSettingsTemplateId',
 										type: 'options',
 										default: '',
-										description: 'Report Settings Templates Identifier. Get via [List Report Settings Templates](#operation/api.projects.reports.settings-templates.getMany)[p. Required when `generateCostEstimate` is `true`',
+										description: 'Report Settings Templates Identifier. Get via [List Report Settings Templates](#operation/api.projects.reports.settings-templates.getMany). Required when `generateCostEstimate` or `generateTranslationCost` is `true`',
 										typeOptions: {
 											loadOptionsMethod: 'getReportSettingsTemplates'
 										}
@@ -1909,7 +1917,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'type',
 										type: 'options',
 										default: 0,
-										description: 'Task type:\n *    0 - translate\n *    1 - proofread',
+										description: 'Task type:\n * 0 - translate\n * 1 - proofread',
 										required: true,
 										options: [
 											{
@@ -2079,11 +2087,19 @@ export const tasksProperties: INodeProperties[] = [
 										placeholder: 'false'
 									},
 									{
+										displayName: 'Generate Translation Cost',
+										name: 'generateTranslationCost',
+										type: 'boolean',
+										default: false,
+										description: 'Generate translation cost report for the task. Requires `reportSettingsTemplateId`',
+										placeholder: 'false'
+									},
+									{
 										displayName: 'Report Settings Template Id',
 										name: 'reportSettingsTemplateId',
 										type: 'options',
 										default: '',
-										description: 'Report Settings Templates Identifier. Get via [List Report Settings Templates](#operation/api.projects.reports.settings-templates.getMany)[p. Required when `generateCostEstimate` is `true`',
+										description: 'Report Settings Templates Identifier. Get via [List Report Settings Templates](#operation/api.projects.reports.settings-templates.getMany). Required when `generateCostEstimate` or `generateTranslationCost` is `true`',
 										typeOptions: {
 											loadOptionsMethod: 'getReportSettingsTemplates'
 										}
@@ -2133,7 +2149,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'type',
 										type: 'options',
 										default: 2,
-										description: 'Task type:\n *    2 - translate by vendor\n *    3 - proofread by vendor',
+										description: 'Task type:\n * 2 - translate by vendor\n * 3 - proofread by vendor',
 										required: true,
 										options: [
 											{
@@ -2151,7 +2167,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'vendor',
 										type: 'string',
 										default: '',
-										description: 'Task vendor:\n *   "crowdin_language_service" - Crowdin Language Services',
+										description: 'Task vendor:\n * Crowdin Language Services',
 										required: true
 									},
 									{
@@ -2313,11 +2329,19 @@ export const tasksProperties: INodeProperties[] = [
 										placeholder: 'false'
 									},
 									{
+										displayName: 'Generate Translation Cost',
+										name: 'generateTranslationCost',
+										type: 'boolean',
+										default: false,
+										description: 'Generate translation cost report for the task. Requires `reportSettingsTemplateId`',
+										placeholder: 'false'
+									},
+									{
 										displayName: 'Report Settings Template Id',
 										name: 'reportSettingsTemplateId',
 										type: 'options',
 										default: '',
-										description: 'Report Settings Templates Identifier. Get via [List Report Settings Templates](#operation/api.projects.reports.settings-templates.getMany)[p. Required when `generateCostEstimate` is `true`',
+										description: 'Report Settings Templates Identifier. Get via [List Report Settings Templates](#operation/api.projects.reports.settings-templates.getMany). Required when `generateCostEstimate` or `generateTranslationCost` is `true`',
 										typeOptions: {
 											loadOptionsMethod: 'getReportSettingsTemplates'
 										}
@@ -2352,7 +2376,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'type',
 										type: 'options',
 										default: 2,
-										description: 'Task type:\n *    2 - translate by vendor\n *    3 - proofread by vendor',
+										description: 'Task type:\n * 2 - translate by vendor\n * 3 - proofread by vendor',
 										required: true,
 										options: [
 											{
@@ -2370,7 +2394,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'vendor',
 										type: 'string',
 										default: '',
-										description: 'Task vendor:\n *   "crowdin_language_service" - Crowdin Language Services',
+										description: 'Task vendor:\n * "crowdin_language_service" - Crowdin Language Services',
 										required: true
 									},
 									{
@@ -2468,7 +2492,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'reportSettingsTemplateId',
 										type: 'options',
 										default: '',
-										description: 'Report Settings Templates Identifier. Get via [List Report Settings Templates](#operation/api.projects.reports.settings-templates.getMany)[p. Required when `generateCostEstimate` is `true`',
+										description: 'Report Settings Templates Identifier. Get via [List Report Settings Templates](#operation/api.projects.reports.settings-templates.getMany). Required when `generateCostEstimate` is `true`',
 										typeOptions: {
 											loadOptionsMethod: 'getReportSettingsTemplates'
 										}
@@ -2518,7 +2542,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'type',
 										type: 'options',
 										default: 2,
-										description: 'Task type:\n *    2 - translate by vendor\n *    3 - proofread by vendor',
+										description: 'Task type:\n * 2 - translate by vendor\n * 3 - proofread by vendor',
 										required: true,
 										options: [
 											{
@@ -2536,7 +2560,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'vendor',
 										type: 'string',
 										default: '',
-										description: 'Task vendor:\n *    "oht" - OneHourTranslation',
+										description: 'Task vendor:\n * "oht" - OneHourTranslation',
 										required: true
 									},
 									{
@@ -2654,7 +2678,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'expertise',
 										type: 'options',
 										default: '',
-										description: 'Task expertise:\n *   "standard"\n *   "mobile-applications"\n *   "software-it"\n *   "gaming-video-games"\n *   "technical-engineering"\n *   "marketing-consumer-media"\n *   "business-finance"\n *   "legal-certificate"\n *   "medical"\n *   "ad-words-banners"\n *   "automotive-aerospace"\n *   "scientific"\n *   "scientific-academic"\n *   "tourism"\n *   "training-employee-handbooks"\n *   "forex-crypto"',
+										description: 'Task expertise:\n *  "standard"\n *  "mobile-applications"\n *  "software-it"\n *  "gaming-video-games"\n *  "technical-engineering"\n *  "marketing-consumer-media"\n *  "business-finance"\n *  "legal-certificate"\n *  "medical"\n *  "ad-words-banners"\n *  "automotive-aerospace"\n *  "scientific"\n *  "scientific-academic"\n *  "tourism"\n *  "training-employee-handbooks"\n *  "forex-crypto"',
 										options: [
 											{
 												name: '-',
@@ -2783,11 +2807,19 @@ export const tasksProperties: INodeProperties[] = [
 										placeholder: 'false'
 									},
 									{
+										displayName: 'Generate Translation Cost',
+										name: 'generateTranslationCost',
+										type: 'boolean',
+										default: false,
+										description: 'Generate translation cost report for the task. Requires `reportSettingsTemplateId`',
+										placeholder: 'false'
+									},
+									{
 										displayName: 'Report Settings Template Id',
 										name: 'reportSettingsTemplateId',
 										type: 'options',
 										default: '',
-										description: 'Report Settings Templates Identifier. Get via [List Report Settings Templates](#operation/api.projects.reports.settings-templates.getMany)[p. Required when `generateCostEstimate` is `true`',
+										description: 'Report Settings Templates Identifier. Get via [List Report Settings Templates](#operation/api.projects.reports.settings-templates.getMany). Required when `generateCostEstimate` or `generateTranslationCost` is `true`',
 										typeOptions: {
 											loadOptionsMethod: 'getReportSettingsTemplates'
 										}
@@ -2822,7 +2854,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'type',
 										type: 'options',
 										default: 2,
-										description: 'Task type:\n *    2 - translate by vendor\n *    3 - proofread by vendor',
+										description: 'Task type:\n * 2 - translate by vendor\n * 3 - proofread by vendor',
 										required: true,
 										options: [
 											{
@@ -2840,7 +2872,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'vendor',
 										type: 'string',
 										default: '',
-										description: 'Task vendor:\n *   "oht" - OneHourTranslation',
+										description: 'Task vendor:\n * "oht" - OneHourTranslation',
 										required: true
 									},
 									{
@@ -2890,7 +2922,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'expertise',
 										type: 'options',
 										default: '',
-										description: 'Task expertise:\n *   "standard"\n *   "mobile-applications"\n *   "software-it"\n *   "gaming-video-games"\n *   "technical-engineering"\n *   "marketing-consumer-media"\n *   "business-finance"\n *   "legal-certificate"\n *   "medical"\n *   "ad-words-banners"\n *   "automotive-aerospace"\n *   "scientific"\n *   "scientific-academic"\n *   "tourism"\n *   "training-employee-handbooks"\n *   "forex-crypto"',
+										description: 'Task expertise:\n *  "standard"\n *  "mobile-applications"\n *  "software-it"\n *  "gaming-video-games"\n *  "technical-engineering"\n *  "marketing-consumer-media"\n *  "business-finance"\n *  "legal-certificate"\n *  "medical"\n *  "ad-words-banners"\n *  "automotive-aerospace"\n *  "scientific"\n *  "scientific-academic"\n *  "tourism"\n *  "training-employee-handbooks"\n *  "forex-crypto"',
 										options: [
 											{
 												name: '-',
@@ -3003,11 +3035,19 @@ export const tasksProperties: INodeProperties[] = [
 										placeholder: 'false'
 									},
 									{
+										displayName: 'Generate Translation Cost',
+										name: 'generateTranslationCost',
+										type: 'boolean',
+										default: false,
+										description: 'Generate translation cost report for the task. Requires `reportSettingsTemplateId`',
+										placeholder: 'false'
+									},
+									{
 										displayName: 'Report Settings Template Id',
 										name: 'reportSettingsTemplateId',
 										type: 'options',
 										default: '',
-										description: 'Report Settings Templates Identifier. Get via [List Report Settings Templates](#operation/api.projects.reports.settings-templates.getMany)[p. Required when `generateCostEstimate` is `true`',
+										description: 'Report Settings Templates Identifier. Get via [List Report Settings Templates](#operation/api.projects.reports.settings-templates.getMany). Required when `generateCostEstimate` or `generateTranslationCost` is `true`',
 										typeOptions: {
 											loadOptionsMethod: 'getReportSettingsTemplates'
 										}
@@ -3057,7 +3097,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'type',
 										type: 'number',
 										default: undefined,
-										description: 'Task type:\n *    2 - translate by vendor',
+										description: 'Task type:\n * 2 - translate by vendor',
 										required: true
 									},
 									{
@@ -3065,7 +3105,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'vendor',
 										type: 'string',
 										default: '',
-										description: 'Task vendor:\n *   "gengo" - Gengo',
+										description: 'Task vendor:\n * "gengo" - Gengo',
 										required: true
 									},
 									{
@@ -3183,7 +3223,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'expertise',
 										type: 'options',
 										default: '',
-										description: 'Task expertise:\n *   "standard"\n *   "pro"',
+										description: 'Task expertise:\n * "standard"\n * "pro"',
 										options: [
 											{
 												name: '-',
@@ -3204,7 +3244,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'tone',
 										type: 'options',
 										default: '',
-										description: 'Task tone:\n *   ""\n *   "Informal"\n *   "Friendly"\n *   "Business"\n *   "Formal"\n *   "other"',
+										description: 'Task tone:\n * ""\n * "Informal"\n * "Friendly"\n * "Business"\n * "Formal"\n * "other"',
 										options: [
 											{
 												name: '-',
@@ -3241,7 +3281,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'purpose',
 										type: 'options',
 										default: '',
-										description: 'Task purpose:\n *   "Personal use"\n *   "Business"\n *   "Online content"\n *   "App/Web localization"\n *   "Media content"\n *   "Semi-technical"\n *   "other"',
+										description: 'Task purpose:\n * "Personal use"\n * "Business"\n * "Online content"\n * "App/Web localization"\n * "Media content"\n * "Semi-technical"\n * "other"',
 										options: [
 											{
 												name: '-',
@@ -3305,7 +3345,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'dateTime:dateFrom',
 										type: 'dateTime',
 										default: '',
-										description: 'Defines start date for interval when strings were modified\n *\n *Format: UTC, ISO 8601',
+										description: 'Defines start date for interval when strings were modified\n\n__Format:__ UTC, ISO 8601',
 										placeholder: '2019-09-23T07:00:14+00:00'
 									},
 									{
@@ -3313,7 +3353,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'dateTime:dateTo',
 										type: 'dateTime',
 										default: '',
-										description: 'Defines end date for interval when strings were modified\n *\n *Format: UTC, ISO 8601',
+										description: 'Defines end date for interval when strings were modified\n\n__Format:__ UTC, ISO 8601',
 										placeholder: '2019-09-27T07:00:14+00:00'
 									},
 									{
@@ -3325,11 +3365,19 @@ export const tasksProperties: INodeProperties[] = [
 										placeholder: 'false'
 									},
 									{
+										displayName: 'Generate Translation Cost',
+										name: 'generateTranslationCost',
+										type: 'boolean',
+										default: false,
+										description: 'Generate translation cost report for the task. Requires `reportSettingsTemplateId`',
+										placeholder: 'false'
+									},
+									{
 										displayName: 'Report Settings Template Id',
 										name: 'reportSettingsTemplateId',
 										type: 'options',
 										default: '',
-										description: 'Report Settings Templates Identifier. Get via [List Report Settings Templates](#operation/api.projects.reports.settings-templates.getMany)[p. Required when `generateCostEstimate` is `true`',
+										description: 'Report Settings Templates Identifier. Get via [List Report Settings Templates](#operation/api.projects.reports.settings-templates.getMany). Required when `generateCostEstimate` or `generateTranslationCost` is `true`',
 										typeOptions: {
 											loadOptionsMethod: 'getReportSettingsTemplates'
 										}
@@ -3364,7 +3412,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'type',
 										type: 'number',
 										default: undefined,
-										description: 'Task type:\n *     2 - translate by vendor',
+										description: 'Task type:\n *  2 - translate by vendor',
 										required: true
 									},
 									{
@@ -3372,7 +3420,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'vendor',
 										type: 'string',
 										default: '',
-										description: 'Task vendor:\n *    "gengo" - Gengo',
+										description: 'Task vendor:\n * "gengo" - Gengo',
 										required: true
 									},
 									{
@@ -3422,7 +3470,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'expertise',
 										type: 'options',
 										default: '',
-										description: 'Task expertise:\n *    "standard"\n *    "pro"',
+										description: 'Task expertise:\n * "standard"\n * "pro"',
 										options: [
 											{
 												name: '-',
@@ -3443,7 +3491,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'tone',
 										type: 'options',
 										default: '',
-										description: 'Task tone:\n *    ""\n *    "Informal"\n *    "Friendly"\n *    "Business"\n *    "Formal"\n *    "other"',
+										description: 'Task tone:\n * ""\n * "Informal"\n * "Friendly"\n * "Business"\n * "Formal"\n * "other"',
 										options: [
 											{
 												name: '-',
@@ -3480,7 +3528,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'purpose',
 										type: 'options',
 										default: '',
-										description: 'Task purpose:\n *    "Personal use"\n *    "Business"\n *    "Online content"\n *    "App/Web localization"\n *    "Media content"\n *    "Semi-technical"\n *    "other"',
+										description: 'Task purpose:\n * "Personal use"\n * "Business"\n * "Online content"\n * "App/Web localization"\n * "Media content"\n * "Semi-technical"\n * "other"',
 										options: [
 											{
 												name: '-',
@@ -3568,7 +3616,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'reportSettingsTemplateId',
 										type: 'options',
 										default: '',
-										description: 'Report Settings Templates Identifier. Get via [List Report Settings Templates](#operation/api.projects.reports.settings-templates.getMany)[p. Required when `generateCostEstimate` is `true`',
+										description: 'Report Settings Templates Identifier. Get via [List Report Settings Templates](#operation/api.projects.reports.settings-templates.getMany). Required when `generateCostEstimate` is `true`',
 										typeOptions: {
 											loadOptionsMethod: 'getReportSettingsTemplates'
 										}
@@ -3618,7 +3666,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'type',
 										type: 'options',
 										default: 2,
-										description: 'Task type:\n *     2 - translate by vendor\n *     3 - proofread by vendor',
+										description: 'Task type: \n * 2 - translate by vendor\n * 3 - proofread by vendor',
 										required: true,
 										options: [
 											{
@@ -3804,7 +3852,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'dateTime:deadline',
 										type: 'dateTime',
 										default: '',
-										description: 'Defines task deadline date\n\n __Format:__ UTC, ISO 8601',
+										description: 'Defines task deadline date\n\n__Format:__ UTC, ISO 8601',
 										placeholder: '2019-09-27T07:00:14+00:00'
 									},
 									{
@@ -3812,7 +3860,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'dateTime:startedAt',
 										type: 'dateTime',
 										default: '',
-										description: 'Defines task started date\n\n __Format:__ UTC, ISO 8601',
+										description: 'Defines task started date\n\n__Format:__ UTC, ISO 8601',
 										placeholder: '2019-09-27T07:00:14+00:00'
 									},
 									{
@@ -3820,7 +3868,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'dateTime:dateFrom',
 										type: 'dateTime',
 										default: '',
-										description: 'Defines start date for interval when strings were modified\n *\n * Formt: UTC, ISO 8601',
+										description: 'Defines start date for interval when strings were modified\n\n__Format:__ UTC, ISO 8601',
 										placeholder: '2019-09-23T07:00:14+00:00'
 									},
 									{
@@ -3828,7 +3876,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'dateTime:dateTo',
 										type: 'dateTime',
 										default: '',
-										description: 'Defines end date for interval when strings were modified\n\n __Format:__ UTC, ISO 8601',
+										description: 'Defines end date for interval when strings were modified\n\n__Format:__ UTC, ISO 8601',
 										placeholder: '2019-09-27T07:00:14+00:00'
 									},
 									{
@@ -3840,11 +3888,19 @@ export const tasksProperties: INodeProperties[] = [
 										placeholder: 'false'
 									},
 									{
+										displayName: 'Generate Translation Cost',
+										name: 'generateTranslationCost',
+										type: 'boolean',
+										default: false,
+										description: 'Generate translation cost report for the task. Requires `reportSettingsTemplateId`',
+										placeholder: 'false'
+									},
+									{
 										displayName: 'Report Settings Template Id',
 										name: 'reportSettingsTemplateId',
 										type: 'options',
 										default: '',
-										description: 'Report Settings Templates Identifier. Get via [List Report Settings Templates](#operation/api.projects.reports.settings-templates.getMany)[p. Required when `generateCostEstimate` is `true`',
+										description: 'Report Settings Templates Identifier. Get via [List Report Settings Templates](#operation/api.projects.reports.settings-templates.getMany). Required when `generateCostEstimate` or `generateTranslationCost` is `true`',
 										typeOptions: {
 											loadOptionsMethod: 'getReportSettingsTemplates'
 										}
@@ -3879,7 +3935,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'type',
 										type: 'options',
 										default: 2,
-										description: 'Task type:\n *    2 - translate by vendor\n *    3 - proofread by vendor',
+										description: 'Task type:\n * 2 - translate by vendor\n * 3 - proofread by vendor',
 										required: true,
 										options: [
 											{
@@ -3997,7 +4053,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'dateTime:deadline',
 										type: 'dateTime',
 										default: '',
-										description: 'Defines task deadline date\n\n __Format:__ UTC, ISO 8601',
+										description: 'Defines task deadline date\n\n__Format:__ UTC, ISO 8601',
 										placeholder: '2019-09-27T07:00:14+00:00'
 									},
 									{
@@ -4005,7 +4061,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'dateTime:startedAt',
 										type: 'dateTime',
 										default: '',
-										description: 'Defines task started date\n\n __Format:__ UTC, ISO 8601',
+										description: 'Defines task started date\n\n__Format:__ UTC, ISO 8601',
 										placeholder: '2019-09-27T07:00:14+00:00'
 									},
 									{
@@ -4013,7 +4069,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'dateTime:dateFrom',
 										type: 'dateTime',
 										default: '',
-										description: 'Defines start date for interval when strings were modified\n\n __Format:__ UTC, ISO 8601',
+										description: 'Defines start date for interval when strings were modified\n\n__Format:__ UTC, ISO 8601',
 										placeholder: '2019-09-23T07:00:14+00:00'
 									},
 									{
@@ -4021,7 +4077,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'dateTime:dateTo',
 										type: 'dateTime',
 										default: '',
-										description: 'Defines end date for interval when strings were modified\n\n __Format:__ UTC, ISO 8601',
+										description: 'Defines end date for interval when strings were modified\n\n__Format:__ UTC, ISO 8601',
 										placeholder: '2019-09-27T07:00:14+00:00'
 									},
 									{
@@ -4033,11 +4089,19 @@ export const tasksProperties: INodeProperties[] = [
 										placeholder: 'false'
 									},
 									{
+										displayName: 'Generate Translation Cost',
+										name: 'generateTranslationCost',
+										type: 'boolean',
+										default: false,
+										description: 'Generate translation cost report for the task. Requires `reportSettingsTemplateId`',
+										placeholder: 'false'
+									},
+									{
 										displayName: 'Report Settings Template Id',
 										name: 'reportSettingsTemplateId',
 										type: 'options',
 										default: '',
-										description: 'Report Settings Templates Identifier. Get via [List Report Settings Templates](#operation/api.projects.reports.settings-templates.getMany)[p. Required when `generateCostEstimate` is `true`',
+										description: 'Report Settings Templates Identifier. Get via [List Report Settings Templates](#operation/api.projects.reports.settings-templates.getMany). Required when `generateCostEstimate` or `generateTranslationCost` is `true`',
 										typeOptions: {
 											loadOptionsMethod: 'getReportSettingsTemplates'
 										}
@@ -4071,7 +4135,7 @@ export const tasksProperties: INodeProperties[] = [
 						name: 'type',
 						type: 'options',
 						default: 1,
-						description: 'Task type:\n *    1 - proofread',
+						description: 'Task type:\n * 1 - proofread',
 						required: true,
 						options: [
 							{
@@ -4162,7 +4226,7 @@ export const tasksProperties: INodeProperties[] = [
 						name: 'type',
 						type: 'options',
 						default: 3,
-						description: 'Task type:\n *    3 - proofread by vendor',
+						description: 'Task type:\n * 3 - proofread by vendor',
 						required: true,
 						options: [
 							{

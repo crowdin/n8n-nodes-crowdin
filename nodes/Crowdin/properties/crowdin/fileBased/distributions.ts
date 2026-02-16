@@ -340,44 +340,6 @@ export const distributionsProperties: INodeProperties[] = [
 		}
 	},
 	{
-		displayName: 'Export Mode',
-		name: 'exportMode',
-		type: 'options',
-		default: '',
-		options: [
-			{
-				name: '-',
-				value: ''
-			},
-			{
-				name: 'default',
-				value: 'default'
-			},
-			{
-				name: 'bundle',
-				value: 'bundle'
-			}
-		],
-		routing: {
-			send: {
-				property: 'exportMode',
-				propertyInDotNotation: false,
-				type: 'body',
-				value: '={{ $value || undefined }}'
-			}
-		},
-		displayOptions: {
-			show: {
-				resource: [
-					'distributions'
-				],
-				operation: [
-					'api.projects.distributions.post'
-				]
-			}
-		}
-	},
-	{
 		displayName: 'Name',
 		required: true,
 		name: 'name',
@@ -403,37 +365,6 @@ export const distributionsProperties: INodeProperties[] = [
 			}
 		},
 		placeholder: 'distribution 1'
-	},
-	{
-		displayName: 'File Ids',
-		name: 'fileIds',
-		type: 'multiOptions',
-		default: [],
-		description: 'Files ids\n\n__Note:__ Required for `default` export mode',
-		routing: {
-			send: {
-				property: 'fileIds',
-				propertyInDotNotation: false,
-				type: 'body',
-				value: '={{ $value }}'
-			}
-		},
-		displayOptions: {
-			show: {
-				resource: [
-					'distributions'
-				],
-				operation: [
-					'api.projects.distributions.post'
-				]
-			}
-		},
-		typeOptions: {
-			loadOptionsMethod: 'getProjectFilesMulti',
-			loadOptionsDependsOn: [
-				'projectId'
-			]
-		}
 	},
 	{
 		displayName: 'Bundle Ids',
@@ -709,45 +640,12 @@ export const distributionsProperties: INodeProperties[] = [
 		},
 		options: [
 			{
-				displayName: 'Export Mode',
-				name: 'exportMode',
-				type: 'options',
-				default: '',
-				options: [
-					{
-						name: '-',
-						value: ''
-					},
-					{
-						name: 'default',
-						value: 'default'
-					},
-					{
-						name: 'bundle',
-						value: 'bundle'
-					}
-				]
-			},
-			{
 				displayName: 'Name',
 				name: 'name',
 				type: 'string',
 				default: '',
 				description: 'Distribution name',
 				placeholder: 'distribution 1'
-			},
-			{
-				displayName: 'File Ids',
-				name: 'fileIds',
-				type: 'multiOptions',
-				default: [],
-				description: 'Files ids\n\n__Note:__ Required for `default` export mode',
-				typeOptions: {
-					loadOptionsMethod: 'getProjectFilesMulti',
-					loadOptionsDependsOn: [
-						'projectId'
-					]
-				}
 			},
 			{
 				displayName: 'Bundle Ids',
