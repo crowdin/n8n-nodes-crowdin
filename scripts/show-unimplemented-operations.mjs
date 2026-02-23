@@ -79,6 +79,12 @@ const SKIP_OPERATIONS = [
 	// Permissions batch operations (complex JSON Patch format)
 	'api.users.projects.permissions.patch',
 	'api.teams.projects.permissions.patch',
+	// AI Providers Gateway operations
+	'api.ai.providers.gateway.crowdin.get',
+	'api.ai.providers.gateway.crowdin.post',
+	'api.ai.providers.gateway.crowdin.put',
+	'api.ai.providers.gateway.crowdin.patch',
+	'api.ai.providers.gateway.crowdin.delete',
 ];
 
 // ============================================================================

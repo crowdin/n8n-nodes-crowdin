@@ -2,7 +2,6 @@
 
 import type { INodeProperties } from 'n8n-workflow';
 import { aiProperties } from './ai';
-import { aiGatewayProperties } from './aiGateway';
 import { storageProperties } from './storage';
 import { languagesProperties } from './languages';
 import { projectsProperties } from './projects';
@@ -38,10 +37,6 @@ const resourceProperty: INodeProperties = {
 		{
 			name: 'AI',
 			value: 'ai'
-		},
-		{
-			name: 'AI Gateway',
-			value: 'aiGateway'
 		},
 		{
 			name: 'Storage',
@@ -170,7 +165,6 @@ const resourceProperty: INodeProperties = {
 export const properties: INodeProperties[] = [
 	resourceProperty,
 	...aiProperties,
-	...aiGatewayProperties,
 	...storageProperties,
 	...languagesProperties,
 	...projectsProperties,
