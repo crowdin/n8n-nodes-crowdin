@@ -98,6 +98,11 @@ const IGNORED_OPERATIONS = [
 	'api.ai.providers.gateway.crowdin.put',
 	'api.ai.providers.gateway.crowdin.patch',
 	'api.ai.providers.gateway.crowdin.delete',
+	'api.ai.providers.gateway.enterprise.get',
+	'api.ai.providers.gateway.enterprise.post',
+	'api.ai.providers.gateway.enterprise.put',
+	'api.ai.providers.gateway.enterprise.patch',
+	'api.ai.providers.gateway.enterprise.delete',
 ];
 
 
