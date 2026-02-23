@@ -3684,7 +3684,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'vendor',
 										type: 'string',
 										default: '',
-										description: 'Task vendor:\n *   "alconost" - Alconost,\n *   "babbleon" - Babble-on,\n *   "tomedes" - Tomedes,\n *   "e2f" - e2f,\n *   "write_path_admin" - WritePath,\n *   "inlingo" - Inlingo,\n *   "acclaro" - Acclaro,\n *   "translate_by_humans" - Translate by Humans,\n *   "lingo24" - Lingo24,\n *   "assertio_language_services" - ASSERTIO Language Services,\n *   "gte_localize" - GTE Localize,\n *   "kettu_solutions" - Kettu Solutions,\n *   "languageline_solutions" - LanguageLine Translation Solutions',
+										description: 'Task vendor:\n *   "alconost" - Alconost,\n *   "babbleon" - Babble-on,\n *   "tomedes" - Tomedes,\n *   "e2f" - e2f,\n *   "write_path_admin" - WritePath,\n *   "inlingo" - Inlingo,\n *   "acclaro" - Acclaro,\n *   "translate_by_humans" - Translate by Humans,\n *   "lingo24" - Lingo24,\n *   "gte_localize" - GTE Localize,\n *   "kettu_solutions" - Kettu Solutions',
 										required: true
 									},
 									{
@@ -3953,7 +3953,7 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'vendor',
 										type: 'string',
 										default: '',
-										description: 'Task vendor:\n *   "alconost" - Alconost,\n *   "babbleon" - Babble-on,\n *   "tomedes" - Tomedes,\n *   "e2f" - e2f,\n *   "write_path_admin" - WritePath,\n *   "inlingo" - Inlingo,\n *   "acclaro" - Acclaro,\n *   "translate_by_humans" - Translate by Humans,\n *   "lingo24" - Lingo24,\n *   "assertio_language_services" - ASSERTIO Language Services,\n *   "gte_localize" - GTE Localize,\n *   "kettu_solutions" - Kettu Solutions,\n *   "languageline_solutions" - LanguageLine Translation Solutions',
+										description: 'Task vendor:\n *   "alconost" - Alconost,\n *   "babbleon" - Babble-on,\n *   "tomedes" - Tomedes,\n *   "e2f" - e2f,\n *   "write_path_admin" - WritePath,\n *   "inlingo" - Inlingo,\n *   "acclaro" - Acclaro,\n *   "translate_by_humans" - Translate by Humans,\n *   "lingo24" - Lingo24,\n *   "gte_localize" - GTE Localize,\n *   "kettu_solutions" - Kettu Solutions',
 										required: true
 									},
 									{
@@ -4240,7 +4240,7 @@ export const tasksProperties: INodeProperties[] = [
 						name: 'vendor',
 						type: 'string',
 						default: '',
-						description: 'Task vendor:\n *   "alconost" - Alconost,\n *   "babbleon" - Babble-on,\n *   "tomedes" - Tomedes,\n *   "e2f" - e2f,\n *   "write_path_admin" - WritePath,\n *   "inlingo" - Inlingo,\n *   "acclaro" - Acclaro,\n *   "translate_by_humans" - Translate by Humans,\n *   "lingo24" - Lingo24,\n *   "assertio_language_services" - ASSERTIO Language Services,\n *   "gte_localize" - GTE Localize,\n *   "kettu_solutions" - Kettu Solutions,\n *   "languageline_solutions" - LanguageLine Translation Solutions',
+						description: 'Task vendor:\n *   "alconost" - Alconost,\n *   "babbleon" - Babble-on,\n *   "tomedes" - Tomedes,\n *   "e2f" - e2f,\n *   "write_path_admin" - WritePath,\n *   "inlingo" - Inlingo,\n *   "acclaro" - Acclaro,\n *   "translate_by_humans" - Translate by Humans,\n *   "lingo24" - Lingo24,\n *   "gte_localize" - GTE Localize,\n *   "kettu_solutions" - Kettu Solutions',
 						required: true
 					},
 					{

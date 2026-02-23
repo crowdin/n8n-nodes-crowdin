@@ -2,6 +2,7 @@
 
 import type { INodeProperties } from 'n8n-workflow';
 import { aiProperties } from './ai';
+import { aiGatewayProperties } from './aiGateway';
 import { storageProperties } from './storage';
 import { languagesProperties } from './languages';
 import { projectsProperties } from './projects';
@@ -11,22 +12,22 @@ import { sourceStringsProperties } from './sourceStrings';
 import { stringTranslationsProperties } from './stringTranslations';
 import { stringCommentsProperties } from './stringComments';
 import { screenshotsProperties } from './screenshots';
-import { glossariesProperties } from './glossaries';
 import { translationMemoryProperties } from './translationMemory';
 import { machineTranslationEnginesProperties } from './machineTranslationEngines';
 import { translationStatusProperties } from './translationStatus';
 import { reportsProperties } from './reports';
-import { usersProperties } from './users';
-import { webhooksProperties } from './webhooks';
 import { organizationWebhooksProperties } from './organizationWebhooks';
+import { dictionariesProperties } from './dictionaries';
 import { applicationsProperties } from './applications';
 import { bundlesProperties } from './bundles';
-import { dictionariesProperties } from './dictionaries';
+import { glossariesProperties } from './glossaries';
 import { distributionsProperties } from './distributions';
 import { labelsProperties } from './labels';
 import { notificationsProperties } from './notifications';
 import { securityLogsProperties } from './securityLogs';
 import { tasksProperties } from './tasks';
+import { usersProperties } from './users';
+import { webhooksProperties } from './webhooks';
 
 const resourceProperty: INodeProperties = {
 	displayName: 'Resource',
@@ -37,6 +38,10 @@ const resourceProperty: INodeProperties = {
 		{
 			name: 'AI',
 			value: 'ai'
+		},
+		{
+			name: 'AI Gateway',
+			value: 'aiGateway'
 		},
 		{
 			name: 'Storage',
@@ -84,11 +89,6 @@ const resourceProperty: INodeProperties = {
 			description: '\nScreenshots provide translators with additional context for the source strings.  Screenshot tags allow specifying  which source strings are displayed on each screenshot.\n\nUse API to manage screenshots and their tags.\n'
 		},
 		{
-			name: 'Glossaries',
-			value: 'glossaries',
-			description: '\nGlossaries help to explain some specific terms or the ones often used in the project so that they can be properly and consistently translated.\n\nUse API to manage glossaries or specific terms. Glossary export and import are [asynchronous operations](#section/Introduction/Asynchronous-Operations) and shall be completed with sequence of API methods.\n'
-		},
-		{
 			name: 'Translation Memory',
 			value: 'translationMemory',
 			description: '\nTranslation Memory (TM) is a vault of translations that were previously made in other projects. Those translations can be reused to speed up the translation process. Every translation made in the project is automatically added to the project Translation Memory.\n\nUse API to create, upload, download, or remove specific TM. Translation Memory export and import are [asynchronous operations](#section/Introduction/Asynchronous-Operations) and shall be completed with sequence of API methods.\n'
@@ -109,19 +109,14 @@ const resourceProperty: INodeProperties = {
 			description: '\nReports help to estimate costs, calculate translation costs, and identify the top members.\n\nUse API to generate Cost Estimate, Translation Cost, and Top Members reports. You can then export reports in .xlsx or .csv file formats. Report generation is an [asynchronous operation](#section/Introduction/Asynchronous-Operations) and shall be completed with a sequence of API methods.'
 		},
 		{
-			name: 'Users',
-			value: 'users',
-			description: '\nUsers API gives you the possibility to get profile information about the currently authenticated user.\n'
-		},
-		{
-			name: 'Webhooks',
-			value: 'webhooks',
-			description: '\nWebhooks allow you to collect information about events that happen in your Crowdin projects. You can select the request type, content type, and add a custom payload, which allows you to create integrations with other systems on your own.\n\nYou can configure webhooks for the following events:\n * all strings in project are translated\n * all strings in project are reviewed\n * all strings in project QA check are finished\n * final translation of string is updated (using Replace in suggestions feature)\n * source string is added\n * source string is updated\n * source string is deleted\n * source string is translated\n * translation for source string is updated (using Replace in suggestions feature)\n * one of translations is deleted\n * translation for string is approved\n * approval for previously added translation is removed\n\nUse API to create, modify, and delete specific webhooks.\n'
-		},
-		{
 			name: 'Organization Webhooks',
 			value: 'organizationWebhooks',
 			description: '\nWebhooks allow you to collect information about events that happen in your Crowdin account. You can select the request type, content type, and add a custom payload, which allows you to create integrations with other systems on your own.\n\nYou can configure webhooks for the following events:\n * project is created\n * project is deleted\n\nUse API to create, modify, and delete specific webhooks.'
+		},
+		{
+			name: 'Dictionaries',
+			value: 'dictionaries',
+			description: '\nDictionaries allow you to create a storage of words that should be skipped by the spell checker.\n\nUse API to get the list of organization dictionaries and to edit a specific dictionary.'
 		},
 		{
 			name: 'Applications',
@@ -133,9 +128,9 @@ const resourceProperty: INodeProperties = {
 			value: 'bundles'
 		},
 		{
-			name: 'Dictionaries',
-			value: 'dictionaries',
-			description: '\nDictionaries allow you to create a storage of words that should be skipped by the spell checker.\n\nUse API to get the list of organization dictionaries and to edit a specific dictionary.'
+			name: 'Glossaries',
+			value: 'glossaries',
+			description: '\nGlossaries help to explain some specific terms or the ones often used in the project so that they can be properly and consistently translated.\n\nUse API to manage glossaries or specific terms. Glossary export and import are [asynchronous operations](#section/Introduction/Asynchronous-Operations) and shall be completed with sequence of API methods.\n'
 		},
 		{
 			name: 'Distributions',
@@ -157,6 +152,16 @@ const resourceProperty: INodeProperties = {
 			name: 'Tasks',
 			value: 'tasks',
 			description: '\nCreate and assign tasks to get files translated or proofread by specific people. You can set the due dates, split words between people, and receive notifications about the changes and updates on tasks. Tasks are project-specific, so you’ll have to create them within a project.\n\nUse API to create, modify, and delete specific tasks.\n'
+		},
+		{
+			name: 'Users',
+			value: 'users',
+			description: '\nUsers API gives you the possibility to get profile information about the currently authenticated user.\n'
+		},
+		{
+			name: 'Webhooks',
+			value: 'webhooks',
+			description: '\nWebhooks allow you to collect information about events that happen in your Crowdin projects. You can select the request type, content type, and add a custom payload, which allows you to create integrations with other systems on your own.\n\nYou can configure webhooks for the following events:\n * all strings in project are translated\n * all strings in project are reviewed\n * all strings in project QA check are finished\n * final translation of string is updated (using Replace in suggestions feature)\n * source string is added\n * source string is updated\n * source string is deleted\n * source string is translated\n * translation for source string is updated (using Replace in suggestions feature)\n * one of translations is deleted\n * translation for string is approved\n * approval for previously added translation is removed\n\nUse API to create, modify, and delete specific webhooks.\n'
 		}
 	],
 	default: 'ai'
@@ -165,6 +170,7 @@ const resourceProperty: INodeProperties = {
 export const properties: INodeProperties[] = [
 	resourceProperty,
 	...aiProperties,
+	...aiGatewayProperties,
 	...storageProperties,
 	...languagesProperties,
 	...projectsProperties,
@@ -174,20 +180,20 @@ export const properties: INodeProperties[] = [
 	...stringTranslationsProperties,
 	...stringCommentsProperties,
 	...screenshotsProperties,
-	...glossariesProperties,
 	...translationMemoryProperties,
 	...machineTranslationEnginesProperties,
 	...translationStatusProperties,
 	...reportsProperties,
-	...usersProperties,
-	...webhooksProperties,
 	...organizationWebhooksProperties,
+	...dictionariesProperties,
 	...applicationsProperties,
 	...bundlesProperties,
-	...dictionariesProperties,
+	...glossariesProperties,
 	...distributionsProperties,
 	...labelsProperties,
 	...notificationsProperties,
 	...securityLogsProperties,
 	...tasksProperties,
+	...usersProperties,
+	...webhooksProperties,
 ];

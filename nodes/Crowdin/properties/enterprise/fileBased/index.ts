@@ -26,6 +26,7 @@ import { organizationWebhooksProperties } from './organizationWebhooks';
 import { dictionariesProperties } from './dictionaries';
 import { applicationsProperties } from './applications';
 import { integrationsProperties } from './integrations';
+import { aiGatewayProperties } from './aiGateway';
 import { bundlesProperties } from './bundles';
 import { customSpellcheckersProperties } from './customSpellcheckers';
 import { distributionsProperties } from './distributions';
@@ -169,6 +170,11 @@ const resourceProperty: INodeProperties = {
 			description: '\nIntegration applications provide synchronization between Crowdin and external content management systems.\n\nUse the API to manage integration files, jobs, settings, and authentication.'
 		},
 		{
+			name: 'AI Gateway',
+			value: 'aiGateway',
+			description: 'The AI Gateway acts as a transparent reverse proxy to the configured AI provider.\n\nSet this endpoint\'s base URL as the `base_url` in your AI SDK client (OpenAI, Anthropic, Google Gemini, etc.), and use your Crowdin API token as the API key.\n\nThe request body and response format depend entirely on the target AI provider.\n\nPlease refer to the respective provider\'s API documentation for payload structure.\n\n**Supported providers:** OpenAI, Anthropic, Google Gemini AI Studio\n\n**Authentication:** The gateway accepts credentials in the format native to each provider\'s SDK:\n- `Authorization: Bearer <token>` (OpenAI and compatible)\n- `x-api-key: <token>` (Anthropic)\n- `x-goog-api-key: <token>` (Google Gemini)\n\nAll of these are interpreted as Crowdin API tokens. The actual provider API key is managed server-side via AI Provider configuration.'
+		},
+		{
 			name: 'Bundles',
 			value: 'bundles'
 		},
@@ -246,6 +252,7 @@ export const properties: INodeProperties[] = [
 	...dictionariesProperties,
 	...applicationsProperties,
 	...integrationsProperties,
+	...aiGatewayProperties,
 	...bundlesProperties,
 	...customSpellcheckersProperties,
 	...distributionsProperties,

@@ -1892,6 +1892,473 @@ export const reportsProperties: INodeProperties[] = [
 										description: 'If true, the report will not be saved to the archive for historical reference.'
 									}
 								]
+							},
+							{
+								displayName: 'By Task',
+								name: '_groupTranslationCostsPeReportByTask',
+								values: [
+									{
+										displayName: 'Unit',
+										name: 'unit',
+										type: 'options',
+										default: '',
+										description: 'Defines report unit',
+										options: [
+											{
+												name: '-',
+												value: ''
+											},
+											{
+												name: 'strings',
+												value: 'strings'
+											},
+											{
+												name: 'words',
+												value: 'words'
+											},
+											{
+												name: 'chars',
+												value: 'chars'
+											},
+											{
+												name: 'chars_with_spaces',
+												value: 'chars_with_spaces'
+											}
+										],
+										placeholder: 'words'
+									},
+									{
+										displayName: 'Currency',
+										name: 'currency',
+										type: 'options',
+										default: '',
+										description: 'Defines report currency',
+										options: [
+											{
+												name: '-',
+												value: ''
+											},
+											{
+												name: 'USD',
+												value: 'USD'
+											},
+											{
+												name: 'EUR',
+												value: 'EUR'
+											},
+											{
+												name: 'JPY',
+												value: 'JPY'
+											},
+											{
+												name: 'GBP',
+												value: 'GBP'
+											},
+											{
+												name: 'AUD',
+												value: 'AUD'
+											},
+											{
+												name: 'CAD',
+												value: 'CAD'
+											},
+											{
+												name: 'CHF',
+												value: 'CHF'
+											},
+											{
+												name: 'CNY',
+												value: 'CNY'
+											},
+											{
+												name: 'SEK',
+												value: 'SEK'
+											},
+											{
+												name: 'NZD',
+												value: 'NZD'
+											},
+											{
+												name: 'MXN',
+												value: 'MXN'
+											},
+											{
+												name: 'SGD',
+												value: 'SGD'
+											},
+											{
+												name: 'HKD',
+												value: 'HKD'
+											},
+											{
+												name: 'NOK',
+												value: 'NOK'
+											},
+											{
+												name: 'KRW',
+												value: 'KRW'
+											},
+											{
+												name: 'TRY',
+												value: 'TRY'
+											},
+											{
+												name: 'RUB',
+												value: 'RUB'
+											},
+											{
+												name: 'INR',
+												value: 'INR'
+											},
+											{
+												name: 'BRL',
+												value: 'BRL'
+											},
+											{
+												name: 'ZAR',
+												value: 'ZAR'
+											},
+											{
+												name: 'GEL',
+												value: 'GEL'
+											},
+											{
+												name: 'UAH',
+												value: 'UAH'
+											},
+											{
+												name: 'DDK',
+												value: 'DDK'
+											},
+											{
+												name: 'PLN',
+												value: 'PLN'
+											}
+										],
+										placeholder: 'USD'
+									},
+									{
+										displayName: 'Format',
+										name: 'format',
+										type: 'options',
+										default: '',
+										description: 'Defines export file format',
+										options: [
+											{
+												name: '-',
+												value: ''
+											},
+											{
+												name: 'xlsx',
+												value: 'xlsx'
+											},
+											{
+												name: 'csv',
+												value: 'csv'
+											},
+											{
+												name: 'json',
+												value: 'json'
+											}
+										]
+									},
+									{
+										displayName: 'Base Rates',
+										name: 'baseRates',
+										type: 'fixedCollection',
+										default: {},
+										placeholder: 'Add Field',
+										options: [
+											{
+												displayName: 'Fields',
+												name: 'fields',
+												values: [
+													{
+														displayName: 'Full Translation',
+														name: 'fullTranslation',
+														type: 'number',
+														default: undefined,
+														description: 'Applies to all languages by default',
+														placeholder: '0.1',
+														required: true
+													},
+													{
+														displayName: 'Proofread',
+														name: 'proofread',
+														type: 'number',
+														default: undefined,
+														description: undefined,
+														placeholder: '0.12',
+														required: true
+													}
+												]
+											}
+										],
+										required: true
+									},
+									{
+										displayName: 'Individual Rates',
+										name: 'individualRates',
+										type: 'fixedCollection',
+										typeOptions: {
+											multipleValues: true
+										},
+										default: {},
+										description: 'Individual rates (Custom rates for certain languages or users)',
+										placeholder: 'Add Item',
+										options: [
+											{
+												displayName: 'Item',
+												name: 'items',
+												values: [
+													{
+														displayName: 'Language Ids',
+														name: 'languageIds',
+														type: 'multiOptions',
+														typeOptions: {
+															loadOptionsMethod: 'getLanguagesMulti'
+														},
+														default: [],
+														description: 'Array of language ids',
+														required: true
+													},
+													{
+														displayName: 'User Ids',
+														name: 'userIds',
+														type: 'multiOptions',
+														typeOptions: {
+															loadOptionsMethod: 'getUsersMulti'
+														},
+														default: [],
+														description: 'Array of user ids',
+														required: true
+													},
+													{
+														displayName: 'Full Translation',
+														name: 'fullTranslation',
+														type: 'number',
+														default: undefined,
+														description: undefined,
+														placeholder: '0.1',
+														required: true
+													},
+													{
+														displayName: 'Proofread',
+														name: 'proofread',
+														type: 'number',
+														default: undefined,
+														description: undefined,
+														placeholder: '0.12',
+														required: true
+													}
+												]
+											}
+										],
+										required: true
+									},
+									{
+										displayName: 'Net Rate Schemes',
+										name: 'netRateSchemes',
+										type: 'fixedCollection',
+										default: {},
+										description: 'Net Rate Schemes (Percentage paid of full translation rate)\n\n__Note:__ A new translation will be included in the report at the lowest rate if multiple scheme categories can be applied to the translation',
+										placeholder: 'Add Field',
+										options: [
+											{
+												displayName: 'Fields',
+												name: 'fields',
+												values: [
+													{
+														displayName: 'Tm Match',
+														name: 'tmMatch',
+														type: 'fixedCollection',
+														typeOptions: {
+															multipleValues: true
+														},
+														default: {},
+														description: undefined,
+														placeholder: 'Add Item',
+														options: [
+															{
+																displayName: 'Item',
+																name: 'items',
+																values: [
+																	{
+																		displayName: 'Match Type',
+																		name: 'matchType',
+																		type: 'string',
+																		default: '',
+																		description: 'Match type, %. Possible values: `perfect`, `100`, or a percentage range (e.g., `99-82`, `81-60`)',
+																		placeholder: 'perfect',
+																		required: true
+																	},
+																	{
+																		displayName: 'Price',
+																		name: 'price',
+																		type: 'number',
+																		default: undefined,
+																		description: 'Price, %',
+																		placeholder: '0.1',
+																		required: true
+																	}
+																]
+															}
+														],
+														required: true
+													},
+													{
+														displayName: 'Mt Match',
+														name: 'mtMatch',
+														type: 'fixedCollection',
+														typeOptions: {
+															multipleValues: true
+														},
+														default: {},
+														description: undefined,
+														placeholder: 'Add Item',
+														options: [
+															{
+																displayName: 'Item',
+																name: 'items',
+																values: [
+																	{
+																		displayName: 'Match Type',
+																		name: 'matchType',
+																		type: 'string',
+																		default: '',
+																		description: 'Match type, %. Possible values: `100` or a percentage range (e.g., `99-82`, `81-60`)',
+																		placeholder: '100',
+																		required: true
+																	},
+																	{
+																		displayName: 'Price',
+																		name: 'price',
+																		type: 'number',
+																		default: undefined,
+																		description: 'Price, %',
+																		placeholder: '0.1',
+																		required: true
+																	}
+																]
+															}
+														],
+														required: true
+													},
+													{
+														displayName: 'Ai Match',
+														name: 'aiMatch',
+														type: 'fixedCollection',
+														typeOptions: {
+															multipleValues: true
+														},
+														default: {},
+														description: '\n\n __Note:__ The `aiMatch` field is optional. If this field is not filled in, the schema will be taken from the `mtMatch` field.',
+														placeholder: 'Add Item',
+														options: [
+															{
+																displayName: 'Item',
+																name: 'items',
+																values: [
+																	{
+																		displayName: 'Match Type',
+																		name: 'matchType',
+																		type: 'string',
+																		default: '',
+																		description: 'Match type, %. Possible values: `100` or a percentage range (e.g., `99-82`, `81-60`)',
+																		placeholder: '100',
+																		required: true
+																	},
+																	{
+																		displayName: 'Price',
+																		name: 'price',
+																		type: 'number',
+																		default: undefined,
+																		description: 'Price, %',
+																		placeholder: '0.1',
+																		required: true
+																	}
+																]
+															}
+														]
+													},
+													{
+														displayName: 'Suggestion Match',
+														name: 'suggestionMatch',
+														type: 'fixedCollection',
+														typeOptions: {
+															multipleValues: true
+														},
+														default: {},
+														description: undefined,
+														placeholder: 'Add Item',
+														options: [
+															{
+																displayName: 'Item',
+																name: 'items',
+																values: [
+																	{
+																		displayName: 'Match Type',
+																		name: 'matchType',
+																		type: 'string',
+																		default: '',
+																		description: 'Match type, %. Possible values: `100` or a percentage range (e.g., `99-82`, `81-60`)',
+																		placeholder: '100',
+																		required: true
+																	},
+																	{
+																		displayName: 'Price',
+																		name: 'price',
+																		type: 'number',
+																		default: undefined,
+																		description: 'Price, %',
+																		placeholder: '0.1',
+																		required: true
+																	}
+																]
+															}
+														],
+														required: true
+													}
+												]
+											}
+										],
+										required: true
+									},
+									{
+										displayName: 'Task Ids',
+										name: 'taskIds',
+										type: 'multiOptions',
+										typeOptions: {
+											loadOptionsMethod: 'getProjectTasksMulti',
+											loadOptionsDependsOn: [
+												'projectId'
+											]
+										},
+										default: [],
+										description: 'Array of task ids. Get via [List Tasks](#operation/api.projects.tasks.getMany)'
+									},
+									{
+										displayName: 'Exclude Approvals For Edited Translations',
+										name: 'excludeApprovalsForEditedTranslations',
+										type: 'boolean',
+										default: false,
+										description: 'Exclude approvals when the same user has made translations for the string.'
+									},
+									{
+										displayName: 'Pre Translated Strings Categorization Adjustment',
+										name: 'preTranslatedStringsCategorizationAdjustment',
+										type: 'boolean',
+										default: false,
+										description: 'Repetitive translations of pre-translated strings are reported under TM or MT match rates instead of Other suggestion match rates, depending on the initial pre-translation type.'
+									},
+									{
+										displayName: 'Skip Archiving',
+										name: 'skipArchiving',
+										type: 'boolean',
+										default: false,
+										description: 'If true, the report will not be saved to the archive for historical reference.'
+									}
+								]
 							}
 						],
 						required: true
@@ -3462,6 +3929,19 @@ export const reportsProperties: INodeProperties[] = [
 										description: 'Project Identifier for which the report should be generated. Get via [List Projects](#operation/api.projects.getMany)'
 									},
 									{
+										displayName: 'Task Ids',
+										name: 'taskIds',
+										type: 'multiOptions',
+										typeOptions: {
+											loadOptionsMethod: 'getProjectTasksMulti',
+											loadOptionsDependsOn: [
+												'projectId'
+											]
+										},
+										default: [],
+										description: 'Array of task ids. Get via [List Tasks](#operation/api.projects.tasks.getMany)'
+									},
+									{
 										displayName: 'Skip Archiving',
 										name: 'skipArchiving',
 										type: 'boolean',
@@ -3495,16 +3975,15 @@ export const reportsProperties: INodeProperties[] = [
 						placeholder: 'group-pre-translate-accuracy'
 					},
 					{
-						displayName: 'General',
+						displayName: 'Schema',
 						name: 'schema',
 						type: 'fixedCollection',
 						default: {},
-						description: undefined,
-						placeholder: 'Add Field',
+						description: 'Group Pre-translation Accuracy Report schema',
 						options: [
 							{
-								displayName: 'Fields',
-								name: 'fields',
+								displayName: 'General',
+								name: '_groupPreTranslateAccuracyReportGeneral',
 								values: [
 									{
 										displayName: 'Unit',
@@ -3622,6 +4101,113 @@ export const reportsProperties: INodeProperties[] = [
 										},
 										default: [],
 										description: 'Project Identifier for which the report should be generated. Get via [List Projects](#operation/api.projects.getMany)'
+									},
+									{
+										displayName: 'Skip Archiving',
+										name: 'skipArchiving',
+										type: 'boolean',
+										default: false,
+										description: 'If true, the report will not be saved to the archive for historical reference.'
+									}
+								]
+							},
+							{
+								displayName: 'By Task',
+								name: '_groupPreTranslateAccuracyReportByTask',
+								values: [
+									{
+										displayName: 'Unit',
+										name: 'unit',
+										type: 'options',
+										default: '',
+										description: 'Defines report unit',
+										options: [
+											{
+												name: '-',
+												value: ''
+											},
+											{
+												name: 'strings',
+												value: 'strings'
+											},
+											{
+												name: 'words',
+												value: 'words'
+											},
+											{
+												name: 'chars',
+												value: 'chars'
+											},
+											{
+												name: 'chars_with_spaces',
+												value: 'chars_with_spaces'
+											}
+										],
+										placeholder: 'words'
+									},
+									{
+										displayName: 'Format',
+										name: 'format',
+										type: 'options',
+										default: '',
+										description: 'Defines export file format',
+										options: [
+											{
+												name: '-',
+												value: ''
+											},
+											{
+												name: 'xlsx',
+												value: 'xlsx'
+											},
+											{
+												name: 'csv',
+												value: 'csv'
+											},
+											{
+												name: 'json',
+												value: 'json'
+											}
+										]
+									},
+									{
+										displayName: 'Match Score Categories',
+										name: 'matchScoreCategories',
+										type: 'fixedCollection',
+										typeOptions: {
+											multipleValues: true
+										},
+										default: {},
+										description: 'Split into categories by match score. Ranges should be in descending order (e.g., 100-90, 89-80)',
+										placeholder: 'Add Item',
+										options: [
+											{
+												displayName: 'Items',
+												name: 'items',
+												values: [
+													{
+														displayName: 'Value',
+														name: '_value',
+														type: 'string',
+														default: '',
+														description: undefined
+													}
+												]
+											}
+										]
+									},
+									{
+										displayName: 'Task Ids',
+										name: 'taskIds',
+										type: 'multiOptions',
+										typeOptions: {
+											loadOptionsMethod: 'getProjectTasksMulti',
+											loadOptionsDependsOn: [
+												'projectId'
+											]
+										},
+										default: [],
+										description: 'Array of task ids. Get via [List Tasks](#operation/api.projects.tasks.getMany)'
 									},
 									{
 										displayName: 'Skip Archiving',
@@ -5553,6 +6139,473 @@ export const reportsProperties: INodeProperties[] = [
 										description: 'If true, the report will not be saved to the archive for historical reference.'
 									}
 								]
+							},
+							{
+								displayName: 'By Task',
+								name: '_groupTranslationCostsPeReportByTask',
+								values: [
+									{
+										displayName: 'Unit',
+										name: 'unit',
+										type: 'options',
+										default: '',
+										description: 'Defines report unit',
+										options: [
+											{
+												name: '-',
+												value: ''
+											},
+											{
+												name: 'strings',
+												value: 'strings'
+											},
+											{
+												name: 'words',
+												value: 'words'
+											},
+											{
+												name: 'chars',
+												value: 'chars'
+											},
+											{
+												name: 'chars_with_spaces',
+												value: 'chars_with_spaces'
+											}
+										],
+										placeholder: 'words'
+									},
+									{
+										displayName: 'Currency',
+										name: 'currency',
+										type: 'options',
+										default: '',
+										description: 'Defines report currency',
+										options: [
+											{
+												name: '-',
+												value: ''
+											},
+											{
+												name: 'USD',
+												value: 'USD'
+											},
+											{
+												name: 'EUR',
+												value: 'EUR'
+											},
+											{
+												name: 'JPY',
+												value: 'JPY'
+											},
+											{
+												name: 'GBP',
+												value: 'GBP'
+											},
+											{
+												name: 'AUD',
+												value: 'AUD'
+											},
+											{
+												name: 'CAD',
+												value: 'CAD'
+											},
+											{
+												name: 'CHF',
+												value: 'CHF'
+											},
+											{
+												name: 'CNY',
+												value: 'CNY'
+											},
+											{
+												name: 'SEK',
+												value: 'SEK'
+											},
+											{
+												name: 'NZD',
+												value: 'NZD'
+											},
+											{
+												name: 'MXN',
+												value: 'MXN'
+											},
+											{
+												name: 'SGD',
+												value: 'SGD'
+											},
+											{
+												name: 'HKD',
+												value: 'HKD'
+											},
+											{
+												name: 'NOK',
+												value: 'NOK'
+											},
+											{
+												name: 'KRW',
+												value: 'KRW'
+											},
+											{
+												name: 'TRY',
+												value: 'TRY'
+											},
+											{
+												name: 'RUB',
+												value: 'RUB'
+											},
+											{
+												name: 'INR',
+												value: 'INR'
+											},
+											{
+												name: 'BRL',
+												value: 'BRL'
+											},
+											{
+												name: 'ZAR',
+												value: 'ZAR'
+											},
+											{
+												name: 'GEL',
+												value: 'GEL'
+											},
+											{
+												name: 'UAH',
+												value: 'UAH'
+											},
+											{
+												name: 'DDK',
+												value: 'DDK'
+											},
+											{
+												name: 'PLN',
+												value: 'PLN'
+											}
+										],
+										placeholder: 'USD'
+									},
+									{
+										displayName: 'Format',
+										name: 'format',
+										type: 'options',
+										default: '',
+										description: 'Defines export file format',
+										options: [
+											{
+												name: '-',
+												value: ''
+											},
+											{
+												name: 'xlsx',
+												value: 'xlsx'
+											},
+											{
+												name: 'csv',
+												value: 'csv'
+											},
+											{
+												name: 'json',
+												value: 'json'
+											}
+										]
+									},
+									{
+										displayName: 'Base Rates',
+										name: 'baseRates',
+										type: 'fixedCollection',
+										default: {},
+										placeholder: 'Add Field',
+										options: [
+											{
+												displayName: 'Fields',
+												name: 'fields',
+												values: [
+													{
+														displayName: 'Full Translation',
+														name: 'fullTranslation',
+														type: 'number',
+														default: undefined,
+														description: 'Applies to all languages by default',
+														placeholder: '0.1',
+														required: true
+													},
+													{
+														displayName: 'Proofread',
+														name: 'proofread',
+														type: 'number',
+														default: undefined,
+														description: undefined,
+														placeholder: '0.12',
+														required: true
+													}
+												]
+											}
+										],
+										required: true
+									},
+									{
+										displayName: 'Individual Rates',
+										name: 'individualRates',
+										type: 'fixedCollection',
+										typeOptions: {
+											multipleValues: true
+										},
+										default: {},
+										description: 'Individual rates (Custom rates for certain languages or users)',
+										placeholder: 'Add Item',
+										options: [
+											{
+												displayName: 'Item',
+												name: 'items',
+												values: [
+													{
+														displayName: 'Language Ids',
+														name: 'languageIds',
+														type: 'multiOptions',
+														typeOptions: {
+															loadOptionsMethod: 'getLanguagesMulti'
+														},
+														default: [],
+														description: 'Array of language ids',
+														required: true
+													},
+													{
+														displayName: 'User Ids',
+														name: 'userIds',
+														type: 'multiOptions',
+														typeOptions: {
+															loadOptionsMethod: 'getUsersMulti'
+														},
+														default: [],
+														description: 'Array of user ids',
+														required: true
+													},
+													{
+														displayName: 'Full Translation',
+														name: 'fullTranslation',
+														type: 'number',
+														default: undefined,
+														description: undefined,
+														placeholder: '0.1',
+														required: true
+													},
+													{
+														displayName: 'Proofread',
+														name: 'proofread',
+														type: 'number',
+														default: undefined,
+														description: undefined,
+														placeholder: '0.12',
+														required: true
+													}
+												]
+											}
+										],
+										required: true
+									},
+									{
+										displayName: 'Net Rate Schemes',
+										name: 'netRateSchemes',
+										type: 'fixedCollection',
+										default: {},
+										description: 'Net Rate Schemes (Percentage paid of full translation rate)\n\n__Note:__ A new translation will be included in the report at the lowest rate if multiple scheme categories can be applied to the translation',
+										placeholder: 'Add Field',
+										options: [
+											{
+												displayName: 'Fields',
+												name: 'fields',
+												values: [
+													{
+														displayName: 'Tm Match',
+														name: 'tmMatch',
+														type: 'fixedCollection',
+														typeOptions: {
+															multipleValues: true
+														},
+														default: {},
+														description: undefined,
+														placeholder: 'Add Item',
+														options: [
+															{
+																displayName: 'Item',
+																name: 'items',
+																values: [
+																	{
+																		displayName: 'Match Type',
+																		name: 'matchType',
+																		type: 'string',
+																		default: '',
+																		description: 'Match type, %. Possible values: `perfect`, `100`, or a percentage range (e.g., `99-82`, `81-60`)',
+																		placeholder: 'perfect',
+																		required: true
+																	},
+																	{
+																		displayName: 'Price',
+																		name: 'price',
+																		type: 'number',
+																		default: undefined,
+																		description: 'Price, %',
+																		placeholder: '0.1',
+																		required: true
+																	}
+																]
+															}
+														],
+														required: true
+													},
+													{
+														displayName: 'Mt Match',
+														name: 'mtMatch',
+														type: 'fixedCollection',
+														typeOptions: {
+															multipleValues: true
+														},
+														default: {},
+														description: undefined,
+														placeholder: 'Add Item',
+														options: [
+															{
+																displayName: 'Item',
+																name: 'items',
+																values: [
+																	{
+																		displayName: 'Match Type',
+																		name: 'matchType',
+																		type: 'string',
+																		default: '',
+																		description: 'Match type, %. Possible values: `100` or a percentage range (e.g., `99-82`, `81-60`)',
+																		placeholder: '100',
+																		required: true
+																	},
+																	{
+																		displayName: 'Price',
+																		name: 'price',
+																		type: 'number',
+																		default: undefined,
+																		description: 'Price, %',
+																		placeholder: '0.1',
+																		required: true
+																	}
+																]
+															}
+														],
+														required: true
+													},
+													{
+														displayName: 'Ai Match',
+														name: 'aiMatch',
+														type: 'fixedCollection',
+														typeOptions: {
+															multipleValues: true
+														},
+														default: {},
+														description: '\n\n __Note:__ The `aiMatch` field is optional. If this field is not filled in, the schema will be taken from the `mtMatch` field.',
+														placeholder: 'Add Item',
+														options: [
+															{
+																displayName: 'Item',
+																name: 'items',
+																values: [
+																	{
+																		displayName: 'Match Type',
+																		name: 'matchType',
+																		type: 'string',
+																		default: '',
+																		description: 'Match type, %. Possible values: `100` or a percentage range (e.g., `99-82`, `81-60`)',
+																		placeholder: '100',
+																		required: true
+																	},
+																	{
+																		displayName: 'Price',
+																		name: 'price',
+																		type: 'number',
+																		default: undefined,
+																		description: 'Price, %',
+																		placeholder: '0.1',
+																		required: true
+																	}
+																]
+															}
+														]
+													},
+													{
+														displayName: 'Suggestion Match',
+														name: 'suggestionMatch',
+														type: 'fixedCollection',
+														typeOptions: {
+															multipleValues: true
+														},
+														default: {},
+														description: undefined,
+														placeholder: 'Add Item',
+														options: [
+															{
+																displayName: 'Item',
+																name: 'items',
+																values: [
+																	{
+																		displayName: 'Match Type',
+																		name: 'matchType',
+																		type: 'string',
+																		default: '',
+																		description: 'Match type, %. Possible values: `100` or a percentage range (e.g., `99-82`, `81-60`)',
+																		placeholder: '100',
+																		required: true
+																	},
+																	{
+																		displayName: 'Price',
+																		name: 'price',
+																		type: 'number',
+																		default: undefined,
+																		description: 'Price, %',
+																		placeholder: '0.1',
+																		required: true
+																	}
+																]
+															}
+														],
+														required: true
+													}
+												]
+											}
+										],
+										required: true
+									},
+									{
+										displayName: 'Task Ids',
+										name: 'taskIds',
+										type: 'multiOptions',
+										typeOptions: {
+											loadOptionsMethod: 'getProjectTasksMulti',
+											loadOptionsDependsOn: [
+												'projectId'
+											]
+										},
+										default: [],
+										description: 'Array of task ids. Get via [List Tasks](#operation/api.projects.tasks.getMany)'
+									},
+									{
+										displayName: 'Exclude Approvals For Edited Translations',
+										name: 'excludeApprovalsForEditedTranslations',
+										type: 'boolean',
+										default: false,
+										description: 'Exclude approvals when the same user has made translations for the string.'
+									},
+									{
+										displayName: 'Pre Translated Strings Categorization Adjustment',
+										name: 'preTranslatedStringsCategorizationAdjustment',
+										type: 'boolean',
+										default: false,
+										description: 'Repetitive translations of pre-translated strings are reported under TM or MT match rates instead of Other suggestion match rates, depending on the initial pre-translation type.'
+									},
+									{
+										displayName: 'Skip Archiving',
+										name: 'skipArchiving',
+										type: 'boolean',
+										default: false,
+										description: 'If true, the report will not be saved to the archive for historical reference.'
+									}
+								]
 							}
 						],
 						required: true
@@ -7123,6 +8176,19 @@ export const reportsProperties: INodeProperties[] = [
 										description: 'Project Identifier for which the report should be generated. Get via [List Projects](#operation/api.projects.getMany)'
 									},
 									{
+										displayName: 'Task Ids',
+										name: 'taskIds',
+										type: 'multiOptions',
+										typeOptions: {
+											loadOptionsMethod: 'getProjectTasksMulti',
+											loadOptionsDependsOn: [
+												'projectId'
+											]
+										},
+										default: [],
+										description: 'Array of task ids. Get via [List Tasks](#operation/api.projects.tasks.getMany)'
+									},
+									{
 										displayName: 'Skip Archiving',
 										name: 'skipArchiving',
 										type: 'boolean',
@@ -7156,16 +8222,15 @@ export const reportsProperties: INodeProperties[] = [
 						placeholder: 'group-pre-translate-accuracy'
 					},
 					{
-						displayName: 'General',
+						displayName: 'Schema',
 						name: 'schema',
 						type: 'fixedCollection',
 						default: {},
-						description: undefined,
-						placeholder: 'Add Field',
+						description: 'Group Pre-translation Accuracy Report schema',
 						options: [
 							{
-								displayName: 'Fields',
-								name: 'fields',
+								displayName: 'General',
+								name: '_groupPreTranslateAccuracyReportGeneral',
 								values: [
 									{
 										displayName: 'Unit',
@@ -7283,6 +8348,113 @@ export const reportsProperties: INodeProperties[] = [
 										},
 										default: [],
 										description: 'Project Identifier for which the report should be generated. Get via [List Projects](#operation/api.projects.getMany)'
+									},
+									{
+										displayName: 'Skip Archiving',
+										name: 'skipArchiving',
+										type: 'boolean',
+										default: false,
+										description: 'If true, the report will not be saved to the archive for historical reference.'
+									}
+								]
+							},
+							{
+								displayName: 'By Task',
+								name: '_groupPreTranslateAccuracyReportByTask',
+								values: [
+									{
+										displayName: 'Unit',
+										name: 'unit',
+										type: 'options',
+										default: '',
+										description: 'Defines report unit',
+										options: [
+											{
+												name: '-',
+												value: ''
+											},
+											{
+												name: 'strings',
+												value: 'strings'
+											},
+											{
+												name: 'words',
+												value: 'words'
+											},
+											{
+												name: 'chars',
+												value: 'chars'
+											},
+											{
+												name: 'chars_with_spaces',
+												value: 'chars_with_spaces'
+											}
+										],
+										placeholder: 'words'
+									},
+									{
+										displayName: 'Format',
+										name: 'format',
+										type: 'options',
+										default: '',
+										description: 'Defines export file format',
+										options: [
+											{
+												name: '-',
+												value: ''
+											},
+											{
+												name: 'xlsx',
+												value: 'xlsx'
+											},
+											{
+												name: 'csv',
+												value: 'csv'
+											},
+											{
+												name: 'json',
+												value: 'json'
+											}
+										]
+									},
+									{
+										displayName: 'Match Score Categories',
+										name: 'matchScoreCategories',
+										type: 'fixedCollection',
+										typeOptions: {
+											multipleValues: true
+										},
+										default: {},
+										description: 'Split into categories by match score. Ranges should be in descending order (e.g., 100-90, 89-80)',
+										placeholder: 'Add Item',
+										options: [
+											{
+												displayName: 'Items',
+												name: 'items',
+												values: [
+													{
+														displayName: 'Value',
+														name: '_value',
+														type: 'string',
+														default: '',
+														description: undefined
+													}
+												]
+											}
+										]
+									},
+									{
+										displayName: 'Task Ids',
+										name: 'taskIds',
+										type: 'multiOptions',
+										typeOptions: {
+											loadOptionsMethod: 'getProjectTasksMulti',
+											loadOptionsDependsOn: [
+												'projectId'
+											]
+										},
+										default: [],
+										description: 'Array of task ids. Get via [List Tasks](#operation/api.projects.tasks.getMany)'
 									},
 									{
 										displayName: 'Skip Archiving',
