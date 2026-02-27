@@ -1283,6 +1283,39 @@ export const sourceStringsProperties: INodeProperties[] = [
 										type: 'number',
 										default: 0,
 										description: 'Defines visible status `yes` as show and `no` as hidden'
+									},
+									{
+										displayName: 'Additional Properties',
+										name: 'spread:additionalProperties',
+										description: 'Defines column number for the specified language. Use language identifier as a key (e.g., `en`, `de`) and column number as a value',
+										type: 'fixedCollection',
+										typeOptions: {
+											multipleValues: true
+										},
+										default: {},
+										placeholder: 'Add Property',
+										options: [
+											{
+												displayName: 'Items',
+												name: 'items',
+												values: [
+													{
+														displayName: 'Key',
+														name: 'key',
+														type: 'string',
+														default: ''
+													},
+													{
+														displayName: 'Value',
+														name: 'value',
+														type: 'number',
+														default: 0,
+														description: 'Defines column number for the specified language. Use language identifier as a key (e.g., `en`, `de`) and column number as a value',
+														placeholder: '0'
+													}
+												]
+											}
+										]
 									}
 								]
 							}
