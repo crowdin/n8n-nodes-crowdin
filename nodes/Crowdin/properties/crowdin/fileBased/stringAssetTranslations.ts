@@ -703,7 +703,7 @@ export const stringAssetTranslationsProperties: INodeProperties[] = [
 	{
 		displayName: 'File Id',
 		name: 'fileId',
-		description: 'File Identifier. Get via [List Files](#operation/api.projects.files.getMany) <br> **Note:** Must be used together with `languageId`',
+		description: 'File Identifier. Get via [List Files](#operation/api.projects.files.getMany)\n**Note:** Must be used together with `languageId`',
 		default: '',
 		type: 'options',
 		routing: {
@@ -1286,37 +1286,6 @@ export const stringAssetTranslationsProperties: INodeProperties[] = [
 		},
 		typeOptions: {
 			loadOptionsMethod: 'getProjectFiles',
-			loadOptionsDependsOn: [
-				'projectId'
-			]
-		}
-	},
-	{
-		displayName: 'Branch Id',
-		name: 'branchId',
-		description: 'Branch Identifier. Get via [List Branches](#operation/api.projects.branches.getMany)',
-		default: '',
-		type: 'options',
-		routing: {
-			send: {
-				type: 'query',
-				property: 'branchId',
-				value: '={{ typeof $value === \'number\' ? $value : undefined }}',
-				propertyInDotNotation: false
-			}
-		},
-		displayOptions: {
-			show: {
-				resource: [
-					'stringAssetTranslations'
-				],
-				operation: [
-					'api.projects.languages.translations.getMany'
-				]
-			}
-		},
-		typeOptions: {
-			loadOptionsMethod: 'getBranches',
 			loadOptionsDependsOn: [
 				'projectId'
 			]
@@ -2434,7 +2403,7 @@ export const stringAssetTranslationsProperties: INodeProperties[] = [
 	{
 		displayName: 'File Id',
 		name: 'fileId',
-		description: 'File Identifier. Get via [List Files](#operation/api.projects.files.getMany)\n\n     __Note:__ Must be used together with `languageId`',
+		description: 'File Identifier. Get via [List Files](#operation/api.projects.files.getMany)\n\n__Note:__ Must be used together with `languageId`',
 		default: '',
 		type: 'options',
 		routing: {
