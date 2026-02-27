@@ -4781,6 +4781,53 @@ function buildFieldFromSchema(name, schema, parentPath, doc = null, depth = 0) {
 				}
 			}
 			
+			// Handle additionalProperties with a simple value type (integer/string/boolean).
+			// Rendered as a multipleValues fixedCollection where each entry is {key, value}.
+			// The 'spread:' prefix tells normalizeValue to spread entries into the parent object.
+			if (schema.additionalProperties && typeof schema.additionalProperties === 'object'
+					&& schema.additionalProperties !== true) {
+				let addlSchema = schema.additionalProperties;
+				if (addlSchema.$ref && doc) {
+					addlSchema = resolveRef(doc, addlSchema.$ref) || addlSchema;
+				}
+				const addlType = (addlSchema.type === 'integer' || addlSchema.type === 'number') ? 'number'
+					: addlSchema.type === 'string' ? 'string'
+					: addlSchema.type === 'boolean' ? 'boolean'
+					: null;
+				if (addlType !== null) {
+					nestedFields.push({
+						displayName: 'Additional Properties',
+						name: 'spread:additionalProperties',
+						description: addlSchema.description,
+						type: 'fixedCollection',
+						typeOptions: { multipleValues: true },
+						default: {},
+						placeholder: 'Add Property',
+						options: [
+							{
+								name: 'items',
+								displayName: 'Items',
+								values: [
+									{
+										displayName: 'Key',
+										name: 'key',
+										type: 'string',
+										default: '',
+									},
+									{
+										displayName: 'Value',
+										name: 'value',
+										type: addlType,
+										default: addlType === 'string' ? '' : 0,
+										description: addlSchema.description,
+									},
+								],
+							},
+						],
+					});
+				}
+			}
+			
 			if (nestedFields.length > 0) {
 				// Use fixedCollection with single option containing all fields
 				return {

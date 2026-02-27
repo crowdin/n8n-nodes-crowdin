@@ -323,6 +323,21 @@ function normalizeValue(obj: unknown, filterEmpty: boolean): unknown {
 			finalKey = k.slice(5); // Remove 'json:' prefix
 			finalValue = parseJsonValue(finalValue);
 		}
+		// Handle spread: prefix - spread array of {key, value} pairs into parent object
+		// Used for additionalProperties (dynamic key-value mappings like language code -> column number)
+		else if (k.startsWith('spread:')) {
+			if (Array.isArray(finalValue)) {
+				for (const item of finalValue) {
+					if (item && typeof item === 'object' && !Array.isArray(item)) {
+						const entry = item as Record<string, unknown>;
+						if (entry.key !== undefined && entry.key !== null && entry.key !== '') {
+							result[String(entry.key)] = entry.value;
+						}
+					}
+				}
+			}
+			continue; // Don't add 'spread:...' key to result
+		}
 		
 		// Filter empty values only if filterEmpty is true (current level)
 		if (filterEmpty && isEmptyValue(finalValue)) {

@@ -703,7 +703,7 @@ export const stringAssetTranslationsProperties: INodeProperties[] = [
 	{
 		displayName: 'File Id',
 		name: 'fileId',
-		description: 'File Identifier. Get via [List Files](#operation/api.projects.files.getMany) <br> **Note:** Must be used together with `languageId`',
+		description: 'File Identifier. Get via [List Files](#operation/api.projects.files.getMany)\n**Note:** Must be used together with `languageId`',
 		default: '',
 		type: 'options',
 		routing: {
@@ -1040,7 +1040,7 @@ export const stringAssetTranslationsProperties: INodeProperties[] = [
 	{
 		displayName: 'String Id',
 		name: 'stringId',
-		description: 'String Identifier. Get via [List Strings](#operation/api.projects.strings.getMany)\n\n__Note:__ Can\'t be used together with `fileId`',
+		description: 'String Identifier. Get via [List Strings](#operation/api.projects.strings.getMany)\n    \n__Note:__ Can\'t be used together with `fileId`',
 		default: '',
 		type: 'options',
 		routing: {
@@ -1071,7 +1071,7 @@ export const stringAssetTranslationsProperties: INodeProperties[] = [
 	{
 		displayName: 'File Id',
 		name: 'fileId',
-		description: 'File Identifier. Get via [List Files](#operation/api.projects.files.getMany)\n\n__Note:__ Can\'t be used together with `stringId`',
+		description: 'File Identifier. Get via [List Files](#operation/api.projects.files.getMany)\n__Note:__ Can\'t be used together with `stringId`',
 		default: '',
 		type: 'options',
 		routing: {
@@ -1327,7 +1327,7 @@ export const stringAssetTranslationsProperties: INodeProperties[] = [
 	{
 		displayName: 'Branch Id',
 		name: 'branchId',
-		description: 'Branch Identifier. Get via [List Branches](#operation/api.projects.branches.getMany)\n     *\n     * __Note:__ Can\'t be used with `fileId` or `directoryId` in the same request',
+		description: 'Branch Identifier. Get via [List Branches](#operation/api.projects.branches.getMany)\n\n__Note:__ Can\'t be used with `fileId` or `directoryId` in the same request',
 		default: '',
 		type: 'options',
 		routing: {
@@ -1358,7 +1358,7 @@ export const stringAssetTranslationsProperties: INodeProperties[] = [
 	{
 		displayName: 'Directory Id',
 		name: 'directoryId',
-		description: 'Directory Identifier. Get via [List Directories](#operation/api.projects.directories.getMany)\n     *\n     * __Note:__ Can\'t be used with `fileId` or `branchId` in same request',
+		description: 'Directory Identifier. Get via [List Directories](#operation/api.projects.directories.getMany)\n\n__Note:__ Can\'t be used with `fileId` or `branchId` in same request',
 		default: '',
 		type: 'options',
 		routing: {
@@ -1389,7 +1389,7 @@ export const stringAssetTranslationsProperties: INodeProperties[] = [
 	{
 		displayName: 'Passed Workflow',
 		name: 'passedWorkflow',
-		description: '\n__Note:__ Can\'t be used with `minApprovalsCount` in same request',
+		description: '__Note:__ Can\'t be used with `minApprovalsCount` in same request',
 		default: '',
 		type: 'options',
 		options: [
@@ -1428,7 +1428,7 @@ export const stringAssetTranslationsProperties: INodeProperties[] = [
 	{
 		displayName: 'Min Approval Count',
 		name: 'minApprovalCount',
-		description: '\n__Note:__ Can\'t be used with `passedWorkflow` in same request',
+		description: '__Note:__ Can\'t be used with `passedWorkflow` in same request',
 		default: 0,
 		type: 'number',
 		routing: {
@@ -2462,7 +2462,7 @@ export const stringAssetTranslationsProperties: INodeProperties[] = [
 	{
 		displayName: 'File Id',
 		name: 'fileId',
-		description: 'File Identifier. Get via [List Files](#operation/api.projects.files.getMany)\n\n     __Note:__ Must be used together with `languageId`',
+		description: 'File Identifier. Get via [List Files](#operation/api.projects.files.getMany)\n\n__Note:__ Must be used together with `languageId`',
 		default: '',
 		type: 'options',
 		routing: {

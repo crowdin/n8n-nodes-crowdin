@@ -1305,7 +1305,7 @@ export const stringTranslationsProperties: INodeProperties[] = [
 	{
 		displayName: 'Min Approval Count',
 		name: 'minApprovalCount',
-		description: '\n__Note:__ Can\'t be used with `passedWorkflow` in same request',
+		description: '__Note:__ Can\'t be used with `passedWorkflow` in same request',
 		default: 0,
 		type: 'number',
 		routing: {
