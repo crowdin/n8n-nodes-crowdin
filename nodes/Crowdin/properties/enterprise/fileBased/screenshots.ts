@@ -887,7 +887,7 @@ export const screenshotsProperties: INodeProperties[] = [
 		name: 'labelIds',
 		type: 'multiOptions',
 		default: [],
-		description: 'Label Identifiers. Get via [List Labels](#operation/api.projects.labels.getMany)',
+		description: 'Attach labels to the screenshot. Get label ids via [List Labels](#operation/api.projects.labels.getMany)',
 		routing: {
 			send: {
 				property: 'labelIds',
@@ -1887,7 +1887,7 @@ export const screenshotsProperties: INodeProperties[] = [
 				name: 'labelIds',
 				type: 'multiOptions',
 				default: [],
-				description: 'Label Identifiers. Get via [List Labels](#operation/api.projects.labels.getMany)',
+				description: 'Attach labels to the screenshot. Get label ids via [List Labels](#operation/api.projects.labels.getMany)',
 				typeOptions: {
 					loadOptionsMethod: 'getProjectLabelsMulti',
 					loadOptionsDependsOn: [
