@@ -2302,31 +2302,6 @@ export const usersProperties: INodeProperties[] = [
 				placeholder: 'America/New_York'
 			},
 			{
-				displayName: 'Status',
-				name: 'status',
-				type: 'options',
-				default: '',
-				description: 'User Status',
-				options: [
-					{
-						name: '-',
-						value: ''
-					},
-					{
-						name: 'active',
-						value: 'active'
-					},
-					{
-						name: 'pending',
-						value: 'pending'
-					},
-					{
-						name: 'blocked',
-						value: 'blocked'
-					}
-				]
-			},
-			{
 				displayName: 'Admin Access',
 				name: 'adminAccess',
 				type: 'boolean',

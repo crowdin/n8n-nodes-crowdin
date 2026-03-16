@@ -1,7 +1,7 @@
 // Auto-generated - do not edit manually
 
 import type { INodeProperties } from 'n8n-workflow';
-import { transformToJsonPatch, normalizeRootBody } from '../../../utils/preSend';
+import { normalizeRootBody } from '../../../utils/preSend';
 
 export const reportsProperties: INodeProperties[] = [
 	{
@@ -230,11 +230,6 @@ export const reportsProperties: INodeProperties[] = [
 					request: {
 						method: 'PATCH',
 						url: '=/reports/settings-templates/{{$parameter["reportSettingsTemplateId"]}}'
-					},
-					send: {
-						preSend: [
-							transformToJsonPatch
-						]
 					}
 				}
 			},
@@ -391,11 +386,6 @@ export const reportsProperties: INodeProperties[] = [
 					request: {
 						method: 'PATCH',
 						url: '=/users/{{$parameter["userId"]}}/reports/settings-templates/{{$parameter["reportSettingsTemplateId"]}}'
-					},
-					send: {
-						preSend: [
-							transformToJsonPatch
-						]
 					}
 				}
 			}
@@ -5567,6 +5557,28 @@ export const reportsProperties: INodeProperties[] = [
 		},
 		typeOptions: {
 			loadOptionsMethod: 'getReportSettingsTemplates'
+		}
+	},
+	{
+		displayName: 'Body',
+		name: 'body',
+		type: 'json',
+		default: '{}',
+		description: 'A JSON Patch operation as defined by [RFC 6902](https://tools.ietf.org/html/rfc6902#section-4)',
+		routing: {
+			request: {
+				body: '={{ JSON.parse($value) }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'reports'
+				],
+				operation: [
+					'api.reports.settings-templates.patch'
+				]
+			}
 		}
 	},
 	{
@@ -14661,196 +14673,16 @@ export const reportsProperties: INodeProperties[] = [
 		}
 	},
 	{
-		displayName: 'Update Fields',
-		name: 'updateFields',
-		type: 'collection',
-		placeholder: 'Add Field',
-		default: {},
-		displayOptions: {
-			show: {
-				resource: [
-					'reports'
-				],
-				operation: [
-					'api.reports.settings-templates.patch'
-				]
+		displayName: 'Body',
+		name: 'body',
+		type: 'json',
+		default: '{}',
+		description: 'A JSON Patch operation as defined by [RFC 6902](https://tools.ietf.org/html/rfc6902#section-4)',
+		routing: {
+			request: {
+				body: '={{ JSON.parse($value) }}'
 			}
 		},
-		options: [
-			{
-				displayName: 'Name',
-				name: 'name',
-				type: 'string',
-				default: '',
-				description: 'Template name',
-				placeholder: 'Default template'
-			},
-			{
-				displayName: 'Currency',
-				name: 'currency',
-				type: 'options',
-				default: '',
-				description: 'Defines report currency',
-				options: [
-					{
-						name: '-',
-						value: ''
-					},
-					{
-						name: 'USD',
-						value: 'USD'
-					},
-					{
-						name: 'EUR',
-						value: 'EUR'
-					},
-					{
-						name: 'JPY',
-						value: 'JPY'
-					},
-					{
-						name: 'GBP',
-						value: 'GBP'
-					},
-					{
-						name: 'AUD',
-						value: 'AUD'
-					},
-					{
-						name: 'CAD',
-						value: 'CAD'
-					},
-					{
-						name: 'CHF',
-						value: 'CHF'
-					},
-					{
-						name: 'CNY',
-						value: 'CNY'
-					},
-					{
-						name: 'SEK',
-						value: 'SEK'
-					},
-					{
-						name: 'NZD',
-						value: 'NZD'
-					},
-					{
-						name: 'MXN',
-						value: 'MXN'
-					},
-					{
-						name: 'SGD',
-						value: 'SGD'
-					},
-					{
-						name: 'HKD',
-						value: 'HKD'
-					},
-					{
-						name: 'NOK',
-						value: 'NOK'
-					},
-					{
-						name: 'KRW',
-						value: 'KRW'
-					},
-					{
-						name: 'TRY',
-						value: 'TRY'
-					},
-					{
-						name: 'RUB',
-						value: 'RUB'
-					},
-					{
-						name: 'INR',
-						value: 'INR'
-					},
-					{
-						name: 'BRL',
-						value: 'BRL'
-					},
-					{
-						name: 'ZAR',
-						value: 'ZAR'
-					},
-					{
-						name: 'GEL',
-						value: 'GEL'
-					},
-					{
-						name: 'UAH',
-						value: 'UAH'
-					},
-					{
-						name: 'DDK',
-						value: 'DDK'
-					},
-					{
-						name: 'PLN',
-						value: 'PLN'
-					}
-				]
-			},
-			{
-				displayName: 'Unit',
-				name: 'unit',
-				type: 'options',
-				default: '',
-				description: 'Defines report unit',
-				options: [
-					{
-						name: '-',
-						value: ''
-					},
-					{
-						name: 'strings',
-						value: 'strings'
-					},
-					{
-						name: 'words',
-						value: 'words'
-					},
-					{
-						name: 'chars',
-						value: 'chars'
-					},
-					{
-						name: 'chars_with_spaces',
-						value: 'chars_with_spaces'
-					}
-				]
-			},
-			{
-				displayName: 'Config',
-				name: 'json:config',
-				type: 'json',
-				default: '{}',
-				description: 'Defines report config'
-			},
-			{
-				displayName: 'Is Public',
-				name: 'isPublic',
-				type: 'boolean',
-				default: false,
-				description: 'Defines report public'
-			}
-		],
-		routing: {
-			send: {
-				type: 'body',
-				value: '={{ $value }}'
-			}
-		}
-	},
-	{
-		displayName: 'Update Fields',
-		name: 'updateFields',
-		type: 'collection',
-		placeholder: 'Add Field',
-		default: {},
 		displayOptions: {
 			show: {
 				resource: [
@@ -14859,167 +14691,6 @@ export const reportsProperties: INodeProperties[] = [
 				operation: [
 					'api.users.reports.settings-templates.patch'
 				]
-			}
-		},
-		options: [
-			{
-				displayName: 'Name',
-				name: 'name',
-				type: 'string',
-				default: '',
-				description: 'Template name',
-				placeholder: 'Default template'
-			},
-			{
-				displayName: 'Currency',
-				name: 'currency',
-				type: 'options',
-				default: '',
-				description: 'Defines report currency',
-				options: [
-					{
-						name: '-',
-						value: ''
-					},
-					{
-						name: 'USD',
-						value: 'USD'
-					},
-					{
-						name: 'EUR',
-						value: 'EUR'
-					},
-					{
-						name: 'JPY',
-						value: 'JPY'
-					},
-					{
-						name: 'GBP',
-						value: 'GBP'
-					},
-					{
-						name: 'AUD',
-						value: 'AUD'
-					},
-					{
-						name: 'CAD',
-						value: 'CAD'
-					},
-					{
-						name: 'CHF',
-						value: 'CHF'
-					},
-					{
-						name: 'CNY',
-						value: 'CNY'
-					},
-					{
-						name: 'SEK',
-						value: 'SEK'
-					},
-					{
-						name: 'NZD',
-						value: 'NZD'
-					},
-					{
-						name: 'MXN',
-						value: 'MXN'
-					},
-					{
-						name: 'SGD',
-						value: 'SGD'
-					},
-					{
-						name: 'HKD',
-						value: 'HKD'
-					},
-					{
-						name: 'NOK',
-						value: 'NOK'
-					},
-					{
-						name: 'KRW',
-						value: 'KRW'
-					},
-					{
-						name: 'TRY',
-						value: 'TRY'
-					},
-					{
-						name: 'RUB',
-						value: 'RUB'
-					},
-					{
-						name: 'INR',
-						value: 'INR'
-					},
-					{
-						name: 'BRL',
-						value: 'BRL'
-					},
-					{
-						name: 'ZAR',
-						value: 'ZAR'
-					},
-					{
-						name: 'GEL',
-						value: 'GEL'
-					},
-					{
-						name: 'UAH',
-						value: 'UAH'
-					},
-					{
-						name: 'DDK',
-						value: 'DDK'
-					},
-					{
-						name: 'PLN',
-						value: 'PLN'
-					}
-				]
-			},
-			{
-				displayName: 'Unit',
-				name: 'unit',
-				type: 'options',
-				default: '',
-				description: 'Defines report unit',
-				options: [
-					{
-						name: '-',
-						value: ''
-					},
-					{
-						name: 'strings',
-						value: 'strings'
-					},
-					{
-						name: 'words',
-						value: 'words'
-					},
-					{
-						name: 'chars',
-						value: 'chars'
-					},
-					{
-						name: 'chars_with_spaces',
-						value: 'chars_with_spaces'
-					}
-				]
-			},
-			{
-				displayName: 'Config',
-				name: 'json:config',
-				type: 'json',
-				default: '{}',
-				description: 'Defines report config'
-			}
-		],
-		routing: {
-			send: {
-				type: 'body',
-				value: '={{ $value }}'
 			}
 		}
 	},

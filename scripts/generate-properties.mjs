@@ -794,59 +794,6 @@ function getRequestBodySchema(doc, operation) {
 	return mediaType?.schema || null;
 }
 
-/**
- * Extract the data model schema from an operation's success response.
- * Unwraps the Resource wrapper pattern (allOf with Resource + data property).
- * @param {object} doc - OpenAPI document
- * @param {object} operation - OpenAPI operation object
- * @returns {object|null} Resolved data model schema or null
- */
-function getResponseDataSchema(doc, operation) {
-	if (!operation?.responses) return null;
-
-	// Find the success response (200, 201, or 202)
-	const successCode = ['200', '201', '202'].find(code => operation.responses[code]);
-	if (!successCode) return null;
-
-	const response = operation.responses[successCode];
-	const content = response?.content?.['application/json'];
-	if (!content?.schema) return null;
-
-	let schema = content.schema;
-	if (schema.$ref) {
-		schema = resolveRef(doc, schema.$ref);
-		if (!schema) return null;
-	}
-
-	// Unwrap Resource wrapper: allOf with Resource base + data property
-	if (schema.allOf) {
-		for (const subSchema of schema.allOf) {
-			let resolved = subSchema;
-			if (resolved.$ref) {
-				resolved = resolveRef(doc, resolved.$ref);
-			}
-			if (resolved?.properties?.data) {
-				let dataSchema = resolved.properties.data;
-				if (dataSchema.$ref) {
-					dataSchema = resolveRef(doc, dataSchema.$ref);
-				}
-				return dataSchema || null;
-			}
-		}
-	}
-
-	// Direct data property (no allOf)
-	if (schema.properties?.data) {
-		let dataSchema = schema.properties.data;
-		if (dataSchema.$ref) {
-			dataSchema = resolveRef(doc, dataSchema.$ref);
-		}
-		return dataSchema || null;
-	}
-
-	return null;
-}
-
 // ============================================================================
 // JSON PATCH SUPPORT
 // Functions for handling PATCH operations that use JSON Patch format (RFC 6902)
@@ -1424,26 +1371,22 @@ function transformPatchOperationsInSpec(doc) {
 		// Find corresponding POST operation for field types
 		const postOp = findCorrespondingPostOperation(doc, pathUrl);
 		let postSchema = postOp ? getRequestBodySchema(doc, postOp) : null;
-
-		// Extract response data schema as fallback for fields not in POST request body
-		// (e.g. status fields that only exist in the response model, not in the creation form)
-		const responseSchema = postOp ? getResponseDataSchema(doc, postOp) : null;
-
-		// Skip PATCH if no corresponding POST operation and no response schema - can't get field types
-		if (!postSchema && !responseSchema) {
+		
+		// Skip PATCH if no corresponding POST operation - can't get field types
+		if (!postSchema) {
 			dynamicSkipOperations.add(operation.operationId);
 			continue;
 		}
-
+		
 		// If POST schema is a batch wrapper (transformed by transformBatchOperationsInSpec),
 		// extract the item schema for field type information.
 		// Batch wrapper structure: { type: 'object', properties: { items: { type: 'array', items: <actual schema> } } }
 		let fieldTypeSchema = postSchema;
-		if (postSchema?.$ref) {
+		if (postSchema.$ref) {
 			fieldTypeSchema = resolveRef(doc, postSchema.$ref);
 		}
-		if (fieldTypeSchema?.type === 'object' &&
-			fieldTypeSchema.properties?.items?.type === 'array' &&
+		if (fieldTypeSchema?.type === 'object' && 
+			fieldTypeSchema.properties?.items?.type === 'array' && 
 			fieldTypeSchema.properties?.items?.items) {
 			let itemSchema = fieldTypeSchema.properties.items.items;
 			if (itemSchema.$ref) {
@@ -1453,24 +1396,21 @@ function transformPatchOperationsInSpec(doc) {
 				fieldTypeSchema = itemSchema;
 			}
 		}
-
+		
 		// Skip if POST schema has unsupported oneOf/anyOf structures
-		if (fieldTypeSchema) {
-			const oneOfLocations = findOneOfAnyOfInSchema(doc, fieldTypeSchema, '', new Set());
-			if (oneOfLocations.length > 0 && !areOneOfLocationsSupported(oneOfLocations)) {
-				// Skip this PATCH - add to dynamicSkipOperations so builder doesn't process it
-				dynamicSkipOperations.add(operation.operationId);
-				continue;
-			}
+		const oneOfLocations = findOneOfAnyOfInSchema(doc, fieldTypeSchema, '', new Set());
+		if (oneOfLocations.length > 0 && !areOneOfLocationsSupported(oneOfLocations)) {
+			// Skip this PATCH - add to dynamicSkipOperations so builder doesn't process it
+			dynamicSkipOperations.add(operation.operationId);
+			continue;
 		}
-
+		
 		// Extract allowed paths from JSON Patch schema
 		const patchPaths = extractPatchPaths(doc, schema).filter(p => typeof p === 'string');
 		if (patchPaths.length === 0) continue;
-
+		
 		// Build new schema with patchable fields (use fieldTypeSchema which handles batch wrappers)
-		// Pass responseSchema as fallback, and raw postSchema for removed-field checks
-		const newSchema = buildPatchFieldsSchema(doc, patchPaths, fieldTypeSchema, responseSchema, postSchema);
+		const newSchema = buildPatchFieldsSchema(doc, patchPaths, fieldTypeSchema);
 		if (!newSchema || Object.keys(newSchema.properties || {}).length === 0) continue;
 		
 		// Create a unique schema name for this PATCH operation
@@ -1536,75 +1476,28 @@ function transformPatchOperationsInSpec(doc) {
 }
 
 /**
- * Check if a field was removed from a specific POST body schema (by removeDeprecatedProperties
- * or removeFieldsProperty). Walks the schema's $ref chain to find matching schema names.
- * @param {object} doc - OpenAPI document
- * @param {object|null} postBodySchema - The POST request body schema (may be a $ref)
- * @param {string} fieldName - Property name to check
- * @returns {boolean} True if the field was removed from this POST body schema
- */
-function wasFieldRemovedFromPostBody(doc, postBodySchema, fieldName) {
-	if (!postBodySchema) return false;
-
-	// Collect all schema names in the POST body schema chain ($ref, allOf)
-	const schemaNames = new Set();
-	function collectSchemaNames(schema) {
-		if (!schema || typeof schema !== 'object') return;
-		if (schema.$ref) {
-			// Extract schema name from $ref like '#/components/schemas/PreTranslationForm'
-			const parts = schema.$ref.split('/');
-			schemaNames.add(parts[parts.length - 1]);
-			const resolved = resolveRef(doc, schema.$ref);
-			if (resolved) collectSchemaNames(resolved);
-			return;
-		}
-		if (schema.allOf) {
-			for (const sub of schema.allOf) collectSchemaNames(sub);
-		}
-	}
-	collectSchemaNames(postBodySchema);
-
-	// Check if any of those schemas had this field removed
-	for (const name of schemaNames) {
-		if (removedPropertiesPerSchema.get(name)?.has(fieldName)) return true;
-	}
-	return false;
-}
-
-/**
  * Build a schema with patchable fields from JSON Patch paths
  * @param {object} doc - OpenAPI document
  * @param {string[]} patchPaths - Array of JSON Pointer paths like ['/name', '/title']
- * @param {object|null} postSchema - POST request body schema for type information
- * @param {object|null} responseSchema - POST response data schema as fallback for type information
- * @param {object|null} rawPostBodySchema - Original POST request body schema (before resolution), used to check removed fields
+ * @param {object|null} postSchema - POST schema for type information
  * @returns {object} OpenAPI schema object
  */
-function buildPatchFieldsSchema(doc, patchPaths, postSchema, responseSchema, rawPostBodySchema) {
+function buildPatchFieldsSchema(doc, patchPaths, postSchema) {
 	const properties = {};
-
+	
 	for (const patchPath of patchPaths) {
 		// Skip nested paths (e.g. /importOptions/someField) - only process top-level fields
 		const segments = patchPath.split('/').filter(s => s.length > 0);
 		if (segments.length > 1) continue;
-
-		const fieldName = segments[0];
-
-		// Get field info from POST request body schema first
-		let fieldInfo = getFieldInfoFromPostSchema(doc, postSchema, patchPath);
-
-		// Fallback: if not found in POST request body, try the response model
-		// Some fields (e.g. status) only exist in the response, not in the creation request.
-		// But skip if the field was removed from the POST body (deprecated or excluded by removeFieldsProperty)
-		if (!fieldInfo && responseSchema && !wasFieldRemovedFromPostBody(doc, rawPostBodySchema, fieldName)) {
-			fieldInfo = getFieldInfoFromPostSchema(doc, responseSchema, patchPath);
-		}
-
-		// Skip if field not found in either schema
+		
+		// Get field info from POST schema
+		const fieldInfo = getFieldInfoFromPostSchema(doc, postSchema, patchPath);
+		
+		// Skip if field not found in POST schema (may be deprecated or doesn't exist)
 		if (!fieldInfo) continue;
-
-		// Convert /name to name, /settings/enabled to settings_enabled (for multi-segment paths)
-		const propName = patchPathToFieldName(patchPath);
+		
+		// Convert /name to name, /settings/enabled to settings_enabled
+		const fieldName = patchPathToFieldName(patchPath);
 		
 		// Build property schema
 		const propSchema = {
@@ -1625,7 +1518,7 @@ function buildPatchFieldsSchema(doc, patchPaths, postSchema, responseSchema, raw
 			propSchema['x-n8n-fixedCollection'] = true;
 		}
 		
-		properties[propName] = propSchema;
+		properties[fieldName] = propSchema;
 	}
 	
 	return {
@@ -2814,45 +2707,22 @@ async function fetchOpenApiDoc(url) {
 }
 
 /**
- * Global map: schema name -> Set of removed property names.
- * Tracks properties removed by removeDeprecatedProperties and removeFieldsProperty
- * so that the response schema fallback in buildPatchFieldsSchema can skip them.
- */
-const removedPropertiesPerSchema = new Map();
-
-/**
- * Record a removed property for a schema.
- * @param {string} schemaName - Schema name (from components/schemas)
- * @param {string} propName - Property name that was removed
- */
-function recordRemovedProperty(schemaName, propName) {
-	if (!schemaName) return;
-	if (!removedPropertiesPerSchema.has(schemaName)) {
-		removedPropertiesPerSchema.set(schemaName, new Set());
-	}
-	removedPropertiesPerSchema.get(schemaName).add(propName);
-}
-
-/**
  * Remove deprecated properties from all schemas in OpenAPI document.
  * This prevents n8n-openapi-node from generating fields for deprecated properties.
- * Also records removed property names per schema for later reference.
- *
+ * 
  * @param {object} doc - OpenAPI document (will be modified in place)
  * @returns {number} Number of removed deprecated properties
  */
 function removeDeprecatedProperties(doc) {
 	let removedCount = 0;
-	removedPropertiesPerSchema.clear();
-
-	function processSchema(schema, schemaName = '') {
+	
+	function processSchema(schema, path = '') {
 		if (!schema || typeof schema !== 'object') return;
-
+		
 		// Remove deprecated properties
 		if (schema.properties) {
 			for (const [propName, propSchema] of Object.entries(schema.properties)) {
 				if (propSchema.deprecated) {
-					recordRemovedProperty(schemaName, propName);
 					delete schema.properties[propName];
 					// Also remove from required array if present
 					if (schema.required && Array.isArray(schema.required)) {
@@ -2866,32 +2736,32 @@ function removeDeprecatedProperties(doc) {
 		// Recurse into nested schemas
 		if (schema.properties) {
 			for (const propSchema of Object.values(schema.properties)) {
-				processSchema(propSchema, schemaName);
+				processSchema(propSchema, path);
 			}
 		}
 		if (schema.items) {
-			processSchema(schema.items, schemaName);
+			processSchema(schema.items, path);
 		}
 		if (schema.allOf) {
 			for (const item of schema.allOf) {
-				processSchema(item, schemaName);
+				processSchema(item, path);
 			}
 		}
 		if (schema.oneOf) {
 			for (const item of schema.oneOf) {
-				processSchema(item, schemaName);
+				processSchema(item, path);
 			}
 		}
 		if (schema.anyOf) {
 			for (const item of schema.anyOf) {
-				processSchema(item, schemaName);
+				processSchema(item, path);
 			}
 		}
 	}
-
+	
 	// Process all schemas in components
-	for (const [name, schema] of Object.entries(doc.components?.schemas || {})) {
-		processSchema(schema, name);
+	for (const schema of Object.values(doc.components?.schemas || {})) {
+		processSchema(schema);
 	}
 	
 	return removedCount;
@@ -2944,24 +2814,19 @@ function removeFieldsProperty(doc) {
 	
 	/**
 	 * Remove 'fields' from a schema's root properties (and oneOf variant roots)
-	 * @param {object} schema - Schema to process
-	 * @param {string} [currentSchemaName] - Schema name for tracking removals
 	 */
-	function removeFieldsFromSchema(schema, currentSchemaName) {
+	function removeFieldsFromSchema(schema) {
 		if (!schema || typeof schema !== 'object') return;
-
+		
 		// Handle $ref
 		if (schema.$ref) {
-			const parts = schema.$ref.split('/');
-			const refName = parts[parts.length - 1];
 			const resolved = resolveRef(doc, schema.$ref);
-			if (resolved) removeFieldsFromSchema(resolved, refName);
+			if (resolved) removeFieldsFromSchema(resolved);
 			return;
 		}
-
+		
 		// Remove 'fields' from root properties
 		if (schema.properties?.fields) {
-			if (currentSchemaName) recordRemovedProperty(currentSchemaName, 'fields');
 			delete schema.properties.fields;
 			if (schema.required && Array.isArray(schema.required)) {
 				schema.required = schema.required.filter(r => r !== 'fields');
@@ -2972,19 +2837,19 @@ function removeFieldsProperty(doc) {
 		// Process oneOf/anyOf variants (root level of each variant)
 		if (schema.oneOf) {
 			for (const variant of schema.oneOf) {
-				removeFieldsFromSchema(variant, currentSchemaName);
+				removeFieldsFromSchema(variant);
 			}
 		}
 		if (schema.anyOf) {
 			for (const variant of schema.anyOf) {
-				removeFieldsFromSchema(variant, currentSchemaName);
+				removeFieldsFromSchema(variant);
 			}
 		}
-
+		
 		// Process allOf (merged schemas)
 		if (schema.allOf) {
 			for (const item of schema.allOf) {
-				removeFieldsFromSchema(item, currentSchemaName);
+				removeFieldsFromSchema(item);
 			}
 		}
 	}

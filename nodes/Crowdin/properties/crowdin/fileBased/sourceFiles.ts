@@ -6274,14 +6274,6 @@ export const sourceFilesProperties: INodeProperties[] = [
 				placeholder: 'Additional context valuable for translators'
 			},
 			{
-				displayName: 'Priority',
-				name: 'priority',
-				type: 'string',
-				default: '',
-				description: 'Value for /priority',
-				placeholder: 'normal'
-			},
-			{
 				displayName: 'Excluded Target Languages',
 				name: 'excludedTargetLanguages',
 				type: 'multiOptions',
