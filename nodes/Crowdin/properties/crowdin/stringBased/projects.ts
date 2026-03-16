@@ -3811,6 +3811,14 @@ export const projectsProperties: INodeProperties[] = [
 				placeholder: 'Articles and tutorials'
 			},
 			{
+				displayName: 'Translate Duplicates',
+				name: 'translateDuplicates',
+				type: 'number',
+				default: 0,
+				description: 'Value for /translateDuplicates',
+				placeholder: '2'
+			},
+			{
 				displayName: 'Is Mt Allowed',
 				name: 'isMtAllowed',
 				type: 'boolean',
@@ -4359,6 +4367,20 @@ export const projectsProperties: INodeProperties[] = [
 				typeOptions: {
 					loadOptionsMethod: 'getGlossaries'
 				}
+			},
+			{
+				displayName: 'Assigned Glossaries',
+				name: 'json:assignedGlossaries',
+				type: 'json',
+				default: '[\n  2\n]',
+				description: 'Value for /assignedGlossaries'
+			},
+			{
+				displayName: 'Assigned Tms',
+				name: 'json:assignedTms',
+				type: 'json',
+				default: '{}',
+				description: 'Value for /assignedTms'
 			},
 			{
 				displayName: 'Tm Pre Translate',
