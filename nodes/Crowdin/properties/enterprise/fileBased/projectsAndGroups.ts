@@ -6650,6 +6650,20 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 				}
 			},
 			{
+				displayName: 'Assigned Glossaries',
+				name: 'json:assignedGlossaries',
+				type: 'json',
+				default: '[\n  2\n]',
+				description: 'Value for /assignedGlossaries'
+			},
+			{
+				displayName: 'Assigned Tms',
+				name: 'json:assignedTms',
+				type: 'json',
+				default: '{}',
+				description: 'Value for /assignedTms'
+			},
+			{
 				displayName: 'Tm Context Type',
 				name: 'tmContextType',
 				type: 'options',
