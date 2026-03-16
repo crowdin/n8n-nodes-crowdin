@@ -12,6 +12,7 @@ import { stringAssetTranslationsProperties } from './stringAssetTranslations';
 import { stringAssetCommentsProperties } from './stringAssetComments';
 import { screenshotsProperties } from './screenshots';
 import { glossariesProperties } from './glossaries';
+import { styleGuidesProperties } from './styleGuides';
 import { translationMemoryProperties } from './translationMemory';
 import { machineTranslationEnginesProperties } from './machineTranslationEngines';
 import { translationStatusProperties } from './translationStatus';
@@ -88,6 +89,11 @@ const resourceProperty: INodeProperties = {
 			name: 'Glossaries',
 			value: 'glossaries',
 			description: '\nGlossaries help to explain some specific terms or the ones often used in the project so that they can be properly and consistently translated.\n\nUse API to manage glossaries or specific terms. Glossary export and import are [asynchronous operations](#section/Introduction/Asynchronous-Operations) and shall be completed with sequence of API methods.\n'
+		},
+		{
+			name: 'Style Guides',
+			value: 'styleGuides',
+			description: '\nStyle Guides help to provide additional context for the translators.\n\nUse API to manage style guides.\n'
 		},
 		{
 			name: 'Translation Memory',
@@ -181,6 +187,7 @@ export const properties: INodeProperties[] = [
 	...stringAssetCommentsProperties,
 	...screenshotsProperties,
 	...glossariesProperties,
+	...styleGuidesProperties,
 	...translationMemoryProperties,
 	...machineTranslationEnginesProperties,
 	...translationStatusProperties,

@@ -1,7 +1,7 @@
 // Auto-generated - do not edit manually
 
 import type { INodeProperties } from 'n8n-workflow';
-import { normalizeFieldBody, extractBatchItems } from '../../../utils/preSend';
+import { transformToJsonPatch, normalizeFieldBody, extractBatchItems } from '../../../utils/preSend';
 
 export const translationsProperties: INodeProperties[] = [
 	{
@@ -76,6 +76,11 @@ export const translationsProperties: INodeProperties[] = [
 					request: {
 						method: 'PATCH',
 						url: '=/projects/{{$parameter["projectId"]}}/pre-translations/{{$parameter["preTranslationId"]}}'
+					},
+					send: {
+						preSend: [
+							transformToJsonPatch
+						]
 					}
 				}
 			},
@@ -365,6 +370,32 @@ export const translationsProperties: INodeProperties[] = [
 		}
 	},
 	{
+		displayName: 'Order By',
+		name: 'orderBy',
+		description: 'Read more about [sorting rules](#section/Introduction/Sorting)',
+		default: '',
+		type: 'string',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'orderBy',
+				value: '={{ $value || undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.pre-translations.getMany'
+				]
+			}
+		},
+		placeholder: 'priority desc,createdAt'
+	},
+	{
 		displayName: 'Limit',
 		name: 'limit',
 		description: 'Max number of results to return',
@@ -503,6 +534,49 @@ export const translationsProperties: INodeProperties[] = [
 		routing: {
 			send: {
 				property: 'method',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.pre-translations.post'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Priority',
+		name: 'priority',
+		type: 'options',
+		default: '',
+		description: undefined,
+		options: [
+			{
+				name: '-',
+				value: ''
+			},
+			{
+				name: 'low',
+				value: 'low'
+			},
+			{
+				name: 'normal',
+				value: 'normal'
+			},
+			{
+				name: 'high',
+				value: 'high'
+			}
+		],
+		routing: {
+			send: {
+				property: 'priority',
 				propertyInDotNotation: false,
 				type: 'body',
 				value: '={{ $value || undefined }}'
@@ -930,28 +1004,6 @@ export const translationsProperties: INodeProperties[] = [
 		description: 'Pre-translation Identifier. Get via [Apply Pre-Translation](#operation/api.projects.pre-translations.post)',
 		default: '',
 		type: 'string',
-		displayOptions: {
-			show: {
-				resource: [
-					'translations'
-				],
-				operation: [
-					'api.projects.pre-translations.patch'
-				]
-			}
-		}
-	},
-	{
-		displayName: 'Body',
-		name: 'body',
-		type: 'json',
-		default: '{}',
-		description: 'A JSON Patch operation as defined by [RFC 6902](https://tools.ietf.org/html/rfc6902#section-4)',
-		routing: {
-			request: {
-				body: '={{ JSON.parse($value) }}'
-			}
-		},
 		displayOptions: {
 			show: {
 				resource: [
@@ -1694,6 +1746,56 @@ export const translationsProperties: INodeProperties[] = [
 				operation: [
 					'api.projects.translations.imports.report.get'
 				]
+			}
+		}
+	},
+	{
+		displayName: 'Update Fields',
+		name: 'updateFields',
+		type: 'collection',
+		placeholder: 'Add Field',
+		default: {},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.pre-translations.patch'
+				]
+			}
+		},
+		options: [
+			{
+				displayName: 'Priority',
+				name: 'priority',
+				type: 'options',
+				default: '',
+				description: 'Value for /priority',
+				options: [
+					{
+						name: '-',
+						value: ''
+					},
+					{
+						name: 'low',
+						value: 'low'
+					},
+					{
+						name: 'normal',
+						value: 'normal'
+					},
+					{
+						name: 'high',
+						value: 'high'
+					}
+				]
+			}
+		],
+		routing: {
+			send: {
+				type: 'body',
+				value: '={{ $value }}'
 			}
 		}
 	},

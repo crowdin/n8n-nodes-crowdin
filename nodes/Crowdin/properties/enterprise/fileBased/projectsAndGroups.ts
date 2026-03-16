@@ -2945,62 +2945,6 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 		}
 	},
 	{
-		displayName: 'Pre Translation Ai Prompt Id',
-		name: 'preTranslationAiPromptId',
-		type: 'options',
-		default: '',
-		description: 'AI Prompt ID to be used as prompt for AI pre-translation as default value',
-		routing: {
-			send: {
-				property: 'preTranslationAiPromptId',
-				propertyInDotNotation: false,
-				type: 'body',
-				value: '={{ typeof $value === \'number\' ? $value : undefined }}'
-			}
-		},
-		displayOptions: {
-			show: {
-				resource: [
-					'projectsAndGroups'
-				],
-				operation: [
-					'api.projects.post'
-				]
-			}
-		},
-		typeOptions: {
-			loadOptionsMethod: 'getAiPrompts'
-		}
-	},
-	{
-		displayName: 'Assist Action Ai Prompt Id',
-		name: 'assistActionAiPromptId',
-		type: 'options',
-		default: '',
-		description: 'AI Prompt ID to be used as prompt for AI Assist action in Editor',
-		routing: {
-			send: {
-				property: 'assistActionAiPromptId',
-				propertyInDotNotation: false,
-				type: 'body',
-				value: '={{ typeof $value === \'number\' ? $value : undefined }}'
-			}
-		},
-		displayOptions: {
-			show: {
-				resource: [
-					'projectsAndGroups'
-				],
-				operation: [
-					'api.projects.post'
-				]
-			}
-		},
-		typeOptions: {
-			loadOptionsMethod: 'getAiPrompts'
-		}
-	},
-	{
 		displayName: 'Editor Suggestion Ai Prompt Id',
 		name: 'editorSuggestionAiPromptId',
 		type: 'options',
@@ -3138,6 +3082,34 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 		},
 		typeOptions: {
 			loadOptionsMethod: 'getGlossaries'
+		}
+	},
+	{
+		displayName: 'Assigned Style Guides',
+		name: 'assignedStyleGuides',
+		type: 'multiOptions',
+		default: [],
+		description: 'Style Guide IDs to assign to project. Get via [List Style Guides](#operation/api.style-guides.getMany)',
+		routing: {
+			send: {
+				property: 'assignedStyleGuides',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'projectsAndGroups'
+				],
+				operation: [
+					'api.projects.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getStyleGuidesMulti'
 		}
 	},
 	{
@@ -6668,6 +6640,16 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 				}
 			},
 			{
+				displayName: 'Assigned Style Guides',
+				name: 'assignedStyleGuides',
+				type: 'multiOptions',
+				default: [],
+				description: 'Style Guide IDs to assign to project. Get via [List Style Guides](#operation/api.style-guides.getMany)',
+				typeOptions: {
+					loadOptionsMethod: 'getStyleGuidesMulti'
+				}
+			},
+			{
 				displayName: 'Tm Context Type',
 				name: 'tmContextType',
 				type: 'options',
@@ -6691,26 +6673,6 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 						value: 'prevAndNextSegment'
 					}
 				]
-			},
-			{
-				displayName: 'Pre Translation Ai Prompt Id',
-				name: 'preTranslationAiPromptId',
-				type: 'options',
-				default: '',
-				description: 'AI Prompt ID to be used as prompt for AI pre-translation as default value',
-				typeOptions: {
-					loadOptionsMethod: 'getAiPrompts'
-				}
-			},
-			{
-				displayName: 'Assist Action Ai Prompt Id',
-				name: 'assistActionAiPromptId',
-				type: 'options',
-				default: '',
-				description: 'AI Prompt ID to be used as prompt for AI Assist action in Editor',
-				typeOptions: {
-					loadOptionsMethod: 'getAiPrompts'
-				}
 			},
 			{
 				displayName: 'Editor Suggestion Ai Prompt Id',

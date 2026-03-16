@@ -11,6 +11,7 @@ import { sourceStringsProperties } from './sourceStrings';
 import { stringTranslationsProperties } from './stringTranslations';
 import { stringCommentsProperties } from './stringComments';
 import { screenshotsProperties } from './screenshots';
+import { styleGuidesProperties } from './styleGuides';
 import { translationMemoryProperties } from './translationMemory';
 import { machineTranslationEnginesProperties } from './machineTranslationEngines';
 import { translationStatusProperties } from './translationStatus';
@@ -82,6 +83,11 @@ const resourceProperty: INodeProperties = {
 			name: 'Screenshots',
 			value: 'screenshots',
 			description: '\nScreenshots provide translators with additional context for the source strings.  Screenshot tags allow specifying  which source strings are displayed on each screenshot.\n\nUse API to manage screenshots and their tags.\n'
+		},
+		{
+			name: 'Style Guides',
+			value: 'styleGuides',
+			description: '\nStyle Guides help to provide additional context for the translators.\n\nUse API to manage style guides.\n'
 		},
 		{
 			name: 'Translation Memory',
@@ -174,6 +180,7 @@ export const properties: INodeProperties[] = [
 	...stringTranslationsProperties,
 	...stringCommentsProperties,
 	...screenshotsProperties,
+	...styleGuidesProperties,
 	...translationMemoryProperties,
 	...machineTranslationEnginesProperties,
 	...translationStatusProperties,

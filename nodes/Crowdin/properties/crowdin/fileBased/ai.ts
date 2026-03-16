@@ -2416,7 +2416,7 @@ export const aiProperties: INodeProperties[] = [
 		name: 'action',
 		type: 'options',
 		default: 'pre_translate',
-		description: 'AI prompt action',
+		description: 'AI prompt action. __Note:__ `assist` is deprecated',
 		options: [
 			{
 				name: 'pre_translate',
@@ -2661,6 +2661,13 @@ export const aiProperties: INodeProperties[] = [
 					{
 						displayName: 'Siblings Strings',
 						name: 'siblingsStrings',
+						type: 'boolean',
+						default: false,
+						description: undefined
+					},
+					{
+						displayName: 'Retry On Qa Issues',
+						name: 'retryOnQaIssues',
 						type: 'boolean',
 						default: false,
 						description: undefined
@@ -2978,6 +2985,13 @@ export const aiProperties: INodeProperties[] = [
 								]
 							}
 						]
+					},
+					{
+						displayName: 'Retry On Qa Issues',
+						name: 'retryOnQaIssues',
+						type: 'boolean',
+						default: false,
+						description: 'Available only for pre-translate action'
 					}
 				]
 			},
@@ -3021,6 +3035,13 @@ export const aiProperties: INodeProperties[] = [
 						type: 'json',
 						default: '{}',
 						description: 'Options to compile the prompt. Get from configurator'
+					},
+					{
+						displayName: 'Retry On Qa Issues',
+						name: 'retryOnQaIssues',
+						type: 'boolean',
+						default: false,
+						description: 'Available only for pre-translate action and may be disabled by AI prompt provider'
 					}
 				]
 			}
@@ -4635,7 +4656,7 @@ export const aiProperties: INodeProperties[] = [
 				name: 'action',
 				type: 'options',
 				default: '',
-				description: 'AI prompt action',
+				description: 'AI prompt action. __Note:__ `assist` is deprecated',
 				options: [
 					{
 						name: '-',
@@ -4801,6 +4822,13 @@ export const aiProperties: INodeProperties[] = [
 							{
 								displayName: 'Siblings Strings',
 								name: 'siblingsStrings',
+								type: 'boolean',
+								default: false,
+								description: undefined
+							},
+							{
+								displayName: 'Retry On Qa Issues',
+								name: 'retryOnQaIssues',
 								type: 'boolean',
 								default: false,
 								description: undefined
@@ -5118,6 +5146,13 @@ export const aiProperties: INodeProperties[] = [
 										]
 									}
 								]
+							},
+							{
+								displayName: 'Retry On Qa Issues',
+								name: 'retryOnQaIssues',
+								type: 'boolean',
+								default: false,
+								description: 'Available only for pre-translate action'
 							}
 						]
 					},
@@ -5161,6 +5196,13 @@ export const aiProperties: INodeProperties[] = [
 								type: 'json',
 								default: '{}',
 								description: 'Options to compile the prompt. Get from configurator'
+							},
+							{
+								displayName: 'Retry On Qa Issues',
+								name: 'retryOnQaIssues',
+								type: 'boolean',
+								default: false,
+								description: 'Available only for pre-translate action and may be disabled by AI prompt provider'
 							}
 						]
 					}

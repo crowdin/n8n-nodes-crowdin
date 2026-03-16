@@ -35,6 +35,7 @@ import { labelsProperties } from './labels';
 import { notificationsProperties } from './notifications';
 import { organizationProperties } from './organization';
 import { securityLogsProperties } from './securityLogs';
+import { styleGuidesProperties } from './styleGuides';
 import { vendorsProperties } from './vendors';
 import { webhooksProperties } from './webhooks';
 
@@ -206,6 +207,10 @@ const resourceProperty: INodeProperties = {
 			value: 'securityLogs'
 		},
 		{
+			name: 'Style Guides',
+			value: 'styleGuides'
+		},
+		{
 			name: 'Vendors',
 			value: 'vendors',
 			description: '\nVendors are the organizations that provide professional translation services. To assign a Vendor to a project workflow you should invite an existing Organization to be a Vendor for you.\n\nUse API to get the list of the Vendors you already invited to your organization.\n'
@@ -255,6 +260,7 @@ export const properties: INodeProperties[] = [
 	...notificationsProperties,
 	...organizationProperties,
 	...securityLogsProperties,
+	...styleGuidesProperties,
 	...vendorsProperties,
 	...webhooksProperties,
 ];
