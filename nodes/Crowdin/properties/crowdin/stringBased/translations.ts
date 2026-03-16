@@ -1767,6 +1767,39 @@ export const translationsProperties: INodeProperties[] = [
 		},
 		options: [
 			{
+				displayName: 'Status',
+				name: 'status',
+				type: 'options',
+				default: '',
+				description: 'Value for /status',
+				options: [
+					{
+						name: '-',
+						value: ''
+					},
+					{
+						name: 'created',
+						value: 'created'
+					},
+					{
+						name: 'in_progress',
+						value: 'in_progress'
+					},
+					{
+						name: 'canceled',
+						value: 'canceled'
+					},
+					{
+						name: 'failed',
+						value: 'failed'
+					},
+					{
+						name: 'finished',
+						value: 'finished'
+					}
+				]
+			},
+			{
 				displayName: 'Priority',
 				name: 'priority',
 				type: 'options',
