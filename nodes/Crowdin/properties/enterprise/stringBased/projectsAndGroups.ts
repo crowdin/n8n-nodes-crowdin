@@ -3126,15 +3126,15 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 	{
 		displayName: 'Assigned Style Guides',
 		name: 'assignedStyleGuides',
-		type: 'fixedCollection',
-		default: {},
+		type: 'multiOptions',
+		default: [],
 		description: 'Style Guide IDs to assign to project. Get via [List Style Guides](#operation/api.style-guides.getMany)',
 		routing: {
 			send: {
 				property: 'assignedStyleGuides',
 				propertyInDotNotation: false,
 				type: 'body',
-				value: '={{ $value.items?.map(i => i._value) || undefined }}'
+				value: '={{ $value }}'
 			}
 		},
 		displayOptions: {
@@ -3148,24 +3148,8 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 			}
 		},
 		typeOptions: {
-			multipleValues: true
-		},
-		placeholder: 'Add Item',
-		options: [
-			{
-				displayName: 'Items',
-				name: 'items',
-				values: [
-					{
-						displayName: 'Value',
-						name: '_value',
-						type: 'number',
-						default: 0,
-						placeholder: '0'
-					}
-				]
-			}
-		]
+			loadOptionsMethod: 'getStyleGuidesMulti'
+		}
 	},
 	{
 		displayName: 'In Context',

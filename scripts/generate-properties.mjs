@@ -151,6 +151,7 @@ const SINGLE_SELECT_OPTIONS = {
 	customSpellcheckerId: { method: 'getCustomSpellcheckers' },
 	externalQaCheckId: { method: 'getExternalQaChecks' },
 	fieldId: { method: 'getFields' },
+	styleGuideId: { method: 'getStyleGuides' },
 	organizationWebhookId: { method: 'getOrganizationWebhooks' },
 	reportSettingsTemplateId: { method: 'getReportSettingsTemplates' },
 	identifier: { method: 'getApplicationInstallations', matchResource: 'applications', expectedType: 'string' },
@@ -278,6 +279,8 @@ const MULTI_SELECT_OPTIONS = {
 	promptIds: { method: 'getAiPrompts' },
 	aiPromptIds: { method: 'getAiPrompts' },
 	mtIds: { method: 'getMTEngines' },
+
+	assignedStyleGuides: { method: 'getStyleGuides' },
 
 	// Context-dependent
 	attachmentIds: { method: 'getStorages', matchOperation: ['api.users.ai.translate.strings.post', 'api.ai.translate.strings.post'] },

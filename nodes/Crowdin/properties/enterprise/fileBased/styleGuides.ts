@@ -484,8 +484,8 @@ export const styleGuidesProperties: INodeProperties[] = [
 		name: 'styleGuideId',
 		required: true,
 		description: 'Style Guide Identifier',
-		default: undefined,
-		type: 'number',
+		default: '',
+		type: 'options',
 		displayOptions: {
 			show: {
 				resource: [
@@ -496,15 +496,17 @@ export const styleGuidesProperties: INodeProperties[] = [
 				]
 			}
 		},
-		placeholder: '0'
+		typeOptions: {
+			loadOptionsMethod: 'getStyleGuides'
+		}
 	},
 	{
 		displayName: 'Style Guide Id',
 		name: 'styleGuideId',
 		required: true,
 		description: 'Style Guide Identifier',
-		default: undefined,
-		type: 'number',
+		default: '',
+		type: 'options',
 		displayOptions: {
 			show: {
 				resource: [
@@ -515,15 +517,17 @@ export const styleGuidesProperties: INodeProperties[] = [
 				]
 			}
 		},
-		placeholder: '0'
+		typeOptions: {
+			loadOptionsMethod: 'getStyleGuides'
+		}
 	},
 	{
 		displayName: 'Style Guide Id',
 		name: 'styleGuideId',
 		required: true,
 		description: 'Style Guide Identifier',
-		default: undefined,
-		type: 'number',
+		default: '',
+		type: 'options',
 		displayOptions: {
 			show: {
 				resource: [
@@ -534,7 +538,9 @@ export const styleGuidesProperties: INodeProperties[] = [
 				]
 			}
 		},
-		placeholder: '0'
+		typeOptions: {
+			loadOptionsMethod: 'getStyleGuides'
+		}
 	},
 	{
 		displayName: 'Update Fields',

@@ -1,5 +1,12 @@
 import type { ILoadOptionsFunctions, INodePropertyOptions } from 'n8n-workflow';
-import type { ApiConfig, LoadOptionsConfig, LoadOptionsMethods, ApiItem, ApiDataWrapper, ApiError } from './types';
+import type {
+	ApiConfig,
+	LoadOptionsConfig,
+	LoadOptionsMethods,
+	ApiItem,
+	ApiDataWrapper,
+	ApiError,
+} from './types';
 import {
 	getProjectId,
 	getGlossaryId,
@@ -44,9 +51,10 @@ function extractErrorMessage(error: unknown): string {
 	// Handle cause with response body
 	if (err?.cause?.response?.body) {
 		try {
-			const body = typeof err.cause.response.body === 'string' 
-				? JSON.parse(err.cause.response.body) 
-				: err.cause.response.body;
+			const body =
+				typeof err.cause.response.body === 'string'
+					? JSON.parse(err.cause.response.body)
+					: err.cause.response.body;
 			if (body?.error?.message) {
 				return body.error.message;
 			}
@@ -81,7 +89,7 @@ async function fetchSingle<T = ApiItem>(
 	const baseUrl = await config.getBaseUrl(context);
 
 	try {
-		const response = await context.helpers.requestWithAuthentication.call(
+		const response = (await context.helpers.requestWithAuthentication.call(
 			context,
 			credentialName,
 			{
@@ -89,7 +97,7 @@ async function fetchSingle<T = ApiItem>(
 				url: `${baseUrl}${endpoint}`,
 				json: true,
 			},
-		) as ApiDataWrapper<T>;
+		)) as ApiDataWrapper<T>;
 
 		return response.data;
 	} catch (error: unknown) {
@@ -120,7 +128,7 @@ async function fetchAllPagesRaw<T = ApiItem>(
 
 	try {
 		while (hasMore) {
-			const response = await context.helpers.requestWithAuthentication.call(
+			const response = (await context.helpers.requestWithAuthentication.call(
 				context,
 				credentialName,
 				{
@@ -129,7 +137,7 @@ async function fetchAllPagesRaw<T = ApiItem>(
 					qs: { limit: PAGE_SIZE, offset, ...extraQs },
 					json: true,
 				},
-			) as { data: Array<ApiDataWrapper<T>> | T[] };
+			)) as { data: Array<ApiDataWrapper<T>> | T[] };
 
 			if (flat) {
 				results.push(...(response.data as T[]));
@@ -138,7 +146,7 @@ async function fetchAllPagesRaw<T = ApiItem>(
 			}
 			hasMore = response.data.length === PAGE_SIZE;
 			offset += PAGE_SIZE;
-			
+
 			// Stop if we've reached the max items limit
 			if (results.length >= MAX_LOAD_OPTIONS_ITEMS) {
 				return results.slice(0, MAX_LOAD_OPTIONS_ITEMS);
@@ -178,9 +186,7 @@ type MethodConfig = Omit<LoadOptionsConfig, 'includeEmpty'>;
  * Truncate text for display in dropdown options
  */
 function truncateText(text: string, maxLength = 50): string {
-	return text.length > maxLength 
-		? text.substring(0, maxLength - 3) + '...' 
-		: text;
+	return text.length > maxLength ? text.substring(0, maxLength - 3) + '...' : text;
 }
 
 /**
@@ -202,7 +208,10 @@ function createTextFormattedMethodPair(
 	config: ApiConfig,
 	getEndpoint: (context: ILoadOptionsFunctions) => string | null,
 	getText: (item: ApiItem) => string,
-): { regular: (this: ILoadOptionsFunctions) => Promise<INodePropertyOptions[]>; multi: (this: ILoadOptionsFunctions) => Promise<INodePropertyOptions[]> } {
+): {
+	regular: (this: ILoadOptionsFunctions) => Promise<INodePropertyOptions[]>;
+	multi: (this: ILoadOptionsFunctions) => Promise<INodePropertyOptions[]>;
+} {
 	return {
 		regular: async function (this: ILoadOptionsFunctions) {
 			const endpoint = getEndpoint(this);
@@ -230,7 +239,10 @@ function createTextFormattedMethodPair(
 function createMethodPair(
 	config: ApiConfig,
 	methodConfig: MethodConfig,
-): { regular: (this: ILoadOptionsFunctions) => Promise<INodePropertyOptions[]>; multi: (this: ILoadOptionsFunctions) => Promise<INodePropertyOptions[]> } {
+): {
+	regular: (this: ILoadOptionsFunctions) => Promise<INodePropertyOptions[]>;
+	multi: (this: ILoadOptionsFunctions) => Promise<INodePropertyOptions[]>;
+} {
 	return {
 		regular: async function (this: ILoadOptionsFunctions) {
 			return fetchAllPages(this, config, { ...methodConfig, includeEmpty: true });
@@ -249,7 +261,10 @@ function createDynamicMethodPair(
 	config: ApiConfig,
 	getEndpoint: (context: ILoadOptionsFunctions) => string | null,
 	methodConfig?: Omit<MethodConfig, 'endpoint'>,
-): { regular: (this: ILoadOptionsFunctions) => Promise<INodePropertyOptions[]>; multi: (this: ILoadOptionsFunctions) => Promise<INodePropertyOptions[]> } {
+): {
+	regular: (this: ILoadOptionsFunctions) => Promise<INodePropertyOptions[]>;
+	multi: (this: ILoadOptionsFunctions) => Promise<INodePropertyOptions[]>;
+} {
 	return {
 		regular: async function (this: ILoadOptionsFunctions) {
 			const endpoint = getEndpoint(this);
@@ -280,39 +295,124 @@ export function createCommonLoadOptions(config: ApiConfig): LoadOptionsMethods {
 	const mtEngines = createMethodPair(config, { endpoint: '/mts' });
 	const translationMemories = createMethodPair(config, { endpoint: '/tms' });
 	const glossaries = createMethodPair(config, { endpoint: '/glossaries' });
+	const styleGuides = createMethodPair(config, { endpoint: '/style-guides' });
 	const storages = createMethodPair(config, { endpoint: '/storages', nameField: 'fileName' });
 	const organizationWebhooks = createMethodPair(config, { endpoint: '/webhooks' });
-	const applicationInstallations = createMethodPair(config, { endpoint: '/applications/installations', nameField: 'name', valueField: 'identifier' });
+	const applicationInstallations = createMethodPair(config, {
+		endpoint: '/applications/installations',
+		nameField: 'name',
+		valueField: 'identifier',
+	});
 
 	// Project-scoped resources
-	const branches = createDynamicMethodPair(config, (ctx) => `/projects/${getProjectId(ctx)}/branches`);
-	const projectFiles = createDynamicMethodPair(config, (ctx) => `/projects/${getProjectId(ctx)}/files`, { nameField: 'path' });
-	const projectDirectories = createDynamicMethodPair(config, (ctx) => `/projects/${getProjectId(ctx)}/directories`);
-	const projectLabels = createDynamicMethodPair(config, (ctx) => `/projects/${getProjectId(ctx)}/labels`, { nameField: 'title' });
-	const projectMembers = createDynamicMethodPair(config, (ctx) => `/projects/${getProjectId(ctx)}/members`, { nameField: 'username' });
-	const projectScreenshots = createDynamicMethodPair(config, (ctx) => `/projects/${getProjectId(ctx)}/screenshots`);
-	const projectBundles = createDynamicMethodPair(config, (ctx) => `/projects/${getProjectId(ctx)}/bundles`);
-	const projectDistributions = createDynamicMethodPair(config, (ctx) => `/projects/${getProjectId(ctx)}/distributions`, { valueField: 'hash' });
-	const projectTasks = createDynamicMethodPair(config, (ctx) => `/projects/${getProjectId(ctx)}/tasks`, { nameField: 'title' });
-	const projectFileFormatSettings = createDynamicMethodPair(config, (ctx) => `/projects/${getProjectId(ctx)}/file-format-settings`);
-	const projectBuilds = createDynamicMethodPair(config, (ctx) => `/projects/${getProjectId(ctx)}/translations/builds`, { nameField: 'id' });
-	const projectReviewedBuilds = createDynamicMethodPair(config, (ctx) => `/projects/${getProjectId(ctx)}/strings/reviewed-builds`, { nameField: 'id' });
-	const projectApprovals = createDynamicMethodPair(config, (ctx) => `/projects/${getProjectId(ctx)}/approvals`, { nameField: 'id' });
-	const projectVotes = createDynamicMethodPair(config, (ctx) => `/projects/${getProjectId(ctx)}/votes`, { nameField: 'id' });
-	const projectTaskSettingsTemplates = createDynamicMethodPair(config, (ctx) => `/projects/${getProjectId(ctx)}/tasks/settings-templates`);
-	const projectWebhooks = createDynamicMethodPair(config, (ctx) => `/projects/${getProjectId(ctx)}/webhooks`);
-	const projectStringsExporterSettings = createDynamicMethodPair(config, (ctx) => `/projects/${getProjectId(ctx)}/strings-exporter-settings`, { nameField: 'format' });
+	const branches = createDynamicMethodPair(
+		config,
+		(ctx) => `/projects/${getProjectId(ctx)}/branches`,
+	);
+	const projectFiles = createDynamicMethodPair(
+		config,
+		(ctx) => `/projects/${getProjectId(ctx)}/files`,
+		{ nameField: 'path' },
+	);
+	const projectDirectories = createDynamicMethodPair(
+		config,
+		(ctx) => `/projects/${getProjectId(ctx)}/directories`,
+	);
+	const projectLabels = createDynamicMethodPair(
+		config,
+		(ctx) => `/projects/${getProjectId(ctx)}/labels`,
+		{ nameField: 'title' },
+	);
+	const projectMembers = createDynamicMethodPair(
+		config,
+		(ctx) => `/projects/${getProjectId(ctx)}/members`,
+		{ nameField: 'username' },
+	);
+	const projectScreenshots = createDynamicMethodPair(
+		config,
+		(ctx) => `/projects/${getProjectId(ctx)}/screenshots`,
+	);
+	const projectBundles = createDynamicMethodPair(
+		config,
+		(ctx) => `/projects/${getProjectId(ctx)}/bundles`,
+	);
+	const projectDistributions = createDynamicMethodPair(
+		config,
+		(ctx) => `/projects/${getProjectId(ctx)}/distributions`,
+		{ valueField: 'hash' },
+	);
+	const projectTasks = createDynamicMethodPair(
+		config,
+		(ctx) => `/projects/${getProjectId(ctx)}/tasks`,
+		{ nameField: 'title' },
+	);
+	const projectFileFormatSettings = createDynamicMethodPair(
+		config,
+		(ctx) => `/projects/${getProjectId(ctx)}/file-format-settings`,
+	);
+	const projectBuilds = createDynamicMethodPair(
+		config,
+		(ctx) => `/projects/${getProjectId(ctx)}/translations/builds`,
+		{ nameField: 'id' },
+	);
+	const projectReviewedBuilds = createDynamicMethodPair(
+		config,
+		(ctx) => `/projects/${getProjectId(ctx)}/strings/reviewed-builds`,
+		{ nameField: 'id' },
+	);
+	const projectApprovals = createDynamicMethodPair(
+		config,
+		(ctx) => `/projects/${getProjectId(ctx)}/approvals`,
+		{ nameField: 'id' },
+	);
+	const projectVotes = createDynamicMethodPair(
+		config,
+		(ctx) => `/projects/${getProjectId(ctx)}/votes`,
+		{ nameField: 'id' },
+	);
+	const projectTaskSettingsTemplates = createDynamicMethodPair(
+		config,
+		(ctx) => `/projects/${getProjectId(ctx)}/tasks/settings-templates`,
+	);
+	const projectWebhooks = createDynamicMethodPair(
+		config,
+		(ctx) => `/projects/${getProjectId(ctx)}/webhooks`,
+	);
+	const projectStringsExporterSettings = createDynamicMethodPair(
+		config,
+		(ctx) => `/projects/${getProjectId(ctx)}/strings-exporter-settings`,
+		{ nameField: 'format' },
+	);
 
 	// File-scoped resources
-	const fileReferences = createDynamicMethodPair(config, (ctx) => `/projects/${getProjectId(ctx)}/files/${getFileId(ctx)}/references`);
-	const fileRevisions = createDynamicMethodPair(config, (ctx) => `/projects/${getProjectId(ctx)}/files/${getFileId(ctx)}/revisions`, { nameField: 'id' });
+	const fileReferences = createDynamicMethodPair(
+		config,
+		(ctx) => `/projects/${getProjectId(ctx)}/files/${getFileId(ctx)}/references`,
+	);
+	const fileRevisions = createDynamicMethodPair(
+		config,
+		(ctx) => `/projects/${getProjectId(ctx)}/files/${getFileId(ctx)}/revisions`,
+		{ nameField: 'id' },
+	);
 
 	// Glossary-scoped resources
-	const glossaryConcepts = createDynamicMethodPair(config, (ctx) => `/glossaries/${getGlossaryId(ctx)}/concepts`, { nameField: 'id' });
-	const glossaryTerms = createDynamicMethodPair(config, (ctx) => `/glossaries/${getGlossaryId(ctx)}/terms`, { nameField: 'text' });
+	const glossaryConcepts = createDynamicMethodPair(
+		config,
+		(ctx) => `/glossaries/${getGlossaryId(ctx)}/concepts`,
+		{ nameField: 'id' },
+	);
+	const glossaryTerms = createDynamicMethodPair(
+		config,
+		(ctx) => `/glossaries/${getGlossaryId(ctx)}/terms`,
+		{ nameField: 'text' },
+	);
 
 	// Screenshot-scoped resources
-	const screenshotTags = createDynamicMethodPair(config, (ctx) => `/projects/${getProjectId(ctx)}/screenshots/${getScreenshotId(ctx)}/tags`, { nameField: 'id' });
+	const screenshotTags = createDynamicMethodPair(
+		config,
+		(ctx) => `/projects/${getProjectId(ctx)}/screenshots/${getScreenshotId(ctx)}/tags`,
+		{ nameField: 'id' },
+	);
 
 	// Integration-scoped resources (Crowdin Apps API)
 	// Uses flat response format { data: [item] } instead of { data: [{ data: item }] }
@@ -323,7 +423,13 @@ export function createCommonLoadOptions(config: ApiConfig): LoadOptionsMethods {
 			if (!appId || !projectId) {
 				return [{ name: '-', value: '' }];
 			}
-			const items = await fetchAllPagesRaw<ApiItem>(this, config, `/applications/${appId}/api/crowdin-files`, { projectId }, true);
+			const items = await fetchAllPagesRaw<ApiItem>(
+				this,
+				config,
+				`/applications/${appId}/api/crowdin-files`,
+				{ projectId },
+				true,
+			);
 			const options = items
 				.filter((item) => item.type !== undefined)
 				.map((item) => ({
@@ -338,7 +444,13 @@ export function createCommonLoadOptions(config: ApiConfig): LoadOptionsMethods {
 			if (!appId || !projectId) {
 				return [];
 			}
-			const items = await fetchAllPagesRaw<ApiItem>(this, config, `/applications/${appId}/api/crowdin-files`, { projectId }, true);
+			const items = await fetchAllPagesRaw<ApiItem>(
+				this,
+				config,
+				`/applications/${appId}/api/crowdin-files`,
+				{ projectId },
+				true,
+			);
 			return items
 				.filter((item) => item.type !== undefined)
 				.map((item) => ({
@@ -382,6 +494,8 @@ export function createCommonLoadOptions(config: ApiConfig): LoadOptionsMethods {
 		getTranslationMemoriesMulti: translationMemories.multi,
 		getGlossaries: glossaries.regular,
 		getGlossariesMulti: glossaries.multi,
+		getStyleGuides: styleGuides.regular,
+		getStyleGuidesMulti: styleGuides.multi,
 		getStorages: storages.regular,
 		getStoragesMulti: storages.multi,
 		getOrganizationWebhooks: organizationWebhooks.regular,
@@ -462,7 +576,11 @@ export function createCommonLoadOptions(config: ApiConfig): LoadOptionsMethods {
 			interface CommentWithAttachments extends ApiItem {
 				attachments?: Array<{ id: number; name: string }>;
 			}
-			const comment = await fetchSingle<CommentWithAttachments>(this, config, `/projects/${projectId}/comments/${commentId}`);
+			const comment = await fetchSingle<CommentWithAttachments>(
+				this,
+				config,
+				`/projects/${projectId}/comments/${commentId}`,
+			);
 			const attachments = comment.attachments || [];
 			const options = attachments.map((attachment) => ({
 				name: attachment.name,
