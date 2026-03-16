@@ -1044,10 +1044,6 @@ export const sourceStringsProperties: INodeProperties[] = [
 				value: 'i18next_json'
 			},
 			{
-				name: 'macosx',
-				value: 'macosx'
-			},
-			{
 				name: 'properties',
 				value: 'properties'
 			},
