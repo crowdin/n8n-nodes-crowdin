@@ -85,6 +85,7 @@ const IGNORED_OPERATIONS = [
 	'api.ai.providers.chat.completions.post',
 	'api.users.ai.providers.chat.completions.post',
 	// Batch operations (complex JSON Patch format)
+	'api.projects.pre-translations.patchBatch',
 	'api.projects.strings.batchPatch',
 	'api.projects.comments.batchPatch',
 	'api.projects.approvals.patch',
