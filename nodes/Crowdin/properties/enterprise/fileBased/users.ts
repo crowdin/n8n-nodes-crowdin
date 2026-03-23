@@ -121,7 +121,7 @@ export const usersProperties: INodeProperties[] = [
 				name: 'Delete Member From Project',
 				value: 'api.projects.members.delete',
 				action: 'Delete Member From Project',
-				description: '**Required scopes:** `project.member` (Read and Write).',
+				description: '**Required scopes:** `project.member` (Read and Write).\n\n__NOTE:__ This action only removes direct permissions. Team-based access will persist.',
 				routing: {
 					request: {
 						method: 'DELETE',
