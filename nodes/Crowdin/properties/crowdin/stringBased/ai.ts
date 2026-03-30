@@ -1842,6 +1842,50 @@ export const aiProperties: INodeProperties[] = [
 		}
 	},
 	{
+		displayName: 'Style Guide Ids',
+		name: 'styleGuideIds',
+		type: 'fixedCollection',
+		default: {},
+		description: 'Array of Style Guide Identifiers. Get via [List Style Guides](#operation/api.style-guides.getMany)',
+		routing: {
+			send: {
+				property: 'styleGuideIds',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value.items?.map(i => i._value) || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.users.ai.file-translations.post'
+				]
+			}
+		},
+		typeOptions: {
+			multipleValues: true
+		},
+		placeholder: 'Add Item',
+		options: [
+			{
+				displayName: 'Items',
+				name: 'items',
+				values: [
+					{
+						displayName: 'Value',
+						name: '_value',
+						type: 'number',
+						default: 0,
+						placeholder: '0'
+					}
+				]
+			}
+		]
+	},
+	{
 		displayName: 'Ai Prompt Id',
 		name: 'aiPromptId',
 		type: 'options',
@@ -4397,6 +4441,50 @@ export const aiProperties: INodeProperties[] = [
 		typeOptions: {
 			loadOptionsMethod: 'getGlossariesMulti'
 		}
+	},
+	{
+		displayName: 'Style Guide Ids',
+		name: 'styleGuideIds',
+		type: 'fixedCollection',
+		default: {},
+		description: 'Array of Style Guide Identifiers. Get via [List Style Guides](#operation/api.style-guides.getMany)',
+		routing: {
+			send: {
+				property: 'styleGuideIds',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value.items?.map(i => i._value) || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.users.ai.translate.strings.post'
+				]
+			}
+		},
+		typeOptions: {
+			multipleValues: true
+		},
+		placeholder: 'Add Item',
+		options: [
+			{
+				displayName: 'Items',
+				name: 'items',
+				values: [
+					{
+						displayName: 'Value',
+						name: '_value',
+						type: 'number',
+						default: 0,
+						placeholder: '0'
+					}
+				]
+			}
+		]
 	},
 	{
 		displayName: 'Ai Prompt Id',
