@@ -1844,15 +1844,15 @@ export const aiProperties: INodeProperties[] = [
 	{
 		displayName: 'Style Guide Ids',
 		name: 'styleGuideIds',
-		type: 'fixedCollection',
-		default: {},
+		type: 'multiOptions',
+		default: [],
 		description: 'Array of Style Guide Identifiers. Get via [List Style Guides](#operation/api.style-guides.getMany)',
 		routing: {
 			send: {
 				property: 'styleGuideIds',
 				propertyInDotNotation: false,
 				type: 'body',
-				value: '={{ $value.items?.map(i => i._value) || undefined }}'
+				value: '={{ $value }}'
 			}
 		},
 		displayOptions: {
@@ -1866,24 +1866,8 @@ export const aiProperties: INodeProperties[] = [
 			}
 		},
 		typeOptions: {
-			multipleValues: true
-		},
-		placeholder: 'Add Item',
-		options: [
-			{
-				displayName: 'Items',
-				name: 'items',
-				values: [
-					{
-						displayName: 'Value',
-						name: '_value',
-						type: 'number',
-						default: 0,
-						placeholder: '0'
-					}
-				]
-			}
-		]
+			loadOptionsMethod: 'getStyleGuidesMulti'
+		}
 	},
 	{
 		displayName: 'Ai Prompt Id',
@@ -4445,15 +4429,15 @@ export const aiProperties: INodeProperties[] = [
 	{
 		displayName: 'Style Guide Ids',
 		name: 'styleGuideIds',
-		type: 'fixedCollection',
-		default: {},
+		type: 'multiOptions',
+		default: [],
 		description: 'Array of Style Guide Identifiers. Get via [List Style Guides](#operation/api.style-guides.getMany)',
 		routing: {
 			send: {
 				property: 'styleGuideIds',
 				propertyInDotNotation: false,
 				type: 'body',
-				value: '={{ $value.items?.map(i => i._value) || undefined }}'
+				value: '={{ $value }}'
 			}
 		},
 		displayOptions: {
@@ -4467,24 +4451,8 @@ export const aiProperties: INodeProperties[] = [
 			}
 		},
 		typeOptions: {
-			multipleValues: true
-		},
-		placeholder: 'Add Item',
-		options: [
-			{
-				displayName: 'Items',
-				name: 'items',
-				values: [
-					{
-						displayName: 'Value',
-						name: '_value',
-						type: 'number',
-						default: 0,
-						placeholder: '0'
-					}
-				]
-			}
-		]
+			loadOptionsMethod: 'getStyleGuidesMulti'
+		}
 	},
 	{
 		displayName: 'Ai Prompt Id',
