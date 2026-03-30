@@ -1842,6 +1842,34 @@ export const aiProperties: INodeProperties[] = [
 		}
 	},
 	{
+		displayName: 'Style Guide Ids',
+		name: 'styleGuideIds',
+		type: 'multiOptions',
+		default: [],
+		description: 'Array of Style Guide Identifiers. Get via [List Style Guides](#operation/api.style-guides.getMany)',
+		routing: {
+			send: {
+				property: 'styleGuideIds',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.users.ai.file-translations.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getStyleGuidesMulti'
+		}
+	},
+	{
 		displayName: 'Ai Prompt Id',
 		name: 'aiPromptId',
 		type: 'options',
@@ -4396,6 +4424,34 @@ export const aiProperties: INodeProperties[] = [
 		},
 		typeOptions: {
 			loadOptionsMethod: 'getGlossariesMulti'
+		}
+	},
+	{
+		displayName: 'Style Guide Ids',
+		name: 'styleGuideIds',
+		type: 'multiOptions',
+		default: [],
+		description: 'Array of Style Guide Identifiers. Get via [List Style Guides](#operation/api.style-guides.getMany)',
+		routing: {
+			send: {
+				property: 'styleGuideIds',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.users.ai.translate.strings.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getStyleGuidesMulti'
 		}
 	},
 	{

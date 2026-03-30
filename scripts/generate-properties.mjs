@@ -282,6 +282,7 @@ const MULTI_SELECT_OPTIONS = {
 	mtIds: { method: 'getMTEngines' },
 
 	assignedStyleGuides: { method: 'getStyleGuides' },
+	styleGuideIds: { method: 'getStyleGuides' },
 
 	// Context-dependent
 	attachmentIds: { method: 'getStorages', matchOperation: ['api.users.ai.translate.strings.post', 'api.ai.translate.strings.post'] },
