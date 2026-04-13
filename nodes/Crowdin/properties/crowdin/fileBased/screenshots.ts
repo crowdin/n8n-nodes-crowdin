@@ -794,7 +794,7 @@ export const screenshotsProperties: INodeProperties[] = [
 		name: 'fileId',
 		type: 'options',
 		default: '',
-		description: 'File Identifier. Get via [List Files](#operation/api.projects.files.getMany)\n\n  __Note:__ Must be used together with `autoTag`. Can\'t be used with `directoryId` or `branchId` in same request',
+		description: 'File Identifier. Get via [List Files](#operation/api.projects.files.getMany)\n\n__Note:__ Must be used together with `autoTag`. Can\'t be used with `directoryId` or `branchId` in same request',
 		routing: {
 			send: {
 				property: 'fileId',
@@ -825,7 +825,7 @@ export const screenshotsProperties: INodeProperties[] = [
 		name: 'branchId',
 		type: 'options',
 		default: '',
-		description: 'Branch identifier. Get via [List Branches](#operation/api.projects.branches.getMany)\n\n __Note:__ Must be used together with `autoTag`. Can\'t be used with `fileId` or `directoryId` in the same request',
+		description: 'Branch identifier. Get via [List Branches](#operation/api.projects.branches.getMany)\n\n__Note:__ Must be used together with `autoTag`. Can\'t be used with `fileId` or `directoryId` in the same request',
 		routing: {
 			send: {
 				property: 'branchId',
@@ -856,7 +856,7 @@ export const screenshotsProperties: INodeProperties[] = [
 		name: 'directoryId',
 		type: 'options',
 		default: '',
-		description: 'Directory Identifier. Get via [List Directories](#operation/api.projects.directories.getMany)\n\n __Note:__ Must be used together with `autoTag`. Can\'t be used with fileId or branchId in same request',
+		description: 'Directory Identifier. Get via [List Directories](#operation/api.projects.directories.getMany)\n\n__Note:__ Must be used together with `autoTag`. Can\'t be used with fileId or branchId in same request',
 		routing: {
 			send: {
 				property: 'directoryId',

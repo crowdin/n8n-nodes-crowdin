@@ -3576,6 +3576,16 @@ export const reportsProperties: INodeProperties[] = [
 										default: '',
 										description: 'Report date to in UTC, ISO 8601',
 										placeholder: '2019-09-27T07:00:14+00:00'
+									},
+									{
+										displayName: 'User Ids',
+										name: 'userIds',
+										type: 'multiOptions',
+										typeOptions: {
+											loadOptionsMethod: 'getUsersMulti'
+										},
+										default: [],
+										description: 'Array of user ids for filtering'
 									}
 								]
 							}
@@ -7801,6 +7811,16 @@ export const reportsProperties: INodeProperties[] = [
 										default: '',
 										description: 'Report date to in UTC, ISO 8601',
 										placeholder: '2019-09-27T07:00:14+00:00'
+									},
+									{
+										displayName: 'User Ids',
+										name: 'userIds',
+										type: 'multiOptions',
+										typeOptions: {
+											loadOptionsMethod: 'getUsersMulti'
+										},
+										default: [],
+										description: 'Array of user ids for filtering'
 									}
 								]
 							}
@@ -13147,6 +13167,29 @@ export const reportsProperties: INodeProperties[] = [
 												value: 'relative'
 											}
 										]
+									},
+									{
+										displayName: 'Branch Ids',
+										name: 'branchIds',
+										type: 'multiOptions',
+										typeOptions: {
+											loadOptionsMethod: 'getBranchesMulti',
+											loadOptionsDependsOn: [
+												'projectId'
+											]
+										},
+										default: [],
+										description: 'Array of branch ids. Get via [List Branches](#operation/api.projects.branches.getMany)'
+									},
+									{
+										displayName: 'User Ids',
+										name: 'userIds',
+										type: 'multiOptions',
+										typeOptions: {
+											loadOptionsMethod: 'getUsersMulti'
+										},
+										default: [],
+										description: 'Array of user ids. Get via [List Project Members](#operation/api.projects.members.getMany)'
 									}
 								]
 							}
@@ -13266,6 +13309,16 @@ export const reportsProperties: INodeProperties[] = [
 										default: '',
 										description: 'Report date to in UTC, ISO 8601',
 										placeholder: '2025-09-27T07:00:14+00:00'
+									},
+									{
+										displayName: 'User Ids',
+										name: 'userIds',
+										type: 'multiOptions',
+										typeOptions: {
+											loadOptionsMethod: 'getUsersMulti'
+										},
+										default: [],
+										description: 'Array of user ids. Get via [List Project Members](#operation/api.projects.members.getMany)'
 									}
 								]
 							}
