@@ -302,6 +302,11 @@ export const projectsProperties: INodeProperties[] = [
 					request: {
 						method: 'PATCH',
 						url: '=/projects/{{$parameter["projectId"]}}/strings-exporter-settings/{{$parameter["systemStringsExporterSettingsId"]}}'
+					},
+					send: {
+						preSend: [
+							transformToJsonPatch
+						]
 					}
 				}
 			}
@@ -5027,188 +5032,6 @@ export const projectsProperties: INodeProperties[] = [
 		}
 	},
 	{
-		displayName: 'Body',
-		name: '_body',
-		description: 'Select configuration type',
-		default: {},
-		type: 'fixedCollection',
-		displayOptions: {
-			show: {
-				resource: [
-					'projects'
-				],
-				operation: [
-					'api.projects.strings-exporter-settings.patch'
-				]
-			}
-		},
-		options: [
-			{
-				displayName: 'Android Strings Exporter Settings',
-				name: '_androidStringsExporterSettings',
-				values: [
-					{
-						displayName: 'Format',
-						name: 'format',
-						type: 'string',
-						default: '',
-						description: 'Defines strings exporter format',
-						required: true,
-						placeholder: 'android'
-					},
-					{
-						displayName: 'Settings',
-						name: 'settings',
-						type: 'fixedCollection',
-						default: {},
-						description: 'Defines strings exporter settings',
-						placeholder: 'Add Field',
-						options: [
-							{
-								displayName: 'Fields',
-								name: 'fields',
-								values: [
-									{
-										displayName: 'Convert Placeholders',
-										name: 'convertPlaceholders',
-										type: 'boolean',
-										default: false,
-										description: 'Convert placeholders to Android format.'
-									},
-									{
-										displayName: 'Convert Line Breaks',
-										name: 'convertLineBreaks',
-										type: 'boolean',
-										default: false,
-										description: 'Сonvert simple line breaks (Enter) to \\n (e.g. New\\nLine).'
-									},
-									{
-										displayName: 'Use Cdata For Strings With Tags',
-										name: 'useCdataForStringsWithTags',
-										type: 'boolean',
-										default: false,
-										description: 'Encloses strings with HTML tags in CDATA sections (e.g., `<b>Name</b>` > `<![CDATA[<b>Name</b>]]>`). Does not apply to strings with only `<xliff:g>` tags.'
-									}
-								]
-							}
-						],
-						required: true
-					}
-				]
-			},
-			{
-				displayName: 'MacOSX Strings Exporter Settings',
-				name: '_macOsxStringsExporterSettings',
-				values: [
-					{
-						displayName: 'Format',
-						name: 'format',
-						type: 'string',
-						default: '',
-						description: 'Defines strings exporter format',
-						required: true,
-						placeholder: 'macosx'
-					},
-					{
-						displayName: 'Settings',
-						name: 'settings',
-						type: 'fixedCollection',
-						default: {},
-						description: 'Defines strings exporter settings',
-						placeholder: 'Add Field',
-						options: [
-							{
-								displayName: 'Fields',
-								name: 'fields',
-								values: [
-									{
-										displayName: 'Convert Placeholders',
-										name: 'convertPlaceholders',
-										type: 'boolean',
-										default: false,
-										description: 'Convert placeholders to MacOSX format.'
-									},
-									{
-										displayName: 'Convert Line Breaks',
-										name: 'convertLineBreaks',
-										type: 'boolean',
-										default: false,
-										description: 'Сonvert simple line breaks (Enter) to \\n (e.g. New\\nLine).'
-									}
-								]
-							}
-						],
-						required: true
-					}
-				]
-			},
-			{
-				displayName: 'Xliff Strings Exporter Settings',
-				name: '_xliffStringsExporterSettings',
-				values: [
-					{
-						displayName: 'Format',
-						name: 'format',
-						type: 'string',
-						default: '',
-						description: 'Defines strings exporter format',
-						required: true,
-						placeholder: 'xliff'
-					},
-					{
-						displayName: 'Settings',
-						name: 'settings',
-						type: 'fixedCollection',
-						default: {},
-						description: 'Defines strings exporter settings',
-						placeholder: 'Add Field',
-						options: [
-							{
-								displayName: 'Fields',
-								name: 'fields',
-								values: [
-									{
-										displayName: 'Language pair mapping',
-										name: 'json:languagePairMapping',
-										type: 'json',
-										default: '{}',
-										description: 'Defines language pair mapping',
-										placeholder: '{"uk":"es","de":"en"}'
-									},
-									{
-										displayName: 'Copy Source To Empty Target',
-										name: 'copySourceToEmptyTarget',
-										type: 'boolean',
-										default: true
-									},
-									{
-										displayName: 'Export Translators Comment',
-										name: 'exportTranslatorsComment',
-										type: 'boolean',
-										default: true,
-										description: 'Export comments added by translators.'
-									}
-								]
-							}
-						],
-						required: true
-					}
-				]
-			}
-		],
-		routing: {
-			send: {
-				preSend: [
-					normalizeRootBody
-				],
-				property: '_body',
-				propertyInDotNotation: false,
-				type: 'body',
-				value: '={{ $value }}'
-			}
-		}
-	},
-	{
 		displayName: 'Update Fields',
 		name: 'updateFields',
 		type: 'collection',
@@ -7875,6 +7698,46 @@ export const projectsProperties: INodeProperties[] = [
 						]
 					}
 				]
+			}
+		],
+		routing: {
+			send: {
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		}
+	},
+	{
+		displayName: 'Update Fields',
+		name: 'updateFields',
+		type: 'collection',
+		placeholder: 'Add Field',
+		default: {},
+		displayOptions: {
+			show: {
+				resource: [
+					'projects'
+				],
+				operation: [
+					'api.projects.strings-exporter-settings.patch'
+				]
+			}
+		},
+		options: [
+			{
+				displayName: 'Format',
+				name: 'format',
+				type: 'string',
+				default: '',
+				description: 'Value for /format',
+				placeholder: 'android'
+			},
+			{
+				displayName: 'Settings',
+				name: 'json:settings',
+				type: 'json',
+				default: '{}',
+				description: 'Defines file format settings'
 			}
 		],
 		routing: {
