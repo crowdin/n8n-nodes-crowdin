@@ -115,7 +115,7 @@ export const stringTranslationsProperties: INodeProperties[] = [
 				name: 'List Language Translations',
 				value: 'api.projects.languages.translations.getMany',
 				action: 'List Language Translations',
-				description: '**Required scopes:** `project.translation` (Read only).\n\n__Note:__ For instant translation delivery to your mobile, web, server, or desktop apps, it is recommended to use [OTA](https://support.crowdin.com/enterprise/content-delivery/).',
+				description: '**Required scopes:** `project.translation` (Read only).\n\n__Note:__ For instant translation delivery directly to user devices, please use [OTA](https://support.crowdin.com/enterprise/content-delivery/). Direct API usage will exceed established rate limits, which suspends further content updates.',
 				routing: {
 					request: {
 						method: 'GET',
@@ -141,7 +141,7 @@ export const stringTranslationsProperties: INodeProperties[] = [
 				name: 'List String Translations',
 				value: 'api.projects.translations.getMany',
 				action: 'List String Translations',
-				description: '**Required scopes:** `project.translation` (Read only).\n\n__Note:__ For instant translation delivery to your mobile, web, server, or desktop apps, it is recommended to use [OTA](https://support.crowdin.com/content-delivery/).',
+				description: '**Required scopes:** `project.translation` (Read only).\n\n__Note:__ For instant translation delivery directly to user devices, please use [OTA](https://support.crowdin.com/content-delivery/). Direct API usage will exceed established rate limits, which suspends further content updates.',
 				routing: {
 					request: {
 						method: 'GET',

@@ -21,7 +21,7 @@ export const sourceStringsProperties: INodeProperties[] = [
 				name: 'List Strings',
 				value: 'api.projects.strings.getMany',
 				action: 'List Strings',
-				description: '**Required scopes:** `project.source.string` (Read only).',
+				description: '**Required scopes:** `project.source.string` (Read only).\n\n__Note:__ For instant translation delivery directly to user devices, please use [OTA](https://support.crowdin.com/enterprise/content-delivery/). Direct API usage will exceed established rate limits, which suspends further content updates.',
 				routing: {
 					request: {
 						method: 'GET',
