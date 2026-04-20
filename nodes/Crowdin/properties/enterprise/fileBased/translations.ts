@@ -219,7 +219,7 @@ export const translationsProperties: INodeProperties[] = [
 				name: 'Export Project Translation',
 				value: 'api.projects.translations.exports.post',
 				action: 'Export Project Translation',
-				description: '**Required scopes:** `project.translation` (Read only).\n\n__Note:__ For instant translation delivery to your mobile, web, server, or desktop apps, it is recommended to use [OTA](https://support.crowdin.com/enterprise/content-delivery/).',
+				description: '**Required scopes:** `project.translation` (Read only).\n\n__Note:__ For instant translation delivery directly to user devices, please use [OTA](https://support.crowdin.com/enterprise/content-delivery/). Direct API usage will exceed established rate limits, which suspends further content updates.',
 				routing: {
 					request: {
 						method: 'POST',
