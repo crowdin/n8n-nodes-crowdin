@@ -2873,10 +2873,9 @@ export const reportsProperties: INodeProperties[] = [
 														displayName: 'Proofread',
 														name: 'proofread',
 														type: 'number',
-														default: undefined,
-														description: undefined,
-														placeholder: '0.12',
-														required: true
+														default: 0,
+														description: 'Proofread rate. Required when `useCategoryBasedProofreadRates` is `false`.',
+														placeholder: '0.12'
 													}
 												]
 											}
@@ -2933,10 +2932,9 @@ export const reportsProperties: INodeProperties[] = [
 														displayName: 'Proofread',
 														name: 'proofread',
 														type: 'number',
-														default: undefined,
-														description: undefined,
-														placeholder: '0.12',
-														required: true
+														default: 0,
+														description: 'Proofread rate. Required when `useCategoryBasedProofreadRates` is `false`.',
+														placeholder: '0.12'
 													}
 												]
 											}
@@ -3112,18 +3110,11 @@ export const reportsProperties: INodeProperties[] = [
 										required: true
 									},
 									{
-										displayName: 'Exclude Approvals For Edited Translations',
-										name: 'excludeApprovalsForEditedTranslations',
+										displayName: 'Use Category Based Proofread Rates',
+										name: 'useCategoryBasedProofreadRates',
 										type: 'boolean',
 										default: false,
-										description: 'Exclude approvals when the same user has made translations for the string.'
-									},
-									{
-										displayName: 'Pre Translated Strings Categorization Adjustment',
-										name: 'preTranslatedStringsCategorizationAdjustment',
-										type: 'boolean',
-										default: false,
-										description: 'Repetitive translations of pre-translated strings are reported under TM or MT match rates instead of Other suggestion match rates, depending on the initial pre-translation type.'
+										description: 'Approvals are treated as submitting an identical translation at the 100% match rate of the corresponding Net Rate Scheme category (TM, MT, AI, or other). When disabled, all approvals use the flat base proofread rate.'
 									},
 									{
 										displayName: 'Group By',
@@ -3459,10 +3450,9 @@ export const reportsProperties: INodeProperties[] = [
 														displayName: 'Proofread',
 														name: 'proofread',
 														type: 'number',
-														default: undefined,
-														description: undefined,
-														placeholder: '0.12',
-														required: true
+														default: 0,
+														description: 'Proofread rate. Required when `useCategoryBasedProofreadRates` is `false`.',
+														placeholder: '0.12'
 													}
 												]
 											}
@@ -3519,10 +3509,9 @@ export const reportsProperties: INodeProperties[] = [
 														displayName: 'Proofread',
 														name: 'proofread',
 														type: 'number',
-														default: undefined,
-														description: undefined,
-														placeholder: '0.12',
-														required: true
+														default: 0,
+														description: 'Proofread rate. Required when `useCategoryBasedProofreadRates` is `false`.',
+														placeholder: '0.12'
 													}
 												]
 											}
@@ -3711,18 +3700,11 @@ export const reportsProperties: INodeProperties[] = [
 										description: 'Array of task ids. Get via [List Tasks](#operation/api.projects.tasks.getMany)'
 									},
 									{
-										displayName: 'Exclude Approvals For Edited Translations',
-										name: 'excludeApprovalsForEditedTranslations',
+										displayName: 'Use Category Based Proofread Rates',
+										name: 'useCategoryBasedProofreadRates',
 										type: 'boolean',
 										default: false,
-										description: 'Exclude approvals when the same user has made translations for the string.'
-									},
-									{
-										displayName: 'Pre Translated Strings Categorization Adjustment',
-										name: 'preTranslatedStringsCategorizationAdjustment',
-										type: 'boolean',
-										default: false,
-										description: 'Repetitive translations of pre-translated strings are reported under TM or MT match rates instead of Other suggestion match rates, depending on the initial pre-translation type.'
+										description: 'Approvals are treated as submitting an identical translation at the 100% match rate of the corresponding Net Rate Scheme category (TM, MT, AI, or other). When disabled, all approvals use the flat base proofread rate.'
 									},
 									{
 										displayName: 'Skip Archiving',
@@ -5934,18 +5916,11 @@ export const reportsProperties: INodeProperties[] = [
 										description: undefined
 									},
 									{
-										displayName: 'Exclude Approvals For Edited Translations',
-										name: 'excludeApprovalsForEditedTranslations',
+										displayName: 'Use Category Based Proofread Rates',
+										name: 'useCategoryBasedProofreadRates',
 										type: 'boolean',
 										default: false,
-										description: 'Exclude approvals when the same user has made translations for the string.'
-									},
-									{
-										displayName: 'Pre Translated Strings Categorization Adjustment',
-										name: 'preTranslatedStringsCategorizationAdjustment',
-										type: 'boolean',
-										default: false,
-										description: 'Repetitive translations of pre-translated strings are reported under TM or MT match rates instead of Other suggestion match rates, depending on the initial pre-translation type.'
+										description: 'Approvals are treated as submitting an identical translation at the 100% match rate of the corresponding Net Rate Scheme category (TM, MT, AI, or other). When disabled, all approvals use the flat base proofread rate.'
 									}
 								]
 							}
@@ -6870,18 +6845,11 @@ export const reportsProperties: INodeProperties[] = [
 										description: undefined
 									},
 									{
-										displayName: 'Exclude Approvals For Edited Translations',
-										name: 'excludeApprovalsForEditedTranslations',
+										displayName: 'Use Category Based Proofread Rates',
+										name: 'useCategoryBasedProofreadRates',
 										type: 'boolean',
 										default: false,
-										description: 'Exclude approvals when the same user has made translations for the string.'
-									},
-									{
-										displayName: 'Pre Translated Strings Categorization Adjustment',
-										name: 'preTranslatedStringsCategorizationAdjustment',
-										type: 'boolean',
-										default: false,
-										description: 'Repetitive translations of pre-translated strings are reported under TM or MT match rates instead of Other suggestion match rates, depending on the initial pre-translation type.'
+										description: 'Approvals are treated as submitting an identical translation at the 100% match rate of the corresponding Net Rate Scheme category (TM, MT, AI, or other). When disabled, all approvals use the flat base proofread rate.'
 									}
 								]
 							}
