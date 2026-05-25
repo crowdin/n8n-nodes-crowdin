@@ -5076,7 +5076,7 @@ export const reportsProperties: INodeProperties[] = [
 										name: 'typeTasks',
 										type: 'options',
 										default: '',
-										description: 'Task type:\n *          0 - Translate by own translators\n *          1 - Proofread by own proofreaders\n *          2 - Translate by vendor\n *          3 - Proofread by vendor',
+										description: 'Task type:\n * 0 - Translate by own translators\n * 1 - Proofread by own proofreaders\n * 2 - Translate by vendor\n * 3 - Proofread by vendor',
 										options: [
 											{
 												name: '-',
@@ -6511,7 +6511,7 @@ export const reportsProperties: INodeProperties[] = [
 										name: 'netRateSchemes',
 										type: 'fixedCollection',
 										default: {},
-										description: 'Net Rate Schemes (Percentage paid of full translation rate)\n *\n * __Note:__ A new translation will be included in the report at the lowest rate if multiple scheme categories can be applied to the translation',
+										description: 'Net Rate Schemes (Percentage paid of full translation rate)\n\n__Note:__ A new translation will be included in the report at the lowest rate if multiple scheme categories can be applied to the translation',
 										placeholder: 'Add Field',
 										options: [
 											{

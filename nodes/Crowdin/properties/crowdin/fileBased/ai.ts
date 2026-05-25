@@ -1473,7 +1473,7 @@ export const aiProperties: INodeProperties[] = [
 		name: 'type',
 		type: 'options',
 		default: '',
-		description: 'Values available:\n- empty value or \'auto\' — Try to detect file type by extension or MIME type\n- \'android\' — Android (*.xml)\n- \'macosx\' — Mac OS X / iOS (*.strings)\n- \'resx\' — .NET, Windows Phone (*.resx)\n- \'properties\' — Java (*.properties)\n- \'gettext\' — GNU GetText (*.po, *.pot)\n- \'yaml\' — Ruby On Rails (*.yaml, *.yml)\n- \'php\' — Hypertext Preprocessor (*.php)\n- \'json\' — Generic JSON (*.json)\n- \'xml\' — Generic XML (*.xml)\n- \'ini\' — Generic INI (*.ini)\n- \'rc\' — Windows Resources (*.rc)\n- \'resw\' — Windows 8 Metro (*.resw)\n- \'resjson\' — Windows 8 Metro (*.resjson)\n- \'qtts\' — Nokia Qt (*.ts)\n- \'joomla\' — Joomla localizable resources (*.ini)\n- \'chrome\' — Google Chrome Extension (*.json)\n- \'dtd\' — Mozilla DTD (*.dtd)\n- \'dklang\' — Delphi DKLang (*.dklang)\n- \'flex\' — Flex (*.properties)\n- \'nsh\' — NSIS Installer Resources (*.nsh)\n- \'wxl\' — WiX Installer (*.wxl)\n- \'xliff\' — XLIFF (*.xliff, *.xlf)\n- \'xliff_two\' — XLIFF 2.0 (*.xliff, *.xlf)\n- \'html\' — HTML (*.html, *.htm, *.xhtml, *.xhtm, *.xht, *.hbs, *.liquid)\n- \'haml\' — Haml (*.haml)\n- \'txt\' — Plain Text (*.txt)\n- \'csv\' — Comma Separated Values (*.csv)\n- \'md\' — Markdown (*.md, *.text, *.markdown...)\n- \'flsnp\' — MadCap Flare (*.flnsp, .flpgpl .fltoc)\n- \'fm_html\' — Jekyll HTML (*.html)\n- \'fm_md\' — Jekyll Markdown (*.md)\n- \'mediawiki\' — MediaWiki (*.wiki, *.wikitext, *.mediawiki)\n- \'docx\' — Microsoft Office, OpenOffice.org Documents, Adobe InDesign, Adobe FrameMaker(*.docx, *.dotx, *.docm, *.dotm, *.xlsx, *.xltx, *.xlsm, *.xltm, *.pptx, *.potx, *.ppsx, *.pptm, *.potm, *.ppsm, *.odt, *.ods, *.odg, *.odp, *.imdl, *.mif)\n- \'xlsx\' — Microsoft Excel (*.xlsx)\n- \'sbv\' — Youtube .sbv (*.sbv)\n- \'properties_play\' — Play Framework\n- \'properties_xml\' — Java Application (*.xml)\n- \'maxthon\' — Maxthon Browser (*.ini)\n- \'go_json\' — Go (*.gotext.json)\n- \'dita\' — DITA Document (*.dita, *.ditamap)\n- \'mif\' — Adobe FrameMaker (*.mif)\n- \'idml\' — Adobe InDesign (*.idml)\n- \'stringsdict\' — iOS (*.stringsdict)\n- \'plist\' — Mac OS property list (*.plist)\n- \'vtt\' — Video Subtitling and WebVTT (*.vtt)\n- \'vdf\' — Steamworks Localization Valve Data File (*.vdf)\n- \'srt\' — SubRip .srt (*.srt)\n- \'stf\' — Salesforce (*.stf)\n- \'toml\' — Toml (*.toml)\n- \'contentful_rt\' — Contentful (*.json)\n- \'svg\' — SVG (*.svg)\n- \'js\' — JavaScript (*.js)\n- \'coffee\' — CoffeeScript (*.coffee)\n- \'nestjs_i18n\' - NestJS i18n\n- \'loc\' — LOC (*.loc)\n\n__Note__: Use `docx` type to import each cell as a separate source string for XLSX file',
+		description: 'Values available:\n- empty value or \'auto\' — Try to detect file type by extension or MIME type\n- \'android\' — Android (*.xml)\n- \'macosx\' — Mac OS X / iOS (*.strings)\n- \'resx\' — .NET, Windows Phone (*.resx)\n- \'properties\' — Java (*.properties)\n- \'gettext\' — GNU GetText (*.po, *.pot)\n- \'yaml\' — Ruby On Rails (*.yaml, *.yml)\n- \'php\' — Hypertext Preprocessor (*.php)\n- \'json\' — Generic JSON (*.json)\n- \'xml\' — Generic XML (*.xml)\n- \'ini\' — Generic INI (*.ini)\n- \'rc\' — Windows Resources (*.rc)\n- \'resw\' — Windows 8 Metro (*.resw)\n- \'resjson\' — Windows 8 Metro (*.resjson)\n- \'qtts\' — Nokia Qt (*.ts)\n- \'joomla\' — Joomla localizable resources (*.ini)\n- \'chrome\' — Google Chrome Extension (*.json)\n- \'dtd\' — Mozilla DTD (*.dtd)\n- \'dklang\' — Delphi DKLang (*.dklang)\n- \'flex\' — Flex (*.properties)\n- \'nsh\' — NSIS Installer Resources (*.nsh)\n- \'wxl\' — WiX Installer (*.wxl)\n- \'xliff\' — XLIFF (*.xliff, *.xlf)\n- \'xliff_two\' — XLIFF 2.0 (*.xliff, *.xlf)\n- \'html\' — HTML (*.html, *.htm, *.xhtml, *.xhtm, *.xht, *.hbs, *.liquid)\n- \'haml\' — Haml (*.haml)\n- \'txt\' — Plain Text (*.txt)\n- \'csv\' — Comma Separated Values (*.csv)\n- \'md\' — Markdown (*.md, *.text, *.markdown...)\n- \'flsnp\' — MadCap Flare (*.flnsp, .flpgpl .fltoc)\n- \'fm_html\' — Jekyll HTML (*.html)\n- \'fm_md\' — Jekyll Markdown (*.md)\n- \'mediawiki\' — MediaWiki (*.wiki, *.wikitext, *.mediawiki)\n- \'docx\' — Microsoft Office, OpenOffice.org Documents, Adobe InDesign, Adobe FrameMaker(*.docx, *.dotx, *.docm, *.dotm, *.xlsx, *.xltx, *.xlsm, *.xltm, *.pptx, *.potx, *.ppsx, *.pptm, *.potm, *.ppsm, *.odt, *.ods, *.odg, *.odp, *.imdl, *.mif)\n- \'vsdx\' — Microsoft Visio (*.vsdx, *.vsdm)\n- \'xlsx\' — Microsoft Excel (*.xlsx)\n- \'sbv\' — Youtube .sbv (*.sbv)\n- \'properties_play\' — Play Framework\n- \'properties_xml\' — Java Application (*.xml)\n- \'maxthon\' — Maxthon Browser (*.ini)\n- \'go_json\' — Go (*.gotext.json)\n- \'dita\' — DITA Document (*.dita, *.ditamap)\n- \'mif\' — Adobe FrameMaker (*.mif)\n- \'idml\' — Adobe InDesign (*.idml)\n- \'stringsdict\' — iOS (*.stringsdict)\n- \'plist\' — Mac OS property list (*.plist)\n- \'vtt\' — Video Subtitling and WebVTT (*.vtt)\n- \'vdf\' — Steamworks Localization Valve Data File (*.vdf)\n- \'srt\' — SubRip .srt (*.srt)\n- \'stf\' — Salesforce (*.stf)\n- \'toml\' — Toml (*.toml)\n- \'contentful_rt\' — Contentful (*.json)\n- \'svg\' — SVG (*.svg)\n- \'js\' — JavaScript (*.js)\n- \'coffee\' — CoffeeScript (*.coffee)\n- \'nestjs_i18n\' - NestJS i18n\n- \'loc\' — LOC (*.loc)\n\n__Note__: Use `docx` type to import each cell as a separate source string for XLSX file',
 		options: [
 			{
 				name: '-',
@@ -1622,6 +1622,10 @@ export const aiProperties: INodeProperties[] = [
 			{
 				name: 'docx',
 				value: 'docx'
+			},
+			{
+				name: 'vsdx',
+				value: 'vsdx'
 			},
 			{
 				name: 'xlsx',
@@ -2332,10 +2336,6 @@ export const aiProperties: INodeProperties[] = [
 				value: 'pre_translate'
 			},
 			{
-				name: 'assist',
-				value: 'assist'
-			},
-			{
 				name: 'qa_check',
 				value: 'qa_check'
 			}
@@ -2444,15 +2444,11 @@ export const aiProperties: INodeProperties[] = [
 		name: 'action',
 		type: 'options',
 		default: 'pre_translate',
-		description: 'AI prompt action. __Note:__ `assist` is deprecated',
+		description: undefined,
 		options: [
 			{
 				name: 'pre_translate',
 				value: 'pre_translate'
-			},
-			{
-				name: 'assist',
-				value: 'assist'
 			},
 			{
 				name: 'qa_check',
@@ -2703,132 +2699,6 @@ export const aiProperties: INodeProperties[] = [
 				]
 			},
 			{
-				displayName: 'Basic mode (assist action)',
-				name: '_basicModeAssistAction',
-				values: [
-					{
-						displayName: 'Mode',
-						name: 'mode',
-						type: 'options',
-						default: 'basic',
-						description: undefined,
-						required: true,
-						options: [
-							{
-								name: 'basic',
-								value: 'basic'
-							}
-						]
-					},
-					{
-						displayName: 'Snippets',
-						name: 'snippets',
-						type: 'multiOptions',
-						typeOptions: {
-							loadOptionsMethod: 'getAiSnippetsByPlaceholderMulti'
-						},
-						default: [],
-						description: 'Array of snippets. Get via [List AI Snippets](#operation/api.ai.snippets.getMany)'
-					},
-					{
-						displayName: 'Other Language Translations',
-						name: 'otherLanguageTranslations',
-						type: 'fixedCollection',
-						default: {},
-						description: undefined,
-						placeholder: 'Add Field',
-						options: [
-							{
-								displayName: 'Fields',
-								name: 'fields',
-								values: [
-									{
-										displayName: 'Is Enabled',
-										name: 'isEnabled',
-										type: 'boolean',
-										default: true,
-										description: undefined
-									},
-									{
-										displayName: 'Language Ids',
-										name: 'languageIds',
-										type: 'multiOptions',
-										typeOptions: {
-											loadOptionsMethod: 'getLanguagesMulti'
-										},
-										default: [],
-										description: 'Array of language ids. Get via [List Supported Languages](#operation/api.languages.getMany)'
-									}
-								]
-							}
-						]
-					},
-					{
-						displayName: 'Glossary Terms',
-						name: 'glossaryTerms',
-						type: 'boolean',
-						default: false,
-						description: undefined
-					},
-					{
-						displayName: 'Tm Suggestions',
-						name: 'tmSuggestions',
-						type: 'boolean',
-						default: false,
-						description: undefined
-					},
-					{
-						displayName: 'File Context',
-						name: 'fileContext',
-						type: 'boolean',
-						default: false,
-						description: undefined
-					},
-					{
-						displayName: 'Generate File Summary',
-						name: 'generateFileSummary',
-						type: 'boolean',
-						default: false,
-						description: undefined
-					},
-					{
-						displayName: 'Screenshots',
-						name: 'screenshots',
-						type: 'boolean',
-						default: false,
-						description: undefined
-					},
-					{
-						displayName: 'File Content',
-						name: 'fileContent',
-						type: 'boolean',
-						default: false,
-						description: undefined
-					},
-					{
-						displayName: 'Public Project Description',
-						name: 'publicProjectDescription',
-						type: 'boolean',
-						default: false,
-						description: undefined
-					},
-					{
-						displayName: 'Siblings Strings',
-						name: 'siblingsStrings',
-						type: 'boolean',
-						default: false,
-						description: undefined
-					},
-					{
-						displayName: 'Filtered Strings',
-						name: 'filteredStrings',
-						type: 'boolean',
-						default: false,
-						description: undefined
-					}
-				]
-			},
-			{
 				displayName: 'Basic mode (QA check action)',
 				name: '_basicModeQaCheckAction',
 				values: [
@@ -2973,13 +2843,6 @@ export const aiProperties: INodeProperties[] = [
 						default: '',
 						description: undefined,
 						required: true
-					},
-					{
-						displayName: 'File Content',
-						name: 'fileContent',
-						type: 'boolean',
-						default: false,
-						description: '__Note:__ Available only for Assist action'
 					},
 					{
 						displayName: 'Other Language Translations',
@@ -4712,7 +4575,7 @@ export const aiProperties: INodeProperties[] = [
 				name: 'action',
 				type: 'options',
 				default: '',
-				description: 'AI prompt action. __Note:__ `assist` is deprecated',
+				description: 'Value for /action',
 				options: [
 					{
 						name: '-',
@@ -4721,10 +4584,6 @@ export const aiProperties: INodeProperties[] = [
 					{
 						name: 'pre_translate',
 						value: 'pre_translate'
-					},
-					{
-						name: 'assist',
-						value: 'assist'
 					},
 					{
 						name: 'qa_check',
@@ -4892,132 +4751,6 @@ export const aiProperties: INodeProperties[] = [
 						]
 					},
 					{
-						name: '_basicModeAssistAction',
-						displayName: 'Basic mode (assist action)',
-						values: [
-							{
-								displayName: 'Mode',
-								name: 'mode',
-								type: 'options',
-								default: 'basic',
-								description: undefined,
-								required: true,
-								options: [
-									{
-										name: 'basic',
-										value: 'basic'
-									}
-								]
-							},
-							{
-								displayName: 'Snippets',
-								name: 'snippets',
-								type: 'multiOptions',
-								typeOptions: {
-									loadOptionsMethod: 'getAiSnippetsByPlaceholderMulti'
-								},
-								default: [],
-								description: 'Array of snippets. Get via [List AI Snippets](#operation/api.ai.snippets.getMany)'
-							},
-							{
-								displayName: 'Other Language Translations',
-								name: 'otherLanguageTranslations',
-								type: 'fixedCollection',
-								default: {},
-								description: undefined,
-								placeholder: 'Add Field',
-								options: [
-									{
-										name: 'fields',
-										displayName: 'Fields',
-										values: [
-											{
-												displayName: 'Is Enabled',
-												name: 'isEnabled',
-												type: 'boolean',
-												default: true,
-												description: undefined
-											},
-											{
-												displayName: 'Language Ids',
-												name: 'languageIds',
-												type: 'multiOptions',
-												typeOptions: {
-													loadOptionsMethod: 'getLanguagesMulti'
-												},
-												default: [],
-												description: 'Array of language ids. Get via [List Supported Languages](#operation/api.languages.getMany)'
-											}
-										]
-									}
-								]
-							},
-							{
-								displayName: 'Glossary Terms',
-								name: 'glossaryTerms',
-								type: 'boolean',
-								default: false,
-								description: undefined
-							},
-							{
-								displayName: 'Tm Suggestions',
-								name: 'tmSuggestions',
-								type: 'boolean',
-								default: false,
-								description: undefined
-							},
-							{
-								displayName: 'File Context',
-								name: 'fileContext',
-								type: 'boolean',
-								default: false,
-								description: undefined
-							},
-							{
-								displayName: 'Generate File Summary',
-								name: 'generateFileSummary',
-								type: 'boolean',
-								default: false,
-								description: undefined
-							},
-							{
-								displayName: 'Screenshots',
-								name: 'screenshots',
-								type: 'boolean',
-								default: false,
-								description: undefined
-							},
-							{
-								displayName: 'File Content',
-								name: 'fileContent',
-								type: 'boolean',
-								default: false,
-								description: undefined
-							},
-							{
-								displayName: 'Public Project Description',
-								name: 'publicProjectDescription',
-								type: 'boolean',
-								default: false,
-								description: undefined
-							},
-							{
-								displayName: 'Siblings Strings',
-								name: 'siblingsStrings',
-								type: 'boolean',
-								default: false,
-								description: undefined
-							},
-							{
-								displayName: 'Filtered Strings',
-								name: 'filteredStrings',
-								type: 'boolean',
-								default: false,
-								description: undefined
-							}
-						]
-					},
-					{
 						name: '_basicModeQaCheckAction',
 						displayName: 'Basic mode (QA check action)',
 						values: [
@@ -5162,13 +4895,6 @@ export const aiProperties: INodeProperties[] = [
 								default: '',
 								description: undefined,
 								required: true
-							},
-							{
-								displayName: 'File Content',
-								name: 'fileContent',
-								type: 'boolean',
-								default: false,
-								description: '__Note:__ Available only for Assist action'
 							},
 							{
 								displayName: 'Other Language Translations',

@@ -18,6 +18,157 @@ export const translationsProperties: INodeProperties[] = [
 		},
 		options: [
 			{
+				name: 'List Bundles',
+				value: 'api.projects.bundles.getMany',
+				action: 'List Bundles',
+				description: '**Required scopes:** `project.translation` (Read only).',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/projects/{{$parameter["projectId"]}}/bundles'
+					},
+					send: {
+						paginate: '={{$parameter["returnAll"]}}'
+					},
+					output: {
+						postReceive: [
+							{
+								type: 'rootProperty',
+								enabled: '={{!$parameter["returnAll"]}}',
+								properties: {
+									property: 'data'
+								}
+							}
+						]
+					}
+				}
+			},
+			{
+				name: 'Add Bundle',
+				value: 'api.projects.bundles.post',
+				action: 'Add Bundle',
+				description: '**Required scopes:** `project.source.file` (Read and Write).',
+				routing: {
+					request: {
+						method: 'POST',
+						url: '=/projects/{{$parameter["projectId"]}}/bundles'
+					}
+				}
+			},
+			{
+				name: 'Get Bundle',
+				value: 'api.projects.bundles.get',
+				action: 'Get Bundle',
+				description: '**Required scopes:** `project.source.file` (Read only).',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/projects/{{$parameter["projectId"]}}/bundles/{{$parameter["bundleId"]}}'
+					}
+				}
+			},
+			{
+				name: 'Delete Bundle',
+				value: 'api.projects.bundles.delete',
+				action: 'Delete Bundle',
+				description: '**Required scopes:** `project.source.file` (Read and Write).',
+				routing: {
+					request: {
+						method: 'DELETE',
+						url: '=/projects/{{$parameter["projectId"]}}/bundles/{{$parameter["bundleId"]}}'
+					},
+					output: {
+						postReceive: [
+							{
+								type: 'set',
+								properties: {
+									value: '={{ { "success": true } }}'
+								}
+							}
+						]
+					}
+				}
+			},
+			{
+				name: 'Edit Bundle',
+				value: 'api.projects.bundles.patch',
+				action: 'Edit Bundle',
+				description: '**Required scopes:** `project.source.file` (Read and Write).',
+				routing: {
+					request: {
+						method: 'PATCH',
+						url: '=/projects/{{$parameter["projectId"]}}/bundles/{{$parameter["bundleId"]}}'
+					},
+					send: {
+						preSend: [
+							transformToJsonPatch
+						]
+					}
+				}
+			},
+			{
+				name: 'Download Bundle',
+				value: 'api.projects.bundles.exports.download.get',
+				action: 'Download Bundle',
+				description: '**Required scopes:** `project.translation` (Read only).',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/projects/{{$parameter["projectId"]}}/bundles/{{$parameter["bundleId"]}}/exports/{{$parameter["exportId"]}}/download'
+					}
+				}
+			},
+			{
+				name: 'Export Bundle',
+				value: 'api.projects.bundles.exports.post',
+				action: 'Export Bundle',
+				description: '**Required scopes:** `project.translation` (Read only).',
+				routing: {
+					request: {
+						method: 'POST',
+						url: '=/projects/{{$parameter["projectId"]}}/bundles/{{$parameter["bundleId"]}}/exports'
+					}
+				}
+			},
+			{
+				name: 'Check Bundle Export Status',
+				value: 'api.projects.bundles.exports.get',
+				action: 'Check Bundle Export Status',
+				description: '**Required scopes:** `project.translation` (Read only).',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/projects/{{$parameter["projectId"]}}/bundles/{{$parameter["bundleId"]}}/exports/{{$parameter["exportId"]}}'
+					}
+				}
+			},
+			{
+				name: 'Bundle List Files',
+				value: 'api.projects.bundles.files.getMany',
+				action: 'Bundle List Files',
+				description: '**Required scopes:** `project.source.file` (Read only).',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/projects/{{$parameter["projectId"]}}/bundles/{{$parameter["bundleId"]}}/files'
+					},
+					send: {
+						paginate: '={{$parameter["returnAll"]}}'
+					},
+					output: {
+						postReceive: [
+							{
+								type: 'rootProperty',
+								enabled: '={{!$parameter["returnAll"]}}',
+								properties: {
+									property: 'data'
+								}
+							}
+						]
+					}
+				}
+			},
+			{
 				name: 'List Pre-Translations',
 				value: 'api.projects.pre-translations.getMany',
 				action: 'List Pre-Translations',
@@ -264,7 +415,178 @@ export const translationsProperties: INodeProperties[] = [
 				}
 			}
 		],
-		default: 'api.projects.pre-translations.getMany'
+		default: 'api.projects.bundles.getMany'
+	},
+	{
+		displayName: 'GET /projects/{projectId}/bundles',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.getMany'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'POST /projects/{projectId}/bundles',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.post'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'GET /projects/{projectId}/bundles/{bundleId}',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.get'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'DELETE /projects/{projectId}/bundles/{bundleId}',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.delete'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'PATCH /projects/{projectId}/bundles/{bundleId}',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.patch'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'GET /projects/{projectId}/bundles/{bundleId}/exports/{exportId}/download',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.exports.download.get'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'POST /projects/{projectId}/bundles/{bundleId}/exports',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.exports.post'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'GET /projects/{projectId}/bundles/{bundleId}/exports/{exportId}',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.exports.get'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'GET /projects/{projectId}/bundles/{bundleId}/files',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.files.getMany'
+				]
+			}
+		}
 	},
 	{
 		displayName: 'GET /projects/{projectId}/pre-translations',
@@ -587,6 +909,1023 @@ export const translationsProperties: INodeProperties[] = [
 					'api.projects.translations.imports.report.get'
 				]
 			}
+		}
+	},
+	{
+		displayName: 'Project Id',
+		name: 'projectId',
+		required: true,
+		description: 'Project Identifier. Get via [List Projects](#operation/api.projects.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.getMany'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjects'
+		}
+	},
+	{
+		displayName: 'Limit',
+		name: 'limit',
+		description: 'Max number of results to return',
+		default: 50,
+		type: 'number',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'limit',
+				value: '={{ typeof $value === \'number\' ? $value : undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.getMany'
+				],
+				returnAll: [
+					false
+				]
+			}
+		},
+		typeOptions: {
+			minValue: 1
+		}
+	},
+	{
+		displayName: 'Project Id',
+		name: 'projectId',
+		required: true,
+		description: 'Project Identifier. Get via [List Projects](#operation/api.projects.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjects'
+		}
+	},
+	{
+		displayName: 'Name',
+		required: true,
+		name: 'name',
+		type: 'string',
+		default: '',
+		description: 'Defines name',
+		routing: {
+			send: {
+				property: 'name',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.post'
+				]
+			}
+		},
+		placeholder: 'Resx bundle'
+	},
+	{
+		displayName: 'Format',
+		name: 'format',
+		type: 'string',
+		default: '',
+		description: 'Defines export file format. If not provided, files will be exported in their original format.\n\n__Note:__ Required for strings-based projects',
+		routing: {
+			send: {
+				property: 'format',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.post'
+				]
+			}
+		},
+		placeholder: 'crowdin-resx'
+	},
+	{
+		displayName: 'Source Patterns',
+		required: true,
+		name: 'sourcePatterns',
+		type: 'fixedCollection',
+		default: {},
+		routing: {
+			send: {
+				property: 'sourcePatterns',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value.items?.map(i => i._value) || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.post'
+				]
+			}
+		},
+		typeOptions: {
+			multipleValues: true
+		},
+		placeholder: 'Add Item',
+		options: [
+			{
+				displayName: 'Items',
+				name: 'items',
+				values: [
+					{
+						displayName: 'Value',
+						name: '_value',
+						type: 'string',
+						default: ''
+					}
+				]
+			}
+		]
+	},
+	{
+		displayName: 'Ignore Patterns',
+		name: 'ignorePatterns',
+		type: 'fixedCollection',
+		default: {},
+		routing: {
+			send: {
+				property: 'ignorePatterns',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value.items?.map(i => i._value) || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.post'
+				]
+			}
+		},
+		typeOptions: {
+			multipleValues: true
+		},
+		placeholder: 'Add Item',
+		options: [
+			{
+				displayName: 'Items',
+				name: 'items',
+				values: [
+					{
+						displayName: 'Value',
+						name: '_value',
+						type: 'string',
+						default: ''
+					}
+				]
+			}
+		]
+	},
+	{
+		displayName: 'Export Pattern',
+		name: 'exportPattern',
+		type: 'string',
+		default: '',
+		description: 'Bundle export pattern. Defines bundle name in resulting translations bundle. **Required** if `format` is specified. If `format` is not specified, uses default pattern based on file structure\n\n__Note:__ Can\'t contain `: * ? " < > |` symbols',
+		routing: {
+			send: {
+				property: 'exportPattern',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.post'
+				]
+			}
+		},
+		placeholder: 'strings-%two_letter_code%.resx'
+	},
+	{
+		displayName: 'Is Multilingual',
+		name: 'isMultilingual',
+		type: 'boolean',
+		default: false,
+		description: 'Export translations in multilingual file',
+		routing: {
+			send: {
+				property: 'isMultilingual',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.post'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Include Project Source Language',
+		name: 'includeProjectSourceLanguage',
+		type: 'boolean',
+		default: false,
+		description: 'Add project source language to bundle',
+		routing: {
+			send: {
+				property: 'includeProjectSourceLanguage',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.post'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Source Language Export Pattern',
+		name: 'sourceLanguageExportPattern',
+		type: 'string',
+		default: '',
+		description: 'Source language export pattern. Works only when `includeProjectSourceLanguage` is enabled.\n\n__Note:__ Can\'t contain `: * ? " < > |` symbols',
+		routing: {
+			send: {
+				property: 'sourceLanguageExportPattern',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.post'
+				]
+			}
+		},
+		placeholder: 'strings-%two_letter_code%.resx'
+	},
+	{
+		displayName: 'Include In Context Pseudo Language',
+		name: 'includeInContextPseudoLanguage',
+		type: 'boolean',
+		default: true,
+		description: 'Add In-Context pseudo-language to bundle',
+		routing: {
+			send: {
+				property: 'includeInContextPseudoLanguage',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.post'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Label Ids',
+		name: 'labelIds',
+		type: 'multiOptions',
+		default: [],
+		description: 'Label Identifiers. Get via [List Labels](#operation/api.projects.labels.getMany)\n\n__Note:__ Can\'t be used when `format` is `null`',
+		routing: {
+			send: {
+				property: 'labelIds',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjectLabelsMulti',
+			loadOptionsDependsOn: [
+				'projectId'
+			]
+		}
+	},
+	{
+		displayName: 'Exclude Label Ids',
+		name: 'excludeLabelIds',
+		type: 'multiOptions',
+		default: [],
+		description: 'Label Identifiers. Get via [List Labels](#operation/api.projects.labels.getMany)\n\n__Note:__ Can\'t be used when `format` is `null`',
+		routing: {
+			send: {
+				property: 'excludeLabelIds',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjectLabelsMulti',
+			loadOptionsDependsOn: [
+				'projectId'
+			]
+		}
+	},
+	{
+		displayName: 'Label Match Rule',
+		name: 'labelMatchRule',
+		type: 'options',
+		default: '',
+		description: 'Match rule for labels:\n- "all" - all labels must be present in string\n- "any" - any of the labels must be present in string\n\n __Note:__ Can only be used when `labelIds` parameter is provided',
+		options: [
+			{
+				name: '-',
+				value: ''
+			},
+			{
+				name: 'all',
+				value: 'all'
+			},
+			{
+				name: 'any',
+				value: 'any'
+			}
+		],
+		routing: {
+			send: {
+				property: 'labelMatchRule',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.post'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Exclude Label Match Rule',
+		name: 'excludeLabelMatchRule',
+		type: 'options',
+		default: '',
+		description: 'Match rule for excluded labels:\n - "all" - all labels must be present in string\n - "any" - any of the labels must be present in string\n\n __Note:__ Can only be used when `excludeLabelIds` parameter is provided',
+		options: [
+			{
+				name: '-',
+				value: ''
+			},
+			{
+				name: 'all',
+				value: 'all'
+			},
+			{
+				name: 'any',
+				value: 'any'
+			}
+		],
+		routing: {
+			send: {
+				property: 'excludeLabelMatchRule',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.post'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Language Ids',
+		name: 'languageIds',
+		type: 'multiOptions',
+		default: [],
+		description: 'Language Identifiers. Get via [List Supported Languages](#operation/api.languages.getMany). If provided, bundle will only export specified languages. If not provided, bundle will export all project target languages.',
+		routing: {
+			send: {
+				property: 'languageIds',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getLanguagesMulti'
+		}
+	},
+	{
+		displayName: 'Project Id',
+		name: 'projectId',
+		required: true,
+		description: 'Project Identifier. Get via [List Projects](#operation/api.projects.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.get'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjects'
+		}
+	},
+	{
+		displayName: 'Bundle Id',
+		name: 'bundleId',
+		required: true,
+		description: 'Bundle Identifier. Get via [List Bundles](#operation/api.projects.bundles.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.get'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjectBundles',
+			loadOptionsDependsOn: [
+				'projectId'
+			]
+		}
+	},
+	{
+		displayName: 'Project Id',
+		name: 'projectId',
+		required: true,
+		description: 'Project Identifier. Get via [List Projects](#operation/api.projects.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.delete'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjects'
+		}
+	},
+	{
+		displayName: 'Bundle Id',
+		name: 'bundleId',
+		required: true,
+		description: 'Bundle Identifier. Get via [List Bundles](#operation/api.projects.bundles.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.delete'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjectBundles',
+			loadOptionsDependsOn: [
+				'projectId'
+			]
+		}
+	},
+	{
+		displayName: 'Project Id',
+		name: 'projectId',
+		required: true,
+		description: 'Project Identifier. Get via [List Projects](#operation/api.projects.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.patch'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjects'
+		}
+	},
+	{
+		displayName: 'Bundle Id',
+		name: 'bundleId',
+		required: true,
+		description: 'Bundle Identifier. Get via [List Bundles](#operation/api.projects.bundles.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.patch'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjectBundles',
+			loadOptionsDependsOn: [
+				'projectId'
+			]
+		}
+	},
+	{
+		displayName: 'Project Id',
+		name: 'projectId',
+		required: true,
+		description: 'Project Identifier. Get via [List Projects](#operation/api.projects.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.exports.download.get'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjects'
+		}
+	},
+	{
+		displayName: 'Bundle Id',
+		name: 'bundleId',
+		required: true,
+		description: 'Bundle Identifier. Get via [List Bundles](#operation/api.projects.bundles.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.exports.download.get'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjectBundles',
+			loadOptionsDependsOn: [
+				'projectId'
+			]
+		}
+	},
+	{
+		displayName: 'Export Id',
+		name: 'exportId',
+		required: true,
+		description: 'Export Identifier, consists of 36 characters. Get via [Export Bundle](#operation/api.projects.bundles.exports.post)',
+		default: '',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.exports.download.get'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Project Id',
+		name: 'projectId',
+		required: true,
+		description: 'Project Identifier. Get via [List Projects](#operation/api.projects.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.exports.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjects'
+		}
+	},
+	{
+		displayName: 'Bundle Id',
+		name: 'bundleId',
+		required: true,
+		description: 'Bundle Identifier. Get via [List Bundles](#operation/api.projects.bundles.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.exports.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjectBundles',
+			loadOptionsDependsOn: [
+				'projectId'
+			]
+		}
+	},
+	{
+		displayName: 'Target Language Ids',
+		name: 'targetLanguageIds',
+		type: 'multiOptions',
+		default: [],
+		description: 'Specify target languages for export. Get via [List Supported Languages](#operation/api.languages.getMany)\n\n * Leave this field empty to export all target languages',
+		routing: {
+			send: {
+				property: 'targetLanguageIds',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.exports.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getLanguagesMulti'
+		}
+	},
+	{
+		displayName: 'Skip Untranslated Strings',
+		name: 'skipUntranslatedStrings',
+		type: 'boolean',
+		default: false,
+		description: 'Defines whether to export only translated strings\n\n__Note:__ `true` value can\'t be used with `skipUntranslatedFiles=true` in same request',
+		routing: {
+			send: {
+				property: 'skipUntranslatedStrings',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.exports.post'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Skip Untranslated Files',
+		name: 'skipUntranslatedFiles',
+		type: 'boolean',
+		default: false,
+		description: 'Defines whether to export only translated files\n\n__Note:__ `true` value can\'t be used with `skipUntranslatedStrings=true` in same request',
+		routing: {
+			send: {
+				property: 'skipUntranslatedFiles',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.exports.post'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Export With Min Approvals Count',
+		name: 'exportWithMinApprovalsCount',
+		type: 'number',
+		default: 0,
+		description: 'Defines whether to export only strings with a minimum number of approvals\n\n__Note:__ value greater than `0` can\'t be used with `exportStringsThatPassedWorkflow=true` in same request',
+		routing: {
+			send: {
+				property: 'exportWithMinApprovalsCount',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value !== 0 ? $value : undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.exports.post'
+				]
+			}
+		},
+		placeholder: '0'
+	},
+	{
+		displayName: 'Export Strings That Passed Workflow',
+		name: 'exportStringsThatPassedWorkflow',
+		type: 'boolean',
+		default: true,
+		description: 'Defines whether to export only strings that passed workflow\n\n__Note:__ `true` value can\'t be used with `exportWithMinApprovalsCount > 0` in same request or in projects without an assigned workflow',
+		routing: {
+			send: {
+				property: 'exportStringsThatPassedWorkflow',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.exports.post'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Project Id',
+		name: 'projectId',
+		required: true,
+		description: 'Project Identifier. Get via [List Projects](#operation/api.projects.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.exports.get'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjects'
+		}
+	},
+	{
+		displayName: 'Bundle Id',
+		name: 'bundleId',
+		required: true,
+		description: 'Bundle Identifier. Get via [List Bundles](#operation/api.projects.bundles.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.exports.get'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjectBundles',
+			loadOptionsDependsOn: [
+				'projectId'
+			]
+		}
+	},
+	{
+		displayName: 'Export Id',
+		name: 'exportId',
+		required: true,
+		description: 'Export Identifier, consists of 36 characters. Get via [Export Bundle](#operation/api.projects.bundles.exports.post)',
+		default: '',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.exports.get'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Project Id',
+		name: 'projectId',
+		required: true,
+		description: 'Project Identifier. Get via [List Projects](#operation/api.projects.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.files.getMany'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjects'
+		}
+	},
+	{
+		displayName: 'Bundle Id',
+		name: 'bundleId',
+		required: true,
+		description: 'Bundle Identifier. Get via [List Bundles](#operation/api.projects.bundles.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.files.getMany'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjectBundles',
+			loadOptionsDependsOn: [
+				'projectId'
+			]
+		}
+	},
+	{
+		displayName: 'Limit',
+		name: 'limit',
+		description: 'Max number of results to return',
+		default: 50,
+		type: 'number',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'limit',
+				value: '={{ typeof $value === \'number\' ? $value : undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.files.getMany'
+				],
+				returnAll: [
+					false
+				]
+			}
+		},
+		typeOptions: {
+			minValue: 1
 		}
 	},
 	{
@@ -972,7 +2311,7 @@ export const translationsProperties: INodeProperties[] = [
 		name: 'skipApprovedTranslations',
 		type: 'boolean',
 		default: false,
-		description: 'Skip approved translations. Default is `false`\n\n__Note:__ Works only with TM pre-translation method',
+		description: 'Skip strings that already have approved translations. Default is `false`',
 		routing: {
 			send: {
 				property: 'skipApprovedTranslations',
@@ -993,14 +2332,126 @@ export const translationsProperties: INodeProperties[] = [
 		}
 	},
 	{
-		displayName: 'Translate Untranslated Only',
-		name: 'translateUntranslatedOnly',
-		type: 'boolean',
-		default: true,
-		description: 'Applies pre-translation for untranslated strings only. Default is `true`',
+		displayName: 'Scope',
+		name: 'scope',
+		type: 'options',
+		default: '',
+		description: 'Which strings to apply pre-translation to. Default is `untranslated`. Available values:\n- \'untranslated\' – strings without an existing translation (default)\n- \'translated\' – strings that already have a translation (re-translation)\n- \'all\' – both untranslated and translated strings\n\n__Note:__ Cannot be used together with the deprecated `translateUntranslatedOnly`.',
+		options: [
+			{
+				name: '-',
+				value: ''
+			},
+			{
+				name: 'untranslated',
+				value: 'untranslated'
+			},
+			{
+				name: 'translated',
+				value: 'translated'
+			},
+			{
+				name: 'all',
+				value: 'all'
+			}
+		],
 		routing: {
 			send: {
-				property: 'translateUntranslatedOnly',
+				property: 'scope',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.pre-translations.post'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Translation Modified Before',
+		name: 'dateTime:translationModifiedBefore',
+		type: 'dateTime',
+		default: '',
+		description: 'Re-translates only if a string\'s current translation was modified prior to this date. Useful after modifying contextual resources like screenshots, style guides, or glossaries.\n\n__Note:__ Has effect when `scope` is `translated` or `all`.',
+		routing: {
+			send: {
+				property: 'translationModifiedBefore',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.pre-translations.post'
+				]
+			}
+		},
+		placeholder: '2026-01-01T00:00:00+00:00'
+	},
+	{
+		displayName: 'Replace Translations Option',
+		name: 'replaceTranslationsOption',
+		type: 'options',
+		default: '',
+		description: 'Defines whether to replace existing translations with new pre-translations. Default is `none`. Available values:\n- \'none\' – add the new translation alongside existing ones (default)\n- \'autoTranslated\' – replace auto-generated translations (TM, MT, AI). Human translations are kept\n- \'all\' – replace all existing translations\n\n__Note:__ Has effect when `scope` is `translated` or `all`.',
+		options: [
+			{
+				name: '-',
+				value: ''
+			},
+			{
+				name: 'none',
+				value: 'none'
+			},
+			{
+				name: 'autoTranslated',
+				value: 'autoTranslated'
+			},
+			{
+				name: 'all',
+				value: 'all'
+			}
+		],
+		routing: {
+			send: {
+				property: 'replaceTranslationsOption',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.pre-translations.post'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Reset Approval Status',
+		name: 'resetApprovalStatus',
+		type: 'boolean',
+		default: false,
+		description: 'Removes approval on existing translations when applying pre-translations. Default is `false`.\n\n__Note:__ Cannot be used together with `autoApproveOption`. Has effect when `scope` is `translated` or `all`.',
+		routing: {
+			send: {
+				property: 'resetApprovalStatus',
 				propertyInDotNotation: false,
 				type: 'body',
 				value: '={{ $value }}'
@@ -1175,6 +2626,31 @@ export const translationsProperties: INodeProperties[] = [
 			loadOptionsDependsOn: [
 				'projectId'
 			]
+		}
+	},
+	{
+		displayName: 'Custom Instruction',
+		name: 'customInstruction',
+		type: 'string',
+		default: '',
+		description: 'Custom instruction for AI pre-translation. This instruction will be appended to the AI prompt text.\n\n__Note:__ Available only for AI pre-translation method',
+		routing: {
+			send: {
+				property: 'customInstruction',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.pre-translations.post'
+				]
+			}
 		}
 	},
 	{
@@ -2802,6 +4278,192 @@ export const translationsProperties: INodeProperties[] = [
 					'translations'
 				],
 				operation: [
+					'api.projects.bundles.patch'
+				]
+			}
+		},
+		options: [
+			{
+				displayName: 'Name',
+				name: 'name',
+				type: 'string',
+				default: '',
+				description: 'Defines name',
+				placeholder: 'Resx bundle'
+			},
+			{
+				displayName: 'Format',
+				name: 'format',
+				type: 'string',
+				default: '',
+				description: 'Defines export file format. If not provided, files will be exported in their original format.\n\n__Note:__ Required for strings-based projects',
+				placeholder: 'crowdin-resx'
+			},
+			{
+				displayName: 'Source Patterns',
+				name: 'sourcePatterns',
+				type: 'fixedCollection',
+				default: {},
+				typeOptions: {
+					multipleValues: true
+				},
+				placeholder: 'Add Item',
+				options: [
+					{
+						name: 'items',
+						displayName: 'Items',
+						values: [
+							{
+								displayName: 'Value',
+								name: '_value',
+								type: 'string',
+								default: ''
+							}
+						]
+					}
+				]
+			},
+			{
+				displayName: 'Ignore Patterns',
+				name: 'ignorePatterns',
+				type: 'fixedCollection',
+				default: {},
+				typeOptions: {
+					multipleValues: true
+				},
+				placeholder: 'Add Item',
+				options: [
+					{
+						name: 'items',
+						displayName: 'Items',
+						values: [
+							{
+								displayName: 'Value',
+								name: '_value',
+								type: 'string',
+								default: ''
+							}
+						]
+					}
+				]
+			},
+			{
+				displayName: 'Export Pattern',
+				name: 'exportPattern',
+				type: 'string',
+				default: '',
+				description: 'Bundle export pattern. Defines bundle name in resulting translations bundle. **Required** if `format` is specified. If `format` is not specified, uses default pattern based on file structure\n\n__Note:__ Can\'t contain `: * ? " < > |` symbols',
+				placeholder: 'strings-%two_letter_code%.resx'
+			},
+			{
+				displayName: 'Is Multilingual',
+				name: 'isMultilingual',
+				type: 'boolean',
+				default: false,
+				description: 'Export translations in multilingual file'
+			},
+			{
+				displayName: 'Include Project Source Language',
+				name: 'includeProjectSourceLanguage',
+				type: 'boolean',
+				default: false,
+				description: 'Add project source language to bundle'
+			},
+			{
+				displayName: 'Include In Context Pseudo Language',
+				name: 'includeInContextPseudoLanguage',
+				type: 'boolean',
+				default: true,
+				description: 'Add In-Context pseudo-language to bundle'
+			},
+			{
+				displayName: 'Label Ids',
+				name: 'labelIds',
+				type: 'multiOptions',
+				default: [],
+				description: 'Label Identifiers. Get via [List Labels](#operation/api.projects.labels.getMany)\n\n__Note:__ Can\'t be used when `format` is `null`',
+				typeOptions: {
+					loadOptionsMethod: 'getProjectLabelsMulti',
+					loadOptionsDependsOn: [
+						'projectId'
+					]
+				}
+			},
+			{
+				displayName: 'Exclude Label Ids',
+				name: 'excludeLabelIds',
+				type: 'multiOptions',
+				default: [],
+				description: 'Label Identifiers. Get via [List Labels](#operation/api.projects.labels.getMany)\n\n__Note:__ Can\'t be used when `format` is `null`',
+				typeOptions: {
+					loadOptionsMethod: 'getProjectLabelsMulti',
+					loadOptionsDependsOn: [
+						'projectId'
+					]
+				}
+			},
+			{
+				displayName: 'Label Match Rule',
+				name: 'labelMatchRule',
+				type: 'options',
+				default: '',
+				description: 'Match rule for labels:\n- "all" - all labels must be present in string\n- "any" - any of the labels must be present in string\n\n __Note:__ Can only be used when `labelIds` parameter is provided',
+				options: [
+					{
+						name: '-',
+						value: ''
+					},
+					{
+						name: 'all',
+						value: 'all'
+					},
+					{
+						name: 'any',
+						value: 'any'
+					}
+				]
+			},
+			{
+				displayName: 'Exclude Label Match Rule',
+				name: 'excludeLabelMatchRule',
+				type: 'options',
+				default: '',
+				description: 'Match rule for excluded labels:\n - "all" - all labels must be present in string\n - "any" - any of the labels must be present in string\n\n __Note:__ Can only be used when `excludeLabelIds` parameter is provided',
+				options: [
+					{
+						name: '-',
+						value: ''
+					},
+					{
+						name: 'all',
+						value: 'all'
+					},
+					{
+						name: 'any',
+						value: 'any'
+					}
+				]
+			}
+		],
+		routing: {
+			send: {
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		}
+	},
+	{
+		displayName: 'Update Fields',
+		name: 'updateFields',
+		type: 'collection',
+		placeholder: 'Add Field',
+		default: {},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
 					'api.projects.pre-translations.patch'
 				]
 			}
@@ -2870,6 +4532,40 @@ export const translationsProperties: INodeProperties[] = [
 			send: {
 				type: 'body',
 				value: '={{ $value }}'
+			}
+		}
+	},
+	{
+		displayName: 'Return All',
+		name: 'returnAll',
+		type: 'boolean',
+		default: true,
+		description: 'Whether to return all results or only up to a given limit',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.getMany'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Return All',
+		name: 'returnAll',
+		type: 'boolean',
+		default: true,
+		description: 'Whether to return all results or only up to a given limit',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.bundles.files.getMany'
+				]
 			}
 		}
 	},

@@ -1584,6 +1584,32 @@ export const tasksProperties: INodeProperties[] = [
 		}
 	},
 	{
+		displayName: 'Batch Id',
+		name: 'batchId',
+		description: 'Filter by task batch. Get `batchId` via [List Tasks](#operation/api.projects.tasks.getMany)',
+		default: 0,
+		type: 'number',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'batchId',
+				value: '={{ $value !== 0 ? $value : undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'tasks'
+				],
+				operation: [
+					'api.projects.tasks.getMany'
+				]
+			}
+		},
+		placeholder: '0'
+	},
+	{
 		displayName: 'Project Id',
 		name: 'projectId',
 		required: true,
@@ -1622,8 +1648,8 @@ export const tasksProperties: INodeProperties[] = [
 		},
 		options: [
 			{
-				displayName: 'Enterprise Task Create Form',
-				name: '_enterpriseTaskCreateForm',
+				displayName: 'Task Create Form',
+				name: '_taskCreateForm',
 				values: [
 					{
 						displayName: 'Form Type',
@@ -1633,7 +1659,7 @@ export const tasksProperties: INodeProperties[] = [
 						description: 'Select the form type',
 						options: [
 							{
-								displayName: 'CreateByFileIdsForm',
+								displayName: 'Create By File Ids Form',
 								name: '_createByFileIdsForm',
 								values: [
 									{
@@ -1970,11 +1996,19 @@ export const tasksProperties: INodeProperties[] = [
 										typeOptions: {
 											loadOptionsMethod: 'getReportSettingsTemplates'
 										}
+									},
+									{
+										displayName: 'Batch Id',
+										name: 'batchId',
+										type: 'number',
+										default: 0,
+										description: 'Task Batch Identifier. Get via [List Tasks](#operation/api.projects.tasks.getMany). Allows grouping tasks into a batch',
+										placeholder: '1'
 									}
 								]
 							},
 							{
-								displayName: 'CreateByStringIdsForm',
+								displayName: 'Create By String Ids Form',
 								name: '_createByStringIdsForm',
 								values: [
 									{
@@ -2243,6 +2277,14 @@ export const tasksProperties: INodeProperties[] = [
 										typeOptions: {
 											loadOptionsMethod: 'getReportSettingsTemplates'
 										}
+									},
+									{
+										displayName: 'Batch Id',
+										name: 'batchId',
+										type: 'number',
+										default: 0,
+										description: 'Task Batch Identifier. Get via [List Tasks](#operation/api.projects.tasks.getMany). Allows grouping tasks into a batch',
+										placeholder: '1'
 									}
 								]
 							}
@@ -2251,8 +2293,8 @@ export const tasksProperties: INodeProperties[] = [
 				]
 			},
 			{
-				displayName: 'Enterprise Vendor Task Create Form',
-				name: '_enterpriseVendorTaskCreateForm',
+				displayName: 'Vendor Task Create Form',
+				name: '_vendorTaskCreateForm',
 				values: [
 					{
 						displayName: 'Form Type',
@@ -2262,7 +2304,7 @@ export const tasksProperties: INodeProperties[] = [
 						description: 'Select the form type',
 						options: [
 							{
-								displayName: 'CreateByFileIdsForm',
+								displayName: 'Create By File Ids Form',
 								name: '_createByFileIdsForm',
 								values: [
 									{
@@ -2474,7 +2516,7 @@ export const tasksProperties: INodeProperties[] = [
 								]
 							},
 							{
-								displayName: 'CreateByStringIdsForm',
+								displayName: 'Create By String Ids Form',
 								name: '_createByStringIdsForm',
 								values: [
 									{
@@ -2656,8 +2698,8 @@ export const tasksProperties: INodeProperties[] = [
 				]
 			},
 			{
-				displayName: 'Enterprise Pending Task Create Form',
-				name: '_enterprisePendingTaskCreateForm',
+				displayName: 'Pending Task Create Form',
+				name: '_pendingTaskCreateForm',
 				values: [
 					{
 						displayName: 'Preceding Task Id',
@@ -2678,7 +2720,7 @@ export const tasksProperties: INodeProperties[] = [
 						name: 'type',
 						type: 'options',
 						default: '',
-						description: 'Task type:\n * 1 - proofread\n\n__Note:__ One of fields `type` or `workflowStepId` is required. Both cannot be provided simultaneously',
+						description: 'Task type:\n * 1 - proofread\n * 3 - proofread by vendor (requires `vendor` field)\n\n__Note:__ One of fields `type` or `workflowStepId` is required. Both cannot be provided simultaneously',
 						options: [
 							{
 								name: '-',
@@ -2687,6 +2729,10 @@ export const tasksProperties: INodeProperties[] = [
 							{
 								name: '1',
 								value: 1
+							},
+							{
+								name: '3',
+								value: 3
 							}
 						]
 					},
@@ -2717,6 +2763,13 @@ export const tasksProperties: INodeProperties[] = [
 						type: 'string',
 						default: '',
 						description: 'Task description'
+					},
+					{
+						displayName: 'Vendor',
+						name: 'vendor',
+						type: 'string',
+						default: '',
+						description: 'Vendor identifier. Required when `type` is `3`. Get via [List Vendors](#operation/api.projects.vendors.getMany)'
 					},
 					{
 						displayName: 'Assignees',
