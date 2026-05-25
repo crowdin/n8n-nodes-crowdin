@@ -1928,15 +1928,15 @@ export const glossariesProperties: INodeProperties[] = [
 	{
 		displayName: 'Author Ids',
 		name: 'authorIds',
-		type: 'fixedCollection',
-		default: {},
+		type: 'multiOptions',
+		default: [],
 		description: 'Filter terms by one or more authors. Up to 50 values.',
 		routing: {
 			send: {
 				property: 'authorIds',
 				propertyInDotNotation: false,
 				type: 'body',
-				value: '={{ $value.items?.map(i => i._value) || undefined }}'
+				value: '={{ $value }}'
 			}
 		},
 		displayOptions: {
@@ -1950,24 +1950,8 @@ export const glossariesProperties: INodeProperties[] = [
 			}
 		},
 		typeOptions: {
-			multipleValues: true
-		},
-		placeholder: 'Add Item',
-		options: [
-			{
-				displayName: 'Items',
-				name: 'items',
-				values: [
-					{
-						displayName: 'Value',
-						name: '_value',
-						type: 'number',
-						default: 0,
-						placeholder: '0'
-					}
-				]
-			}
-		]
+			loadOptionsMethod: 'getUsersMulti'
+		}
 	},
 	{
 		displayName: 'Language Ids',

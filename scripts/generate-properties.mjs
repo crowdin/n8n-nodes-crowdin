@@ -272,6 +272,7 @@ const MULTI_SELECT_OPTIONS = {
 	glossaryIds: { method: 'getGlossaries' },
 	teamIds: { method: 'getTeams' },
 	userIds: { method: 'getUsers' },
+	authorIds: { method: 'getUsers' },
 	taskReviewerIds: { method: 'getUsers' },
 	assigneeIds: { method: 'getUsers' },
 	creatorIds: { method: 'getUsers' },
