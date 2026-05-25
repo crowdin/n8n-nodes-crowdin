@@ -1556,6 +1556,32 @@ export const tasksProperties: INodeProperties[] = [
 		placeholder: '123'
 	},
 	{
+		displayName: 'Batch Id',
+		name: 'batchId',
+		description: 'Filter by task batch. Get `batchId` via [List Tasks](#operation/api.projects.tasks.getMany)',
+		default: 0,
+		type: 'number',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'batchId',
+				value: '={{ $value !== 0 ? $value : undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'tasks'
+				],
+				operation: [
+					'api.projects.tasks.getMany'
+				]
+			}
+		},
+		placeholder: '0'
+	},
+	{
 		displayName: 'Project Id',
 		name: 'projectId',
 		required: true,
@@ -1594,8 +1620,8 @@ export const tasksProperties: INodeProperties[] = [
 		},
 		options: [
 			{
-				displayName: 'Crowdin Task Create Form',
-				name: '_crowdinTaskCreateForm',
+				displayName: 'Task Create',
+				name: '_taskCreate',
 				values: [
 					{
 						displayName: 'Form Type',
@@ -1605,7 +1631,7 @@ export const tasksProperties: INodeProperties[] = [
 						description: 'Select the form type',
 						options: [
 							{
-								displayName: 'CreateByBranchIdsForm',
+								displayName: 'Create By Branch Ids Form',
 								name: '_createByBranchIdsForm',
 								values: [
 									{
@@ -1886,11 +1912,19 @@ export const tasksProperties: INodeProperties[] = [
 										typeOptions: {
 											loadOptionsMethod: 'getReportSettingsTemplates'
 										}
+									},
+									{
+										displayName: 'Batch Id',
+										name: 'batchId',
+										type: 'number',
+										default: 0,
+										description: 'Task Batch Identifier. Get via [List Tasks](#operation/api.projects.tasks.getMany). Allows grouping tasks into a batch',
+										placeholder: '1'
 									}
 								]
 							},
 							{
-								displayName: 'CreateByStringIdsForm',
+								displayName: 'Create By String Ids Form',
 								name: '_createByStringIdsForm',
 								values: [
 									{
@@ -2103,1523 +2137,14 @@ export const tasksProperties: INodeProperties[] = [
 										typeOptions: {
 											loadOptionsMethod: 'getReportSettingsTemplates'
 										}
-									}
-								]
-							}
-						]
-					}
-				]
-			},
-			{
-				displayName: 'Crowdin Language Service Task Create Form',
-				name: '_crowdinLanguageServiceTaskCreateForm',
-				values: [
-					{
-						displayName: 'Form Type',
-						name: '_subType',
-						type: 'fixedCollection',
-						default: {},
-						description: 'Select the form type',
-						options: [
-							{
-								displayName: 'CreateByBranchIdsForm',
-								name: '_createByBranchIdsForm',
-								values: [
-									{
-										displayName: 'Title',
-										name: 'title',
-										type: 'string',
-										default: '',
-										description: 'Task title',
-										required: true
-									},
-									{
-										displayName: 'Language Id',
-										name: 'languageId',
-										type: 'options',
-										default: '',
-										description: 'Task Language Identifier. Get via [Project Target Languages](#operation/api.projects.get)',
-										required: true,
-										typeOptions: {
-											loadOptionsMethod: 'getLanguages'
-										}
-									},
-									{
-										displayName: 'Type',
-										name: 'type',
-										type: 'options',
-										default: 2,
-										description: 'Task type:\n * 2 - translate by vendor\n * 3 - proofread by vendor',
-										required: true,
-										options: [
-											{
-												name: '2',
-												value: 2
-											},
-											{
-												name: '3',
-												value: 3
-											}
-										]
-									},
-									{
-										displayName: 'Vendor',
-										name: 'vendor',
-										type: 'string',
-										default: '',
-										description: 'Task vendor:\n * Crowdin Language Services',
-										required: true
-									},
-									{
-										displayName: 'Branch Ids',
-										name: 'branchIds',
-										type: 'multiOptions',
-										typeOptions: {
-											loadOptionsMethod: 'getBranchesMulti',
-											loadOptionsDependsOn: [
-												'projectId'
-											]
-										},
-										default: [],
-										description: 'Array of branch ids. Get via [List Branches](#operation/api.projects.branches.getMany)',
-										required: true
-									},
-									{
-										displayName: 'Label Ids',
-										name: 'labelIds',
-										type: 'multiOptions',
-										typeOptions: {
-											loadOptionsMethod: 'getProjectLabelsMulti',
-											loadOptionsDependsOn: [
-												'projectId'
-											]
-										},
-										default: [],
-										description: 'Label Identifiers. Get via [List Labels](#operation/api.projects.labels.getMany)'
-									},
-									{
-										displayName: 'Label Match Rule',
-										name: 'labelMatchRule',
-										type: 'options',
-										default: '',
-										description: 'Match rule for labels:\n- "all" - all labels must be present in string\n- "any" - any of the labels must be present in string\n\n__Note:__ Can only be used when `labelIds` parameter is provided',
-										options: [
-											{
-												name: '-',
-												value: ''
-											},
-											{
-												name: 'all',
-												value: 'all'
-											},
-											{
-												name: 'any',
-												value: 'any'
-											}
-										]
-									},
-									{
-										displayName: 'Exclude Label Ids',
-										name: 'excludeLabelIds',
-										type: 'multiOptions',
-										typeOptions: {
-											loadOptionsMethod: 'getProjectLabelsMulti',
-											loadOptionsDependsOn: [
-												'projectId'
-											]
-										},
-										default: [],
-										description: 'Label Identifiers. Get via [List Labels](#operation/api.projects.labels.getMany)'
-									},
-									{
-										displayName: 'Exclude Label Match Rule',
-										name: 'excludeLabelMatchRule',
-										type: 'options',
-										default: '',
-										description: 'Match rule for excluded labels:\n- "all" - all labels must be present in string\n- "any" - any of the labels must be present in string\n\n__Note:__ Can only be used when `excludeLabelIds` parameter is provided',
-										options: [
-											{
-												name: '-',
-												value: ''
-											},
-											{
-												name: 'all',
-												value: 'all'
-											},
-											{
-												name: 'any',
-												value: 'any'
-											}
-										]
-									},
-									{
-										displayName: 'Status',
-										name: 'status',
-										type: 'options',
-										default: '',
-										description: 'Task status',
-										options: [
-											{
-												name: '-',
-												value: ''
-											},
-											{
-												name: 'todo',
-												value: 'todo'
-											},
-											{
-												name: 'in_progress',
-												value: 'in_progress'
-											}
-										]
-									},
-									{
-										displayName: 'Description',
-										name: 'description',
-										type: 'string',
-										default: '',
-										description: 'Task description'
-									},
-									{
-										displayName: 'Include Pre Translated Strings Only',
-										name: 'includePreTranslatedStringsOnly',
-										type: 'boolean',
-										default: false,
-										description: 'Defines whether to include only pretranslated strings',
-										placeholder: 'true'
-									},
-									{
-										displayName: 'Date From',
-										name: 'dateTime:dateFrom',
-										type: 'dateTime',
-										default: '',
-										description: 'Defines start date for interval when strings were modified\n\n __Format:__ UTC, ISO 8601',
-										placeholder: '2019-09-23T07:00:14+00:00'
-									},
-									{
-										displayName: 'Date To',
-										name: 'dateTime:dateTo',
-										type: 'dateTime',
-										default: '',
-										description: 'Defines end date for interval when strings were modified\n\n __Format:__ UTC, ISO 8601',
-										placeholder: '2019-09-27T07:00:14+00:00'
-									},
-									{
-										displayName: 'Translations Updated Date From',
-										name: 'dateTime:translationsUpdatedDateFrom',
-										type: 'dateTime',
-										default: '',
-										description: 'Defines start date for interval when translation were updated (proofread tasks only)\n\n __Format:__ UTC, ISO 8601',
-										placeholder: '2019-09-23T07:00:14+00:00'
-									},
-									{
-										displayName: 'Translations Updated Date To',
-										name: 'dateTime:translationsUpdatedDateTo',
-										type: 'dateTime',
-										default: '',
-										description: 'Defines end date for interval when translation were updated (proofread tasks only)\n\n __Format:__ UTC, ISO 8601',
-										placeholder: '2019-09-27T07:00:14+00:00'
-									},
-									{
-										displayName: 'Generate Cost Estimate',
-										name: 'generateCostEstimate',
-										type: 'boolean',
-										default: false,
-										description: 'Generate cost estimate report for the task. Requires `reportSettingsTemplateId`',
-										placeholder: 'false'
-									},
-									{
-										displayName: 'Generate Translation Cost',
-										name: 'generateTranslationCost',
-										type: 'boolean',
-										default: false,
-										description: 'Generate translation cost report for the task. Requires `reportSettingsTemplateId`',
-										placeholder: 'false'
-									},
-									{
-										displayName: 'Report Settings Template Id',
-										name: 'reportSettingsTemplateId',
-										type: 'options',
-										default: '',
-										description: 'Report Settings Templates Identifier. Get via [List Report Settings Templates](#operation/api.projects.reports.settings-templates.getMany). Required when `generateCostEstimate` or `generateTranslationCost` is `true`',
-										typeOptions: {
-											loadOptionsMethod: 'getReportSettingsTemplates'
-										}
-									}
-								]
-							},
-							{
-								displayName: 'CreateByStringIdsForm',
-								name: '_createByStringIdsForm',
-								values: [
-									{
-										displayName: 'Title',
-										name: 'title',
-										type: 'string',
-										default: '',
-										description: 'Task title',
-										required: true
-									},
-									{
-										displayName: 'Language Id',
-										name: 'languageId',
-										type: 'options',
-										default: '',
-										description: 'Task Language Identifier. Get via [Project Target Languages](#operation/api.projects.get)',
-										required: true,
-										typeOptions: {
-											loadOptionsMethod: 'getLanguages'
-										}
-									},
-									{
-										displayName: 'Type',
-										name: 'type',
-										type: 'options',
-										default: 2,
-										description: 'Task type:\n * 2 - translate by vendor\n * 3 - proofread by vendor',
-										required: true,
-										options: [
-											{
-												name: '2',
-												value: 2
-											},
-											{
-												name: '3',
-												value: 3
-											}
-										]
-									},
-									{
-										displayName: 'Vendor',
-										name: 'vendor',
-										type: 'string',
-										default: '',
-										description: 'Task vendor:\n * "crowdin_language_service" - Crowdin Language Services',
-										required: true
-									},
-									{
-										displayName: 'String Ids',
-										name: 'stringIds',
-										type: 'multiOptions',
-										typeOptions: {
-											loadOptionsMethod: 'getProjectStringsMulti',
-											loadOptionsDependsOn: [
-												'projectId'
-											]
-										},
-										default: [],
-										description: 'Task String Identifiers. Get via [List Strings](#operation/api.projects.strings.getMany)',
-										required: true
-									},
-									{
-										displayName: 'Status',
-										name: 'status',
-										type: 'options',
-										default: '',
-										description: 'Task status',
-										options: [
-											{
-												name: '-',
-												value: ''
-											},
-											{
-												name: 'todo',
-												value: 'todo'
-											},
-											{
-												name: 'in_progress',
-												value: 'in_progress'
-											}
-										]
-									},
-									{
-										displayName: 'Description',
-										name: 'description',
-										type: 'string',
-										default: '',
-										description: 'Task description'
-									},
-									{
-										displayName: 'Include Pre Translated Strings Only',
-										name: 'includePreTranslatedStringsOnly',
-										type: 'boolean',
-										default: false,
-										description: 'Defines whether to include only pretranslated strings',
-										placeholder: 'true'
-									},
-									{
-										displayName: 'Date From',
-										name: 'dateTime:dateFrom',
-										type: 'dateTime',
-										default: '',
-										description: 'Defines start date for interval when strings were modified\n\n __Format:__ UTC, ISO 8601',
-										placeholder: '2019-09-23T07:00:14+00:00'
-									},
-									{
-										displayName: 'Date To',
-										name: 'dateTime:dateTo',
-										type: 'dateTime',
-										default: '',
-										description: 'Defines end date for interval when strings were modified\n\n __Format:__ UTC, ISO 8601',
-										placeholder: '2019-09-27T07:00:14+00:00'
-									},
-									{
-										displayName: 'Translations Updated Date From',
-										name: 'dateTime:translationsUpdatedDateFrom',
-										type: 'dateTime',
-										default: '',
-										description: 'Defines start date for interval when translation were updated (proofread tasks only)\n\n __Format:__ UTC, ISO 8601',
-										placeholder: '2019-09-23T07:00:14+00:00'
-									},
-									{
-										displayName: 'Translations Updated Date To',
-										name: 'dateTime:translationsUpdatedDateTo',
-										type: 'dateTime',
-										default: '',
-										description: 'Defines end date for interval when translation were updated (proofread tasks only)\n\n __Format:__ UTC, ISO 8601',
-										placeholder: '2019-09-27T07:00:14+00:00'
-									},
-									{
-										displayName: 'Generate Cost Estimate',
-										name: 'generateCostEstimate',
-										type: 'boolean',
-										default: false,
-										description: 'Generate cost estimate report for the task. Requires `reportSettingsTemplateId`',
-										placeholder: 'false'
-									},
-									{
-										displayName: 'Report Settings Template Id',
-										name: 'reportSettingsTemplateId',
-										type: 'options',
-										default: '',
-										description: 'Report Settings Templates Identifier. Get via [List Report Settings Templates](#operation/api.projects.reports.settings-templates.getMany). Required when `generateCostEstimate` is `true`',
-										typeOptions: {
-											loadOptionsMethod: 'getReportSettingsTemplates'
-										}
-									}
-								]
-							}
-						]
-					}
-				]
-			},
-			{
-				displayName: 'Crowdin Vendor Oht Task Create Form',
-				name: '_crowdinVendorOhtTaskCreateForm',
-				values: [
-					{
-						displayName: 'Form Type',
-						name: '_subType',
-						type: 'fixedCollection',
-						default: {},
-						description: 'Select the form type',
-						options: [
-							{
-								displayName: 'CreateByBranchIdsForm',
-								name: '_createByBranchIdsForm',
-								values: [
-									{
-										displayName: 'Title',
-										name: 'title',
-										type: 'string',
-										default: '',
-										description: 'Task title',
-										required: true
-									},
-									{
-										displayName: 'Language Id',
-										name: 'languageId',
-										type: 'options',
-										default: '',
-										description: 'Task Language Identifier. Get via [Project Target Languages](#operation/api.projects.get)',
-										required: true,
-										typeOptions: {
-											loadOptionsMethod: 'getLanguages'
-										}
-									},
-									{
-										displayName: 'Type',
-										name: 'type',
-										type: 'options',
-										default: 2,
-										description: 'Task type:\n * 2 - translate by vendor\n * 3 - proofread by vendor',
-										required: true,
-										options: [
-											{
-												name: '2',
-												value: 2
-											},
-											{
-												name: '3',
-												value: 3
-											}
-										]
-									},
-									{
-										displayName: 'Vendor',
-										name: 'vendor',
-										type: 'string',
-										default: '',
-										description: 'Task vendor:\n * "oht" - OneHourTranslation',
-										required: true
-									},
-									{
-										displayName: 'Branch Ids',
-										name: 'branchIds',
-										type: 'multiOptions',
-										typeOptions: {
-											loadOptionsMethod: 'getBranchesMulti',
-											loadOptionsDependsOn: [
-												'projectId'
-											]
-										},
-										default: [],
-										description: 'Array of branch ids. Get via [List Branches](#operation/api.projects.branches.getMany)',
-										required: true
-									},
-									{
-										displayName: 'Label Ids',
-										name: 'labelIds',
-										type: 'multiOptions',
-										typeOptions: {
-											loadOptionsMethod: 'getProjectLabelsMulti',
-											loadOptionsDependsOn: [
-												'projectId'
-											]
-										},
-										default: [],
-										description: 'Label Identifiers. Get via [List Labels](#operation/api.projects.labels.getMany)'
-									},
-									{
-										displayName: 'Label Match Rule',
-										name: 'labelMatchRule',
-										type: 'options',
-										default: '',
-										description: 'Match rule for labels:\n- "all" - all labels must be present in string\n- "any" - any of the labels must be present in string\n\n __Note:__ Can only be used when `labelIds` parameter is provided',
-										options: [
-											{
-												name: '-',
-												value: ''
-											},
-											{
-												name: 'all',
-												value: 'all'
-											},
-											{
-												name: 'any',
-												value: 'any'
-											}
-										]
-									},
-									{
-										displayName: 'Exclude Label Ids',
-										name: 'excludeLabelIds',
-										type: 'multiOptions',
-										typeOptions: {
-											loadOptionsMethod: 'getProjectLabelsMulti',
-											loadOptionsDependsOn: [
-												'projectId'
-											]
-										},
-										default: [],
-										description: 'Label Identifiers. Get via [List Labels](#operation/api.projects.labels.getMany)'
-									},
-									{
-										displayName: 'Exclude Label Match Rule',
-										name: 'excludeLabelMatchRule',
-										type: 'options',
-										default: '',
-										description: 'Match rule for excluded labels:\n- "all" - all labels must be present in string\n- "any" - any of the labels must be present in string\n\n __Note:__ Can only be used when `excludeLabelIds` parameter is provided',
-										options: [
-											{
-												name: '-',
-												value: ''
-											},
-											{
-												name: 'all',
-												value: 'all'
-											},
-											{
-												name: 'any',
-												value: 'any'
-											}
-										]
-									},
-									{
-										displayName: 'Status',
-										name: 'status',
-										type: 'options',
-										default: '',
-										description: 'Task status',
-										options: [
-											{
-												name: '-',
-												value: ''
-											},
-											{
-												name: 'todo',
-												value: 'todo'
-											},
-											{
-												name: 'in_progress',
-												value: 'in_progress'
-											}
-										]
-									},
-									{
-										displayName: 'Description',
-										name: 'description',
-										type: 'string',
-										default: '',
-										description: 'Task description'
-									},
-									{
-										displayName: 'Expertise',
-										name: 'expertise',
-										type: 'options',
-										default: '',
-										description: 'Task expertise:\n *  "standard"\n *  "mobile-applications"\n *  "software-it"\n *  "gaming-video-games"\n *  "technical-engineering"\n *  "marketing-consumer-media"\n *  "business-finance"\n *  "legal-certificate"\n *  "medical"\n *  "ad-words-banners"\n *  "automotive-aerospace"\n *  "scientific"\n *  "scientific-academic"\n *  "tourism"\n *  "training-employee-handbooks"\n *  "forex-crypto"',
-										options: [
-											{
-												name: '-',
-												value: ''
-											},
-											{
-												name: 'standard',
-												value: 'standard'
-											},
-											{
-												name: 'mobile-applications',
-												value: 'mobile-applications'
-											},
-											{
-												name: 'software-it',
-												value: 'software-it'
-											},
-											{
-												name: 'gaming-video-games',
-												value: 'gaming-video-games'
-											},
-											{
-												name: 'technical-engineering',
-												value: 'technical-engineering'
-											},
-											{
-												name: 'marketing-consumer-media',
-												value: 'marketing-consumer-media'
-											},
-											{
-												name: 'business-finance',
-												value: 'business-finance'
-											},
-											{
-												name: 'legal-certificate',
-												value: 'legal-certificate'
-											},
-											{
-												name: 'medical',
-												value: 'medical'
-											},
-											{
-												name: 'ad-words-banners',
-												value: 'ad-words-banners'
-											},
-											{
-												name: 'automotive-aerospace',
-												value: 'automotive-aerospace'
-											},
-											{
-												name: 'scientific',
-												value: 'scientific'
-											},
-											{
-												name: 'scientific-academic',
-												value: 'scientific-academic'
-											},
-											{
-												name: 'tourism',
-												value: 'tourism'
-											},
-											{
-												name: 'training-employee-handbooks',
-												value: 'training-employee-handbooks'
-											},
-											{
-												name: 'forex-crypto',
-												value: 'forex-crypto'
-											}
-										]
-									},
-									{
-										displayName: 'Edit Service',
-										name: 'editService',
-										type: 'boolean',
-										default: false,
-										description: 'Enables Edit stage for all jobs',
-										placeholder: 'true'
-									},
-									{
-										displayName: 'Include Pre Translated Strings Only',
-										name: 'includePreTranslatedStringsOnly',
-										type: 'boolean',
-										default: false,
-										description: 'Defines whether to include only pretranslated strings',
-										placeholder: 'true'
-									},
-									{
-										displayName: 'Date From',
-										name: 'dateTime:dateFrom',
-										type: 'dateTime',
-										default: '',
-										description: 'Defines start date for interval when strings were modified\n\n __Format:__ UTC, ISO 8601',
-										placeholder: '2019-09-23T07:00:14+00:00'
-									},
-									{
-										displayName: 'Date To',
-										name: 'dateTime:dateTo',
-										type: 'dateTime',
-										default: '',
-										description: 'Defines end date for interval when strings were modified\n\n __Format:__ UTC, ISO 8601',
-										placeholder: '2019-09-27T07:00:14+00:00'
-									},
-									{
-										displayName: 'Translations Updated Date From',
-										name: 'dateTime:translationsUpdatedDateFrom',
-										type: 'dateTime',
-										default: '',
-										description: 'Defines start date for interval when translation were updated (proofread tasks only)\n\n __Format:__ UTC, ISO 8601',
-										placeholder: '2019-09-23T07:00:14+00:00'
-									},
-									{
-										displayName: 'Translations Updated Date To',
-										name: 'dateTime:translationsUpdatedDateTo',
-										type: 'dateTime',
-										default: '',
-										description: 'Defines end date for interval when translation were updated (proofread tasks only)\n\n __Format:__ UTC, ISO 8601',
-										placeholder: '2019-09-27T07:00:14+00:00'
-									},
-									{
-										displayName: 'Generate Cost Estimate',
-										name: 'generateCostEstimate',
-										type: 'boolean',
-										default: false,
-										description: 'Generate cost estimate report for the task. Requires `reportSettingsTemplateId`',
-										placeholder: 'false'
-									},
-									{
-										displayName: 'Generate Translation Cost',
-										name: 'generateTranslationCost',
-										type: 'boolean',
-										default: false,
-										description: 'Generate translation cost report for the task. Requires `reportSettingsTemplateId`',
-										placeholder: 'false'
-									},
-									{
-										displayName: 'Report Settings Template Id',
-										name: 'reportSettingsTemplateId',
-										type: 'options',
-										default: '',
-										description: 'Report Settings Templates Identifier. Get via [List Report Settings Templates](#operation/api.projects.reports.settings-templates.getMany). Required when `generateCostEstimate` or `generateTranslationCost` is `true`',
-										typeOptions: {
-											loadOptionsMethod: 'getReportSettingsTemplates'
-										}
-									}
-								]
-							},
-							{
-								displayName: 'CreateByStringIdsForm',
-								name: '_createByStringIdsForm',
-								values: [
-									{
-										displayName: 'Title',
-										name: 'title',
-										type: 'string',
-										default: '',
-										description: 'Task title',
-										required: true
-									},
-									{
-										displayName: 'Language Id',
-										name: 'languageId',
-										type: 'options',
-										default: '',
-										description: 'Task Language Identifier. Get via [Project Target Languages](#operation/api.projects.get)',
-										required: true,
-										typeOptions: {
-											loadOptionsMethod: 'getLanguages'
-										}
-									},
-									{
-										displayName: 'Type',
-										name: 'type',
-										type: 'options',
-										default: 2,
-										description: 'Task type:\n * 2 - translate by vendor\n * 3 - proofread by vendor',
-										required: true,
-										options: [
-											{
-												name: '2',
-												value: 2
-											},
-											{
-												name: '3',
-												value: 3
-											}
-										]
-									},
-									{
-										displayName: 'Vendor',
-										name: 'vendor',
-										type: 'string',
-										default: '',
-										description: 'Task vendor:\n * "oht" - OneHourTranslation',
-										required: true
-									},
-									{
-										displayName: 'String Ids',
-										name: 'stringIds',
-										type: 'multiOptions',
-										typeOptions: {
-											loadOptionsMethod: 'getProjectStringsMulti',
-											loadOptionsDependsOn: [
-												'projectId'
-											]
-										},
-										default: [],
-										description: 'Task String Identifiers. Get via [List Strings](#operation/api.projects.strings.getMany)',
-										required: true
-									},
-									{
-										displayName: 'Status',
-										name: 'status',
-										type: 'options',
-										default: '',
-										description: 'Task status',
-										options: [
-											{
-												name: '-',
-												value: ''
-											},
-											{
-												name: 'todo',
-												value: 'todo'
-											},
-											{
-												name: 'in_progress',
-												value: 'in_progress'
-											}
-										]
-									},
-									{
-										displayName: 'Description',
-										name: 'description',
-										type: 'string',
-										default: '',
-										description: 'Task description'
-									},
-									{
-										displayName: 'Expertise',
-										name: 'expertise',
-										type: 'options',
-										default: '',
-										description: 'Task expertise:\n *  "standard"\n *  "mobile-applications"\n *  "software-it"\n *  "gaming-video-games"\n *  "technical-engineering"\n *  "marketing-consumer-media"\n *  "business-finance"\n *  "legal-certificate"\n *  "medical"\n *  "ad-words-banners"\n *  "automotive-aerospace"\n *  "scientific"\n *  "scientific-academic"\n *  "tourism"\n *  "training-employee-handbooks"\n *  "forex-crypto"',
-										options: [
-											{
-												name: '-',
-												value: ''
-											},
-											{
-												name: 'standard',
-												value: 'standard'
-											},
-											{
-												name: 'mobile-applications',
-												value: 'mobile-applications'
-											},
-											{
-												name: 'software-it',
-												value: 'software-it'
-											},
-											{
-												name: 'gaming-video-games',
-												value: 'gaming-video-games'
-											},
-											{
-												name: 'technical-engineering',
-												value: 'technical-engineering'
-											},
-											{
-												name: 'marketing-consumer-media',
-												value: 'marketing-consumer-media'
-											},
-											{
-												name: 'business-finance',
-												value: 'business-finance'
-											},
-											{
-												name: 'legal-certificate',
-												value: 'legal-certificate'
-											},
-											{
-												name: 'medical',
-												value: 'medical'
-											},
-											{
-												name: 'ad-words-banners',
-												value: 'ad-words-banners'
-											},
-											{
-												name: 'automotive-aerospace',
-												value: 'automotive-aerospace'
-											},
-											{
-												name: 'scientific',
-												value: 'scientific'
-											},
-											{
-												name: 'scientific-academic',
-												value: 'scientific-academic'
-											},
-											{
-												name: 'tourism',
-												value: 'tourism'
-											},
-											{
-												name: 'training-employee-handbooks',
-												value: 'training-employee-handbooks'
-											},
-											{
-												name: 'forex-crypto',
-												value: 'forex-crypto'
-											}
-										]
-									},
-									{
-										displayName: 'Edit Service',
-										name: 'editService',
-										type: 'boolean',
-										default: false,
-										description: 'Enables Edit stage for all jobs',
-										placeholder: 'true'
-									},
-									{
-										displayName: 'Include Pre Translated Strings Only',
-										name: 'includePreTranslatedStringsOnly',
-										type: 'boolean',
-										default: false,
-										description: 'Defines whether to include only pretranslated strings',
-										placeholder: 'true'
-									},
-									{
-										displayName: 'Date From',
-										name: 'dateTime:dateFrom',
-										type: 'dateTime',
-										default: '',
-										description: 'Defines start date for interval when strings were modified\n\n __Format:__ UTC, ISO 8601',
-										placeholder: '2019-09-23T07:00:14+00:00'
-									},
-									{
-										displayName: 'Date To',
-										name: 'dateTime:dateTo',
-										type: 'dateTime',
-										default: '',
-										description: 'Defines end date for interval when strings were modified\n\n __Format:__ UTC, ISO 8601',
-										placeholder: '2019-09-27T07:00:14+00:00'
-									},
-									{
-										displayName: 'Generate Cost Estimate',
-										name: 'generateCostEstimate',
-										type: 'boolean',
-										default: false,
-										description: 'Generate cost estimate report for the task. Requires `reportSettingsTemplateId`',
-										placeholder: 'false'
-									},
-									{
-										displayName: 'Generate Translation Cost',
-										name: 'generateTranslationCost',
-										type: 'boolean',
-										default: false,
-										description: 'Generate translation cost report for the task. Requires `reportSettingsTemplateId`',
-										placeholder: 'false'
-									},
-									{
-										displayName: 'Report Settings Template Id',
-										name: 'reportSettingsTemplateId',
-										type: 'options',
-										default: '',
-										description: 'Report Settings Templates Identifier. Get via [List Report Settings Templates](#operation/api.projects.reports.settings-templates.getMany). Required when `generateCostEstimate` or `generateTranslationCost` is `true`',
-										typeOptions: {
-											loadOptionsMethod: 'getReportSettingsTemplates'
-										}
-									}
-								]
-							}
-						]
-					}
-				]
-			},
-			{
-				displayName: 'Crowdin Vendor Gengo Task Create Form',
-				name: '_crowdinVendorGengoTaskCreateForm',
-				values: [
-					{
-						displayName: 'Form Type',
-						name: '_subType',
-						type: 'fixedCollection',
-						default: {},
-						description: 'Select the form type',
-						options: [
-							{
-								displayName: 'CreateByBranchIdsForm',
-								name: '_createByBranchIdsForm',
-								values: [
-									{
-										displayName: 'Title',
-										name: 'title',
-										type: 'string',
-										default: '',
-										description: 'Task title',
-										required: true
-									},
-									{
-										displayName: 'Language Id',
-										name: 'languageId',
-										type: 'options',
-										default: '',
-										description: 'Task Language Identifier. Get via [Project Target Languages](#operation/api.projects.get)',
-										required: true,
-										typeOptions: {
-											loadOptionsMethod: 'getLanguages'
-										}
 									},
 									{
-										displayName: 'Type',
-										name: 'type',
+										displayName: 'Batch Id',
+										name: 'batchId',
 										type: 'number',
-										default: undefined,
-										description: 'Task type:\n * 2 - translate by vendor',
-										required: true
-									},
-									{
-										displayName: 'Vendor',
-										name: 'vendor',
-										type: 'string',
-										default: '',
-										description: 'Task vendor:\n * "gengo" - Gengo',
-										required: true
-									},
-									{
-										displayName: 'Branch Ids',
-										name: 'branchIds',
-										type: 'multiOptions',
-										typeOptions: {
-											loadOptionsMethod: 'getBranchesMulti',
-											loadOptionsDependsOn: [
-												'projectId'
-											]
-										},
-										default: [],
-										description: 'Array of branch ids. Get via [List Branches](#operation/api.projects.branches.getMany)',
-										required: true
-									},
-									{
-										displayName: 'Label Ids',
-										name: 'labelIds',
-										type: 'multiOptions',
-										typeOptions: {
-											loadOptionsMethod: 'getProjectLabelsMulti',
-											loadOptionsDependsOn: [
-												'projectId'
-											]
-										},
-										default: [],
-										description: 'Label Identifiers. Get via [List Labels](#operation/api.projects.labels.getMany)'
-									},
-									{
-										displayName: 'Label Match Rule',
-										name: 'labelMatchRule',
-										type: 'options',
-										default: '',
-										description: 'Match rule for labels:\n- "all" - all labels must be present in string\n- "any" - any of the labels must be present in string\n\n__Note:__ Can only be used when `labelIds` parameter is provided',
-										options: [
-											{
-												name: '-',
-												value: ''
-											},
-											{
-												name: 'all',
-												value: 'all'
-											},
-											{
-												name: 'any',
-												value: 'any'
-											}
-										]
-									},
-									{
-										displayName: 'Exclude Label Ids',
-										name: 'excludeLabelIds',
-										type: 'multiOptions',
-										typeOptions: {
-											loadOptionsMethod: 'getProjectLabelsMulti',
-											loadOptionsDependsOn: [
-												'projectId'
-											]
-										},
-										default: [],
-										description: 'Label Identifiers. Get via [List Labels](#operation/api.projects.labels.getMany)'
-									},
-									{
-										displayName: 'Exclude Label Match Rule',
-										name: 'excludeLabelMatchRule',
-										type: 'options',
-										default: '',
-										description: 'Match rule for excluded labels:\n- "all" - all labels must be present in string\n- "any" - any of the labels must be present in string\n\n__Note:__ Can only be used when `excludeLabelIds` parameter is provided',
-										options: [
-											{
-												name: '-',
-												value: ''
-											},
-											{
-												name: 'all',
-												value: 'all'
-											},
-											{
-												name: 'any',
-												value: 'any'
-											}
-										]
-									},
-									{
-										displayName: 'Status',
-										name: 'status',
-										type: 'options',
-										default: '',
-										description: 'Task status',
-										options: [
-											{
-												name: '-',
-												value: ''
-											},
-											{
-												name: 'todo',
-												value: 'todo'
-											},
-											{
-												name: 'in_progress',
-												value: 'in_progress'
-											}
-										]
-									},
-									{
-										displayName: 'Description',
-										name: 'description',
-										type: 'string',
-										default: '',
-										description: 'Task description'
-									},
-									{
-										displayName: 'Expertise',
-										name: 'expertise',
-										type: 'options',
-										default: '',
-										description: 'Task expertise:\n * "standard"\n * "pro"',
-										options: [
-											{
-												name: '-',
-												value: ''
-											},
-											{
-												name: 'standard',
-												value: 'standard'
-											},
-											{
-												name: 'pro',
-												value: 'pro'
-											}
-										]
-									},
-									{
-										displayName: 'Tone',
-										name: 'tone',
-										type: 'options',
-										default: '',
-										description: 'Task tone:\n * ""\n * "Informal"\n * "Friendly"\n * "Business"\n * "Formal"\n * "other"',
-										options: [
-											{
-												name: '-',
-												value: ''
-											},
-											{
-												name: '',
-												value: ''
-											},
-											{
-												name: 'Informal',
-												value: 'Informal'
-											},
-											{
-												name: 'Friendly',
-												value: 'Friendly'
-											},
-											{
-												name: 'Business',
-												value: 'Business'
-											},
-											{
-												name: 'Formal',
-												value: 'Formal'
-											},
-											{
-												name: 'other',
-												value: 'other'
-											}
-										]
-									},
-									{
-										displayName: 'Purpose',
-										name: 'purpose',
-										type: 'options',
-										default: '',
-										description: 'Task purpose:\n * "Personal use"\n * "Business"\n * "Online content"\n * "App/Web localization"\n * "Media content"\n * "Semi-technical"\n * "other"',
-										options: [
-											{
-												name: '-',
-												value: ''
-											},
-											{
-												name: 'Personal use',
-												value: 'Personal use'
-											},
-											{
-												name: 'Business',
-												value: 'Business'
-											},
-											{
-												name: 'Online content',
-												value: 'Online content'
-											},
-											{
-												name: 'App/Web localization',
-												value: 'App/Web localization'
-											},
-											{
-												name: 'Media content',
-												value: 'Media content'
-											},
-											{
-												name: 'Semi-technical',
-												value: 'Semi-technical'
-											},
-											{
-												name: 'other',
-												value: 'other'
-											}
-										]
-									},
-									{
-										displayName: 'Customer Message',
-										name: 'customerMessage',
-										type: 'string',
-										default: '',
-										description: 'Instructions for translators'
-									},
-									{
-										displayName: 'Use Preferred',
-										name: 'usePreferred',
-										type: 'boolean',
-										default: false,
-										description: 'Use preferred translators',
-										placeholder: 'true'
-									},
-									{
-										displayName: 'Edit Service',
-										name: 'editService',
-										type: 'boolean',
-										default: false,
-										description: 'Enables Edit stage for all jobs',
-										placeholder: 'true'
-									},
-									{
-										displayName: 'Date From',
-										name: 'dateTime:dateFrom',
-										type: 'dateTime',
-										default: '',
-										description: 'Defines start date for interval when strings were modified\n\n__Format:__ UTC, ISO 8601',
-										placeholder: '2019-09-23T07:00:14+00:00'
-									},
-									{
-										displayName: 'Date To',
-										name: 'dateTime:dateTo',
-										type: 'dateTime',
-										default: '',
-										description: 'Defines end date for interval when strings were modified\n\n__Format:__ UTC, ISO 8601',
-										placeholder: '2019-09-27T07:00:14+00:00'
-									},
-									{
-										displayName: 'Generate Cost Estimate',
-										name: 'generateCostEstimate',
-										type: 'boolean',
-										default: false,
-										description: 'Generate cost estimate report for the task. Requires `reportSettingsTemplateId`',
-										placeholder: 'false'
-									},
-									{
-										displayName: 'Generate Translation Cost',
-										name: 'generateTranslationCost',
-										type: 'boolean',
-										default: false,
-										description: 'Generate translation cost report for the task. Requires `reportSettingsTemplateId`',
-										placeholder: 'false'
-									},
-									{
-										displayName: 'Report Settings Template Id',
-										name: 'reportSettingsTemplateId',
-										type: 'options',
-										default: '',
-										description: 'Report Settings Templates Identifier. Get via [List Report Settings Templates](#operation/api.projects.reports.settings-templates.getMany). Required when `generateCostEstimate` or `generateTranslationCost` is `true`',
-										typeOptions: {
-											loadOptionsMethod: 'getReportSettingsTemplates'
-										}
-									}
-								]
-							},
-							{
-								displayName: 'CreateByStringIdsForm',
-								name: '_createByStringIdsForm',
-								values: [
-									{
-										displayName: 'Title',
-										name: 'title',
-										type: 'string',
-										default: '',
-										description: 'Task title',
-										required: true
-									},
-									{
-										displayName: 'Language Id',
-										name: 'languageId',
-										type: 'options',
-										default: '',
-										description: 'Task Language Identifier. Get via [Project Target Languages](#operation/api.projects.get)',
-										required: true,
-										typeOptions: {
-											loadOptionsMethod: 'getLanguages'
-										}
-									},
-									{
-										displayName: 'Type',
-										name: 'type',
-										type: 'number',
-										default: undefined,
-										description: 'Task type:\n *  2 - translate by vendor',
-										required: true
-									},
-									{
-										displayName: 'Vendor',
-										name: 'vendor',
-										type: 'string',
-										default: '',
-										description: 'Task vendor:\n * "gengo" - Gengo',
-										required: true
-									},
-									{
-										displayName: 'String Ids',
-										name: 'stringIds',
-										type: 'multiOptions',
-										typeOptions: {
-											loadOptionsMethod: 'getProjectStringsMulti',
-											loadOptionsDependsOn: [
-												'projectId'
-											]
-										},
-										default: [],
-										description: 'Task String Identifiers. Get via [List Strings](#operation/api.projects.strings.getMany)',
-										required: true
-									},
-									{
-										displayName: 'Status',
-										name: 'status',
-										type: 'options',
-										default: '',
-										description: 'Task status',
-										options: [
-											{
-												name: '-',
-												value: ''
-											},
-											{
-												name: 'todo',
-												value: 'todo'
-											},
-											{
-												name: 'in_progress',
-												value: 'in_progress'
-											}
-										]
-									},
-									{
-										displayName: 'Description',
-										name: 'description',
-										type: 'string',
-										default: '',
-										description: 'Task description'
-									},
-									{
-										displayName: 'Expertise',
-										name: 'expertise',
-										type: 'options',
-										default: '',
-										description: 'Task expertise:\n * "standard"\n * "pro"',
-										options: [
-											{
-												name: '-',
-												value: ''
-											},
-											{
-												name: 'standard',
-												value: 'standard'
-											},
-											{
-												name: 'pro',
-												value: 'pro'
-											}
-										]
-									},
-									{
-										displayName: 'Tone',
-										name: 'tone',
-										type: 'options',
-										default: '',
-										description: 'Task tone:\n * ""\n * "Informal"\n * "Friendly"\n * "Business"\n * "Formal"\n * "other"',
-										options: [
-											{
-												name: '-',
-												value: ''
-											},
-											{
-												name: '',
-												value: ''
-											},
-											{
-												name: 'Informal',
-												value: 'Informal'
-											},
-											{
-												name: 'Friendly',
-												value: 'Friendly'
-											},
-											{
-												name: 'Business',
-												value: 'Business'
-											},
-											{
-												name: 'Formal',
-												value: 'Formal'
-											},
-											{
-												name: 'other',
-												value: 'other'
-											}
-										]
-									},
-									{
-										displayName: 'Purpose',
-										name: 'purpose',
-										type: 'options',
-										default: '',
-										description: 'Task purpose:\n * "Personal use"\n * "Business"\n * "Online content"\n * "App/Web localization"\n * "Media content"\n * "Semi-technical"\n * "other"',
-										options: [
-											{
-												name: '-',
-												value: ''
-											},
-											{
-												name: 'Personal use',
-												value: 'Personal use'
-											},
-											{
-												name: 'Business',
-												value: 'Business'
-											},
-											{
-												name: 'Online content',
-												value: 'Online content'
-											},
-											{
-												name: 'App/Web localization',
-												value: 'App/Web localization'
-											},
-											{
-												name: 'Media content',
-												value: 'Media content'
-											},
-											{
-												name: 'Semi-technical',
-												value: 'Semi-technical'
-											},
-											{
-												name: 'other',
-												value: 'other'
-											}
-										]
-									},
-									{
-										displayName: 'Customer Message',
-										name: 'customerMessage',
-										type: 'string',
-										default: '',
-										description: 'Instructions for translators'
-									},
-									{
-										displayName: 'Use Preferred',
-										name: 'usePreferred',
-										type: 'boolean',
-										default: false,
-										description: 'Use preferred translators',
-										placeholder: 'true'
-									},
-									{
-										displayName: 'Edit Service',
-										name: 'editService',
-										type: 'boolean',
-										default: false,
-										description: 'Enables Edit stage for all jobs',
-										placeholder: 'true'
-									},
-									{
-										displayName: 'Date From',
-										name: 'dateTime:dateFrom',
-										type: 'dateTime',
-										default: '',
-										description: 'Defines start date for interval when strings were modified\n\n __Format:__ UTC, ISO 8601',
-										placeholder: '2019-09-23T07:00:14+00:00'
-									},
-									{
-										displayName: 'Date To',
-										name: 'dateTime:dateTo',
-										type: 'dateTime',
-										default: '',
-										description: 'Defines end date for interval when strings were modified\n\n __Format:__ UTC, ISO 8601',
-										placeholder: '2019-09-27T07:00:14+00:00'
-									},
-									{
-										displayName: 'Generate Cost Estimate',
-										name: 'generateCostEstimate',
-										type: 'boolean',
-										default: false,
-										description: 'Generate cost estimate report for the task. Requires `reportSettingsTemplateId`',
-										placeholder: 'false'
-									},
-									{
-										displayName: 'Report Settings Template Id',
-										name: 'reportSettingsTemplateId',
-										type: 'options',
-										default: '',
-										description: 'Report Settings Templates Identifier. Get via [List Report Settings Templates](#operation/api.projects.reports.settings-templates.getMany). Required when `generateCostEstimate` is `true`',
-										typeOptions: {
-											loadOptionsMethod: 'getReportSettingsTemplates'
-										}
+										default: 0,
+										description: 'Task Batch Identifier. Get via [List Tasks](#operation/api.projects.tasks.getMany). Allows grouping tasks into a batch',
+										placeholder: '1'
 									}
 								]
 							}
@@ -3628,493 +2153,8 @@ export const tasksProperties: INodeProperties[] = [
 				]
 			},
 			{
-				displayName: 'Crowdin Vendor Manual Task Create Form',
-				name: '_crowdinVendorManualTaskCreateForm',
-				values: [
-					{
-						displayName: 'Form Type',
-						name: '_subType',
-						type: 'fixedCollection',
-						default: {},
-						description: 'Select the form type',
-						options: [
-							{
-								displayName: 'CreateByBranchIdsForm',
-								name: '_createByBranchIdsForm',
-								values: [
-									{
-										displayName: 'Title',
-										name: 'title',
-										type: 'string',
-										default: '',
-										description: 'Task title',
-										required: true
-									},
-									{
-										displayName: 'Language Id',
-										name: 'languageId',
-										type: 'options',
-										default: '',
-										description: 'Task Language Identifier. Get via [List Supported Languages](#operation/api.languages.getMany)',
-										required: true,
-										typeOptions: {
-											loadOptionsMethod: 'getLanguages'
-										}
-									},
-									{
-										displayName: 'Type',
-										name: 'type',
-										type: 'options',
-										default: 2,
-										description: 'Task type: \n * 2 - translate by vendor\n * 3 - proofread by vendor',
-										required: true,
-										options: [
-											{
-												name: '2',
-												value: 2
-											},
-											{
-												name: '3',
-												value: 3
-											}
-										]
-									},
-									{
-										displayName: 'Vendor',
-										name: 'vendor',
-										type: 'string',
-										default: '',
-										description: 'Task vendor:\n *   "alconost" - Alconost,\n *   "babbleon" - Babble-on,\n *   "tomedes" - Tomedes,\n *   "e2f" - e2f,\n *   "write_path_admin" - WritePath,\n *   "inlingo" - Inlingo,\n *   "acclaro" - Acclaro,\n *   "translate_by_humans" - Translate by Humans,\n *   "lingo24" - Lingo24,\n *   "gte_localize" - GTE Localize,\n *   "kettu_solutions" - Kettu Solutions',
-										required: true
-									},
-									{
-										displayName: 'Branch Ids',
-										name: 'branchIds',
-										type: 'multiOptions',
-										typeOptions: {
-											loadOptionsMethod: 'getBranchesMulti',
-											loadOptionsDependsOn: [
-												'projectId'
-											]
-										},
-										default: [],
-										description: 'Array of branch ids. Get via [List Branches](#operation/api.projects.branches.getMany)',
-										required: true
-									},
-									{
-										displayName: 'Label Ids',
-										name: 'labelIds',
-										type: 'multiOptions',
-										typeOptions: {
-											loadOptionsMethod: 'getProjectLabelsMulti',
-											loadOptionsDependsOn: [
-												'projectId'
-											]
-										},
-										default: [],
-										description: 'Label Identifiers. Get via [List Labels](#operation/api.projects.labels.getMany)'
-									},
-									{
-										displayName: 'Label Match Rule',
-										name: 'labelMatchRule',
-										type: 'options',
-										default: '',
-										description: 'Match rule for labels:\n- "all" - all labels must be present in string\n- "any" - any of the labels must be present in string\n\n__Note:__ Can only be used when `labelIds` parameter is provided',
-										options: [
-											{
-												name: '-',
-												value: ''
-											},
-											{
-												name: 'all',
-												value: 'all'
-											},
-											{
-												name: 'any',
-												value: 'any'
-											}
-										]
-									},
-									{
-										displayName: 'Exclude Label Ids',
-										name: 'excludeLabelIds',
-										type: 'multiOptions',
-										typeOptions: {
-											loadOptionsMethod: 'getProjectLabelsMulti',
-											loadOptionsDependsOn: [
-												'projectId'
-											]
-										},
-										default: [],
-										description: 'Label Identifiers. Get via [List Labels](#operation/api.projects.labels.getMany)'
-									},
-									{
-										displayName: 'Exclude Label Match Rule',
-										name: 'excludeLabelMatchRule',
-										type: 'options',
-										default: '',
-										description: 'Match rule for excluded labels:\n- "all" - all labels must be present in string\n- "any" - any of the labels must be present in string\n__Note:__ Can only be used when `excludeLabelIds` parameter is provided',
-										options: [
-											{
-												name: '-',
-												value: ''
-											},
-											{
-												name: 'all',
-												value: 'all'
-											},
-											{
-												name: 'any',
-												value: 'any'
-											}
-										]
-									},
-									{
-										displayName: 'Status',
-										name: 'status',
-										type: 'options',
-										default: '',
-										description: 'Task status',
-										options: [
-											{
-												name: '-',
-												value: ''
-											},
-											{
-												name: 'todo',
-												value: 'todo'
-											},
-											{
-												name: 'in_progress',
-												value: 'in_progress'
-											}
-										]
-									},
-									{
-										displayName: 'Description',
-										name: 'description',
-										type: 'string',
-										default: '',
-										description: 'Task description'
-									},
-									{
-										displayName: 'Skip Assigned Strings',
-										name: 'skipAssignedStrings',
-										type: 'boolean',
-										default: false,
-										description: 'Skip strings already included in other tasks',
-										placeholder: 'true'
-									},
-									{
-										displayName: 'Include Pre Translated Strings Only',
-										name: 'includePreTranslatedStringsOnly',
-										type: 'boolean',
-										default: false,
-										description: 'Defines whether to export only pretranslated strings\n\n__Note:__ `true` value can\'t be used with `type=0` or `type=2` in same request',
-										placeholder: 'true'
-									},
-									{
-										displayName: 'Assignees',
-										name: 'assignees',
-										type: 'fixedCollection',
-										typeOptions: {
-											multipleValues: true
-										},
-										default: {},
-										description: undefined,
-										placeholder: 'Add Item',
-										options: [
-											{
-												displayName: 'Item',
-												name: 'items',
-												values: [
-													{
-														displayName: 'Id',
-														name: 'id',
-														type: 'number',
-														default: undefined,
-														description: 'Project Member Identifier. Get via [List Project Members](#operation/api.projects.members.getMany)',
-														required: true
-													},
-													{
-														displayName: 'Words Count',
-														name: 'wordsCount',
-														type: 'number',
-														default: 0,
-														description: 'Defines how many words (starting from 1) are assigned to each task assignee\n *\n * __Note:__ Can be used only when \'splitContent\' parameter is specified'
-													}
-												]
-											}
-										]
-									},
-									{
-										displayName: 'Deadline',
-										name: 'dateTime:deadline',
-										type: 'dateTime',
-										default: '',
-										description: 'Defines task deadline date\n\n__Format:__ UTC, ISO 8601',
-										placeholder: '2019-09-27T07:00:14+00:00'
-									},
-									{
-										displayName: 'Started At',
-										name: 'dateTime:startedAt',
-										type: 'dateTime',
-										default: '',
-										description: 'Defines task started date\n\n__Format:__ UTC, ISO 8601',
-										placeholder: '2019-09-27T07:00:14+00:00'
-									},
-									{
-										displayName: 'Date From',
-										name: 'dateTime:dateFrom',
-										type: 'dateTime',
-										default: '',
-										description: 'Defines start date for interval when strings were modified\n\n__Format:__ UTC, ISO 8601',
-										placeholder: '2019-09-23T07:00:14+00:00'
-									},
-									{
-										displayName: 'Date To',
-										name: 'dateTime:dateTo',
-										type: 'dateTime',
-										default: '',
-										description: 'Defines end date for interval when strings were modified\n\n__Format:__ UTC, ISO 8601',
-										placeholder: '2019-09-27T07:00:14+00:00'
-									},
-									{
-										displayName: 'Generate Cost Estimate',
-										name: 'generateCostEstimate',
-										type: 'boolean',
-										default: false,
-										description: 'Generate cost estimate report for the task. Requires `reportSettingsTemplateId`',
-										placeholder: 'false'
-									},
-									{
-										displayName: 'Generate Translation Cost',
-										name: 'generateTranslationCost',
-										type: 'boolean',
-										default: false,
-										description: 'Generate translation cost report for the task. Requires `reportSettingsTemplateId`',
-										placeholder: 'false'
-									},
-									{
-										displayName: 'Report Settings Template Id',
-										name: 'reportSettingsTemplateId',
-										type: 'options',
-										default: '',
-										description: 'Report Settings Templates Identifier. Get via [List Report Settings Templates](#operation/api.projects.reports.settings-templates.getMany). Required when `generateCostEstimate` or `generateTranslationCost` is `true`',
-										typeOptions: {
-											loadOptionsMethod: 'getReportSettingsTemplates'
-										}
-									}
-								]
-							},
-							{
-								displayName: 'CreateByStringIdsForm',
-								name: '_createByStringIdsForm',
-								values: [
-									{
-										displayName: 'Title',
-										name: 'title',
-										type: 'string',
-										default: '',
-										description: 'Task title',
-										required: true
-									},
-									{
-										displayName: 'Language Id',
-										name: 'languageId',
-										type: 'options',
-										default: '',
-										description: 'Task Language Identifier. Get via [List Supported Languages](#operation/api.languages.getMany)',
-										required: true,
-										typeOptions: {
-											loadOptionsMethod: 'getLanguages'
-										}
-									},
-									{
-										displayName: 'Type',
-										name: 'type',
-										type: 'options',
-										default: 2,
-										description: 'Task type:\n * 2 - translate by vendor\n * 3 - proofread by vendor',
-										required: true,
-										options: [
-											{
-												name: '2',
-												value: 2
-											},
-											{
-												name: '3',
-												value: 3
-											}
-										]
-									},
-									{
-										displayName: 'Vendor',
-										name: 'vendor',
-										type: 'string',
-										default: '',
-										description: 'Task vendor:\n *   "alconost" - Alconost,\n *   "babbleon" - Babble-on,\n *   "tomedes" - Tomedes,\n *   "e2f" - e2f,\n *   "write_path_admin" - WritePath,\n *   "inlingo" - Inlingo,\n *   "acclaro" - Acclaro,\n *   "translate_by_humans" - Translate by Humans,\n *   "lingo24" - Lingo24,\n *   "gte_localize" - GTE Localize,\n *   "kettu_solutions" - Kettu Solutions',
-										required: true
-									},
-									{
-										displayName: 'String Ids',
-										name: 'stringIds',
-										type: 'multiOptions',
-										typeOptions: {
-											loadOptionsMethod: 'getProjectStringsMulti',
-											loadOptionsDependsOn: [
-												'projectId'
-											]
-										},
-										default: [],
-										description: 'Task String Identifiers. Get via [List Strings](#operation/api.projects.strings.getMany)',
-										required: true
-									},
-									{
-										displayName: 'Status',
-										name: 'status',
-										type: 'options',
-										default: '',
-										description: 'Task status',
-										options: [
-											{
-												name: '-',
-												value: ''
-											},
-											{
-												name: 'todo',
-												value: 'todo'
-											},
-											{
-												name: 'in_progress',
-												value: 'in_progress'
-											}
-										]
-									},
-									{
-										displayName: 'Description',
-										name: 'description',
-										type: 'string',
-										default: '',
-										description: 'Task description'
-									},
-									{
-										displayName: 'Skip Assigned Strings',
-										name: 'skipAssignedStrings',
-										type: 'boolean',
-										default: false,
-										description: 'Skip strings already included in other tasks',
-										placeholder: 'true'
-									},
-									{
-										displayName: 'Include Pre Translated Strings Only',
-										name: 'includePreTranslatedStringsOnly',
-										type: 'boolean',
-										default: false,
-										description: 'Defines whether to export only pretranslated strings\n\n__Note:__ `true` value can\'t be used with `type=0` or `type=2` in same request',
-										placeholder: 'true'
-									},
-									{
-										displayName: 'Assignees',
-										name: 'assignees',
-										type: 'fixedCollection',
-										typeOptions: {
-											multipleValues: true
-										},
-										default: {},
-										description: undefined,
-										placeholder: 'Add Item',
-										options: [
-											{
-												displayName: 'Item',
-												name: 'items',
-												values: [
-													{
-														displayName: 'Id',
-														name: 'id',
-														type: 'number',
-														default: undefined,
-														description: 'Project Member Identifier. Get via [List Project Members](#operation/api.projects.members.getMany)',
-														required: true
-													},
-													{
-														displayName: 'Words Count',
-														name: 'wordsCount',
-														type: 'number',
-														default: 0,
-														description: 'Defines how many words (starting from 1) are assigned to each task assignee\n *\n * __Note:__ Can be used only when \'splitContent\' parameter is specified'
-													}
-												]
-											}
-										]
-									},
-									{
-										displayName: 'Deadline',
-										name: 'dateTime:deadline',
-										type: 'dateTime',
-										default: '',
-										description: 'Defines task deadline date\n\n__Format:__ UTC, ISO 8601',
-										placeholder: '2019-09-27T07:00:14+00:00'
-									},
-									{
-										displayName: 'Started At',
-										name: 'dateTime:startedAt',
-										type: 'dateTime',
-										default: '',
-										description: 'Defines task started date\n\n__Format:__ UTC, ISO 8601',
-										placeholder: '2019-09-27T07:00:14+00:00'
-									},
-									{
-										displayName: 'Date From',
-										name: 'dateTime:dateFrom',
-										type: 'dateTime',
-										default: '',
-										description: 'Defines start date for interval when strings were modified\n\n__Format:__ UTC, ISO 8601',
-										placeholder: '2019-09-23T07:00:14+00:00'
-									},
-									{
-										displayName: 'Date To',
-										name: 'dateTime:dateTo',
-										type: 'dateTime',
-										default: '',
-										description: 'Defines end date for interval when strings were modified\n\n__Format:__ UTC, ISO 8601',
-										placeholder: '2019-09-27T07:00:14+00:00'
-									},
-									{
-										displayName: 'Generate Cost Estimate',
-										name: 'generateCostEstimate',
-										type: 'boolean',
-										default: false,
-										description: 'Generate cost estimate report for the task. Requires `reportSettingsTemplateId`',
-										placeholder: 'false'
-									},
-									{
-										displayName: 'Generate Translation Cost',
-										name: 'generateTranslationCost',
-										type: 'boolean',
-										default: false,
-										description: 'Generate translation cost report for the task. Requires `reportSettingsTemplateId`',
-										placeholder: 'false'
-									},
-									{
-										displayName: 'Report Settings Template Id',
-										name: 'reportSettingsTemplateId',
-										type: 'options',
-										default: '',
-										description: 'Report Settings Templates Identifier. Get via [List Report Settings Templates](#operation/api.projects.reports.settings-templates.getMany). Required when `generateCostEstimate` or `generateTranslationCost` is `true`',
-										typeOptions: {
-											loadOptionsMethod: 'getReportSettingsTemplates'
-										}
-									}
-								]
-							}
-						]
-					}
-				]
-			},
-			{
-				displayName: 'Crowdin Pending Task Create Form',
-				name: '_crowdinPendingTaskCreateForm',
+				displayName: 'Pending Task Create',
+				name: '_pendingTaskCreate',
 				values: [
 					{
 						displayName: 'Preceding Task Id',
@@ -4135,12 +2175,16 @@ export const tasksProperties: INodeProperties[] = [
 						name: 'type',
 						type: 'options',
 						default: 1,
-						description: 'Task type:\n * 1 - proofread',
+						description: 'Task type:\n * 1 - proofread\n * 3 - proofread by vendor (requires `vendor` field)',
 						required: true,
 						options: [
 							{
 								name: '1',
 								value: 1
+							},
+							{
+								name: '3',
+								value: 3
 							}
 						]
 					},
@@ -4158,6 +2202,13 @@ export const tasksProperties: INodeProperties[] = [
 						type: 'string',
 						default: '',
 						description: 'Task description'
+					},
+					{
+						displayName: 'Vendor',
+						name: 'vendor',
+						type: 'string',
+						default: '',
+						description: 'Vendor identifier. Required when `type` is `3`. Browse available vendors at [Crowdin Store](https://crowdin.com/store/vendors).'
 					},
 					{
 						displayName: 'Assignees',
@@ -4204,101 +2255,503 @@ export const tasksProperties: INodeProperties[] = [
 				]
 			},
 			{
-				displayName: 'Crowdin Vendor Manual Pending Task Create Form',
-				name: '_crowdinVendorManualPendingTaskCreateForm',
+				displayName: 'Vendor Task Create',
+				name: '_vendorTaskCreate',
 				values: [
 					{
-						displayName: 'Preceding Task Id',
-						name: 'precedingTaskId',
-						type: 'options',
-						default: '',
-						description: 'Translate Task Identifier. Get via [List Tasks](#operation/api.projects.tasks.getMany)',
-						required: true,
-						typeOptions: {
-							loadOptionsMethod: 'getProjectTasks',
-							loadOptionsDependsOn: [
-								'projectId'
-							]
-						}
-					},
-					{
-						displayName: 'Type',
-						name: 'type',
-						type: 'options',
-						default: 3,
-						description: 'Task type:\n * 3 - proofread by vendor',
-						required: true,
-						options: [
-							{
-								name: '3',
-								value: 3
-							}
-						]
-					},
-					{
-						displayName: 'Vendor',
-						name: 'vendor',
-						type: 'string',
-						default: '',
-						description: 'Task vendor:\n *   "alconost" - Alconost,\n *   "babbleon" - Babble-on,\n *   "tomedes" - Tomedes,\n *   "e2f" - e2f,\n *   "write_path_admin" - WritePath,\n *   "inlingo" - Inlingo,\n *   "acclaro" - Acclaro,\n *   "translate_by_humans" - Translate by Humans,\n *   "lingo24" - Lingo24,\n *   "gte_localize" - GTE Localize,\n *   "kettu_solutions" - Kettu Solutions',
-						required: true
-					},
-					{
-						displayName: 'Title',
-						name: 'title',
-						type: 'string',
-						default: '',
-						description: 'Task title',
-						required: true
-					},
-					{
-						displayName: 'Description',
-						name: 'description',
-						type: 'string',
-						default: '',
-						description: 'Task description'
-					},
-					{
-						displayName: 'Assignees',
-						name: 'assignees',
+						displayName: 'Form Type',
+						name: '_subType',
 						type: 'fixedCollection',
-						typeOptions: {
-							multipleValues: true
-						},
 						default: {},
-						description: undefined,
-						placeholder: 'Add Item',
+						description: 'Select the form type',
 						options: [
 							{
-								displayName: 'Item',
-								name: 'items',
+								displayName: 'Create By Branch Ids Form',
+								name: '_createByBranchIdsForm',
 								values: [
 									{
-										displayName: 'Id',
-										name: 'id',
-										type: 'number',
-										default: undefined,
-										description: 'Project Member Identifier. Get via [List Project Members](#operation/api.projects.members.getMany)',
+										displayName: 'Title',
+										name: 'title',
+										type: 'string',
+										default: '',
+										description: 'Task title',
 										required: true
 									},
 									{
-										displayName: 'Words Count',
-										name: 'wordsCount',
-										type: 'number',
-										default: 0,
-										description: 'Defines how many words (starting from 1) are assigned to each task assignee\n *\n * __Note:__ Can be used only when \'splitContent\' parameter is specified'
+										displayName: 'Language Id',
+										name: 'languageId',
+										type: 'options',
+										default: '',
+										description: 'Task Language Identifier. Get via [Project Target Languages](#operation/api.projects.get)',
+										required: true,
+										typeOptions: {
+											loadOptionsMethod: 'getLanguages'
+										}
+									},
+									{
+										displayName: 'Type',
+										name: 'type',
+										type: 'options',
+										default: 2,
+										description: 'Task type:\n * 2 - translate by vendor\n * 3 - proofread by vendor',
+										required: true,
+										options: [
+											{
+												name: '2',
+												value: 2
+											},
+											{
+												name: '3',
+												value: 3
+											}
+										]
+									},
+									{
+										displayName: 'Vendor',
+										name: 'vendor',
+										type: 'string',
+										default: '',
+										description: 'Vendor identifier. Browse available vendors at [Crowdin Store](https://crowdin.com/store/vendors).\n\n__Note:__ Additional vendor-specific settings (e.g. expertise, tone, quality) are configured per vendor in the store.',
+										required: true
+									},
+									{
+										displayName: 'Branch Ids',
+										name: 'branchIds',
+										type: 'multiOptions',
+										typeOptions: {
+											loadOptionsMethod: 'getBranchesMulti',
+											loadOptionsDependsOn: [
+												'projectId'
+											]
+										},
+										default: [],
+										description: 'Array of branch identifiers. Get via [List Branches](#operation/api.projects.branches.getMany)',
+										required: true
+									},
+									{
+										displayName: 'Label Ids',
+										name: 'labelIds',
+										type: 'multiOptions',
+										typeOptions: {
+											loadOptionsMethod: 'getProjectLabelsMulti',
+											loadOptionsDependsOn: [
+												'projectId'
+											]
+										},
+										default: [],
+										description: 'Label Identifiers. Get via [List Labels](#operation/api.projects.labels.getMany)'
+									},
+									{
+										displayName: 'Label Match Rule',
+										name: 'labelMatchRule',
+										type: 'options',
+										default: '',
+										description: 'Match rule for labels:\n- "all" - all labels must be present in string\n- "any" - any of the labels must be present in string\n\n__Note:__ Can only be used when `labelIds` parameter is provided',
+										options: [
+											{
+												name: '-',
+												value: ''
+											},
+											{
+												name: 'all',
+												value: 'all'
+											},
+											{
+												name: 'any',
+												value: 'any'
+											}
+										]
+									},
+									{
+										displayName: 'Exclude Label Ids',
+										name: 'excludeLabelIds',
+										type: 'multiOptions',
+										typeOptions: {
+											loadOptionsMethod: 'getProjectLabelsMulti',
+											loadOptionsDependsOn: [
+												'projectId'
+											]
+										},
+										default: [],
+										description: 'Label Identifiers to exclude. Get via [List Labels](#operation/api.projects.labels.getMany)'
+									},
+									{
+										displayName: 'Exclude Label Match Rule',
+										name: 'excludeLabelMatchRule',
+										type: 'options',
+										default: '',
+										description: 'Match rule for excluded labels:\n- "all" - all labels must be present in string\n- "any" - any of the labels must be present in string\n\n__Note:__ Can only be used when `excludeLabelIds` parameter is provided',
+										options: [
+											{
+												name: '-',
+												value: ''
+											},
+											{
+												name: 'all',
+												value: 'all'
+											},
+											{
+												name: 'any',
+												value: 'any'
+											}
+										]
+									},
+									{
+										displayName: 'Status',
+										name: 'status',
+										type: 'options',
+										default: '',
+										description: 'Task status',
+										options: [
+											{
+												name: '-',
+												value: ''
+											},
+											{
+												name: 'todo',
+												value: 'todo'
+											},
+											{
+												name: 'in_progress',
+												value: 'in_progress'
+											}
+										]
+									},
+									{
+										displayName: 'Description',
+										name: 'description',
+										type: 'string',
+										default: '',
+										description: 'Task description'
+									},
+									{
+										displayName: 'Include Pre Translated Strings Only',
+										name: 'includePreTranslatedStringsOnly',
+										type: 'boolean',
+										default: false,
+										description: 'Defines whether to include only pretranslated strings',
+										placeholder: 'true'
+									},
+									{
+										displayName: 'Skip Assigned Strings',
+										name: 'skipAssignedStrings',
+										type: 'boolean',
+										default: false,
+										description: 'Skip strings already included in other tasks.\n\n__Note:__ Not supported by all vendors. Verify with your vendor.',
+										placeholder: 'true'
+									},
+									{
+										displayName: 'Deadline',
+										name: 'dateTime:deadline',
+										type: 'dateTime',
+										default: '',
+										description: 'Defines task deadline date.\n\n__Format:__ UTC, ISO 8601\n\n__Note:__ Not supported by all vendors. Verify with your vendor.',
+										placeholder: '2019-09-27T07:00:14+00:00'
+									},
+									{
+										displayName: 'Date From',
+										name: 'dateTime:dateFrom',
+										type: 'dateTime',
+										default: '',
+										description: 'Defines start date for interval when strings were modified\n\n__Format:__ UTC, ISO 8601',
+										placeholder: '2019-09-23T07:00:14+00:00'
+									},
+									{
+										displayName: 'Date To',
+										name: 'dateTime:dateTo',
+										type: 'dateTime',
+										default: '',
+										description: 'Defines end date for interval when strings were modified\n\n__Format:__ UTC, ISO 8601',
+										placeholder: '2019-09-27T07:00:14+00:00'
+									},
+									{
+										displayName: 'Translations Updated Date From',
+										name: 'dateTime:translationsUpdatedDateFrom',
+										type: 'dateTime',
+										default: '',
+										description: 'Defines start date for interval when translations were updated. For proofread tasks only.\n\n__Format:__ UTC, ISO 8601',
+										placeholder: '2019-09-23T07:00:14+00:00'
+									},
+									{
+										displayName: 'Translations Updated Date To',
+										name: 'dateTime:translationsUpdatedDateTo',
+										type: 'dateTime',
+										default: '',
+										description: 'Defines end date for interval when translations were updated. For proofread tasks only.\n\n__Format:__ UTC, ISO 8601',
+										placeholder: '2019-09-27T07:00:14+00:00'
+									},
+									{
+										displayName: 'Generate Cost Estimate',
+										name: 'generateCostEstimate',
+										type: 'boolean',
+										default: false,
+										description: 'Generate cost estimate report for the task. Requires `reportSettingsTemplateId`',
+										placeholder: 'false'
+									},
+									{
+										displayName: 'Generate Translation Cost',
+										name: 'generateTranslationCost',
+										type: 'boolean',
+										default: false,
+										description: 'Generate translation cost report for the task. Requires `reportSettingsTemplateId`',
+										placeholder: 'false'
+									},
+									{
+										displayName: 'Report Settings Template Id',
+										name: 'reportSettingsTemplateId',
+										type: 'options',
+										default: '',
+										description: 'Report Settings Templates Identifier. Get via [List Report Settings Templates](#operation/api.projects.reports.settings-templates.getMany). Required when `generateCostEstimate` or `generateTranslationCost` is `true`',
+										typeOptions: {
+											loadOptionsMethod: 'getReportSettingsTemplates'
+										}
+									}
+								]
+							},
+							{
+								displayName: 'Create By String Ids Form',
+								name: '_createByStringIdsForm',
+								values: [
+									{
+										displayName: 'Title',
+										name: 'title',
+										type: 'string',
+										default: '',
+										description: 'Task title',
+										required: true
+									},
+									{
+										displayName: 'Language Id',
+										name: 'languageId',
+										type: 'options',
+										default: '',
+										description: 'Task Language Identifier. Get via [Project Target Languages](#operation/api.projects.get)',
+										required: true,
+										typeOptions: {
+											loadOptionsMethod: 'getLanguages'
+										}
+									},
+									{
+										displayName: 'Type',
+										name: 'type',
+										type: 'options',
+										default: 2,
+										description: 'Task type:\n * 2 - translate by vendor\n * 3 - proofread by vendor',
+										required: true,
+										options: [
+											{
+												name: '2',
+												value: 2
+											},
+											{
+												name: '3',
+												value: 3
+											}
+										]
+									},
+									{
+										displayName: 'Vendor',
+										name: 'vendor',
+										type: 'string',
+										default: '',
+										description: 'Vendor identifier. Browse available vendors at [Crowdin Store](https://crowdin.com/store/vendors).\n\n__Note:__ Additional vendor-specific settings (e.g. expertise, tone, quality) are configured per vendor in the store.',
+										required: true
+									},
+									{
+										displayName: 'String Ids',
+										name: 'stringIds',
+										type: 'multiOptions',
+										typeOptions: {
+											loadOptionsMethod: 'getProjectStringsMulti',
+											loadOptionsDependsOn: [
+												'projectId'
+											]
+										},
+										default: [],
+										description: 'Task String Identifiers. Get via [List Strings](#operation/api.projects.strings.getMany)',
+										required: true
+									},
+									{
+										displayName: 'Label Ids',
+										name: 'labelIds',
+										type: 'multiOptions',
+										typeOptions: {
+											loadOptionsMethod: 'getProjectLabelsMulti',
+											loadOptionsDependsOn: [
+												'projectId'
+											]
+										},
+										default: [],
+										description: 'Label Identifiers. Get via [List Labels](#operation/api.projects.labels.getMany)'
+									},
+									{
+										displayName: 'Label Match Rule',
+										name: 'labelMatchRule',
+										type: 'options',
+										default: '',
+										description: 'Match rule for labels:\n- "all" - all labels must be present in string\n- "any" - any of the labels must be present in string\n\n__Note:__ Can only be used when `labelIds` parameter is provided',
+										options: [
+											{
+												name: '-',
+												value: ''
+											},
+											{
+												name: 'all',
+												value: 'all'
+											},
+											{
+												name: 'any',
+												value: 'any'
+											}
+										]
+									},
+									{
+										displayName: 'Exclude Label Ids',
+										name: 'excludeLabelIds',
+										type: 'multiOptions',
+										typeOptions: {
+											loadOptionsMethod: 'getProjectLabelsMulti',
+											loadOptionsDependsOn: [
+												'projectId'
+											]
+										},
+										default: [],
+										description: 'Label Identifiers to exclude. Get via [List Labels](#operation/api.projects.labels.getMany)'
+									},
+									{
+										displayName: 'Exclude Label Match Rule',
+										name: 'excludeLabelMatchRule',
+										type: 'options',
+										default: '',
+										description: 'Match rule for excluded labels:\n- "all" - all labels must be present in string\n- "any" - any of the labels must be present in string\n\n__Note:__ Can only be used when `excludeLabelIds` parameter is provided',
+										options: [
+											{
+												name: '-',
+												value: ''
+											},
+											{
+												name: 'all',
+												value: 'all'
+											},
+											{
+												name: 'any',
+												value: 'any'
+											}
+										]
+									},
+									{
+										displayName: 'Status',
+										name: 'status',
+										type: 'options',
+										default: '',
+										description: 'Task status',
+										options: [
+											{
+												name: '-',
+												value: ''
+											},
+											{
+												name: 'todo',
+												value: 'todo'
+											},
+											{
+												name: 'in_progress',
+												value: 'in_progress'
+											}
+										]
+									},
+									{
+										displayName: 'Description',
+										name: 'description',
+										type: 'string',
+										default: '',
+										description: 'Task description'
+									},
+									{
+										displayName: 'Include Pre Translated Strings Only',
+										name: 'includePreTranslatedStringsOnly',
+										type: 'boolean',
+										default: false,
+										description: 'Defines whether to include only pretranslated strings',
+										placeholder: 'true'
+									},
+									{
+										displayName: 'Skip Assigned Strings',
+										name: 'skipAssignedStrings',
+										type: 'boolean',
+										default: false,
+										description: 'Skip strings already included in other tasks.\n\n__Note:__ Not supported by all vendors. Verify with your vendor.',
+										placeholder: 'true'
+									},
+									{
+										displayName: 'Deadline',
+										name: 'dateTime:deadline',
+										type: 'dateTime',
+										default: '',
+										description: 'Defines task deadline date.\n\n__Format:__ UTC, ISO 8601\n\n__Note:__ Not supported by all vendors. Verify with your vendor.',
+										placeholder: '2019-09-27T07:00:14+00:00'
+									},
+									{
+										displayName: 'Date From',
+										name: 'dateTime:dateFrom',
+										type: 'dateTime',
+										default: '',
+										description: 'Defines start date for interval when strings were modified\n\n__Format:__ UTC, ISO 8601',
+										placeholder: '2019-09-23T07:00:14+00:00'
+									},
+									{
+										displayName: 'Date To',
+										name: 'dateTime:dateTo',
+										type: 'dateTime',
+										default: '',
+										description: 'Defines end date for interval when strings were modified\n\n__Format:__ UTC, ISO 8601',
+										placeholder: '2019-09-27T07:00:14+00:00'
+									},
+									{
+										displayName: 'Translations Updated Date From',
+										name: 'dateTime:translationsUpdatedDateFrom',
+										type: 'dateTime',
+										default: '',
+										description: 'Defines start date for interval when translations were updated. For proofread tasks only.\n\n__Format:__ UTC, ISO 8601',
+										placeholder: '2019-09-23T07:00:14+00:00'
+									},
+									{
+										displayName: 'Translations Updated Date To',
+										name: 'dateTime:translationsUpdatedDateTo',
+										type: 'dateTime',
+										default: '',
+										description: 'Defines end date for interval when translations were updated. For proofread tasks only.\n\n__Format:__ UTC, ISO 8601',
+										placeholder: '2019-09-27T07:00:14+00:00'
+									},
+									{
+										displayName: 'Generate Cost Estimate',
+										name: 'generateCostEstimate',
+										type: 'boolean',
+										default: false,
+										description: 'Generate cost estimate report for the task. Requires `reportSettingsTemplateId`',
+										placeholder: 'false'
+									},
+									{
+										displayName: 'Generate Translation Cost',
+										name: 'generateTranslationCost',
+										type: 'boolean',
+										default: false,
+										description: 'Generate translation cost report for the task. Requires `reportSettingsTemplateId`',
+										placeholder: 'false'
+									},
+									{
+										displayName: 'Report Settings Template Id',
+										name: 'reportSettingsTemplateId',
+										type: 'options',
+										default: '',
+										description: 'Report Settings Templates Identifier. Get via [List Report Settings Templates](#operation/api.projects.reports.settings-templates.getMany). Required when `generateCostEstimate` or `generateTranslationCost` is `true`',
+										typeOptions: {
+											loadOptionsMethod: 'getReportSettingsTemplates'
+										}
 									}
 								]
 							}
 						]
-					},
-					{
-						displayName: 'Deadline',
-						name: 'dateTime:deadline',
-						type: 'dateTime',
-						default: '',
-						description: 'Defines task deadline date\n\n __Format:__ UTC, ISO 8601',
-						placeholder: '2019-09-27T07:00:14+00:00'
 					}
 				]
 			}

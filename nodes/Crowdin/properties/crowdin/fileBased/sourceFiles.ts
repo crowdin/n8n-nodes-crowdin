@@ -2214,7 +2214,7 @@ export const sourceFilesProperties: INodeProperties[] = [
 		name: 'type',
 		type: 'options',
 		default: '',
-		description: 'Values available:\n- empty value or \'auto\' — Try to detect file type by extension or MIME type\n- \'android\' — Android (*.xml)\n- \'macosx\' — Mac OS X / iOS (*.strings)\n- \'resx\' — .NET, Windows Phone (*.resx)\n- \'properties\' — Java (*.properties)\n- \'gettext\' — GNU GetText (*.po, *.pot)\n- \'yaml\' — Ruby On Rails (*.yaml, *.yml)\n- \'php\' — Hypertext Preprocessor (*.php)\n- \'json\' — Generic JSON (*.json)\n- \'xml\' — Generic XML (*.xml)\n- \'ini\' — Generic INI (*.ini)\n- \'rc\' — Windows Resources (*.rc)\n- \'resw\' — Windows 8 Metro (*.resw)\n- \'resjson\' — Windows 8 Metro (*.resjson)\n- \'qtts\' — Nokia Qt (*.ts)\n- \'joomla\' — Joomla localizable resources (*.ini)\n- \'chrome\' — Google Chrome Extension (*.json)\n- \'dtd\' — Mozilla DTD (*.dtd)\n- \'dklang\' — Delphi DKLang (*.dklang)\n- \'flex\' — Flex (*.properties)\n- \'nsh\' — NSIS Installer Resources (*.nsh)\n- \'wxl\' — WiX Installer (*.wxl)\n- \'xliff\' — XLIFF (*.xliff, *.xlf)\n- \'xliff_two\' — XLIFF 2.0 (*.xliff, *.xlf)\n- \'html\' — HTML (*.html, *.htm, *.xhtml, *.xhtm, *.xht, *.hbs, *.liquid)\n- \'haml\' — Haml (*.haml)\n- \'txt\' — Plain Text (*.txt)\n- \'csv\' — Comma Separated Values (*.csv)\n- \'md\' — Markdown (*.md, *.text, *.markdown...)\n- \'flsnp\' — MadCap Flare (*.flnsp, .flpgpl .fltoc)\n- \'fm_html\' — Jekyll HTML (*.html)\n- \'fm_md\' — Jekyll Markdown (*.md)\n- \'mediawiki\' — MediaWiki (*.wiki, *.wikitext, *.mediawiki)\n- \'docx\' — Microsoft Office, OpenOffice.org Documents, Adobe InDesign, Adobe FrameMaker(*.docx, *.dotx, *.docm, *.dotm, *.xlsx, *.xltx, *.xlsm, *.xltm, *.pptx, *.potx, *.ppsx, *.pptm, *.potm, *.ppsm, *.odt, *.ods, *.odg, *.odp, *.imdl, *.mif)\n- \'xlsx\' — Microsoft Excel (*.xlsx)\n- \'sbv\' — Youtube .sbv (*.sbv)\n- \'properties_play\' — Play Framework\n- \'properties_xml\' — Java Application (*.xml)\n- \'maxthon\' — Maxthon Browser (*.ini)\n- \'go_json\' — Go (*.gotext.json)\n- \'dita\' — DITA Document (*.dita, *.ditamap)\n- \'mif\' — Adobe FrameMaker (*.mif)\n- \'idml\' — Adobe InDesign (*.idml)\n- \'stringsdict\' — iOS (*.stringsdict)\n- \'plist\' — Mac OS property list (*.plist)\n- \'vtt\' — Video Subtitling and WebVTT (*.vtt)\n- \'vdf\' — Steamworks Localization Valve Data File (*.vdf)\n- \'srt\' — SubRip .srt (*.srt)\n- \'stf\' — Salesforce (*.stf)\n- \'toml\' — Toml (*.toml)\n- \'contentful_rt\' — Contentful (*.json)\n- \'svg\' — SVG (*.svg)\n- \'js\' — JavaScript (*.js)\n- \'coffee\' — CoffeeScript (*.coffee)\n- \'nestjs_i18n\' - NestJS i18n\n- \'loc\' — LOC (*.loc)\n\n__Note__: Use `docx` type to import each cell as a separate source string for XLSX file',
+		description: 'Values available:\n- empty value or \'auto\' — Try to detect file type by extension or MIME type\n- \'android\' — Android (*.xml)\n- \'macosx\' — Mac OS X / iOS (*.strings)\n- \'resx\' — .NET, Windows Phone (*.resx)\n- \'properties\' — Java (*.properties)\n- \'gettext\' — GNU GetText (*.po, *.pot)\n- \'yaml\' — Ruby On Rails (*.yaml, *.yml)\n- \'php\' — Hypertext Preprocessor (*.php)\n- \'json\' — Generic JSON (*.json)\n- \'xml\' — Generic XML (*.xml)\n- \'ini\' — Generic INI (*.ini)\n- \'rc\' — Windows Resources (*.rc)\n- \'resw\' — Windows 8 Metro (*.resw)\n- \'resjson\' — Windows 8 Metro (*.resjson)\n- \'qtts\' — Nokia Qt (*.ts)\n- \'joomla\' — Joomla localizable resources (*.ini)\n- \'chrome\' — Google Chrome Extension (*.json)\n- \'dtd\' — Mozilla DTD (*.dtd)\n- \'dklang\' — Delphi DKLang (*.dklang)\n- \'flex\' — Flex (*.properties)\n- \'nsh\' — NSIS Installer Resources (*.nsh)\n- \'wxl\' — WiX Installer (*.wxl)\n- \'xliff\' — XLIFF (*.xliff, *.xlf)\n- \'xliff_two\' — XLIFF 2.0 (*.xliff, *.xlf)\n- \'html\' — HTML (*.html, *.htm, *.xhtml, *.xhtm, *.xht, *.hbs, *.liquid)\n- \'haml\' — Haml (*.haml)\n- \'txt\' — Plain Text (*.txt)\n- \'csv\' — Comma Separated Values (*.csv)\n- \'md\' — Markdown (*.md, *.text, *.markdown...)\n- \'flsnp\' — MadCap Flare (*.flnsp, .flpgpl .fltoc)\n- \'fm_html\' — Jekyll HTML (*.html)\n- \'fm_md\' — Jekyll Markdown (*.md)\n- \'mediawiki\' — MediaWiki (*.wiki, *.wikitext, *.mediawiki)\n- \'docx\' — Microsoft Office, OpenOffice.org Documents, Adobe InDesign, Adobe FrameMaker(*.docx, *.dotx, *.docm, *.dotm, *.xlsx, *.xltx, *.xlsm, *.xltm, *.pptx, *.potx, *.ppsx, *.pptm, *.potm, *.ppsm, *.odt, *.ods, *.odg, *.odp, *.imdl, *.mif)\n- \'vsdx\' — Microsoft Visio (*.vsdx, *.vsdm)\n- \'xlsx\' — Microsoft Excel (*.xlsx)\n- \'sbv\' — Youtube .sbv (*.sbv)\n- \'properties_play\' — Play Framework\n- \'properties_xml\' — Java Application (*.xml)\n- \'maxthon\' — Maxthon Browser (*.ini)\n- \'go_json\' — Go (*.gotext.json)\n- \'dita\' — DITA Document (*.dita, *.ditamap)\n- \'mif\' — Adobe FrameMaker (*.mif)\n- \'idml\' — Adobe InDesign (*.idml)\n- \'stringsdict\' — iOS (*.stringsdict)\n- \'plist\' — Mac OS property list (*.plist)\n- \'vtt\' — Video Subtitling and WebVTT (*.vtt)\n- \'vdf\' — Steamworks Localization Valve Data File (*.vdf)\n- \'srt\' — SubRip .srt (*.srt)\n- \'stf\' — Salesforce (*.stf)\n- \'toml\' — Toml (*.toml)\n- \'contentful_rt\' — Contentful (*.json)\n- \'svg\' — SVG (*.svg)\n- \'js\' — JavaScript (*.js)\n- \'coffee\' — CoffeeScript (*.coffee)\n- \'nestjs_i18n\' - NestJS i18n\n- \'loc\' — LOC (*.loc)\n\n__Note__: Use `docx` type to import each cell as a separate source string for XLSX file',
 		options: [
 			{
 				name: '-',
@@ -2363,6 +2363,10 @@ export const sourceFilesProperties: INodeProperties[] = [
 			{
 				name: 'docx',
 				value: 'docx'
+			},
+			{
+				name: 'vsdx',
+				value: 'vsdx'
 			},
 			{
 				name: 'xlsx',
@@ -2946,6 +2950,43 @@ export const sourceFilesProperties: INodeProperties[] = [
 						type: 'options',
 						default: '',
 						description: 'Storage Identifier. Get via [List Storages](#operation/api.storages.getMany).\n\n  Storage identifier of the SRX segmentation rules file. Read more about [Custom Segmentation](https://support.crowdin.com/custom-segmentation/#segmentation-examples).',
+						typeOptions: {
+							loadOptionsMethod: 'getStorages'
+						}
+					}
+				]
+			},
+			{
+				displayName: 'Vsdx File Import Options',
+				name: '_vsdxFileImportOptions',
+				values: [
+					{
+						displayName: 'Clean Tags Aggressively',
+						name: 'cleanTagsAggressively',
+						type: 'boolean',
+						default: false,
+						description: 'When checked, strips additional formatting tags related to text spacing.'
+					},
+					{
+						displayName: 'Translate Hyperlink Urls',
+						name: 'translateHyperlinkUrls',
+						type: 'boolean',
+						default: false,
+						description: 'When checked, exposes hidden hyperlinks for translation.'
+					},
+					{
+						displayName: 'Content Segmentation',
+						name: 'contentSegmentation',
+						type: 'boolean',
+						default: true,
+						description: 'Defines whether to split long texts into smaller text segments.'
+					},
+					{
+						displayName: 'Srx Storage Id',
+						name: 'srxStorageId',
+						type: 'options',
+						default: '',
+						description: 'Storage Identifier. Get via [List Storages](#operation/api.storages.getMany).\n\n Storage identifier of the SRX segmentation rules file. Read more about [Custom Segmentation](https://support.crowdin.com/custom-segmentation/#segmentation-examples).',
 						typeOptions: {
 							loadOptionsMethod: 'getStorages'
 						}
@@ -4471,6 +4512,43 @@ export const sourceFilesProperties: INodeProperties[] = [
 										type: 'options',
 										default: '',
 										description: 'Storage Identifier. Get via [List Storages](#operation/api.storages.getMany).\n\n  Storage identifier of the SRX segmentation rules file. Read more about [Custom Segmentation](https://support.crowdin.com/custom-segmentation/#segmentation-examples).',
+										typeOptions: {
+											loadOptionsMethod: 'getStorages'
+										}
+									}
+								]
+							},
+							{
+								displayName: 'Vsdx File Import Options',
+								name: '_vsdxFileImportOptions',
+								values: [
+									{
+										displayName: 'Clean Tags Aggressively',
+										name: 'cleanTagsAggressively',
+										type: 'boolean',
+										default: false,
+										description: 'When checked, strips additional formatting tags related to text spacing.'
+									},
+									{
+										displayName: 'Translate Hyperlink Urls',
+										name: 'translateHyperlinkUrls',
+										type: 'boolean',
+										default: false,
+										description: 'When checked, exposes hidden hyperlinks for translation.'
+									},
+									{
+										displayName: 'Content Segmentation',
+										name: 'contentSegmentation',
+										type: 'boolean',
+										default: true,
+										description: 'Defines whether to split long texts into smaller text segments.'
+									},
+									{
+										displayName: 'Srx Storage Id',
+										name: 'srxStorageId',
+										type: 'options',
+										default: '',
+										description: 'Storage Identifier. Get via [List Storages](#operation/api.storages.getMany).\n\n Storage identifier of the SRX segmentation rules file. Read more about [Custom Segmentation](https://support.crowdin.com/custom-segmentation/#segmentation-examples).',
 										typeOptions: {
 											loadOptionsMethod: 'getStorages'
 										}

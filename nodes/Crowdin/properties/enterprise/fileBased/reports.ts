@@ -2632,7 +2632,7 @@ export const reportsProperties: INodeProperties[] = [
 										name: 'typeTasks',
 										type: 'options',
 										default: '',
-										description: 'Task type:\n *      0 - translate\n *      1 - proofread\n *      2 - translate by vendor\n *      3 - proofread by vendor',
+										description: 'Task type:\n * 0 - translate\n * 1 - proofread\n * 2 - translate by vendor\n * 3 - proofread by vendor',
 										options: [
 											{
 												name: '-',
@@ -2790,7 +2790,7 @@ export const reportsProperties: INodeProperties[] = [
 										name: 'typeTasks',
 										type: 'options',
 										default: '',
-										description: 'Task type:\n *       0 - translate\n *       1 - proofread\n *       2 - translate by vendor\n *       3 - proofread by vendor',
+										description: 'Task type:\n * 0 - translate\n * 1 - proofread\n * 2 - translate by vendor\n * 3 - proofread by vendor',
 										options: [
 											{
 												name: '-',
@@ -2940,7 +2940,7 @@ export const reportsProperties: INodeProperties[] = [
 										name: 'typeTasks',
 										type: 'options',
 										default: '',
-										description: 'Task type:\n *      0 - translate\n *      1 - proofread\n *      2 - translate by vendor\n *      3 - proofread by vendor',
+										description: 'Task type:\n * 0 - translate\n * 1 - proofread\n * 2 - translate by vendor\n * 3 - proofread by vendor',
 										options: [
 											{
 												name: '-',
@@ -3098,7 +3098,7 @@ export const reportsProperties: INodeProperties[] = [
 										name: 'typeTasks',
 										type: 'options',
 										default: '',
-										description: 'Task type:\n *      0 - translate\n *      1 - proofread\n *      2 - translate by vendor\n *      3 - proofread by vendor',
+										description: 'Task type:\n * 0 - translate\n * 1 - proofread\n * 2 - translate by vendor\n * 3 - proofread by vendor',
 										options: [
 											{
 												name: '-',
@@ -3272,7 +3272,7 @@ export const reportsProperties: INodeProperties[] = [
 										name: 'typeTasks',
 										type: 'options',
 										default: '',
-										description: 'Task type:\n *      0 - translate\n *      1 - proofread\n *      2 - translate by vendor\n *      3 - proofread by vendor',
+										description: 'Task type:\n * 0 - translate\n * 1 - proofread\n * 2 - translate by vendor\n * 3 - proofread by vendor',
 										options: [
 											{
 												name: '-',
@@ -3880,7 +3880,7 @@ export const reportsProperties: INodeProperties[] = [
 										name: 'typeTasks',
 										type: 'options',
 										default: '',
-										description: 'Task type:\n *     0 - translate\n *     1 - proofread\n *     2 - translate by vendor\n *     3 - proofread by vendor',
+										description: 'Task type:\n * 0 - translate\n * 1 - proofread\n * 2 - translate by vendor\n * 3 - proofread by vendor',
 										options: [
 											{
 												name: '-',
@@ -6842,7 +6842,7 @@ export const reportsProperties: INodeProperties[] = [
 										name: 'typeTasks',
 										type: 'options',
 										default: '',
-										description: 'Task type:\n *      0 - translate\n *      1 - proofread\n *      2 - translate by vendor\n *      3 - proofread by vendor',
+										description: 'Task type:\n * 0 - translate\n * 1 - proofread\n * 2 - translate by vendor\n * 3 - proofread by vendor',
 										options: [
 											{
 												name: '-',
@@ -7000,7 +7000,7 @@ export const reportsProperties: INodeProperties[] = [
 										name: 'typeTasks',
 										type: 'options',
 										default: '',
-										description: 'Task type:\n *       0 - translate\n *       1 - proofread\n *       2 - translate by vendor\n *       3 - proofread by vendor',
+										description: 'Task type:\n * 0 - translate\n * 1 - proofread\n * 2 - translate by vendor\n * 3 - proofread by vendor',
 										options: [
 											{
 												name: '-',
@@ -7150,7 +7150,7 @@ export const reportsProperties: INodeProperties[] = [
 										name: 'typeTasks',
 										type: 'options',
 										default: '',
-										description: 'Task type:\n *      0 - translate\n *      1 - proofread\n *      2 - translate by vendor\n *      3 - proofread by vendor',
+										description: 'Task type:\n * 0 - translate\n * 1 - proofread\n * 2 - translate by vendor\n * 3 - proofread by vendor',
 										options: [
 											{
 												name: '-',
@@ -7308,7 +7308,7 @@ export const reportsProperties: INodeProperties[] = [
 										name: 'typeTasks',
 										type: 'options',
 										default: '',
-										description: 'Task type:\n *      0 - translate\n *      1 - proofread\n *      2 - translate by vendor\n *      3 - proofread by vendor',
+										description: 'Task type:\n * 0 - translate\n * 1 - proofread\n * 2 - translate by vendor\n * 3 - proofread by vendor',
 										options: [
 											{
 												name: '-',
@@ -7482,7 +7482,7 @@ export const reportsProperties: INodeProperties[] = [
 										name: 'typeTasks',
 										type: 'options',
 										default: '',
-										description: 'Task type:\n *      0 - translate\n *      1 - proofread\n *      2 - translate by vendor\n *      3 - proofread by vendor',
+										description: 'Task type:\n * 0 - translate\n * 1 - proofread\n * 2 - translate by vendor\n * 3 - proofread by vendor',
 										options: [
 											{
 												name: '-',
@@ -8090,7 +8090,7 @@ export const reportsProperties: INodeProperties[] = [
 										name: 'typeTasks',
 										type: 'options',
 										default: '',
-										description: 'Task type:\n *     0 - translate\n *     1 - proofread\n *     2 - translate by vendor\n *     3 - proofread by vendor',
+										description: 'Task type:\n * 0 - translate\n * 1 - proofread\n * 2 - translate by vendor\n * 3 - proofread by vendor',
 										options: [
 											{
 												name: '-',
@@ -12048,7 +12048,7 @@ export const reportsProperties: INodeProperties[] = [
 										name: 'typeTasks',
 										type: 'options',
 										default: '',
-										description: 'Task type:\n *     0 - translate\n *     1 - proofread\n *     2 - translate by vendor\n *     3 - proofread by vendor',
+										description: 'Task type:\n * 0 - translate\n * 1 - proofread\n * 2 - translate by vendor\n * 3 - proofread by vendor',
 										options: [
 											{
 												name: '-',
@@ -12192,7 +12192,7 @@ export const reportsProperties: INodeProperties[] = [
 										name: 'typeTasks',
 										type: 'options',
 										default: '',
-										description: 'Task type:\n *      0 - translate\n *      1 - proofread\n *      2 - translate by vendor\n *      3 - proofread by vendor',
+										description: 'Task type:\n * 0 - translate\n * 1 - proofread\n * 2 - translate by vendor\n * 3 - proofread by vendor',
 										options: [
 											{
 												name: '-',
@@ -12328,7 +12328,7 @@ export const reportsProperties: INodeProperties[] = [
 										name: 'typeTasks',
 										type: 'options',
 										default: '',
-										description: 'Task type:\n *     0 - translate\n *     1 - proofread\n *     2 - translate by vendor\n *     3 - proofread by vendor',
+										description: 'Task type:\n * 0 - translate\n * 1 - proofread\n * 2 - translate by vendor\n * 3 - proofread by vendor',
 										options: [
 											{
 												name: '-',
@@ -12472,7 +12472,7 @@ export const reportsProperties: INodeProperties[] = [
 										name: 'typeTasks',
 										type: 'options',
 										default: '',
-										description: 'Task type:\n *     0 - translate\n *     1 - proofread\n *     2 - translate by vendor\n *     3 - proofread by vendor',
+										description: 'Task type:\n * 0 - translate\n * 1 - proofread\n * 2 - translate by vendor\n * 3 - proofread by vendor',
 										options: [
 											{
 												name: '-',
@@ -12632,7 +12632,7 @@ export const reportsProperties: INodeProperties[] = [
 										name: 'typeTasks',
 										type: 'options',
 										default: '',
-										description: 'Task type:\n *     0 - translate\n *     1 - proofread\n *     2 - translate by vendor\n *     3 - proofread by vendor',
+										description: 'Task type:\n * 0 - translate\n * 1 - proofread\n * 2 - translate by vendor\n * 3 - proofread by vendor',
 										options: [
 											{
 												name: '-',
@@ -13603,7 +13603,7 @@ export const reportsProperties: INodeProperties[] = [
 										name: 'typeTasks',
 										type: 'options',
 										default: '',
-										description: 'Task type:\n *         0 - translate\n *         1 - proofread\n *         2 - translate by vendor\n *         3 - proofread by vendor',
+										description: 'Task type:\n * 0 - translate\n * 1 - proofread\n * 2 - translate by vendor\n * 3 - proofread by vendor',
 										options: [
 											{
 												name: '-',
@@ -14111,7 +14111,7 @@ export const reportsProperties: INodeProperties[] = [
 										name: 'netRateSchemes',
 										type: 'fixedCollection',
 										default: {},
-										description: 'Net Rate Schemes (Percentage paid of full translation rate)\n *\n * __Note:__ A new translation will be included in the report at the lowest rate if multiple scheme categories can be applied to the translation',
+										description: 'Net Rate Schemes (Percentage paid of full translation rate)\n\n__Note:__ A new translation will be included in the report at the lowest rate if multiple scheme categories can be applied to the translation',
 										placeholder: 'Add Field',
 										options: [
 											{

@@ -25,7 +25,6 @@ import { clientsProperties } from './clients';
 import { organizationWebhooksProperties } from './organizationWebhooks';
 import { dictionariesProperties } from './dictionaries';
 import { applicationsProperties } from './applications';
-import { bundlesProperties } from './bundles';
 import { customSpellcheckersProperties } from './customSpellcheckers';
 import { distributionsProperties } from './distributions';
 import { externalQaChecksProperties } from './externalQaChecks';
@@ -164,10 +163,6 @@ const resourceProperty: INodeProperties = {
 			description: '\nCrowdin Apps are web applications that can be integrated with Crowdin to extend its functionality.\n\nUse the API to manage the necessary app data.'
 		},
 		{
-			name: 'Bundles',
-			value: 'bundles'
-		},
-		{
 			name: 'Custom Spellcheckers',
 			value: 'customSpellcheckers'
 		},
@@ -244,7 +239,6 @@ export const properties: INodeProperties[] = [
 	...organizationWebhooksProperties,
 	...dictionariesProperties,
 	...applicationsProperties,
-	...bundlesProperties,
 	...customSpellcheckersProperties,
 	...distributionsProperties,
 	...externalQaChecksProperties,

@@ -11,23 +11,22 @@ import { sourceStringsProperties } from './sourceStrings';
 import { stringTranslationsProperties } from './stringTranslations';
 import { stringCommentsProperties } from './stringComments';
 import { screenshotsProperties } from './screenshots';
-import { styleGuidesProperties } from './styleGuides';
+import { glossariesProperties } from './glossaries';
 import { translationMemoryProperties } from './translationMemory';
 import { machineTranslationEnginesProperties } from './machineTranslationEngines';
 import { translationStatusProperties } from './translationStatus';
-import { reportsProperties } from './reports';
-import { organizationWebhooksProperties } from './organizationWebhooks';
 import { dictionariesProperties } from './dictionaries';
 import { applicationsProperties } from './applications';
-import { bundlesProperties } from './bundles';
-import { glossariesProperties } from './glossaries';
 import { distributionsProperties } from './distributions';
 import { labelsProperties } from './labels';
 import { notificationsProperties } from './notifications';
-import { securityLogsProperties } from './securityLogs';
-import { tasksProperties } from './tasks';
+import { styleGuidesProperties } from './styleGuides';
+import { reportsProperties } from './reports';
 import { usersProperties } from './users';
 import { webhooksProperties } from './webhooks';
+import { organizationWebhooksProperties } from './organizationWebhooks';
+import { securityLogsProperties } from './securityLogs';
+import { tasksProperties } from './tasks';
 
 const resourceProperty: INodeProperties = {
 	displayName: 'Resource',
@@ -85,9 +84,9 @@ const resourceProperty: INodeProperties = {
 			description: '\nScreenshots provide translators with additional context for the source strings.  Screenshot tags allow specifying  which source strings are displayed on each screenshot.\n\nUse API to manage screenshots and their tags.\n'
 		},
 		{
-			name: 'Style Guides',
-			value: 'styleGuides',
-			description: '\nStyle Guides help to provide additional context for the translators.\n\nUse API to manage style guides.\n'
+			name: 'Glossaries',
+			value: 'glossaries',
+			description: '\nGlossaries help to explain some specific terms or the ones often used in the project so that they can be properly and consistently translated.\n\nUse API to manage glossaries or specific terms. Glossary export and import are [asynchronous operations](#section/Introduction/Asynchronous-Operations) and shall be completed with sequence of API methods.\n'
 		},
 		{
 			name: 'Translation Memory',
@@ -105,16 +104,6 @@ const resourceProperty: INodeProperties = {
 			description: '\nStatus represents the general localization progress on both translations and proofreading.\n\nUse API to check translation and proofreading progress on different levels: file, language, branch, directory.\n'
 		},
 		{
-			name: 'Reports',
-			value: 'reports',
-			description: '\nReports help to estimate costs, calculate translation costs, and identify the top members.\n\nUse API to generate Cost Estimate, Translation Cost, and Top Members reports. You can then export reports in .xlsx or .csv file formats. Report generation is an [asynchronous operation](#section/Introduction/Asynchronous-Operations) and shall be completed with a sequence of API methods.'
-		},
-		{
-			name: 'Organization Webhooks',
-			value: 'organizationWebhooks',
-			description: '\nWebhooks allow you to collect information about events that happen in your Crowdin account. You can select the request type, content type, and add a custom payload, which allows you to create integrations with other systems on your own.\n\nYou can configure webhooks for the following events:\n * project is created\n * project is deleted\n\nUse API to create, modify, and delete specific webhooks.'
-		},
-		{
 			name: 'Dictionaries',
 			value: 'dictionaries',
 			description: '\nDictionaries allow you to create a storage of words that should be skipped by the spell checker.\n\nUse API to get the list of organization dictionaries and to edit a specific dictionary.'
@@ -123,15 +112,6 @@ const resourceProperty: INodeProperties = {
 			name: 'Applications',
 			value: 'applications',
 			description: '\nCrowdin Apps are web applications that can be integrated with Crowdin to extend its functionality.\n\nUse the API to manage the necessary app data.\n'
-		},
-		{
-			name: 'Bundles',
-			value: 'bundles'
-		},
-		{
-			name: 'Glossaries',
-			value: 'glossaries',
-			description: '\nGlossaries help to explain some specific terms or the ones often used in the project so that they can be properly and consistently translated.\n\nUse API to manage glossaries or specific terms. Glossary export and import are [asynchronous operations](#section/Introduction/Asynchronous-Operations) and shall be completed with sequence of API methods.\n'
 		},
 		{
 			name: 'Distributions',
@@ -146,13 +126,14 @@ const resourceProperty: INodeProperties = {
 			value: 'notifications'
 		},
 		{
-			name: 'Security Logs',
-			value: 'securityLogs'
+			name: 'Style Guides',
+			value: 'styleGuides',
+			description: '\nStyle Guides help to provide additional context for the translators.\n\nUse API to manage style guides.\n'
 		},
 		{
-			name: 'Tasks',
-			value: 'tasks',
-			description: '\nCreate and assign tasks to get files translated or proofread by specific people. You can set the due dates, split words between people, and receive notifications about the changes and updates on tasks. Tasks are project-specific, so you’ll have to create them within a project.\n\nUse API to create, modify, and delete specific tasks.\n'
+			name: 'Reports',
+			value: 'reports',
+			description: '\nReports help to estimate costs, calculate translation costs, and identify the top members.\n\nUse API to generate Cost Estimate, Translation Cost, and Top Members reports. You can then export reports in .xlsx or .csv file formats. Report generation is an [asynchronous operation](#section/Introduction/Asynchronous-Operations) and shall be completed with a sequence of API methods.'
 		},
 		{
 			name: 'Users',
@@ -163,6 +144,20 @@ const resourceProperty: INodeProperties = {
 			name: 'Webhooks',
 			value: 'webhooks',
 			description: '\nWebhooks allow you to collect information about events that happen in your Crowdin projects. You can select the request type, content type, and add a custom payload, which allows you to create integrations with other systems on your own.\n\nYou can configure webhooks for the following events:\n * all strings in project are translated\n * all strings in project are reviewed\n * all strings in project QA check are finished\n * final translation of string is updated (using Replace in suggestions feature)\n * source string is added\n * source string is updated\n * source string is deleted\n * source string is translated\n * translation for source string is updated (using Replace in suggestions feature)\n * one of translations is deleted\n * translation for string is approved\n * approval for previously added translation is removed\n\nUse API to create, modify, and delete specific webhooks.\n'
+		},
+		{
+			name: 'Organization Webhooks',
+			value: 'organizationWebhooks',
+			description: '\nWebhooks allow you to collect information about events that happen in your Crowdin account. You can select the request type, content type, and add a custom payload, which allows you to create integrations with other systems on your own.\n\nYou can configure webhooks for the following events:\n * project is created\n * project is deleted\n\nUse API to create, modify, and delete specific webhooks.'
+		},
+		{
+			name: 'Security Logs',
+			value: 'securityLogs'
+		},
+		{
+			name: 'Tasks',
+			value: 'tasks',
+			description: '\nCreate and assign tasks to get files translated or proofread by specific people. You can set the due dates, split words between people, and receive notifications about the changes and updates on tasks. Tasks are project-specific, so you’ll have to create them within a project.\n\nUse API to create, modify, and delete specific tasks.\n'
 		}
 	],
 	default: 'ai'
@@ -180,21 +175,20 @@ export const properties: INodeProperties[] = [
 	...stringTranslationsProperties,
 	...stringCommentsProperties,
 	...screenshotsProperties,
-	...styleGuidesProperties,
+	...glossariesProperties,
 	...translationMemoryProperties,
 	...machineTranslationEnginesProperties,
 	...translationStatusProperties,
-	...reportsProperties,
-	...organizationWebhooksProperties,
 	...dictionariesProperties,
 	...applicationsProperties,
-	...bundlesProperties,
-	...glossariesProperties,
 	...distributionsProperties,
 	...labelsProperties,
 	...notificationsProperties,
-	...securityLogsProperties,
-	...tasksProperties,
+	...styleGuidesProperties,
+	...reportsProperties,
 	...usersProperties,
 	...webhooksProperties,
+	...organizationWebhooksProperties,
+	...securityLogsProperties,
+	...tasksProperties,
 ];

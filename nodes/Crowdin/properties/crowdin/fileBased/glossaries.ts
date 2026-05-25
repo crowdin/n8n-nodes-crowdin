@@ -1550,6 +1550,45 @@ export const glossariesProperties: INodeProperties[] = [
 		]
 	},
 	{
+		displayName: 'Export Type',
+		name: 'exportType',
+		type: 'options',
+		default: '',
+		description: 'Determines whether the export keeps every term of a matching concept (`concepts`, default)\n * or only the terms that match the active filters (`terms`).',
+		options: [
+			{
+				name: '-',
+				value: ''
+			},
+			{
+				name: 'concepts',
+				value: 'concepts'
+			},
+			{
+				name: 'terms',
+				value: 'terms'
+			}
+		],
+		routing: {
+			send: {
+				property: 'exportType',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'glossaries'
+				],
+				operation: [
+					'api.glossaries.exports.post'
+				]
+			}
+		}
+	},
+	{
 		displayName: 'Text',
 		name: 'text',
 		type: 'string',
@@ -1651,16 +1690,30 @@ export const glossariesProperties: INodeProperties[] = [
 		}
 	},
 	{
-		displayName: 'Status',
-		name: 'status',
-		type: 'options',
-		default: '',
-		description: undefined,
+		displayName: 'Statuses',
+		name: 'statuses',
+		type: 'multiOptions',
+		default: [],
+		description: 'Filter terms by one or more statuses.',
+		routing: {
+			send: {
+				property: 'statuses',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'glossaries'
+				],
+				operation: [
+					'api.glossaries.exports.post'
+				]
+			}
+		},
 		options: [
-			{
-				name: '-',
-				value: ''
-			},
 			{
 				name: 'PREFERRED',
 				value: 'PREFERRED'
@@ -1681,13 +1734,20 @@ export const glossariesProperties: INodeProperties[] = [
 				name: 'DRAFT',
 				value: 'DRAFT'
 			}
-		],
+		]
+	},
+	{
+		displayName: 'Parts Of Speech',
+		name: 'partsOfSpeech',
+		type: 'multiOptions',
+		default: [],
+		description: 'Filter terms by one or more parts of speech.',
 		routing: {
 			send: {
-				property: 'status',
+				property: 'partsOfSpeech',
 				propertyInDotNotation: false,
 				type: 'body',
-				value: '={{ $value || undefined }}'
+				value: '={{ $value }}'
 			}
 		},
 		displayOptions: {
@@ -1699,19 +1759,8 @@ export const glossariesProperties: INodeProperties[] = [
 					'api.glossaries.exports.post'
 				]
 			}
-		}
-	},
-	{
-		displayName: 'Part Of Speech',
-		name: 'partOfSpeech',
-		type: 'options',
-		default: '',
-		description: undefined,
+		},
 		options: [
-			{
-				name: '-',
-				value: ''
-			},
 			{
 				name: 'NOUN',
 				value: 'NOUN'
@@ -1776,13 +1825,20 @@ export const glossariesProperties: INodeProperties[] = [
 				name: 'X',
 				value: 'X'
 			}
-		],
+		]
+	},
+	{
+		displayName: 'Types',
+		name: 'types',
+		type: 'multiOptions',
+		default: [],
+		description: 'Filter terms by one or more types.',
 		routing: {
 			send: {
-				property: 'partOfSpeech',
+				property: 'types',
 				propertyInDotNotation: false,
 				type: 'body',
-				value: '={{ $value || undefined }}'
+				value: '={{ $value }}'
 			}
 		},
 		displayOptions: {
@@ -1794,19 +1850,8 @@ export const glossariesProperties: INodeProperties[] = [
 					'api.glossaries.exports.post'
 				]
 			}
-		}
-	},
-	{
-		displayName: 'Type',
-		name: 'type',
-		type: 'options',
-		default: '',
-		description: undefined,
+		},
 		options: [
-			{
-				name: '-',
-				value: ''
-			},
 			{
 				name: 'FULL_FORM',
 				value: 'FULL_FORM'
@@ -1831,13 +1876,20 @@ export const glossariesProperties: INodeProperties[] = [
 				name: 'VARIANT',
 				value: 'VARIANT'
 			}
-		],
+		]
+	},
+	{
+		displayName: 'Genders',
+		name: 'genders',
+		type: 'multiOptions',
+		default: [],
+		description: 'Filter terms by one or more genders.',
 		routing: {
 			send: {
-				property: 'type',
+				property: 'genders',
 				propertyInDotNotation: false,
 				type: 'body',
-				value: '={{ $value || undefined }}'
+				value: '={{ $value }}'
 			}
 		},
 		displayOptions: {
@@ -1849,19 +1901,8 @@ export const glossariesProperties: INodeProperties[] = [
 					'api.glossaries.exports.post'
 				]
 			}
-		}
-	},
-	{
-		displayName: 'Gender',
-		name: 'gender',
-		type: 'options',
-		default: '',
-		description: undefined,
+		},
 		options: [
-			{
-				name: '-',
-				value: ''
-			},
 			{
 				name: 'MASCULINE',
 				value: 'MASCULINE'
@@ -1882,38 +1923,20 @@ export const glossariesProperties: INodeProperties[] = [
 				name: 'OTHER',
 				value: 'OTHER'
 			}
-		],
-		routing: {
-			send: {
-				property: 'gender',
-				propertyInDotNotation: false,
-				type: 'body',
-				value: '={{ $value || undefined }}'
-			}
-		},
-		displayOptions: {
-			show: {
-				resource: [
-					'glossaries'
-				],
-				operation: [
-					'api.glossaries.exports.post'
-				]
-			}
-		}
+		]
 	},
 	{
-		displayName: 'Author Id',
-		name: 'authorId',
-		type: 'options',
-		default: '',
-		description: undefined,
+		displayName: 'Author Ids',
+		name: 'authorIds',
+		type: 'multiOptions',
+		default: [],
+		description: 'Filter terms by one or more authors. Up to 50 values.',
 		routing: {
 			send: {
-				property: 'authorId',
+				property: 'authorIds',
 				propertyInDotNotation: false,
 				type: 'body',
-				value: '={{ typeof $value === \'number\' ? $value : undefined }}'
+				value: '={{ $value }}'
 			}
 		},
 		displayOptions: {
@@ -1927,7 +1950,35 @@ export const glossariesProperties: INodeProperties[] = [
 			}
 		},
 		typeOptions: {
-			loadOptionsMethod: 'getUsers'
+			loadOptionsMethod: 'getUsersMulti'
+		}
+	},
+	{
+		displayName: 'Language Ids',
+		name: 'languageIds',
+		type: 'multiOptions',
+		default: [],
+		description: 'Filter terms by one or more language IDs. Up to 50 values.',
+		routing: {
+			send: {
+				property: 'languageIds',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'glossaries'
+				],
+				operation: [
+					'api.glossaries.exports.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getLanguagesMulti'
 		}
 	},
 	{
