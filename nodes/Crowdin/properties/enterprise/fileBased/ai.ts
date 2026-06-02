@@ -2175,7 +2175,7 @@ export const aiProperties: INodeProperties[] = [
 		name: 'action',
 		type: 'options',
 		default: 'pre_translate',
-		description: undefined,
+		description: 'AI prompt action. __Note:__ `assist` is deprecated',
 		options: [
 			{
 				name: 'pre_translate',
@@ -2411,8 +2411,8 @@ export const aiProperties: INodeProperties[] = [
 						description: undefined
 					},
 					{
-						displayName: 'Public Project Description',
-						name: 'publicProjectDescription',
+						displayName: 'Project Context',
+						name: 'projectContext',
 						type: 'boolean',
 						default: false,
 						description: undefined
@@ -2430,6 +2430,13 @@ export const aiProperties: INodeProperties[] = [
 						type: 'boolean',
 						default: false,
 						description: undefined
+					},
+					{
+						displayName: 'Organization Context',
+						name: 'organizationContext',
+						type: 'boolean',
+						default: false,
+						description: 'Include organization name and internal description into the prompt context.'
 					}
 				]
 			},
@@ -2462,11 +2469,18 @@ export const aiProperties: INodeProperties[] = [
 						description: 'Array of snippets. Get via [List AI Snippets](#operation/api.ai.snippets.getMany)'
 					},
 					{
-						displayName: 'Public Project Description',
-						name: 'publicProjectDescription',
+						displayName: 'Project Context',
+						name: 'projectContext',
 						type: 'boolean',
 						default: false,
 						description: undefined
+					},
+					{
+						displayName: 'Organization Context',
+						name: 'organizationContext',
+						type: 'boolean',
+						default: false,
+						description: 'Include organization name and internal description into the prompt context.'
 					}
 				]
 			},
@@ -2554,11 +2568,18 @@ export const aiProperties: INodeProperties[] = [
 						description: undefined
 					},
 					{
-						displayName: 'Public Project Description',
-						name: 'publicProjectDescription',
+						displayName: 'Project Context',
+						name: 'projectContext',
 						type: 'boolean',
 						default: false,
 						description: undefined
+					},
+					{
+						displayName: 'Organization Context',
+						name: 'organizationContext',
+						type: 'boolean',
+						default: false,
+						description: 'Include organization name and internal description into the prompt context.'
 					}
 				]
 			},
@@ -4011,7 +4032,7 @@ export const aiProperties: INodeProperties[] = [
 				name: 'action',
 				type: 'options',
 				default: '',
-				description: 'Value for /action',
+				description: 'AI prompt action. __Note:__ `assist` is deprecated',
 				options: [
 					{
 						name: '-',
@@ -4168,8 +4189,8 @@ export const aiProperties: INodeProperties[] = [
 								description: undefined
 							},
 							{
-								displayName: 'Public Project Description',
-								name: 'publicProjectDescription',
+								displayName: 'Project Context',
+								name: 'projectContext',
 								type: 'boolean',
 								default: false,
 								description: undefined
@@ -4187,6 +4208,13 @@ export const aiProperties: INodeProperties[] = [
 								type: 'boolean',
 								default: false,
 								description: undefined
+							},
+							{
+								displayName: 'Organization Context',
+								name: 'organizationContext',
+								type: 'boolean',
+								default: false,
+								description: 'Include organization name and internal description into the prompt context.'
 							}
 						]
 					},
@@ -4219,11 +4247,18 @@ export const aiProperties: INodeProperties[] = [
 								description: 'Array of snippets. Get via [List AI Snippets](#operation/api.ai.snippets.getMany)'
 							},
 							{
-								displayName: 'Public Project Description',
-								name: 'publicProjectDescription',
+								displayName: 'Project Context',
+								name: 'projectContext',
 								type: 'boolean',
 								default: false,
 								description: undefined
+							},
+							{
+								displayName: 'Organization Context',
+								name: 'organizationContext',
+								type: 'boolean',
+								default: false,
+								description: 'Include organization name and internal description into the prompt context.'
 							}
 						]
 					},
@@ -4311,11 +4346,18 @@ export const aiProperties: INodeProperties[] = [
 								description: undefined
 							},
 							{
-								displayName: 'Public Project Description',
-								name: 'publicProjectDescription',
+								displayName: 'Project Context',
+								name: 'projectContext',
 								type: 'boolean',
 								default: false,
 								description: undefined
+							},
+							{
+								displayName: 'Organization Context',
+								name: 'organizationContext',
+								type: 'boolean',
+								default: false,
+								description: 'Include organization name and internal description into the prompt context.'
 							}
 						]
 					},

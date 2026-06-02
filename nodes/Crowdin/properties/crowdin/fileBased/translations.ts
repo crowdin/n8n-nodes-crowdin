@@ -2260,7 +2260,7 @@ export const translationsProperties: INodeProperties[] = [
 		name: 'duplicateTranslations',
 		type: 'boolean',
 		default: false,
-		description: 'Adds translations even if the same translation already exists. Default is `false`',
+		description: 'Adds translations even if the same translation already exists. Default is `false`.\n\n__Note:__ Cannot be used when `replaceTranslationsOption` is `all` (replacing all translations already overrides duplicate handling).',
 		routing: {
 			send: {
 				property: 'duplicateTranslations',
@@ -2285,7 +2285,7 @@ export const translationsProperties: INodeProperties[] = [
 		name: 'skipApprovedTranslations',
 		type: 'boolean',
 		default: false,
-		description: 'Skip strings that already have approved translations. Default is `false`',
+		description: 'Skip strings that already have approved translations. Default is `false`.\n\n__Note:__ Cannot be used together with `resetApprovalStatus`.',
 		routing: {
 			send: {
 				property: 'skipApprovedTranslations',
@@ -2353,7 +2353,7 @@ export const translationsProperties: INodeProperties[] = [
 		name: 'dateTime:translationModifiedBefore',
 		type: 'dateTime',
 		default: '',
-		description: 'Re-translates only if a string\'s current translation was modified prior to this date. Useful after modifying contextual resources like screenshots, style guides, or glossaries.\n\n__Note:__ Has effect when `scope` is `translated` or `all`.',
+		description: 'Re-translates only if a string\'s current translation was modified prior to this date. Useful after modifying contextual resources like screenshots, style guides, or glossaries.\n\n__Note:__ Requires `scope` to be `translated` or `all`. Cannot be used with `scope: "untranslated"` or `translateUntranslatedOnly: true`.',
 		routing: {
 			send: {
 				property: 'translationModifiedBefore',
@@ -2379,7 +2379,7 @@ export const translationsProperties: INodeProperties[] = [
 		name: 'replaceTranslationsOption',
 		type: 'options',
 		default: '',
-		description: 'Defines whether to replace existing translations with new pre-translations. Default is `none`. Available values:\n- \'none\' – add the new translation alongside existing ones (default)\n- \'autoTranslated\' – replace auto-generated translations (TM, MT, AI). Human translations are kept\n- \'all\' – replace all existing translations\n\n__Note:__ Has effect when `scope` is `translated` or `all`.',
+		description: 'Defines whether to replace existing translations with new pre-translations. Default is `none`. Available values:\n- \'none\' – add the new translation alongside existing ones (default)\n- \'autoTranslated\' – replace auto-generated translations (TM, MT, AI). Human translations are kept\n- \'all\' – replace all existing translations\n\n__Note:__ Values other than `none` require `scope` to be `translated` or `all` (cannot be combined with `scope: "untranslated"` or `translateUntranslatedOnly: true`).',
 		options: [
 			{
 				name: '-',
@@ -2422,7 +2422,7 @@ export const translationsProperties: INodeProperties[] = [
 		name: 'resetApprovalStatus',
 		type: 'boolean',
 		default: false,
-		description: 'Removes approval on existing translations when applying pre-translations. Default is `false`.\n\n__Note:__ Cannot be used together with `autoApproveOption`. Has effect when `scope` is `translated` or `all`.',
+		description: 'Removes approval on existing translations when applying pre-translations. Default is `false`.\n\n__Note:__ Requires `scope` to be `translated` or `all`. Cannot be used together with `skipApprovedTranslations`, `autoApproveOption` (any value other than `none`), or when `replaceTranslationsOption` is `all` (replaced translations lose approval automatically). Cannot be used with `scope: "untranslated"` or `translateUntranslatedOnly: true`.',
 		routing: {
 			send: {
 				property: 'resetApprovalStatus',

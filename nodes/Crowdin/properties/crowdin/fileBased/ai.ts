@@ -2676,8 +2676,8 @@ export const aiProperties: INodeProperties[] = [
 						description: undefined
 					},
 					{
-						displayName: 'Public Project Description',
-						name: 'publicProjectDescription',
+						displayName: 'Project Context',
+						name: 'projectContext',
 						type: 'boolean',
 						default: false,
 						description: undefined
@@ -2782,8 +2782,8 @@ export const aiProperties: INodeProperties[] = [
 						description: undefined
 					},
 					{
-						displayName: 'Public Project Description',
-						name: 'publicProjectDescription',
+						displayName: 'Project Context',
+						name: 'projectContext',
 						type: 'boolean',
 						default: false,
 						description: undefined
@@ -4728,8 +4728,8 @@ export const aiProperties: INodeProperties[] = [
 								description: undefined
 							},
 							{
-								displayName: 'Public Project Description',
-								name: 'publicProjectDescription',
+								displayName: 'Project Context',
+								name: 'projectContext',
 								type: 'boolean',
 								default: false,
 								description: undefined
@@ -4834,8 +4834,8 @@ export const aiProperties: INodeProperties[] = [
 								description: undefined
 							},
 							{
-								displayName: 'Public Project Description',
-								name: 'publicProjectDescription',
+								displayName: 'Project Context',
+								name: 'projectContext',
 								type: 'boolean',
 								default: false,
 								description: undefined
