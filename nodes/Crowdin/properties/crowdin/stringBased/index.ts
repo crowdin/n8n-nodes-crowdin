@@ -1,6 +1,7 @@
 // Auto-generated - do not edit manually
 
 import type { INodeProperties } from 'n8n-workflow';
+import { advisorProperties } from './advisor';
 import { aiProperties } from './ai';
 import { storageProperties } from './storage';
 import { languagesProperties } from './languages';
@@ -14,13 +15,13 @@ import { screenshotsProperties } from './screenshots';
 import { glossariesProperties } from './glossaries';
 import { translationMemoryProperties } from './translationMemory';
 import { machineTranslationEnginesProperties } from './machineTranslationEngines';
-import { translationStatusProperties } from './translationStatus';
 import { dictionariesProperties } from './dictionaries';
 import { applicationsProperties } from './applications';
 import { distributionsProperties } from './distributions';
 import { labelsProperties } from './labels';
 import { notificationsProperties } from './notifications';
 import { styleGuidesProperties } from './styleGuides';
+import { translationStatusProperties } from './translationStatus';
 import { reportsProperties } from './reports';
 import { usersProperties } from './users';
 import { webhooksProperties } from './webhooks';
@@ -34,6 +35,10 @@ const resourceProperty: INodeProperties = {
 	type: 'options',
 	noDataExpression: true,
 	options: [
+		{
+			name: 'Advisor',
+			value: 'advisor'
+		},
 		{
 			name: 'AI',
 			value: 'ai'
@@ -99,11 +104,6 @@ const resourceProperty: INodeProperties = {
 			description: '\nMachine Translation Engines (MTE) are the sources for pre-translations. You can currently connect Google Translate, Microsoft Translator, Crowdin Translate, DeepL Pro and Amazon Translate engines.\n\nUse API to add, update, and delete specific MTE.\n'
 		},
 		{
-			name: 'Translation Status',
-			value: 'translationStatus',
-			description: '\nStatus represents the general localization progress on both translations and proofreading.\n\nUse API to check translation and proofreading progress on different levels: file, language, branch, directory.\n'
-		},
-		{
 			name: 'Dictionaries',
 			value: 'dictionaries',
 			description: '\nDictionaries allow you to create a storage of words that should be skipped by the spell checker.\n\nUse API to get the list of organization dictionaries and to edit a specific dictionary.'
@@ -129,6 +129,11 @@ const resourceProperty: INodeProperties = {
 			name: 'Style Guides',
 			value: 'styleGuides',
 			description: '\nStyle Guides help to provide additional context for the translators.\n\nUse API to manage style guides.\n'
+		},
+		{
+			name: 'Translation Status',
+			value: 'translationStatus',
+			description: '\nStatus represents the general localization progress on both translations and proofreading.\n\nUse API to check translation and proofreading progress on different levels: file, language, branch, directory.\n'
 		},
 		{
 			name: 'Reports',
@@ -160,11 +165,12 @@ const resourceProperty: INodeProperties = {
 			description: '\nCreate and assign tasks to get files translated or proofread by specific people. You can set the due dates, split words between people, and receive notifications about the changes and updates on tasks. Tasks are project-specific, so you’ll have to create them within a project.\n\nUse API to create, modify, and delete specific tasks.\n'
 		}
 	],
-	default: 'ai'
+	default: 'advisor'
 };
 
 export const properties: INodeProperties[] = [
 	resourceProperty,
+	...advisorProperties,
 	...aiProperties,
 	...storageProperties,
 	...languagesProperties,
@@ -178,13 +184,13 @@ export const properties: INodeProperties[] = [
 	...glossariesProperties,
 	...translationMemoryProperties,
 	...machineTranslationEnginesProperties,
-	...translationStatusProperties,
 	...dictionariesProperties,
 	...applicationsProperties,
 	...distributionsProperties,
 	...labelsProperties,
 	...notificationsProperties,
 	...styleGuidesProperties,
+	...translationStatusProperties,
 	...reportsProperties,
 	...usersProperties,
 	...webhooksProperties,

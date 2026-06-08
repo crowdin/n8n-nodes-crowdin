@@ -1648,8 +1648,8 @@ export const tasksProperties: INodeProperties[] = [
 		},
 		options: [
 			{
-				displayName: 'Task Create Form',
-				name: '_taskCreateForm',
+				displayName: 'Enterprise Task Create Form',
+				name: '_enterpriseTaskCreateForm',
 				values: [
 					{
 						displayName: 'Form Type',
@@ -1659,9 +1659,22 @@ export const tasksProperties: INodeProperties[] = [
 						description: 'Select the form type',
 						options: [
 							{
-								displayName: 'Create By Branch Ids Form',
-								name: '_createByBranchIdsForm',
+								displayName: 'Create By Source Ids Form',
+								name: '_createBySourceIdsForm',
 								values: [
+									{
+										displayName: 'Branch Ids',
+										name: 'branchIds',
+										type: 'multiOptions',
+										typeOptions: {
+											loadOptionsMethod: 'getBranchesMulti',
+											loadOptionsDependsOn: [
+												'projectId'
+											]
+										},
+										default: [],
+										description: 'Branch Identifiers. Get via [List Branches](#operation/api.projects.branches.getMany)\n\n__Note:__ One of fields `branchIds` or `stringIds` is required. Both cannot be provided simultaneously'
+									},
 									{
 										displayName: 'Type',
 										name: 'type',
@@ -1715,20 +1728,6 @@ export const tasksProperties: INodeProperties[] = [
 										typeOptions: {
 											loadOptionsMethod: 'getLanguages'
 										}
-									},
-									{
-										displayName: 'Branch Ids',
-										name: 'branchIds',
-										type: 'multiOptions',
-										typeOptions: {
-											loadOptionsMethod: 'getBranchesMulti',
-											loadOptionsDependsOn: [
-												'projectId'
-											]
-										},
-										default: [],
-										description: 'Array of branch ids. Get via [List Branches](#operation/api.projects.branches.getMany)',
-										required: true
 									},
 									{
 										displayName: 'Label Ids',
@@ -2012,6 +2011,20 @@ export const tasksProperties: INodeProperties[] = [
 								name: '_createByStringIdsForm',
 								values: [
 									{
+										displayName: 'String Ids',
+										name: 'stringIds',
+										type: 'multiOptions',
+										typeOptions: {
+											loadOptionsMethod: 'getProjectStringsMulti',
+											loadOptionsDependsOn: [
+												'projectId'
+											]
+										},
+										default: [],
+										description: 'Task String Identifiers. Get via [List Strings](#operation/api.projects.strings.getMany)',
+										required: true
+									},
+									{
 										displayName: 'Type',
 										name: 'type',
 										type: 'options',
@@ -2064,20 +2077,6 @@ export const tasksProperties: INodeProperties[] = [
 										typeOptions: {
 											loadOptionsMethod: 'getLanguages'
 										}
-									},
-									{
-										displayName: 'String Ids',
-										name: 'stringIds',
-										type: 'multiOptions',
-										typeOptions: {
-											loadOptionsMethod: 'getProjectStringsMulti',
-											loadOptionsDependsOn: [
-												'projectId'
-											]
-										},
-										default: [],
-										description: 'Task String Identifiers. Get via [List Strings](#operation/api.projects.strings.getMany)',
-										required: true
 									},
 									{
 										displayName: 'Status',
@@ -2293,8 +2292,8 @@ export const tasksProperties: INodeProperties[] = [
 				]
 			},
 			{
-				displayName: 'Vendor Task Create Form',
-				name: '_vendorTaskCreateForm',
+				displayName: 'Enterprise Vendor Task Create Form',
+				name: '_enterpriseVendorTaskCreateForm',
 				values: [
 					{
 						displayName: 'Form Type',
@@ -2304,9 +2303,22 @@ export const tasksProperties: INodeProperties[] = [
 						description: 'Select the form type',
 						options: [
 							{
-								displayName: 'Create By Branch Ids Form',
-								name: '_createByBranchIdsForm',
+								displayName: 'Create By Source Ids Form',
+								name: '_createBySourceIdsForm',
 								values: [
+									{
+										displayName: 'Branch Ids',
+										name: 'branchIds',
+										type: 'multiOptions',
+										typeOptions: {
+											loadOptionsMethod: 'getBranchesMulti',
+											loadOptionsDependsOn: [
+												'projectId'
+											]
+										},
+										default: [],
+										description: 'Branch Identifiers. Get via [List Branches](#operation/api.projects.branches.getMany)\n\n__Note:__ One of fields `branchIds` or `stringIds` is required. Both cannot be provided simultaneously'
+									},
 									{
 										displayName: 'Workflow Step Id',
 										name: 'workflowStepId',
@@ -2340,20 +2352,6 @@ export const tasksProperties: INodeProperties[] = [
 										typeOptions: {
 											loadOptionsMethod: 'getLanguages'
 										}
-									},
-									{
-										displayName: 'Branch Ids',
-										name: 'branchIds',
-										type: 'multiOptions',
-										typeOptions: {
-											loadOptionsMethod: 'getBranchesMulti',
-											loadOptionsDependsOn: [
-												'projectId'
-											]
-										},
-										default: [],
-										description: 'Array of branch ids. Get via [List Branches](#operation/api.projects.branches.getMany)',
-										required: true
 									},
 									{
 										displayName: 'Label Ids',
@@ -2520,6 +2518,20 @@ export const tasksProperties: INodeProperties[] = [
 								name: '_createByStringIdsForm',
 								values: [
 									{
+										displayName: 'String Ids',
+										name: 'stringIds',
+										type: 'multiOptions',
+										typeOptions: {
+											loadOptionsMethod: 'getProjectStringsMulti',
+											loadOptionsDependsOn: [
+												'projectId'
+											]
+										},
+										default: [],
+										description: 'Task String Identifiers. Get via [List Strings](#operation/api.projects.strings.getMany)',
+										required: true
+									},
+									{
 										displayName: 'Workflow Step Id',
 										name: 'workflowStepId',
 										type: 'options',
@@ -2552,20 +2564,6 @@ export const tasksProperties: INodeProperties[] = [
 										typeOptions: {
 											loadOptionsMethod: 'getLanguages'
 										}
-									},
-									{
-										displayName: 'String Ids',
-										name: 'stringIds',
-										type: 'multiOptions',
-										typeOptions: {
-											loadOptionsMethod: 'getProjectStringsMulti',
-											loadOptionsDependsOn: [
-												'projectId'
-											]
-										},
-										default: [],
-										description: 'Task String Identifiers. Get via [List Strings](#operation/api.projects.strings.getMany)',
-										required: true
 									},
 									{
 										displayName: 'Label Ids',

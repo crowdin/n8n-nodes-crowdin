@@ -1,6 +1,7 @@
 // Auto-generated - do not edit manually
 
 import type { INodeProperties } from 'n8n-workflow';
+import { advisorProperties } from './advisor';
 import { aiProperties } from './ai';
 import { storageProperties } from './storage';
 import { languagesProperties } from './languages';
@@ -22,20 +23,20 @@ import { tasksProperties } from './tasks';
 import { usersProperties } from './users';
 import { teamsProperties } from './teams';
 import { clientsProperties } from './clients';
-import { organizationWebhooksProperties } from './organizationWebhooks';
 import { dictionariesProperties } from './dictionaries';
 import { applicationsProperties } from './applications';
+import { externalQaChecksProperties } from './externalQaChecks';
 import { customSpellcheckersProperties } from './customSpellcheckers';
 import { distributionsProperties } from './distributions';
-import { externalQaChecksProperties } from './externalQaChecks';
 import { fieldsProperties } from './fields';
 import { labelsProperties } from './labels';
 import { notificationsProperties } from './notifications';
 import { organizationProperties } from './organization';
+import { webhooksProperties } from './webhooks';
+import { organizationWebhooksProperties } from './organizationWebhooks';
 import { securityLogsProperties } from './securityLogs';
 import { styleGuidesProperties } from './styleGuides';
 import { vendorsProperties } from './vendors';
-import { webhooksProperties } from './webhooks';
 
 const resourceProperty: INodeProperties = {
 	displayName: 'Resource',
@@ -43,6 +44,10 @@ const resourceProperty: INodeProperties = {
 	type: 'options',
 	noDataExpression: true,
 	options: [
+		{
+			name: 'Advisor',
+			value: 'advisor'
+		},
 		{
 			name: 'AI',
 			value: 'ai'
@@ -148,11 +153,6 @@ const resourceProperty: INodeProperties = {
 			description: '\nClients are the organizations that order professional translation services from Vendors. Clients can invite an existing organization to become a Vendor for them.\n\nUse the API to get a list of the Clients you already cooperate with as a Vendor.\n'
 		},
 		{
-			name: 'Organization Webhooks',
-			value: 'organizationWebhooks',
-			description: '\nWebhooks allow you to collect information about events that happen in your Crowdin Enterprise organization. You can select the request type, content type, and add a custom payload, which allows you to create integrations with other systems on your own.\n\nYou can configure webhooks for the following events:\n * group is created\n * group is deleted\n * project is created\n * project is deleted\n\nUse API to create, modify, and delete specific webhooks.\n'
-		},
-		{
 			name: 'Dictionaries',
 			value: 'dictionaries',
 			description: '\nDictionaries allow you to create a storage of words that should be skipped by the spell checker.\n\nUse API to get the list of organization dictionaries and to edit a specific dictionary.\n'
@@ -163,17 +163,17 @@ const resourceProperty: INodeProperties = {
 			description: '\nCrowdin Apps are web applications that can be integrated with Crowdin to extend its functionality.\n\nUse the API to manage the necessary app data.'
 		},
 		{
+			name: 'External QA Checks',
+			value: 'externalQaChecks',
+			description: '\nExternal QA Checks are the tools that help to ensure the quality of the translations.\n\nYou can install an applicastion with External QA Check module to your organization and extend basic functionality with additional checks.\n'
+		},
+		{
 			name: 'Custom Spellcheckers',
 			value: 'customSpellcheckers'
 		},
 		{
 			name: 'Distributions',
 			value: 'distributions'
-		},
-		{
-			name: 'External QA Checks',
-			value: 'externalQaChecks',
-			description: '\nExternal QA Checks are the tools that help to ensure the quality of the translations.\n\nYou can install an applicastion with External QA Check module to your organization and extend basic functionality with additional checks.\n'
 		},
 		{
 			name: 'Fields',
@@ -192,6 +192,16 @@ const resourceProperty: INodeProperties = {
 			value: 'organization'
 		},
 		{
+			name: 'Webhooks',
+			value: 'webhooks',
+			description: '\nWebhooks allow you to collect information about events that happen in your Crowdin Enterprise projects. You can select the request type, content type, and add a custom payload, which allows you to create integrations with other systems on your own.\n\nYou can configure webhooks for the following events:\n * all strings in project are translated\n * all strings in project are reviewed\n * all strings in project QA check are finished\n * final translation of string is updated (using Replace in suggestions feature)\n * source string is added\n * source string is updated\n * source string is deleted\n * source string is translated\n * translation for source string is updated (using Replace in suggestions feature)\n * one of translations is deleted\n * translation for string is approved\n * approval for previously added translation is removed\n\nUse API to create, modify, and delete specific webhooks.\n'
+		},
+		{
+			name: 'Organization Webhooks',
+			value: 'organizationWebhooks',
+			description: '\nWebhooks allow you to collect information about events that happen in your Crowdin Enterprise organization. You can select the request type, content type, and add a custom payload, which allows you to create integrations with other systems on your own.\n\nYou can configure webhooks for the following events:\n * group is created\n * group is deleted\n * project is created\n * project is deleted\n\nUse API to create, modify, and delete specific webhooks.\n'
+		},
+		{
 			name: 'Security Logs',
 			value: 'securityLogs'
 		},
@@ -203,18 +213,14 @@ const resourceProperty: INodeProperties = {
 			name: 'Vendors',
 			value: 'vendors',
 			description: '\nVendors are the organizations that provide professional translation services. To assign a Vendor to a project workflow you should invite an existing Organization to be a Vendor for you.\n\nUse API to get the list of the Vendors you already invited to your organization.\n'
-		},
-		{
-			name: 'Webhooks',
-			value: 'webhooks',
-			description: '\nWebhooks allow you to collect information about events that happen in your Crowdin Enterprise projects. You can select the request type, content type, and add a custom payload, which allows you to create integrations with other systems on your own.\n\nYou can configure webhooks for the following events:\n * all strings in project are translated\n * all strings in project are reviewed\n * all strings in project QA check are finished\n * final translation of string is updated (using Replace in suggestions feature)\n * source string is added\n * source string is updated\n * source string is deleted\n * source string is translated\n * translation for source string is updated (using Replace in suggestions feature)\n * one of translations is deleted\n * translation for string is approved\n * approval for previously added translation is removed\n\nUse API to create, modify, and delete specific webhooks.\n'
 		}
 	],
-	default: 'ai'
+	default: 'advisor'
 };
 
 export const properties: INodeProperties[] = [
 	resourceProperty,
+	...advisorProperties,
 	...aiProperties,
 	...storageProperties,
 	...languagesProperties,
@@ -236,18 +242,18 @@ export const properties: INodeProperties[] = [
 	...usersProperties,
 	...teamsProperties,
 	...clientsProperties,
-	...organizationWebhooksProperties,
 	...dictionariesProperties,
 	...applicationsProperties,
+	...externalQaChecksProperties,
 	...customSpellcheckersProperties,
 	...distributionsProperties,
-	...externalQaChecksProperties,
 	...fieldsProperties,
 	...labelsProperties,
 	...notificationsProperties,
 	...organizationProperties,
+	...webhooksProperties,
+	...organizationWebhooksProperties,
 	...securityLogsProperties,
 	...styleGuidesProperties,
 	...vendorsProperties,
-	...webhooksProperties,
 ];
