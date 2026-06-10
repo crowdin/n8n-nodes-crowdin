@@ -3073,6 +3073,32 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 		}
 	},
 	{
+		displayName: 'Context Review Ai Prompt Id',
+		name: 'contextReviewAiPromptId',
+		type: 'number',
+		default: 0,
+		description: 'AI Prompt ID to be used as prompt for Advisor string context review',
+		routing: {
+			send: {
+				property: 'contextReviewAiPromptId',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value !== 0 ? $value : undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'projectsAndGroups'
+				],
+				operation: [
+					'api.projects.post'
+				]
+			}
+		},
+		placeholder: '11'
+	},
+	{
 		displayName: 'Default Tm Id',
 		name: 'defaultTmId',
 		type: 'options',
@@ -3569,7 +3595,7 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 						name: 'type',
 						type: 'options',
 						default: '',
-						description: 'Values available:\n *            \'i18next_json\' — i18next (*.json)\n *            \'nestjs_i18n\' - NestJS i18n',
+						description: 'Values available:\n * \'i18next_json\' — i18next (*.json)\n * \'nestjs_i18n\' - NestJS i18n',
 						options: [
 							{
 								name: '-',
@@ -4940,6 +4966,14 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 				}
 			},
 			{
+				displayName: 'Context Review Ai Prompt Id',
+				name: 'contextReviewAiPromptId',
+				type: 'number',
+				default: 0,
+				description: 'AI Prompt ID to be used as prompt for Advisor string context review',
+				placeholder: '11'
+			},
+			{
 				displayName: 'Savings Report Settings Template Id',
 				name: 'savingsReportSettingsTemplateId',
 				type: 'options',
@@ -5460,7 +5494,7 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 								name: 'type',
 								type: 'options',
 								default: '',
-								description: 'Values available:\n *            \'i18next_json\' — i18next (*.json)\n *            \'nestjs_i18n\' - NestJS i18n',
+								description: 'Values available:\n * \'i18next_json\' — i18next (*.json)\n * \'nestjs_i18n\' - NestJS i18n',
 								options: [
 									{
 										name: '-',

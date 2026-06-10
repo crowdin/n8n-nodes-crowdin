@@ -2334,6 +2334,32 @@ export const projectsProperties: INodeProperties[] = [
 		}
 	},
 	{
+		displayName: 'Context Review Ai Prompt Id',
+		name: 'contextReviewAiPromptId',
+		type: 'number',
+		default: 0,
+		description: 'AI Prompt ID to be used as prompt for Advisor string context review',
+		routing: {
+			send: {
+				property: 'contextReviewAiPromptId',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value !== 0 ? $value : undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'projects'
+				],
+				operation: [
+					'api.projects.post'
+				]
+			}
+		},
+		placeholder: '11'
+	},
+	{
 		displayName: 'Savings Report Settings Template Id',
 		name: 'savingsReportSettingsTemplateId',
 		type: 'options',
@@ -2911,7 +2937,7 @@ export const projectsProperties: INodeProperties[] = [
 						name: 'escapeQuotes',
 						type: 'options',
 						default: '',
-						description: 'Values available:\n - 0 - Do not escape single quote\n - 1 - Escape single quote by another single quote\n - 2 - Escape single quote by a backslash\n - 3 - Escape single quote by another single quote only in strings containing variables (`{0}`)',
+						description: 'Values available:\n * 0 - Do not escape single quote\n * 1 - Escape single quote by another single quote\n * 2 - Escape single quote by a backslash\n * 3 - Escape single quote by another single quote only in strings containing variables (`{0}`)',
 						options: [
 							{
 								name: '-',
@@ -2940,7 +2966,7 @@ export const projectsProperties: INodeProperties[] = [
 						name: 'escapeSpecialCharacters',
 						type: 'options',
 						default: '',
-						description: 'Defines whether any special characters (=, :, ! and #) should be escaped by backslash in exported translations. You can add escape_special_characters per-file option.\n\nAcceptable values are: 0, 1. Default is 0.\n - 0 - Do not escape special characters\n - 1 - Escape special characters by a backslash',
+						description: 'Defines whether any special characters (=, :, ! and #) should be escaped by backslash in exported translations. You can add escape_special_characters per-file option.\n\nAcceptable values are: 0, 1. Default is 0.\n * 0 - Do not escape special characters\n * 1 - Escape special characters by a backslash',
 						options: [
 							{
 								name: '-',
@@ -2984,7 +3010,7 @@ export const projectsProperties: INodeProperties[] = [
 							multipleValues: true
 						},
 						default: {},
-						description: 'This is an array of strings, where each item is the XPaths to DOM element that should be imported.\n\nSupported XPath patterns:\n- `/path/to/node` — Absolute path to a specific node\n- `/path/to/attribute[@attr]` — Absolute path to an attribute\n- `//node` — All nodes with the specified name\n- `//[@attr]` — All elements with the specified attribute\n- `nodeone/nodetwo` — Relative path\n- `/nodeone//nodetwo` — Mixed absolute and descendant path\n- `//node[@attr]` — All nodes with the specified name and attribute',
+						description: 'This is an array of strings, where each item is the XPaths to DOM element that should be imported.\n\nSupported XPath patterns:\n * `/path/to/node` — Absolute path to a specific node\n * `/path/to/attribute[@attr]` — Absolute path to an attribute\n * `//node` — All nodes with the specified name\n * `//[@attr]` — All elements with the specified attribute\n * `nodeone/nodetwo` — Relative path\n * `/nodeone//nodetwo` — Mixed absolute and descendant path\n * `//node[@attr]` — All nodes with the specified name and attribute',
 						placeholder: 'Add Item',
 						options: [
 							{
@@ -3461,7 +3487,7 @@ export const projectsProperties: INodeProperties[] = [
 						name: 'type',
 						type: 'options',
 						default: '',
-						description: 'Values available:\n - \'mdx_v1\' — MDX (v1)\n * - \'mdx_v2\' - MDX (v2)',
+						description: 'Values available:\n * \'mdx_v1\' — MDX (v1)\n * \'mdx_v2\' - MDX (v2)',
 						options: [
 							{
 								name: '-',
@@ -4167,7 +4193,7 @@ export const projectsProperties: INodeProperties[] = [
 						name: 'type',
 						type: 'options',
 						default: '',
-						description: 'Values available:\n *            \'i18next_json\' — i18next (*.json)\n *            \'nestjs_i18n\' - NestJS i18n',
+						description: 'Values available:\n * \'i18next_json\' — i18next (*.json)\n * \'nestjs_i18n\' - NestJS i18n',
 						options: [
 							{
 								name: '-',
@@ -4465,7 +4491,7 @@ export const projectsProperties: INodeProperties[] = [
 						name: 'exportQuotes',
 						type: 'options',
 						default: '',
-						description: 'Acceptable values are: \'single\', \'double\'. Default is \'single\'.\n - \'single\' - Output will be enclosed in single quotes\n - \'double\' - Output will be enclosed in double quotes',
+						description: 'Acceptable values are: \'single\', \'double\'. Default is \'single\'.\n * \'single\' - Output will be enclosed in single quotes\n * \'double\' - Output will be enclosed in double quotes',
 						options: [
 							{
 								name: '-',
@@ -6019,6 +6045,14 @@ export const projectsProperties: INodeProperties[] = [
 				}
 			},
 			{
+				displayName: 'Context Review Ai Prompt Id',
+				name: 'contextReviewAiPromptId',
+				type: 'number',
+				default: 0,
+				description: 'AI Prompt ID to be used as prompt for Advisor string context review',
+				placeholder: '11'
+			},
+			{
 				displayName: 'Savings Report Settings Template Id',
 				name: 'savingsReportSettingsTemplateId',
 				type: 'options',
@@ -6084,7 +6118,7 @@ export const projectsProperties: INodeProperties[] = [
 								name: 'escapeQuotes',
 								type: 'options',
 								default: '',
-								description: 'Values available:\n - 0 - Do not escape single quote\n - 1 - Escape single quote by another single quote\n - 2 - Escape single quote by a backslash\n - 3 - Escape single quote by another single quote only in strings containing variables (`{0}`)',
+								description: 'Values available:\n * 0 - Do not escape single quote\n * 1 - Escape single quote by another single quote\n * 2 - Escape single quote by a backslash\n * 3 - Escape single quote by another single quote only in strings containing variables (`{0}`)',
 								options: [
 									{
 										name: '-',
@@ -6113,7 +6147,7 @@ export const projectsProperties: INodeProperties[] = [
 								name: 'escapeSpecialCharacters',
 								type: 'options',
 								default: '',
-								description: 'Defines whether any special characters (=, :, ! and #) should be escaped by backslash in exported translations. You can add escape_special_characters per-file option.\n\nAcceptable values are: 0, 1. Default is 0.\n - 0 - Do not escape special characters\n - 1 - Escape special characters by a backslash',
+								description: 'Defines whether any special characters (=, :, ! and #) should be escaped by backslash in exported translations. You can add escape_special_characters per-file option.\n\nAcceptable values are: 0, 1. Default is 0.\n * 0 - Do not escape special characters\n * 1 - Escape special characters by a backslash',
 								options: [
 									{
 										name: '-',
@@ -6157,7 +6191,7 @@ export const projectsProperties: INodeProperties[] = [
 									multipleValues: true
 								},
 								default: {},
-								description: 'This is an array of strings, where each item is the XPaths to DOM element that should be imported.\n\nSupported XPath patterns:\n- `/path/to/node` — Absolute path to a specific node\n- `/path/to/attribute[@attr]` — Absolute path to an attribute\n- `//node` — All nodes with the specified name\n- `//[@attr]` — All elements with the specified attribute\n- `nodeone/nodetwo` — Relative path\n- `/nodeone//nodetwo` — Mixed absolute and descendant path\n- `//node[@attr]` — All nodes with the specified name and attribute',
+								description: 'This is an array of strings, where each item is the XPaths to DOM element that should be imported.\n\nSupported XPath patterns:\n * `/path/to/node` — Absolute path to a specific node\n * `/path/to/attribute[@attr]` — Absolute path to an attribute\n * `//node` — All nodes with the specified name\n * `//[@attr]` — All elements with the specified attribute\n * `nodeone/nodetwo` — Relative path\n * `/nodeone//nodetwo` — Mixed absolute and descendant path\n * `//node[@attr]` — All nodes with the specified name and attribute',
 								placeholder: 'Add Item',
 								options: [
 									{
@@ -6634,7 +6668,7 @@ export const projectsProperties: INodeProperties[] = [
 								name: 'type',
 								type: 'options',
 								default: '',
-								description: 'Values available:\n - \'mdx_v1\' — MDX (v1)\n * - \'mdx_v2\' - MDX (v2)',
+								description: 'Values available:\n * \'mdx_v1\' — MDX (v1)\n * \'mdx_v2\' - MDX (v2)',
 								options: [
 									{
 										name: '-',
@@ -7340,7 +7374,7 @@ export const projectsProperties: INodeProperties[] = [
 								name: 'type',
 								type: 'options',
 								default: '',
-								description: 'Values available:\n *            \'i18next_json\' — i18next (*.json)\n *            \'nestjs_i18n\' - NestJS i18n',
+								description: 'Values available:\n * \'i18next_json\' — i18next (*.json)\n * \'nestjs_i18n\' - NestJS i18n',
 								options: [
 									{
 										name: '-',
@@ -7638,7 +7672,7 @@ export const projectsProperties: INodeProperties[] = [
 								name: 'exportQuotes',
 								type: 'options',
 								default: '',
-								description: 'Acceptable values are: \'single\', \'double\'. Default is \'single\'.\n - \'single\' - Output will be enclosed in single quotes\n - \'double\' - Output will be enclosed in double quotes',
+								description: 'Acceptable values are: \'single\', \'double\'. Default is \'single\'.\n * \'single\' - Output will be enclosed in single quotes\n * \'double\' - Output will be enclosed in double quotes',
 								options: [
 									{
 										name: '-',

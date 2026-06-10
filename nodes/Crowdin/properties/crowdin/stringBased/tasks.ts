@@ -1631,9 +1631,22 @@ export const tasksProperties: INodeProperties[] = [
 						description: 'Select the form type',
 						options: [
 							{
-								displayName: 'Create By Branch Ids Form',
-								name: '_createByBranchIdsForm',
+								displayName: 'Create By Source Ids Form',
+								name: '_createBySourceIdsForm',
 								values: [
+									{
+										displayName: 'Branch Ids',
+										name: 'branchIds',
+										type: 'multiOptions',
+										typeOptions: {
+											loadOptionsMethod: 'getBranchesMulti',
+											loadOptionsDependsOn: [
+												'projectId'
+											]
+										},
+										default: [],
+										description: 'Branch Identifiers. Get via [List Branches](#operation/api.projects.branches.getMany)\n\n__Note:__ One of fields `branchIds` or `stringIds` is required. Both cannot be provided simultaneously'
+									},
 									{
 										displayName: 'Title',
 										name: 'title',
@@ -1670,20 +1683,6 @@ export const tasksProperties: INodeProperties[] = [
 												value: 1
 											}
 										]
-									},
-									{
-										displayName: 'Branch Ids',
-										name: 'branchIds',
-										type: 'multiOptions',
-										typeOptions: {
-											loadOptionsMethod: 'getBranchesMulti',
-											loadOptionsDependsOn: [
-												'projectId'
-											]
-										},
-										default: [],
-										description: 'Array of branch ids. Get via [List Branches](#operation/api.projects.branches.getMany)',
-										required: true
 									},
 									{
 										displayName: 'Label Ids',
@@ -1928,6 +1927,20 @@ export const tasksProperties: INodeProperties[] = [
 								name: '_createByStringIdsForm',
 								values: [
 									{
+										displayName: 'String Ids',
+										name: 'stringIds',
+										type: 'multiOptions',
+										typeOptions: {
+											loadOptionsMethod: 'getProjectStringsMulti',
+											loadOptionsDependsOn: [
+												'projectId'
+											]
+										},
+										default: [],
+										description: 'Task String Identifiers. Get via [List Strings](#operation/api.projects.strings.getMany)',
+										required: true
+									},
+									{
 										displayName: 'Title',
 										name: 'title',
 										type: 'string',
@@ -1963,20 +1976,6 @@ export const tasksProperties: INodeProperties[] = [
 												value: 1
 											}
 										]
-									},
-									{
-										displayName: 'String Ids',
-										name: 'stringIds',
-										type: 'multiOptions',
-										typeOptions: {
-											loadOptionsMethod: 'getProjectStringsMulti',
-											loadOptionsDependsOn: [
-												'projectId'
-											]
-										},
-										default: [],
-										description: 'Task String Identifiers. Get via [List Strings](#operation/api.projects.strings.getMany)',
-										required: true
 									},
 									{
 										displayName: 'Status',
@@ -2266,9 +2265,22 @@ export const tasksProperties: INodeProperties[] = [
 						description: 'Select the form type',
 						options: [
 							{
-								displayName: 'Create By Branch Ids Form',
-								name: '_createByBranchIdsForm',
+								displayName: 'Create By Source Ids Form',
+								name: '_createBySourceIdsForm',
 								values: [
+									{
+										displayName: 'Branch Ids',
+										name: 'branchIds',
+										type: 'multiOptions',
+										typeOptions: {
+											loadOptionsMethod: 'getBranchesMulti',
+											loadOptionsDependsOn: [
+												'projectId'
+											]
+										},
+										default: [],
+										description: 'Branch Identifiers. Get via [List Branches](#operation/api.projects.branches.getMany)\n\n__Note:__ One of fields `branchIds` or `stringIds` is required. Both cannot be provided simultaneously'
+									},
 									{
 										displayName: 'Title',
 										name: 'title',
@@ -2312,20 +2324,6 @@ export const tasksProperties: INodeProperties[] = [
 										type: 'string',
 										default: '',
 										description: 'Vendor identifier. Browse available vendors at [Crowdin Store](https://crowdin.com/store/vendors).\n\n__Note:__ Additional vendor-specific settings (e.g. expertise, tone, quality) are configured per vendor in the store.',
-										required: true
-									},
-									{
-										displayName: 'Branch Ids',
-										name: 'branchIds',
-										type: 'multiOptions',
-										typeOptions: {
-											loadOptionsMethod: 'getBranchesMulti',
-											loadOptionsDependsOn: [
-												'projectId'
-											]
-										},
-										default: [],
-										description: 'Array of branch identifiers. Get via [List Branches](#operation/api.projects.branches.getMany)',
 										required: true
 									},
 									{
@@ -2513,6 +2511,20 @@ export const tasksProperties: INodeProperties[] = [
 								name: '_createByStringIdsForm',
 								values: [
 									{
+										displayName: 'String Ids',
+										name: 'stringIds',
+										type: 'multiOptions',
+										typeOptions: {
+											loadOptionsMethod: 'getProjectStringsMulti',
+											loadOptionsDependsOn: [
+												'projectId'
+											]
+										},
+										default: [],
+										description: 'Task String Identifiers. Get via [List Strings](#operation/api.projects.strings.getMany)',
+										required: true
+									},
+									{
 										displayName: 'Title',
 										name: 'title',
 										type: 'string',
@@ -2555,20 +2567,6 @@ export const tasksProperties: INodeProperties[] = [
 										type: 'string',
 										default: '',
 										description: 'Vendor identifier. Browse available vendors at [Crowdin Store](https://crowdin.com/store/vendors).\n\n__Note:__ Additional vendor-specific settings (e.g. expertise, tone, quality) are configured per vendor in the store.',
-										required: true
-									},
-									{
-										displayName: 'String Ids',
-										name: 'stringIds',
-										type: 'multiOptions',
-										typeOptions: {
-											loadOptionsMethod: 'getProjectStringsMulti',
-											loadOptionsDependsOn: [
-												'projectId'
-											]
-										},
-										default: [],
-										description: 'Task String Identifiers. Get via [List Strings](#operation/api.projects.strings.getMany)',
 										required: true
 									},
 									{

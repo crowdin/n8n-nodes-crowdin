@@ -93,6 +93,9 @@ const IGNORED_OPERATIONS = [
 	// Permissions batch operations (complex JSON Patch format)
 	'api.users.projects.permissions.patch',
 	'api.teams.projects.permissions.patch',
+	// Advisor insight PATCH (JSON Patch with no companion POST → field types can't be
+	// inferred; implemented by hand in properties/common/extensions/advisors.ts)
+	'api.projects.advisors.insights.patch',
 	// AI Providers Gateway operations
 	'api.ai.providers.gateway.crowdin.get',
 	'api.ai.providers.gateway.crowdin.post',
