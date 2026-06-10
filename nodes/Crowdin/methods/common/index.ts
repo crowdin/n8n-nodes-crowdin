@@ -481,6 +481,13 @@ export function createCommonLoadOptions(config: ApiConfig): LoadOptionsMethods {
 		(ctx) => `/projects/${getProjectId(ctx)}/comments`,
 		(item) => String(item.text),
 	);
+	// Advisor insights have no name/title — inspectorKey is the most human-readable
+	// label and can repeat across insights, so show it with the ID.
+	const projectAdvisorInsights = createTextFormattedMethodPair(
+		config,
+		(ctx) => `/projects/${getProjectId(ctx)}/advisors/insights`,
+		(item) => String(item.inspectorKey ?? item.category ?? item.id),
+	);
 
 	return {
 		// ===== Account/Organization-level resources =====
@@ -564,6 +571,8 @@ export function createCommonLoadOptions(config: ApiConfig): LoadOptionsMethods {
 		getProjectStringsMulti: projectStrings.multi,
 		getProjectComments: projectComments.regular,
 		getProjectCommentsMulti: projectComments.multi,
+		getProjectAdvisorInsights: projectAdvisorInsights.regular,
+		getProjectAdvisorInsightsMulti: projectAdvisorInsights.multi,
 
 		// ===== Special methods that can't use the pattern =====
 
