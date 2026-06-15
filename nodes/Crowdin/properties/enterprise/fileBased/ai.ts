@@ -2961,6 +2961,20 @@ export const aiProperties: INodeProperties[] = [
 						typeOptions: {
 							password: true
 						}
+					},
+					{
+						displayName: 'Base Url',
+						name: 'baseUrl',
+						type: 'string',
+						default: '',
+						description: 'Override the provider API base URL (e.g. a self-hosted proxy or third-party gateway)'
+					},
+					{
+						displayName: 'Headers',
+						name: 'json:headers',
+						type: 'json',
+						default: '{}',
+						description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden.'
 					}
 				]
 			},
@@ -2998,6 +3012,20 @@ export const aiProperties: INodeProperties[] = [
 						type: 'string',
 						default: '',
 						required: true
+					},
+					{
+						displayName: 'Base Url',
+						name: 'baseUrl',
+						type: 'string',
+						default: '',
+						description: 'Override the provider API base URL (e.g. a self-hosted proxy or third-party gateway)'
+					},
+					{
+						displayName: 'Headers',
+						name: 'json:headers',
+						type: 'json',
+						default: '{}',
+						description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden.'
 					}
 				]
 			},
@@ -3025,6 +3053,20 @@ export const aiProperties: INodeProperties[] = [
 						type: 'json',
 						default: '{}',
 						required: true
+					},
+					{
+						displayName: 'Base Url',
+						name: 'baseUrl',
+						type: 'string',
+						default: '',
+						description: 'Override the provider API base URL (e.g. a self-hosted proxy or third-party gateway)'
+					},
+					{
+						displayName: 'Headers',
+						name: 'json:headers',
+						type: 'json',
+						default: '{}',
+						description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden.'
 					}
 				]
 			},
@@ -3042,6 +3084,20 @@ export const aiProperties: INodeProperties[] = [
 						typeOptions: {
 							password: true
 						}
+					},
+					{
+						displayName: 'Base Url',
+						name: 'baseUrl',
+						type: 'string',
+						default: '',
+						description: 'Override the provider API base URL (e.g. a self-hosted proxy or third-party gateway)'
+					},
+					{
+						displayName: 'Headers',
+						name: 'json:headers',
+						type: 'json',
+						default: '{}',
+						description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden.'
 					}
 				]
 			},
@@ -3058,6 +3114,20 @@ export const aiProperties: INodeProperties[] = [
 						typeOptions: {
 							password: true
 						}
+					},
+					{
+						displayName: 'Base Url',
+						name: 'baseUrl',
+						type: 'string',
+						default: '',
+						description: 'Override the provider API base URL (e.g. a self-hosted proxy or third-party gateway)'
+					},
+					{
+						displayName: 'Headers',
+						name: 'json:headers',
+						type: 'json',
+						default: '{}',
+						description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden.'
 					}
 				]
 			},
@@ -3074,6 +3144,20 @@ export const aiProperties: INodeProperties[] = [
 						typeOptions: {
 							password: true
 						}
+					},
+					{
+						displayName: 'Base Url',
+						name: 'baseUrl',
+						type: 'string',
+						default: '',
+						description: 'Override the provider API base URL (e.g. a self-hosted proxy or third-party gateway)'
+					},
+					{
+						displayName: 'Headers',
+						name: 'json:headers',
+						type: 'json',
+						default: '{}',
+						description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden.'
 					}
 				]
 			},
@@ -3090,6 +3174,20 @@ export const aiProperties: INodeProperties[] = [
 						typeOptions: {
 							password: true
 						}
+					},
+					{
+						displayName: 'Base Url',
+						name: 'baseUrl',
+						type: 'string',
+						default: '',
+						description: 'Override the provider API base URL (e.g. a self-hosted proxy or third-party gateway)'
+					},
+					{
+						displayName: 'Headers',
+						name: 'json:headers',
+						type: 'json',
+						default: '{}',
+						description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden.'
 					}
 				]
 			},
@@ -3120,6 +3218,20 @@ export const aiProperties: INodeProperties[] = [
 						type: 'string',
 						default: '',
 						required: true
+					},
+					{
+						displayName: 'Base Url',
+						name: 'baseUrl',
+						type: 'string',
+						default: '',
+						description: 'Override the provider API base URL (e.g. a self-hosted proxy or third-party gateway)'
+					},
+					{
+						displayName: 'Headers',
+						name: 'json:headers',
+						type: 'json',
+						default: '{}',
+						description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden.'
 					}
 				]
 			},
@@ -3136,6 +3248,20 @@ export const aiProperties: INodeProperties[] = [
 						typeOptions: {
 							password: true
 						}
+					},
+					{
+						displayName: 'Base Url',
+						name: 'baseUrl',
+						type: 'string',
+						default: '',
+						description: 'Override the provider API base URL (e.g. a self-hosted proxy or third-party gateway)'
+					},
+					{
+						displayName: 'Headers',
+						name: 'json:headers',
+						type: 'json',
+						default: '{}',
+						description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden.'
 					}
 				]
 			},
@@ -3590,20 +3716,11 @@ export const aiProperties: INodeProperties[] = [
 		}
 	},
 	{
-		displayName: 'Strings',
-		required: true,
-		name: 'strings',
-		type: 'fixedCollection',
+		displayName: 'Body',
+		name: '_body',
+		description: 'Select configuration type',
 		default: {},
-		description: 'Array of strings to translate (max 500 strings, each max 10000 characters)',
-		routing: {
-			send: {
-				property: 'strings',
-				propertyInDotNotation: false,
-				type: 'body',
-				value: '={{ $value.items?.map(i => i._value) || undefined }}'
-			}
-		},
+		type: 'fixedCollection',
 		displayOptions: {
 			show: {
 				resource: [
@@ -3614,322 +3731,294 @@ export const aiProperties: INodeProperties[] = [
 				]
 			}
 		},
-		typeOptions: {
-			multipleValues: true
-		},
-		placeholder: 'Add Item',
 		options: [
 			{
-				displayName: 'Items',
-				name: 'items',
+				displayName: 'Ai Translate By Prompt Form',
+				name: '_aiTranslateByPromptForm',
 				values: [
 					{
-						displayName: 'Value',
-						name: '_value',
-						type: 'string',
-						default: ''
+						displayName: 'Strings',
+						name: 'strings',
+						type: 'fixedCollection',
+						typeOptions: {
+							multipleValues: true
+						},
+						default: {},
+						description: 'Array of strings to translate (max 500 strings, each max 10000 characters)',
+						placeholder: 'Add Item',
+						options: [
+							{
+								displayName: 'Items',
+								name: 'items',
+								values: [
+									{
+										displayName: 'Value',
+										name: '_value',
+										type: 'string',
+										default: '',
+										description: undefined
+									}
+								]
+							}
+						],
+						required: true
+					},
+					{
+						displayName: 'Source Language Id',
+						name: 'sourceLanguageId',
+						type: 'options',
+						default: '',
+						description: 'Source Language Identifier. Get via [List Supported Languages](#operation/api.languages.getMany). If not specified, auto-detection will be used.',
+						typeOptions: {
+							loadOptionsMethod: 'getLanguages'
+						}
+					},
+					{
+						displayName: 'Target Language Id',
+						name: 'targetLanguageId',
+						type: 'options',
+						default: '',
+						description: 'Target Language Identifier. Get via [List Supported Languages](#operation/api.languages.getMany)',
+						required: true,
+						typeOptions: {
+							loadOptionsMethod: 'getLanguages'
+						}
+					},
+					{
+						displayName: 'Tm Ids',
+						name: 'tmIds',
+						type: 'multiOptions',
+						typeOptions: {
+							loadOptionsMethod: 'getTranslationMemoriesMulti'
+						},
+						default: [],
+						description: 'Array of Translation Memory Identifiers. Get via [List TMs](#operation/api.tms.getMany)'
+					},
+					{
+						displayName: 'Glossary Ids',
+						name: 'glossaryIds',
+						type: 'multiOptions',
+						typeOptions: {
+							loadOptionsMethod: 'getGlossariesMulti'
+						},
+						default: [],
+						description: 'Array of Glossary Identifiers. Get via [List Glossaries](#operation/api.glossaries.getMany)'
+					},
+					{
+						displayName: 'Style Guide Ids',
+						name: 'styleGuideIds',
+						type: 'multiOptions',
+						typeOptions: {
+							loadOptionsMethod: 'getStyleGuidesMulti'
+						},
+						default: [],
+						description: 'Array of Style Guide Identifiers. Get via [List Style Guides](#operation/api.style-guides.getMany)'
+					},
+					{
+						displayName: 'Instructions',
+						name: 'instructions',
+						type: 'fixedCollection',
+						typeOptions: {
+							multipleValues: true
+						},
+						default: {},
+						description: 'Custom instructions for translation',
+						placeholder: 'Add Item',
+						options: [
+							{
+								displayName: 'Items',
+								name: 'items',
+								values: [
+									{
+										displayName: 'Value',
+										name: '_value',
+										type: 'string',
+										default: '',
+										description: undefined
+									}
+								]
+							}
+						]
+					},
+					{
+						displayName: 'Attachment Ids',
+						name: 'attachmentIds',
+						type: 'multiOptions',
+						typeOptions: {
+							loadOptionsMethod: 'getStoragesMulti'
+						},
+						default: [],
+						description: 'Storage IDs of images to pass to AI as attachments (max 10). Get via [List Storages](#operation/api.storages.getMany)\n\nOnly image files are allowed:\n * jpeg\n * jpg\n * png\n * gif\n * webp'
+					},
+					{
+						displayName: 'Ai Prompt Id',
+						name: 'aiPromptId',
+						type: 'options',
+						default: '',
+						description: 'Pre-Translation Prompt Identifier. Get via [List Prompts](#operation/api.ai.prompts.getMany)\n\n__Note:__ Can\'t be used with `aiProviderId` or `aiModelId` in same request',
+						required: true,
+						typeOptions: {
+							loadOptionsMethod: 'getAiPrompts'
+						}
+					}
+				]
+			},
+			{
+				displayName: 'Ai Translate By Provider Model Form',
+				name: '_aiTranslateByProviderModelForm',
+				values: [
+					{
+						displayName: 'Strings',
+						name: 'strings',
+						type: 'fixedCollection',
+						typeOptions: {
+							multipleValues: true
+						},
+						default: {},
+						description: 'Array of strings to translate (max 500 strings, each max 10000 characters)',
+						placeholder: 'Add Item',
+						options: [
+							{
+								displayName: 'Items',
+								name: 'items',
+								values: [
+									{
+										displayName: 'Value',
+										name: '_value',
+										type: 'string',
+										default: '',
+										description: undefined
+									}
+								]
+							}
+						],
+						required: true
+					},
+					{
+						displayName: 'Source Language Id',
+						name: 'sourceLanguageId',
+						type: 'options',
+						default: '',
+						description: 'Source Language Identifier. Get via [List Supported Languages](#operation/api.languages.getMany). If not specified, auto-detection will be used.',
+						typeOptions: {
+							loadOptionsMethod: 'getLanguages'
+						}
+					},
+					{
+						displayName: 'Target Language Id',
+						name: 'targetLanguageId',
+						type: 'options',
+						default: '',
+						description: 'Target Language Identifier. Get via [List Supported Languages](#operation/api.languages.getMany)',
+						required: true,
+						typeOptions: {
+							loadOptionsMethod: 'getLanguages'
+						}
+					},
+					{
+						displayName: 'Tm Ids',
+						name: 'tmIds',
+						type: 'multiOptions',
+						typeOptions: {
+							loadOptionsMethod: 'getTranslationMemoriesMulti'
+						},
+						default: [],
+						description: 'Array of Translation Memory Identifiers. Get via [List TMs](#operation/api.tms.getMany)'
+					},
+					{
+						displayName: 'Glossary Ids',
+						name: 'glossaryIds',
+						type: 'multiOptions',
+						typeOptions: {
+							loadOptionsMethod: 'getGlossariesMulti'
+						},
+						default: [],
+						description: 'Array of Glossary Identifiers. Get via [List Glossaries](#operation/api.glossaries.getMany)'
+					},
+					{
+						displayName: 'Style Guide Ids',
+						name: 'styleGuideIds',
+						type: 'multiOptions',
+						typeOptions: {
+							loadOptionsMethod: 'getStyleGuidesMulti'
+						},
+						default: [],
+						description: 'Array of Style Guide Identifiers. Get via [List Style Guides](#operation/api.style-guides.getMany)'
+					},
+					{
+						displayName: 'Instructions',
+						name: 'instructions',
+						type: 'fixedCollection',
+						typeOptions: {
+							multipleValues: true
+						},
+						default: {},
+						description: 'Custom instructions for translation',
+						placeholder: 'Add Item',
+						options: [
+							{
+								displayName: 'Items',
+								name: 'items',
+								values: [
+									{
+										displayName: 'Value',
+										name: '_value',
+										type: 'string',
+										default: '',
+										description: undefined
+									}
+								]
+							}
+						]
+					},
+					{
+						displayName: 'Attachment Ids',
+						name: 'attachmentIds',
+						type: 'multiOptions',
+						typeOptions: {
+							loadOptionsMethod: 'getStoragesMulti'
+						},
+						default: [],
+						description: 'Storage IDs of images to pass to AI as attachments (max 10). Get via [List Storages](#operation/api.storages.getMany)\n\nOnly image files are allowed:\n * jpeg\n * jpg\n * png\n * gif\n * webp'
+					},
+					{
+						displayName: 'Ai Provider Id',
+						name: 'aiProviderId',
+						type: 'options',
+						default: '',
+						description: 'AI Provider Identifier. Get via [List AI Providers](#operation/api.ai.providers.getMany)\n\n__Note:__ Must be used together with `aiModelId`. Can\'t be used with `aiPromptId` in same request',
+						required: true,
+						typeOptions: {
+							loadOptionsMethod: 'getAiProviders'
+						}
+					},
+					{
+						displayName: 'Ai Model Id',
+						name: 'aiModelId',
+						type: 'options',
+						default: '',
+						description: 'AI Model ID. Get via [List AI Provider Models](#operation/api.ai.providers.models.getMany)\n\n__Note:__ Must be used together with `aiProviderId`. Can\'t be used with `aiPromptId` in same request',
+						required: true,
+						typeOptions: {
+							loadOptionsMethod: 'getAiProviderModels',
+							loadOptionsDependsOn: [
+								'aiProviderId'
+							]
+						}
 					}
 				]
 			}
-		]
-	},
-	{
-		displayName: 'Source Language Id',
-		name: 'sourceLanguageId',
-		type: 'options',
-		default: '',
-		description: 'Source Language Identifier. Get via [List Supported Languages](#operation/api.languages.getMany). If not specified, auto-detection will be used.',
+		],
 		routing: {
 			send: {
-				property: 'sourceLanguageId',
-				propertyInDotNotation: false,
-				type: 'body',
-				value: '={{ $value || undefined }}'
-			}
-		},
-		displayOptions: {
-			show: {
-				resource: [
-					'ai'
+				preSend: [
+					normalizeRootBody
 				],
-				operation: [
-					'api.ai.translate.strings.post'
-				]
-			}
-		},
-		typeOptions: {
-			loadOptionsMethod: 'getLanguages'
-		}
-	},
-	{
-		displayName: 'Target Language Id',
-		required: true,
-		name: 'targetLanguageId',
-		type: 'options',
-		default: '',
-		description: 'Target Language Identifier. Get via [List Supported Languages](#operation/api.languages.getMany)',
-		routing: {
-			send: {
-				property: 'targetLanguageId',
-				propertyInDotNotation: false,
-				type: 'body',
-				value: '={{ $value || undefined }}'
-			}
-		},
-		displayOptions: {
-			show: {
-				resource: [
-					'ai'
-				],
-				operation: [
-					'api.ai.translate.strings.post'
-				]
-			}
-		},
-		typeOptions: {
-			loadOptionsMethod: 'getLanguages'
-		}
-	},
-	{
-		displayName: 'Tm Ids',
-		name: 'tmIds',
-		type: 'multiOptions',
-		default: [],
-		description: 'Array of Translation Memory Identifiers. Get via [List TMs](#operation/api.tms.getMany)',
-		routing: {
-			send: {
-				property: 'tmIds',
+				property: '_body',
 				propertyInDotNotation: false,
 				type: 'body',
 				value: '={{ $value }}'
 			}
-		},
-		displayOptions: {
-			show: {
-				resource: [
-					'ai'
-				],
-				operation: [
-					'api.ai.translate.strings.post'
-				]
-			}
-		},
-		typeOptions: {
-			loadOptionsMethod: 'getTranslationMemoriesMulti'
-		}
-	},
-	{
-		displayName: 'Glossary Ids',
-		name: 'glossaryIds',
-		type: 'multiOptions',
-		default: [],
-		description: 'Array of Glossary Identifiers. Get via [List Glossaries](#operation/api.glossaries.getMany)',
-		routing: {
-			send: {
-				property: 'glossaryIds',
-				propertyInDotNotation: false,
-				type: 'body',
-				value: '={{ $value }}'
-			}
-		},
-		displayOptions: {
-			show: {
-				resource: [
-					'ai'
-				],
-				operation: [
-					'api.ai.translate.strings.post'
-				]
-			}
-		},
-		typeOptions: {
-			loadOptionsMethod: 'getGlossariesMulti'
-		}
-	},
-	{
-		displayName: 'Style Guide Ids',
-		name: 'styleGuideIds',
-		type: 'multiOptions',
-		default: [],
-		description: 'Array of Style Guide Identifiers. Get via [List Style Guides](#operation/api.style-guides.getMany)',
-		routing: {
-			send: {
-				property: 'styleGuideIds',
-				propertyInDotNotation: false,
-				type: 'body',
-				value: '={{ $value }}'
-			}
-		},
-		displayOptions: {
-			show: {
-				resource: [
-					'ai'
-				],
-				operation: [
-					'api.ai.translate.strings.post'
-				]
-			}
-		},
-		typeOptions: {
-			loadOptionsMethod: 'getStyleGuidesMulti'
-		}
-	},
-	{
-		displayName: 'Ai Prompt Id',
-		name: 'aiPromptId',
-		type: 'options',
-		default: '',
-		description: 'Pre-Translation Prompt Identifier. Get via [List Prompts](#operation/api.ai.prompts.getMany)\n\n__Note:__ Can\'t be used with `aiProviderId` or `aiModelId` in same request',
-		routing: {
-			send: {
-				property: 'aiPromptId',
-				propertyInDotNotation: false,
-				type: 'body',
-				value: '={{ typeof $value === \'number\' ? $value : undefined }}'
-			}
-		},
-		displayOptions: {
-			show: {
-				resource: [
-					'ai'
-				],
-				operation: [
-					'api.ai.translate.strings.post'
-				]
-			}
-		},
-		typeOptions: {
-			loadOptionsMethod: 'getAiPrompts'
-		}
-	},
-	{
-		displayName: 'Ai Provider Id',
-		name: 'aiProviderId',
-		type: 'options',
-		default: '',
-		description: 'AI Provider Identifier. Get via [List AI Providers](#operation/api.ai.providers.getMany)\n\n__Note:__ Must be used together with `aiModelId`. Can\'t be used with `aiPromptId` in same request',
-		routing: {
-			send: {
-				property: 'aiProviderId',
-				propertyInDotNotation: false,
-				type: 'body',
-				value: '={{ typeof $value === \'number\' ? $value : undefined }}'
-			}
-		},
-		displayOptions: {
-			show: {
-				resource: [
-					'ai'
-				],
-				operation: [
-					'api.ai.translate.strings.post'
-				]
-			}
-		},
-		typeOptions: {
-			loadOptionsMethod: 'getAiProviders'
-		}
-	},
-	{
-		displayName: 'Ai Model Id',
-		name: 'aiModelId',
-		type: 'options',
-		default: '',
-		description: 'AI Model ID. Get via [List AI Provider Models](#operation/api.ai.providers.models.getMany)\n\n__Note:__ Must be used together with `aiProviderId`. Can\'t be used with `aiPromptId` in same request',
-		routing: {
-			send: {
-				property: 'aiModelId',
-				propertyInDotNotation: false,
-				type: 'body',
-				value: '={{ $value || undefined }}'
-			}
-		},
-		displayOptions: {
-			show: {
-				resource: [
-					'ai'
-				],
-				operation: [
-					'api.ai.translate.strings.post'
-				]
-			}
-		},
-		typeOptions: {
-			loadOptionsMethod: 'getAiProviderModels',
-			loadOptionsDependsOn: [
-				'aiProviderId'
-			]
-		}
-	},
-	{
-		displayName: 'Instructions',
-		name: 'instructions',
-		type: 'fixedCollection',
-		default: {},
-		description: 'Custom instructions for translation',
-		routing: {
-			send: {
-				property: 'instructions',
-				propertyInDotNotation: false,
-				type: 'body',
-				value: '={{ $value.items?.map(i => i._value) || undefined }}'
-			}
-		},
-		displayOptions: {
-			show: {
-				resource: [
-					'ai'
-				],
-				operation: [
-					'api.ai.translate.strings.post'
-				]
-			}
-		},
-		typeOptions: {
-			multipleValues: true
-		},
-		placeholder: 'Add Item',
-		options: [
-			{
-				displayName: 'Items',
-				name: 'items',
-				values: [
-					{
-						displayName: 'Value',
-						name: '_value',
-						type: 'string',
-						default: ''
-					}
-				]
-			}
-		]
-	},
-	{
-		displayName: 'Attachment Ids',
-		name: 'attachmentIds',
-		type: 'multiOptions',
-		default: [],
-		description: 'Storage IDs of images to pass to AI as attachments (max 10). Get via [List Storages](#operation/api.storages.getMany)\n\nOnly image files are allowed:\n * jpeg\n * jpg\n * png\n * gif\n * webp',
-		routing: {
-			send: {
-				property: 'attachmentIds',
-				propertyInDotNotation: false,
-				type: 'body',
-				value: '={{ $value }}'
-			}
-		},
-		displayOptions: {
-			show: {
-				resource: [
-					'ai'
-				],
-				operation: [
-					'api.ai.translate.strings.post'
-				]
-			}
-		},
-		typeOptions: {
-			loadOptionsMethod: 'getStoragesMulti'
 		}
 	},
 	{
@@ -4615,6 +4704,20 @@ export const aiProperties: INodeProperties[] = [
 								typeOptions: {
 									password: true
 								}
+							},
+							{
+								displayName: 'Base Url',
+								name: 'baseUrl',
+								type: 'string',
+								default: '',
+								description: 'Override the provider API base URL (e.g. a self-hosted proxy or third-party gateway)'
+							},
+							{
+								displayName: 'Headers',
+								name: 'json:headers',
+								type: 'json',
+								default: '{}',
+								description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden.'
 							}
 						]
 					},
@@ -4652,6 +4755,20 @@ export const aiProperties: INodeProperties[] = [
 								type: 'string',
 								default: '',
 								required: true
+							},
+							{
+								displayName: 'Base Url',
+								name: 'baseUrl',
+								type: 'string',
+								default: '',
+								description: 'Override the provider API base URL (e.g. a self-hosted proxy or third-party gateway)'
+							},
+							{
+								displayName: 'Headers',
+								name: 'json:headers',
+								type: 'json',
+								default: '{}',
+								description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden.'
 							}
 						]
 					},
@@ -4679,6 +4796,20 @@ export const aiProperties: INodeProperties[] = [
 								type: 'json',
 								default: '{}',
 								required: true
+							},
+							{
+								displayName: 'Base Url',
+								name: 'baseUrl',
+								type: 'string',
+								default: '',
+								description: 'Override the provider API base URL (e.g. a self-hosted proxy or third-party gateway)'
+							},
+							{
+								displayName: 'Headers',
+								name: 'json:headers',
+								type: 'json',
+								default: '{}',
+								description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden.'
 							}
 						]
 					},
@@ -4696,6 +4827,20 @@ export const aiProperties: INodeProperties[] = [
 								typeOptions: {
 									password: true
 								}
+							},
+							{
+								displayName: 'Base Url',
+								name: 'baseUrl',
+								type: 'string',
+								default: '',
+								description: 'Override the provider API base URL (e.g. a self-hosted proxy or third-party gateway)'
+							},
+							{
+								displayName: 'Headers',
+								name: 'json:headers',
+								type: 'json',
+								default: '{}',
+								description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden.'
 							}
 						]
 					},
@@ -4712,6 +4857,20 @@ export const aiProperties: INodeProperties[] = [
 								typeOptions: {
 									password: true
 								}
+							},
+							{
+								displayName: 'Base Url',
+								name: 'baseUrl',
+								type: 'string',
+								default: '',
+								description: 'Override the provider API base URL (e.g. a self-hosted proxy or third-party gateway)'
+							},
+							{
+								displayName: 'Headers',
+								name: 'json:headers',
+								type: 'json',
+								default: '{}',
+								description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden.'
 							}
 						]
 					},
@@ -4728,6 +4887,20 @@ export const aiProperties: INodeProperties[] = [
 								typeOptions: {
 									password: true
 								}
+							},
+							{
+								displayName: 'Base Url',
+								name: 'baseUrl',
+								type: 'string',
+								default: '',
+								description: 'Override the provider API base URL (e.g. a self-hosted proxy or third-party gateway)'
+							},
+							{
+								displayName: 'Headers',
+								name: 'json:headers',
+								type: 'json',
+								default: '{}',
+								description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden.'
 							}
 						]
 					},
@@ -4744,6 +4917,20 @@ export const aiProperties: INodeProperties[] = [
 								typeOptions: {
 									password: true
 								}
+							},
+							{
+								displayName: 'Base Url',
+								name: 'baseUrl',
+								type: 'string',
+								default: '',
+								description: 'Override the provider API base URL (e.g. a self-hosted proxy or third-party gateway)'
+							},
+							{
+								displayName: 'Headers',
+								name: 'json:headers',
+								type: 'json',
+								default: '{}',
+								description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden.'
 							}
 						]
 					},
@@ -4774,6 +4961,20 @@ export const aiProperties: INodeProperties[] = [
 								type: 'string',
 								default: '',
 								required: true
+							},
+							{
+								displayName: 'Base Url',
+								name: 'baseUrl',
+								type: 'string',
+								default: '',
+								description: 'Override the provider API base URL (e.g. a self-hosted proxy or third-party gateway)'
+							},
+							{
+								displayName: 'Headers',
+								name: 'json:headers',
+								type: 'json',
+								default: '{}',
+								description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden.'
 							}
 						]
 					},
@@ -4790,6 +4991,20 @@ export const aiProperties: INodeProperties[] = [
 								typeOptions: {
 									password: true
 								}
+							},
+							{
+								displayName: 'Base Url',
+								name: 'baseUrl',
+								type: 'string',
+								default: '',
+								description: 'Override the provider API base URL (e.g. a self-hosted proxy or third-party gateway)'
+							},
+							{
+								displayName: 'Headers',
+								name: 'json:headers',
+								type: 'json',
+								default: '{}',
+								description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden.'
 							}
 						]
 					},
