@@ -90,9 +90,9 @@ export const applicationsProperties: INodeProperties[] = [
 				}
 			},
 			{
-				name: 'Edit Application Installation',
+				name: 'Update Application Permissions',
 				value: 'api.applications.installations.patch',
-				action: 'Edit Application Installation',
+				action: 'Update Application Permissions',
 				description: '**Required scopes:** `application` (Read and Write).',
 				routing: {
 					request: {
@@ -103,6 +103,30 @@ export const applicationsProperties: INodeProperties[] = [
 						preSend: [
 							transformToJsonPatch
 						]
+					}
+				}
+			},
+			{
+				name: 'Get Application Installation Update',
+				value: 'api.applications.installations.update.get',
+				action: 'Get Application Installation Update',
+				description: '**Required scopes:** `application` (Read only).\n\nReturns the diff between the currently installed application and the latest cached manifest, tagged with `manifestHash` for optimistic-locking on apply.',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/applications/installations/{{$parameter["identifier"]}}/update'
+					}
+				}
+			},
+			{
+				name: 'Apply Application Installation Update',
+				value: 'api.applications.installations.update.post',
+				action: 'Apply Application Installation Update',
+				description: '**Required scopes:** `application` (Read and Write).\n\nApply the latest cached manifest to an installed application. Requires `manifestHash` from a recent GET /update call as an optimistic-locking token. If the cached manifest has changed since, returns 409 with the fresh diff in the response body.',
+				routing: {
+					request: {
+						method: 'POST',
+						url: '=/applications/installations/{{$parameter["identifier"]}}/update'
 					}
 				}
 			},
@@ -285,6 +309,44 @@ export const applicationsProperties: INodeProperties[] = [
 				],
 				operation: [
 					'api.applications.installations.patch'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'GET /applications/installations/{identifier}/update',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.installations.update.get'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'POST /applications/installations/{identifier}/update',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.installations.update.post'
 				]
 			}
 		}
@@ -851,6 +913,75 @@ export const applicationsProperties: INodeProperties[] = [
 		typeOptions: {
 			loadOptionsMethod: 'getApplicationInstallations'
 		}
+	},
+	{
+		displayName: 'Identifier',
+		name: 'identifier',
+		required: true,
+		description: 'Application Identifier. Get via [List Applications](#operation/api.applications.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.installations.update.get'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getApplicationInstallations'
+		}
+	},
+	{
+		displayName: 'Identifier',
+		name: 'identifier',
+		required: true,
+		description: 'Application Identifier. Get via [List Applications](#operation/api.applications.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.installations.update.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getApplicationInstallations'
+		}
+	},
+	{
+		displayName: 'Manifest Hash',
+		required: true,
+		name: 'manifestHash',
+		type: 'string',
+		default: '',
+		description: 'Hash of the manifest version the admin reviewed (from GET /update response). Must match the currently cached version, otherwise the apply request fails with 409.',
+		routing: {
+			send: {
+				property: 'manifestHash',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.installations.update.post'
+				]
+			}
+		},
+		placeholder: '5536b952d54e0846b6fd69217f6eb7cfdcfba41774732926e1f0c1a158a6e405'
 	},
 	{
 		displayName: 'Application Identifier',

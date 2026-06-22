@@ -21,7 +21,7 @@ export const stringAssetTranslationsProperties: INodeProperties[] = [
 				name: 'List Translation Approvals',
 				value: 'api.projects.approvals.getMany',
 				action: 'List Translation Approvals',
-				description: '**Required scopes:** `project.translation` (Read only).\n\n__Note:__ Either `translationId` OR `fileId` OR `labelIds` OR `excludeLabelIds` with `languageId` OR `stringId` with `languageId` are required',
+				description: '**Required scopes:** `project.translation` (Read only).\n\n__Note:__ Either `translationId` OR `languageId` is required. `stringId`, `fileId`, `labelIds` and `excludeLabelIds` can be used only with `languageId` in the same request',
 				routing: {
 					request: {
 						method: 'GET',
@@ -138,9 +138,9 @@ export const stringAssetTranslationsProperties: INodeProperties[] = [
 				}
 			},
 			{
-				name: 'List Translations',
+				name: 'List String/Asset Translations',
 				value: 'api.projects.translations.getMany',
-				action: 'List Translations',
+				action: 'List String/Asset Translations',
 				description: '**Required scopes:** `project.translation` (Read only).\n\n__Note:__ For instant translation delivery directly to user devices, please use [OTA](https://support.crowdin.com/content-delivery/). Direct API usage will exceed established rate limits, which suspends further content updates.',
 				routing: {
 					request: {
@@ -259,7 +259,7 @@ export const stringAssetTranslationsProperties: INodeProperties[] = [
 				name: 'List Translation Votes',
 				value: 'api.projects.votes.getMany',
 				action: 'List Translation Votes',
-				description: '**Required scopes:** `project.translation` (Read only).\n\n__Note:__ Either `translationId` OR `fileId` OR `labelIds` OR `excludeLabelIds` with `languageId` OR `stringId` with `languageId` are required',
+				description: '**Required scopes:** `project.translation` (Read only).\n\n__Note:__ Either `translationId` OR `languageId` is required. `stringId`, `fileId`, `labelIds` and `excludeLabelIds` can be used only with `languageId` in the same request',
 				routing: {
 					request: {
 						method: 'GET',
@@ -703,7 +703,7 @@ export const stringAssetTranslationsProperties: INodeProperties[] = [
 	{
 		displayName: 'File Id',
 		name: 'fileId',
-		description: 'File Identifier. Get via [List Files](#operation/api.projects.files.getMany)\n**Note:** Must be used together with `languageId`',
+		description: 'File Identifier. Get via [List Files](#operation/api.projects.files.getMany)\n\n__Note:__ Must be used together with `languageId`',
 		default: '',
 		type: 'options',
 		routing: {
@@ -796,7 +796,7 @@ export const stringAssetTranslationsProperties: INodeProperties[] = [
 	{
 		displayName: 'String Id',
 		name: 'stringId',
-		description: 'String Identifier. Get via [List Strings](#operation/api.projects.strings.getMany) <br> **Note:** Must be used together with `languageId`',
+		description: 'String Identifier. Get via [List Strings](#operation/api.projects.strings.getMany) <br> **Note:** Must be used together with `languageId`. Not supported for `assets`',
 		default: '',
 		type: 'options',
 		routing: {
@@ -827,7 +827,7 @@ export const stringAssetTranslationsProperties: INodeProperties[] = [
 	{
 		displayName: 'Language Id',
 		name: 'languageId',
-		description: 'Language Identifier. Get via [Project Target Languages](#operation/api.projects.get) <br> **Note:** Must be used together with `stringId` or `fileId`',
+		description: 'Language Identifier. Get via [Project Target Languages](#operation/api.projects.get)',
 		default: '',
 		type: 'options',
 		routing: {
@@ -855,7 +855,7 @@ export const stringAssetTranslationsProperties: INodeProperties[] = [
 	{
 		displayName: 'Translation Id',
 		name: 'translationId',
-		description: 'Translation Identifier. Get via [List String Translations](#operation/api.projects.translations.getMany) <br> **Note:** If specified, `fileId`, `stringId` and `languageId` are ignored',
+		description: 'Translation Identifier. Get via [List String Translations](#operation/api.projects.translations.getMany) <br> **Note:** Can\'t be used with `languageId` in the same request',
 		default: 0,
 		type: 'number',
 		routing: {
@@ -1509,37 +1509,6 @@ export const stringAssetTranslationsProperties: INodeProperties[] = [
 		}
 	},
 	{
-		displayName: 'String Id',
-		name: 'stringId',
-		description: 'String Identifier. Get via [List Strings](#operation/api.projects.strings.getMany)',
-		default: '',
-		type: 'options',
-		routing: {
-			send: {
-				type: 'query',
-				property: 'stringId',
-				value: '={{ typeof $value === \'number\' ? $value : undefined }}',
-				propertyInDotNotation: false
-			}
-		},
-		displayOptions: {
-			show: {
-				resource: [
-					'stringAssetTranslations'
-				],
-				operation: [
-					'api.projects.translations.getMany'
-				]
-			}
-		},
-		typeOptions: {
-			loadOptionsMethod: 'getProjectStrings',
-			loadOptionsDependsOn: [
-				'projectId'
-			]
-		}
-	},
-	{
 		displayName: 'Language Id',
 		name: 'languageId',
 		required: true,
@@ -1566,6 +1535,37 @@ export const stringAssetTranslationsProperties: INodeProperties[] = [
 		},
 		typeOptions: {
 			loadOptionsMethod: 'getLanguages'
+		}
+	},
+	{
+		displayName: 'String Id',
+		name: 'stringId',
+		description: 'String Identifier. Get via [List Strings](#operation/api.projects.strings.getMany)\n\n__Note:__ Not supported for `assets`',
+		default: '',
+		type: 'options',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'stringId',
+				value: '={{ typeof $value === \'number\' ? $value : undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'stringAssetTranslations'
+				],
+				operation: [
+					'api.projects.translations.getMany'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjectStrings',
+			loadOptionsDependsOn: [
+				'projectId'
+			]
 		}
 	},
 	{
@@ -2318,7 +2318,7 @@ export const stringAssetTranslationsProperties: INodeProperties[] = [
 	{
 		displayName: 'String Id',
 		name: 'stringId',
-		description: 'String Identifier. Get via [List Strings](#operation/api.projects.strings.getMany) <br> **Note:** Must be used together with `languageId`',
+		description: 'String Identifier. Get via [List Strings](#operation/api.projects.strings.getMany) <br> **Note:** Must be used together with `languageId`. Not supported for `assets`',
 		default: '',
 		type: 'options',
 		routing: {
@@ -2349,7 +2349,7 @@ export const stringAssetTranslationsProperties: INodeProperties[] = [
 	{
 		displayName: 'Language Id',
 		name: 'languageId',
-		description: 'Language Identifier. Get via [Project Target Languages](#operation/api.projects.get) <br> **Note:** Must be used together with `stringId`',
+		description: 'Language Identifier. Get via [Project Target Languages](#operation/api.projects.get)',
 		default: '',
 		type: 'options',
 		routing: {
@@ -2377,7 +2377,7 @@ export const stringAssetTranslationsProperties: INodeProperties[] = [
 	{
 		displayName: 'Translation Id',
 		name: 'translationId',
-		description: 'Translation Identifier. Get via [List String Translations](#operation/api.projects.translations.getMany) <br> **Note:** If specified, `stringId` and `languageId` are ignored',
+		description: 'Translation Identifier. Get via [List String Translations](#operation/api.projects.translations.getMany) <br> **Note:** Can\'t be used with `languageId` in the same request',
 		default: 0,
 		type: 'number',
 		routing: {

@@ -21,7 +21,7 @@ export const stringTranslationsProperties: INodeProperties[] = [
 				name: 'List Translation Approvals',
 				value: 'api.projects.approvals.getMany',
 				action: 'List Translation Approvals',
-				description: '**Required scopes:** `project.translation` (Read only).\n\n__Note:__ Either `translationId` OR `correctionId` OR `labelIds` OR `excludeLabelIds` with `languageId` OR `stringId` with `languageId` are required',
+				description: '**Required scopes:** `project.translation` (Read only).\n\n__Note:__ Either `translationId` OR `correctionId` OR `languageId` is required. `stringId`, `labelIds` and `excludeLabelIds` can be used only with `languageId` in the same request',
 				routing: {
 					request: {
 						method: 'GET',
@@ -259,7 +259,7 @@ export const stringTranslationsProperties: INodeProperties[] = [
 				name: 'List Translation Votes',
 				value: 'api.projects.votes.getMany',
 				action: 'List Translation Votes',
-				description: '**Required scopes:** `project.translation` (Read only).\n\n__Note:__ Either `translationId` OR `labelIds` OR `excludeLabelIds` with `languageId` OR `stringId` with `languageId` are required',
+				description: '**Required scopes:** `project.translation` (Read only).\n\n__Note:__ Either `translationId` OR `languageId` is required. `stringId`, `labelIds` and `excludeLabelIds` can be used only with `languageId` in the same request',
 				routing: {
 					request: {
 						method: 'GET',
@@ -734,7 +734,7 @@ export const stringTranslationsProperties: INodeProperties[] = [
 	{
 		displayName: 'Language Id',
 		name: 'languageId',
-		description: 'Language Identifier. Get via [Project Target Languages](#operation/api.projects.get) <br> **Note:** Must be used together with `stringId`',
+		description: 'Language Identifier. Get via [Project Target Languages](#operation/api.projects.get)',
 		default: '',
 		type: 'options',
 		routing: {
@@ -762,7 +762,7 @@ export const stringTranslationsProperties: INodeProperties[] = [
 	{
 		displayName: 'Translation Id',
 		name: 'translationId',
-		description: 'Translation Identifier. Get via [List String Translations](#operation/api.projects.translations.getMany) <br> **Note:** If specified, `stringId` and `languageId` are ignored. Cannot be used with `correctionId`',
+		description: 'Translation Identifier. Get via [List String Translations](#operation/api.projects.translations.getMany) <br> **Note:** Can\'t be used with `correctionId` or `languageId` in the same request',
 		default: 0,
 		type: 'number',
 		routing: {
@@ -788,7 +788,7 @@ export const stringTranslationsProperties: INodeProperties[] = [
 	{
 		displayName: 'Correction Id',
 		name: 'correctionId',
-		description: 'Correction Identifier. Get via [List Corrections](#operation/api.projects.corrections.getMany) <br> **Note:** Cannot be used with `translationId` or `languageId`. Available only for projects with advanced workflow',
+		description: 'Correction Identifier. Get via [List Corrections](#operation/api.projects.corrections.getMany) <br> **Note:** Cannot be used with `translationId`, `languageId` or `stringId`. Available only for projects with advanced workflow',
 		default: 0,
 		type: 'number',
 		routing: {
@@ -1447,7 +1447,6 @@ export const stringTranslationsProperties: INodeProperties[] = [
 	{
 		displayName: 'String Id',
 		name: 'stringId',
-		required: true,
 		description: 'String Identifier. Get via [List Strings](#operation/api.projects.strings.getMany)',
 		default: '',
 		type: 'options',
@@ -1455,7 +1454,7 @@ export const stringTranslationsProperties: INodeProperties[] = [
 			send: {
 				type: 'query',
 				property: 'stringId',
-				value: '={{ $value }}',
+				value: '={{ typeof $value === \'number\' ? $value : undefined }}',
 				propertyInDotNotation: false
 			}
 		},
@@ -2288,7 +2287,7 @@ export const stringTranslationsProperties: INodeProperties[] = [
 	{
 		displayName: 'Language Id',
 		name: 'languageId',
-		description: 'Language Identifier. Get via [Project Target Languages](#operation/api.projects.get) <br> **Note:** Must be used together with `stringId`',
+		description: 'Language Identifier. Get via [Project Target Languages](#operation/api.projects.get)',
 		default: '',
 		type: 'options',
 		routing: {
@@ -2316,7 +2315,7 @@ export const stringTranslationsProperties: INodeProperties[] = [
 	{
 		displayName: 'Translation Id',
 		name: 'translationId',
-		description: 'Translation Identifier. Get via [List String Translations](#operation/api.projects.translations.getMany) <br> **Note:** If specified, `stringId` and `languageId` are ignored',
+		description: 'Translation Identifier. Get via [List String Translations](#operation/api.projects.translations.getMany) <br> **Note:** Can\'t be used with `languageId` in the same request',
 		default: 0,
 		type: 'number',
 		routing: {
