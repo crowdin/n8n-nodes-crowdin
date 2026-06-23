@@ -20,7 +20,7 @@ export const stringTranslationsProperties: INodeProperties[] = [
 				name: 'List Translation Approvals',
 				value: 'api.projects.approvals.getMany',
 				action: 'List Translation Approvals',
-				description: '**Required scopes:** `project.translation` (Read only).\n\n__Note:__ Either `translationId` OR `labelIds` OR `excludeLabelIds` with `languageId` OR `stringId` with `languageId` are required',
+				description: '**Required scopes:** `project.translation` (Read only).\n\n__Note:__ Either `translationId` OR `languageId` is required. `stringId`, `labelIds` and `excludeLabelIds` can be used only with `languageId` in the same request',
 				routing: {
 					request: {
 						method: 'GET',
@@ -137,9 +137,9 @@ export const stringTranslationsProperties: INodeProperties[] = [
 				}
 			},
 			{
-				name: 'List Translations',
+				name: 'List String Translations',
 				value: 'api.projects.translations.getMany',
-				action: 'List Translations',
+				action: 'List String Translations',
 				description: '**Required scopes:** `project.translation` (Read only).\n\n__Note:__ For instant translation delivery directly to user devices, please use [OTA](https://support.crowdin.com/content-delivery/). Direct API usage will exceed established rate limits, which suspends further content updates.',
 				routing: {
 					request: {
@@ -258,7 +258,7 @@ export const stringTranslationsProperties: INodeProperties[] = [
 				name: 'List Translation Votes',
 				value: 'api.projects.votes.getMany',
 				action: 'List Translation Votes',
-				description: '**Required scopes:** `project.translation` (Read only).\n\n__Note:__ Either `translationId` OR `labelIds` OR `excludeLabelIds` with `languageId` OR `stringId` with `languageId` are required',
+				description: '**Required scopes:** `project.translation` (Read only).\n\n__Note:__ Either `translationId` OR `languageId` is required. `stringId`, `labelIds` and `excludeLabelIds` can be used only with `languageId` in the same request',
 				routing: {
 					request: {
 						method: 'GET',
@@ -733,7 +733,7 @@ export const stringTranslationsProperties: INodeProperties[] = [
 	{
 		displayName: 'Language Id',
 		name: 'languageId',
-		description: 'Language Identifier. Get via [Project Target Languages](#operation/api.projects.get) <br> **Note:** Must be used together with `stringId`',
+		description: 'Language Identifier. Get via [Project Target Languages](#operation/api.projects.get)',
 		default: '',
 		type: 'options',
 		routing: {
@@ -761,7 +761,7 @@ export const stringTranslationsProperties: INodeProperties[] = [
 	{
 		displayName: 'Translation Id',
 		name: 'translationId',
-		description: 'Translation Identifier. Get via [List String Translations](#operation/api.projects.translations.getMany) <br> **Note:** If specified, `stringId` and `languageId` are ignored',
+		description: 'Translation Identifier. Get via [List String Translations](#operation/api.projects.translations.getMany) <br> **Note:** Can\'t be used with `languageId` in the same request',
 		default: 0,
 		type: 'number',
 		routing: {
@@ -2227,7 +2227,7 @@ export const stringTranslationsProperties: INodeProperties[] = [
 	{
 		displayName: 'Language Id',
 		name: 'languageId',
-		description: 'Language Identifier. Get via [Project Target Languages](#operation/api.projects.get) <br> **Note:** Must be used together with `stringId`',
+		description: 'Language Identifier. Get via [Project Target Languages](#operation/api.projects.get)',
 		default: '',
 		type: 'options',
 		routing: {
@@ -2255,7 +2255,7 @@ export const stringTranslationsProperties: INodeProperties[] = [
 	{
 		displayName: 'Translation Id',
 		name: 'translationId',
-		description: 'Translation Identifier. Get via [List String Translations](#operation/api.projects.translations.getMany) <br> **Note:** If specified, `stringId` and `languageId` are ignored',
+		description: 'Translation Identifier. Get via [List String Translations](#operation/api.projects.translations.getMany) <br> **Note:** Can\'t be used with `languageId` in the same request',
 		default: 0,
 		type: 'number',
 		routing: {
