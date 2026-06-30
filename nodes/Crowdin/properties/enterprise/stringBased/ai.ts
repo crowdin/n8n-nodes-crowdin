@@ -2908,6 +2908,10 @@ export const aiProperties: INodeProperties[] = [
 				value: 'deepseek'
 			},
 			{
+				name: 'microsoft_foundry',
+				value: 'microsoft_foundry'
+			},
+			{
 				name: 'custom_ai',
 				value: 'custom_ai'
 			}
@@ -3266,6 +3270,66 @@ export const aiProperties: INodeProperties[] = [
 				]
 			},
 			{
+				displayName: 'Microsoft Foundry',
+				name: '_microsoftFoundry',
+				values: [
+					{
+						displayName: 'Deployments',
+						name: 'deployments',
+						type: 'fixedCollection',
+						typeOptions: {
+							multipleValues: true
+						},
+						default: {},
+						description: 'Deployed models of the Foundry project. Each entry is self-contained — copy its Target URI and API key from the deployment details page in the Foundry portal (deployments of one project may live on different connected Azure resources)',
+						placeholder: 'Add Item',
+						options: [
+							{
+								displayName: 'Item',
+								name: 'items',
+								values: [
+									{
+										displayName: 'Deployment Name',
+										name: 'deploymentName',
+										type: 'string',
+										default: '',
+										description: 'Deployment name (used as the model id)',
+										required: true
+									},
+									{
+										displayName: 'Target Uri',
+										name: 'targetUri',
+										type: 'string',
+										default: '',
+										description: 'Deployment Target URI (its path encodes the API the deployment is served by, e.g. /anthropic/v1/messages or /openai/v1/chat/completions)',
+										required: true
+									},
+									{
+										displayName: 'Api Key',
+										name: 'apiKey',
+										type: 'string',
+										default: '',
+										description: 'API key of the Azure resource hosting the deployment',
+										required: true,
+										typeOptions: {
+											password: true
+										}
+									}
+								]
+							}
+						],
+						required: true
+					},
+					{
+						displayName: 'Headers',
+						name: 'json:headers',
+						type: 'json',
+						default: '{}',
+						description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden.'
+					}
+				]
+			},
+			{
 				displayName: 'Custom AI',
 				name: '_customAi',
 				values: [
@@ -3330,7 +3394,7 @@ export const aiProperties: INodeProperties[] = [
 		name: 'useSystemCredentials',
 		type: 'boolean',
 		default: false,
-		description: 'Enables the paid service AI provider via Crowdin.\n\n__Note__: Set to true if `credentials` is not provided. Not supported for `custom_ai`, `x_ai`, `watsonx`, `deepseek` and `google_gemini_ai_studio` types.',
+		description: 'Enables the paid service AI provider via Crowdin.\n\n__Note__: Set to true if `credentials` is not provided. Not supported for `custom_ai`, `x_ai`, `watsonx`, `deepseek`, `microsoft_foundry` and `google_gemini_ai_studio` types.',
 		routing: {
 			send: {
 				property: 'useSystemCredentials',
@@ -4679,6 +4743,10 @@ export const aiProperties: INodeProperties[] = [
 						value: 'deepseek'
 					},
 					{
+						name: 'microsoft_foundry',
+						value: 'microsoft_foundry'
+					},
+					{
 						name: 'custom_ai',
 						value: 'custom_ai'
 					}
@@ -5009,6 +5077,66 @@ export const aiProperties: INodeProperties[] = [
 						]
 					},
 					{
+						name: '_microsoftFoundry',
+						displayName: 'Microsoft Foundry',
+						values: [
+							{
+								displayName: 'Deployments',
+								name: 'deployments',
+								type: 'fixedCollection',
+								typeOptions: {
+									multipleValues: true
+								},
+								default: {},
+								description: 'Deployed models of the Foundry project. Each entry is self-contained — copy its Target URI and API key from the deployment details page in the Foundry portal (deployments of one project may live on different connected Azure resources)',
+								placeholder: 'Add Item',
+								options: [
+									{
+										name: 'items',
+										displayName: 'Item',
+										values: [
+											{
+												displayName: 'Deployment Name',
+												name: 'deploymentName',
+												type: 'string',
+												default: '',
+												description: 'Deployment name (used as the model id)',
+												required: true
+											},
+											{
+												displayName: 'Target Uri',
+												name: 'targetUri',
+												type: 'string',
+												default: '',
+												description: 'Deployment Target URI (its path encodes the API the deployment is served by, e.g. /anthropic/v1/messages or /openai/v1/chat/completions)',
+												required: true
+											},
+											{
+												displayName: 'Api Key',
+												name: 'apiKey',
+												type: 'string',
+												default: '',
+												description: 'API key of the Azure resource hosting the deployment',
+												required: true,
+												typeOptions: {
+													password: true
+												}
+											}
+										]
+									}
+								],
+								required: true
+							},
+							{
+								displayName: 'Headers',
+								name: 'json:headers',
+								type: 'json',
+								default: '{}',
+								description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden.'
+							}
+						]
+					},
+					{
 						name: '_customAi',
 						displayName: 'Custom AI',
 						values: [
@@ -5044,7 +5172,7 @@ export const aiProperties: INodeProperties[] = [
 				name: 'useSystemCredentials',
 				type: 'boolean',
 				default: false,
-				description: 'Enables the paid service AI provider via Crowdin.\n\n__Note__: Set to true if `credentials` is not provided. Not supported for `custom_ai`, `x_ai`, `watsonx`, `deepseek` and `google_gemini_ai_studio` types.'
+				description: 'Enables the paid service AI provider via Crowdin.\n\n__Note__: Set to true if `credentials` is not provided. Not supported for `custom_ai`, `x_ai`, `watsonx`, `deepseek`, `microsoft_foundry` and `google_gemini_ai_studio` types.'
 			}
 		],
 		routing: {
