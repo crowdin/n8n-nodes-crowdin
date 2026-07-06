@@ -758,27 +758,13 @@ export const advisorProperties: INodeProperties[] = [
 		displayName: 'Is Dismissed',
 		name: 'isDismissed',
 		description: 'Filter insights by dismissal flag. Omit to return both dismissed and active insights.',
-		default: '',
-		type: 'options',
-		options: [
-			{
-				name: '-',
-				value: ''
-			},
-			{
-				name: '0',
-				value: 0
-			},
-			{
-				name: '1',
-				value: 1
-			}
-		],
+		default: true,
+		type: 'boolean',
 		routing: {
 			send: {
 				type: 'query',
 				property: 'isDismissed',
-				value: '={{ $value || undefined }}',
+				value: '={{ $value }}',
 				propertyInDotNotation: false
 			}
 		},

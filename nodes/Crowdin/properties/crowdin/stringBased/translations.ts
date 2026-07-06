@@ -2852,7 +2852,6 @@ export const translationsProperties: INodeProperties[] = [
 	},
 	{
 		displayName: 'Branch Id',
-		required: true,
 		name: 'branchId',
 		type: 'options',
 		default: '',
@@ -2862,7 +2861,7 @@ export const translationsProperties: INodeProperties[] = [
 				property: 'branchId',
 				propertyInDotNotation: false,
 				type: 'body',
-				value: '={{ $value }}'
+				value: '={{ typeof $value === \'number\' ? $value : undefined }}'
 			}
 		},
 		displayOptions: {

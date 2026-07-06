@@ -4922,6 +4922,16 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 				}
 			},
 			{
+				displayName: 'Assigned Style Guides',
+				name: 'assignedStyleGuides',
+				type: 'multiOptions',
+				default: [],
+				description: 'Style Guide IDs to assign to project. Get via [List Style Guides](#operation/api.style-guides.getMany)',
+				typeOptions: {
+					loadOptionsMethod: 'getStyleGuidesMulti'
+				}
+			},
+			{
 				displayName: 'Assigned Glossaries',
 				name: 'json:assignedGlossaries',
 				type: 'json',

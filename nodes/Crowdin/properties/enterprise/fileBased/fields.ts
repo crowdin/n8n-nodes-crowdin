@@ -597,6 +597,7 @@ export const fieldsProperties: INodeProperties[] = [
 	{
 		displayName: 'Config',
 		name: 'config',
+		required: true,
 		description: 'Select configuration type',
 		default: {},
 		type: 'fixedCollection',
