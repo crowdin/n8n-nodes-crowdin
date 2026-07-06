@@ -1408,27 +1408,13 @@ export const sourceFilesProperties: INodeProperties[] = [
 		displayName: 'Recursion',
 		name: 'recursion',
 		description: 'Use to list directories recursively\n\n__Note:__ Works only when `directoryId` or `branchId` parameter is specified',
-		default: '',
-		type: 'options',
-		options: [
-			{
-				name: '-',
-				value: ''
-			},
-			{
-				name: '0',
-				value: 0
-			},
-			{
-				name: '1',
-				value: 1
-			}
-		],
+		default: true,
+		type: 'boolean',
 		routing: {
 			send: {
 				type: 'query',
 				property: 'recursion',
-				value: '={{ $value || undefined }}',
+				value: '={{ $value }}',
 				propertyInDotNotation: false
 			}
 		},
@@ -1952,27 +1938,13 @@ export const sourceFilesProperties: INodeProperties[] = [
 		displayName: 'Recursion',
 		name: 'recursion',
 		description: 'Use to list files recursively\n\n__Note:__ Works only when `directoryId` or `branchId` parameter is specified',
-		default: '',
-		type: 'options',
-		options: [
-			{
-				name: '-',
-				value: ''
-			},
-			{
-				name: '0',
-				value: 0
-			},
-			{
-				name: '1',
-				value: 1
-			}
-		],
+		default: true,
+		type: 'boolean',
 		routing: {
 			send: {
 				type: 'query',
 				property: 'recursion',
-				value: '={{ $value || undefined }}',
+				value: '={{ $value }}',
 				propertyInDotNotation: false
 			}
 		},

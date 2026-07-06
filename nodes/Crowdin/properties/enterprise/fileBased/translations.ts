@@ -2058,7 +2058,6 @@ export const translationsProperties: INodeProperties[] = [
 	},
 	{
 		displayName: 'File Ids',
-		required: true,
 		name: 'fileIds',
 		type: 'multiOptions',
 		default: [],

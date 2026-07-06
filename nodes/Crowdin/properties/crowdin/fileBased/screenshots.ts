@@ -1358,29 +1358,33 @@ export const screenshotsProperties: INodeProperties[] = [
 														displayName: 'X',
 														name: 'x',
 														type: 'number',
-														default: 0,
-														description: undefined
+														default: undefined,
+														description: undefined,
+														required: true
 													},
 													{
 														displayName: 'Y',
 														name: 'y',
 														type: 'number',
-														default: 0,
-														description: undefined
+														default: undefined,
+														description: undefined,
+														required: true
 													},
 													{
 														displayName: 'Width',
 														name: 'width',
 														type: 'number',
-														default: 0,
-														description: undefined
+														default: undefined,
+														description: undefined,
+														required: true
 													},
 													{
 														displayName: 'Height',
 														name: 'height',
 														type: 'number',
-														default: 0,
-														description: undefined
+														default: undefined,
+														description: undefined,
+														required: true
 													}
 												]
 											}
@@ -1559,29 +1563,33 @@ export const screenshotsProperties: INodeProperties[] = [
 										displayName: 'X',
 										name: 'x',
 										type: 'number',
-										default: 0,
-										description: undefined
+										default: undefined,
+										description: undefined,
+										required: true
 									},
 									{
 										displayName: 'Y',
 										name: 'y',
 										type: 'number',
-										default: 0,
-										description: undefined
+										default: undefined,
+										description: undefined,
+										required: true
 									},
 									{
 										displayName: 'Width',
 										name: 'width',
 										type: 'number',
-										default: 0,
-										description: undefined
+										default: undefined,
+										description: undefined,
+										required: true
 									},
 									{
 										displayName: 'Height',
 										name: 'height',
 										type: 'number',
-										default: 0,
-										description: undefined
+										default: undefined,
+										description: undefined,
+										required: true
 									}
 								]
 							}
@@ -1949,29 +1957,33 @@ export const screenshotsProperties: INodeProperties[] = [
 								displayName: 'X',
 								name: 'x',
 								type: 'number',
-								default: 0,
-								description: undefined
+								default: undefined,
+								description: undefined,
+								required: true
 							},
 							{
 								displayName: 'Y',
 								name: 'y',
 								type: 'number',
-								default: 0,
-								description: undefined
+								default: undefined,
+								description: undefined,
+								required: true
 							},
 							{
 								displayName: 'Width',
 								name: 'width',
 								type: 'number',
-								default: 0,
-								description: undefined
+								default: undefined,
+								description: undefined,
+								required: true
 							},
 							{
 								displayName: 'Height',
 								name: 'height',
 								type: 'number',
-								default: 0,
-								description: undefined
+								default: undefined,
+								description: undefined,
+								required: true
 							}
 						]
 					}

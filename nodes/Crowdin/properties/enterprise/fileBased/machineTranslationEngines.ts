@@ -816,6 +816,7 @@ export const machineTranslationEnginesProperties: INodeProperties[] = [
 	},
 	{
 		displayName: 'Strings',
+		required: true,
 		name: 'strings',
 		type: 'fixedCollection',
 		default: {},
