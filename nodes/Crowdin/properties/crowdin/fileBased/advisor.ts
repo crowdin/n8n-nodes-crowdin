@@ -260,11 +260,10 @@ export const advisorProperties: INodeProperties[] = [
 	},
 	{
 		displayName: 'Checked At',
-		required: true,
 		name: 'dateTime:checkedAt',
 		type: 'dateTime',
 		default: '',
-		description: 'Date when the app performed this check (ISO 8601)',
+		description: 'Date when the app performed this check (ISO 8601). Defaults to the time the request is received.',
 		routing: {
 			send: {
 				property: 'checkedAt',
