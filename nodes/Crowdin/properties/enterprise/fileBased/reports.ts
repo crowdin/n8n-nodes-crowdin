@@ -1678,7 +1678,7 @@ export const reportsProperties: INodeProperties[] = [
 															multipleValues: true
 														},
 														default: {},
-														description: undefined,
+														description: 'Must include the `100` match type, and the `perfect` match type when `useTmEditDistance` is `false`. With `useTmEditDistance` enabled, edit-distance matching produces no perfect matches (capped at `100`).',
 														placeholder: 'Add Item',
 														options: [
 															{
@@ -1832,6 +1832,13 @@ export const reportsProperties: INodeProperties[] = [
 										type: 'boolean',
 										default: false,
 										description: 'Approvals are treated as submitting an identical translation at the 100% match rate of the corresponding Net Rate Scheme category (TM, MT, AI, or other). When disabled, all approvals use the flat base proofread rate.'
+									},
+									{
+										displayName: 'Use Tm Edit Distance',
+										name: 'useTmEditDistance',
+										type: 'boolean',
+										default: false,
+										description: 'Calculations are based on the edit distance between the TM match and final translation instead of source segment similarity. Matches recorded before July 13, 2026, fall back to traditional source similarity.'
 									},
 									{
 										displayName: 'Group By',
@@ -2175,7 +2182,7 @@ export const reportsProperties: INodeProperties[] = [
 															multipleValues: true
 														},
 														default: {},
-														description: undefined,
+														description: 'Must include the `100` match type, and the `perfect` match type when `useTmEditDistance` is `false`. With `useTmEditDistance` enabled, edit-distance matching produces no perfect matches (capped at `100`).',
 														placeholder: 'Add Item',
 														options: [
 															{
@@ -2342,6 +2349,13 @@ export const reportsProperties: INodeProperties[] = [
 										type: 'boolean',
 										default: false,
 										description: 'Approvals are treated as submitting an identical translation at the 100% match rate of the corresponding Net Rate Scheme category (TM, MT, AI, or other). When disabled, all approvals use the flat base proofread rate.'
+									},
+									{
+										displayName: 'Use Tm Edit Distance',
+										name: 'useTmEditDistance',
+										type: 'boolean',
+										default: false,
+										description: 'Calculations are based on the edit distance between the TM match and final translation instead of source segment similarity. Matches recorded before July 13, 2026, fall back to traditional source similarity.'
 									},
 									{
 										displayName: 'Skip Archiving',
@@ -5036,7 +5050,7 @@ export const reportsProperties: INodeProperties[] = [
 															multipleValues: true
 														},
 														default: {},
-														description: undefined,
+														description: 'Must include the `100` match type, and the `perfect` match type when `useTmEditDistance` is `false`. With `useTmEditDistance` enabled, edit-distance matching produces no perfect matches (capped at `100`).',
 														placeholder: 'Add Item',
 														options: [
 															{
@@ -5204,6 +5218,13 @@ export const reportsProperties: INodeProperties[] = [
 										type: 'boolean',
 										default: true,
 										description: 'Approvals are treated as submitting an identical translation at the 100% match rate of the corresponding Net Rate Scheme category (TM, MT, AI, or other). When disabled, all approvals use the flat base proofread rate.'
+									},
+									{
+										displayName: 'Use Tm Edit Distance',
+										name: 'useTmEditDistance',
+										type: 'boolean',
+										default: false,
+										description: 'Calculations are based on the edit distance between the TM match and final translation instead of source segment similarity. Matches recorded before July 13, 2026, fall back to traditional source similarity.'
 									}
 								]
 							}
@@ -5888,7 +5909,7 @@ export const reportsProperties: INodeProperties[] = [
 															multipleValues: true
 														},
 														default: {},
-														description: undefined,
+														description: 'Must include the `100` match type, and the `perfect` match type when `useTmEditDistance` is `false`. With `useTmEditDistance` enabled, edit-distance matching produces no perfect matches (capped at `100`).',
 														placeholder: 'Add Item',
 														options: [
 															{
@@ -6042,6 +6063,13 @@ export const reportsProperties: INodeProperties[] = [
 										type: 'boolean',
 										default: false,
 										description: 'Approvals are treated as submitting an identical translation at the 100% match rate of the corresponding Net Rate Scheme category (TM, MT, AI, or other). When disabled, all approvals use the flat base proofread rate.'
+									},
+									{
+										displayName: 'Use Tm Edit Distance',
+										name: 'useTmEditDistance',
+										type: 'boolean',
+										default: false,
+										description: 'Calculations are based on the edit distance between the TM match and final translation instead of source segment similarity. Matches recorded before July 13, 2026, fall back to traditional source similarity.'
 									},
 									{
 										displayName: 'Group By',
@@ -6385,7 +6413,7 @@ export const reportsProperties: INodeProperties[] = [
 															multipleValues: true
 														},
 														default: {},
-														description: undefined,
+														description: 'Must include the `100` match type, and the `perfect` match type when `useTmEditDistance` is `false`. With `useTmEditDistance` enabled, edit-distance matching produces no perfect matches (capped at `100`).',
 														placeholder: 'Add Item',
 														options: [
 															{
@@ -6552,6 +6580,13 @@ export const reportsProperties: INodeProperties[] = [
 										type: 'boolean',
 										default: false,
 										description: 'Approvals are treated as submitting an identical translation at the 100% match rate of the corresponding Net Rate Scheme category (TM, MT, AI, or other). When disabled, all approvals use the flat base proofread rate.'
+									},
+									{
+										displayName: 'Use Tm Edit Distance',
+										name: 'useTmEditDistance',
+										type: 'boolean',
+										default: false,
+										description: 'Calculations are based on the edit distance between the TM match and final translation instead of source segment similarity. Matches recorded before July 13, 2026, fall back to traditional source similarity.'
 									},
 									{
 										displayName: 'Skip Archiving',
@@ -10561,7 +10596,7 @@ export const reportsProperties: INodeProperties[] = [
 															multipleValues: true
 														},
 														default: {},
-														description: undefined,
+														description: 'Must include the `100` match type, and the `perfect` match type when `useTmEditDistance` is `false`. With `useTmEditDistance` enabled, edit-distance matching produces no perfect matches (capped at `100`).',
 														placeholder: 'Add Item',
 														options: [
 															{
@@ -10715,6 +10750,13 @@ export const reportsProperties: INodeProperties[] = [
 										type: 'boolean',
 										default: false,
 										description: 'Approvals are treated as submitting an identical translation at the 100% match rate of the corresponding Net Rate Scheme category (TM, MT, AI, or other). When disabled, all approvals use the flat base proofread rate.'
+									},
+									{
+										displayName: 'Use Tm Edit Distance',
+										name: 'useTmEditDistance',
+										type: 'boolean',
+										default: false,
+										description: 'Calculations are based on the edit distance between the TM match and final translation instead of source segment similarity. Matches recorded before July 13, 2026, fall back to traditional source similarity.'
 									},
 									{
 										displayName: 'Group By',
@@ -11125,7 +11167,7 @@ export const reportsProperties: INodeProperties[] = [
 															multipleValues: true
 														},
 														default: {},
-														description: undefined,
+														description: 'Must include the `100` match type, and the `perfect` match type when `useTmEditDistance` is `false`. With `useTmEditDistance` enabled, edit-distance matching produces no perfect matches (capped at `100`).',
 														placeholder: 'Add Item',
 														options: [
 															{
@@ -11292,6 +11334,13 @@ export const reportsProperties: INodeProperties[] = [
 										type: 'boolean',
 										default: false,
 										description: 'Approvals are treated as submitting an identical translation at the 100% match rate of the corresponding Net Rate Scheme category (TM, MT, AI, or other). When disabled, all approvals use the flat base proofread rate.'
+									},
+									{
+										displayName: 'Use Tm Edit Distance',
+										name: 'useTmEditDistance',
+										type: 'boolean',
+										default: false,
+										description: 'Calculations are based on the edit distance between the TM match and final translation instead of source segment similarity. Matches recorded before July 13, 2026, fall back to traditional source similarity.'
 									},
 									{
 										displayName: 'Skip Archiving',
@@ -14126,7 +14175,7 @@ export const reportsProperties: INodeProperties[] = [
 															multipleValues: true
 														},
 														default: {},
-														description: undefined,
+														description: 'Must include the `100` match type, and the `perfect` match type when `useTmEditDistance` is `false`. With `useTmEditDistance` enabled, edit-distance matching produces no perfect matches (capped at `100`).',
 														placeholder: 'Add Item',
 														options: [
 															{
@@ -14294,6 +14343,13 @@ export const reportsProperties: INodeProperties[] = [
 										type: 'boolean',
 										default: false,
 										description: 'Approvals are treated as submitting an identical translation at the 100% match rate of the corresponding Net Rate Scheme category (TM, MT, AI, or other). When disabled, all approvals use the flat base proofread rate.'
+									},
+									{
+										displayName: 'Use Tm Edit Distance',
+										name: 'useTmEditDistance',
+										type: 'boolean',
+										default: false,
+										description: 'Calculations are based on the edit distance between the TM match and final translation instead of source segment similarity. Matches recorded before July 13, 2026, fall back to traditional source similarity.'
 									}
 								]
 							}
