@@ -23,10 +23,11 @@ import { usersProperties } from './users';
 import { notificationsProperties } from './notifications';
 import { aiProperties } from './ai';
 import { languagesProperties } from './languages';
-import { webhooksProperties } from './webhooks';
 import { organizationWebhooksProperties } from './organizationWebhooks';
 import { applicationsProperties } from './applications';
 import { advisorProperties } from './advisor';
+import { sourceFilesProperties } from './sourceFiles';
+import { webhooksProperties } from './webhooks';
 import { securityLogsProperties } from './securityLogs';
 
 const resourceProperty: INodeProperties = {
@@ -146,11 +147,6 @@ const resourceProperty: INodeProperties = {
 			description: '\nCrowdin supports more than 300 world languages and custom languages created in the system.\n\nUse API to get the list of all supported languages and retrieve additional details (e.g. text direction, internal code) on specific language.\n'
 		},
 		{
-			name: 'Webhooks',
-			value: 'webhooks',
-			description: '\nWebhooks allow you to collect information about events that happen in your Crowdin projects. You can select the request type, content type, and add a custom payload, which allows you to create integrations with other systems on your own.\n\nYou can configure webhooks for the following events:\n * all strings in project are translated\n * all strings in project are reviewed\n * all strings in project QA check are finished\n * final translation of string is updated (using Replace in suggestions feature)\n * source string is added\n * source string is updated\n * source string is deleted\n * source string is translated\n * translation for source string is updated (using Replace in suggestions feature)\n * one of translations is deleted\n * translation for string is approved\n * approval for previously added translation is removed\n\nUse API to create, modify, and delete specific webhooks.\n'
-		},
-		{
 			name: 'Organization Webhooks',
 			value: 'organizationWebhooks',
 			description: '\nWebhooks allow you to collect information about events that happen in your Crowdin account. You can select the request type, content type, and add a custom payload, which allows you to create integrations with other systems on your own.\n\nYou can configure webhooks for the following events:\n * project is created\n * project is deleted\n\nUse API to create, modify, and delete specific webhooks.\n'
@@ -164,6 +160,15 @@ const resourceProperty: INodeProperties = {
 			name: 'Advisor',
 			value: 'advisor',
 			description: '\nAdvisor checks your project setup and content and provides insights with recommendations for improving your localization workflow. Installed applications can extend Advisor with their own checks.\n\nUse API to manage advisor insights and to run advisor checks.\n'
+		},
+		{
+			name: 'Source Files',
+			value: 'sourceFiles'
+		},
+		{
+			name: 'Webhooks',
+			value: 'webhooks',
+			description: '\nWebhooks allow you to collect information about events that happen in your Crowdin projects. You can select the request type, content type, and add a custom payload, which allows you to create integrations with other systems on your own.\n\nYou can configure webhooks for the following events:\n * all strings in project are translated\n * all strings in project are reviewed\n * all strings in project QA check are finished\n * final translation of string is updated (using Replace in suggestions feature)\n * source string is added\n * source string is updated\n * source string is deleted\n * source string is translated\n * translation for source string is updated (using Replace in suggestions feature)\n * one of translations is deleted\n * translation for string is approved\n * approval for previously added translation is removed\n\nUse API to create, modify, and delete specific webhooks.\n'
 		},
 		{
 			name: 'Security Logs',
@@ -198,9 +203,10 @@ export const properties: INodeProperties[] = [
 	...notificationsProperties,
 	...aiProperties,
 	...languagesProperties,
-	...webhooksProperties,
 	...organizationWebhooksProperties,
 	...applicationsProperties,
 	...advisorProperties,
+	...sourceFilesProperties,
+	...webhooksProperties,
 	...securityLogsProperties,
 ];

@@ -932,6 +932,31 @@ export const branchesProperties: INodeProperties[] = [
 		}
 	},
 	{
+		displayName: 'Prefer',
+		name: 'Prefer',
+		description: '**[Recommended]** Set to `respond-async` (RFC 7240) to delete asynchronously. The endpoint then returns 202 with a delete operation to poll.',
+		default: '',
+		type: 'string',
+		routing: {
+			request: {
+				headers: {
+					Prefer: '={{ $value }}'
+				}
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'branches'
+				],
+				operation: [
+					'api.projects.branches.delete'
+				]
+			}
+		},
+		placeholder: 'respond-async'
+	},
+	{
 		displayName: 'Project Id',
 		name: 'projectId',
 		required: true,
