@@ -107,6 +107,18 @@ export const sourceFilesProperties: INodeProperties[] = [
 				}
 			},
 			{
+				name: 'Check Delete Branch Job Status',
+				value: 'api.projects.branches.jobs.get',
+				action: 'Check Delete Branch Job Status',
+				description: '**Required scopes:** `project.source.file` (Read only).',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/projects/{{$parameter["projectId"]}}/branches/{{$parameter["branchId"]}}/jobs/{{$parameter["jobIdentifier"]}}'
+					}
+				}
+			},
+			{
 				name: 'List Directories',
 				value: 'api.projects.directories.getMany',
 				action: 'List Directories',
@@ -192,6 +204,18 @@ export const sourceFilesProperties: INodeProperties[] = [
 						preSend: [
 							transformToJsonPatch
 						]
+					}
+				}
+			},
+			{
+				name: 'Check Delete Directory Job Status',
+				value: 'api.projects.directories.jobs.get',
+				action: 'Check Delete Directory Job Status',
+				description: '**Required scopes:** `project.source.file` (Read only).',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/projects/{{$parameter["projectId"]}}/directories/{{$parameter["directoryId"]}}/jobs/{{$parameter["jobIdentifier"]}}'
 					}
 				}
 			},
@@ -293,6 +317,18 @@ export const sourceFilesProperties: INodeProperties[] = [
 						preSend: [
 							transformToJsonPatch
 						]
+					}
+				}
+			},
+			{
+				name: 'Check Delete File Job Status',
+				value: 'api.projects.files.jobs.get',
+				action: 'Check Delete File Job Status',
+				description: '**Required scopes:** `project.source.file` (Read only).',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/projects/{{$parameter["projectId"]}}/files/{{$parameter["fileId"]}}/jobs/{{$parameter["jobIdentifier"]}}'
 					}
 				}
 			},
@@ -529,6 +565,25 @@ export const sourceFilesProperties: INodeProperties[] = [
 		}
 	},
 	{
+		displayName: 'GET /projects/{projectId}/branches/{branchId}/jobs/{jobIdentifier}',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceFiles'
+				],
+				operation: [
+					'api.projects.branches.jobs.get'
+				]
+			}
+		}
+	},
+	{
 		displayName: 'GET /projects/{projectId}/directories',
 		name: 'operation',
 		type: 'notice',
@@ -619,6 +674,25 @@ export const sourceFilesProperties: INodeProperties[] = [
 				],
 				operation: [
 					'api.projects.directories.patch'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'GET /projects/{projectId}/directories/{directoryId}/jobs/{jobIdentifier}',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceFiles'
+				],
+				operation: [
+					'api.projects.directories.jobs.get'
 				]
 			}
 		}
@@ -733,6 +807,25 @@ export const sourceFilesProperties: INodeProperties[] = [
 				],
 				operation: [
 					'api.projects.files.patch'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'GET /projects/{projectId}/files/{fileId}/jobs/{jobIdentifier}',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceFiles'
+				],
+				operation: [
+					'api.projects.files.jobs.get'
 				]
 			}
 		}
@@ -1226,6 +1319,31 @@ export const sourceFilesProperties: INodeProperties[] = [
 		}
 	},
 	{
+		displayName: 'Prefer',
+		name: 'Prefer',
+		description: '**[Recommended]** Set to `respond-async` (RFC 7240) to delete asynchronously. The endpoint then returns 202 with a delete operation to poll.',
+		default: '',
+		type: 'string',
+		routing: {
+			request: {
+				headers: {
+					Prefer: '={{ $value }}'
+				}
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceFiles'
+				],
+				operation: [
+					'api.projects.branches.delete'
+				]
+			}
+		},
+		placeholder: 'respond-async'
+	},
+	{
 		displayName: 'Project Id',
 		name: 'projectId',
 		required: true,
@@ -1268,6 +1386,69 @@ export const sourceFilesProperties: INodeProperties[] = [
 			loadOptionsDependsOn: [
 				'projectId'
 			]
+		}
+	},
+	{
+		displayName: 'Project Id',
+		name: 'projectId',
+		required: true,
+		description: 'Project Identifier. Get via [List Projects](#operation/api.projects.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceFiles'
+				],
+				operation: [
+					'api.projects.branches.jobs.get'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjects'
+		}
+	},
+	{
+		displayName: 'Branch Id',
+		name: 'branchId',
+		required: true,
+		description: 'Branch Identifier. Get via [List Branches](#operation/api.projects.branches.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceFiles'
+				],
+				operation: [
+					'api.projects.branches.jobs.get'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getBranches',
+			loadOptionsDependsOn: [
+				'projectId'
+			]
+		}
+	},
+	{
+		displayName: 'Identifier',
+		name: 'identifier',
+		required: true,
+		description: 'Delete operation identifier (UUID). Returned by the async DELETE (Prefer: respond-async).',
+		default: '',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceFiles'
+				],
+				operation: [
+					'api.projects.branches.jobs.get'
+				]
+			}
 		}
 	},
 	{
@@ -1756,6 +1937,31 @@ export const sourceFilesProperties: INodeProperties[] = [
 		}
 	},
 	{
+		displayName: 'Prefer',
+		name: 'Prefer',
+		description: '**[Recommended]** Set to `respond-async` (RFC 7240) to delete asynchronously. The endpoint then returns 202 with a delete operation to poll.',
+		default: '',
+		type: 'string',
+		routing: {
+			request: {
+				headers: {
+					Prefer: '={{ $value }}'
+				}
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceFiles'
+				],
+				operation: [
+					'api.projects.directories.delete'
+				]
+			}
+		},
+		placeholder: 'respond-async'
+	},
+	{
 		displayName: 'Project Id',
 		name: 'projectId',
 		required: true,
@@ -1798,6 +2004,69 @@ export const sourceFilesProperties: INodeProperties[] = [
 			loadOptionsDependsOn: [
 				'projectId'
 			]
+		}
+	},
+	{
+		displayName: 'Project Id',
+		name: 'projectId',
+		required: true,
+		description: 'Project Identifier. Get via [List Projects](#operation/api.projects.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceFiles'
+				],
+				operation: [
+					'api.projects.directories.jobs.get'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjects'
+		}
+	},
+	{
+		displayName: 'Directory Id',
+		name: 'directoryId',
+		required: true,
+		description: 'Directory Identifier. Get via [List Directories](#operation/api.projects.directories.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceFiles'
+				],
+				operation: [
+					'api.projects.directories.jobs.get'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjectDirectories',
+			loadOptionsDependsOn: [
+				'projectId'
+			]
+		}
+	},
+	{
+		displayName: 'Identifier',
+		name: 'identifier',
+		required: true,
+		description: 'Delete operation identifier (UUID). Returned by the async DELETE (Prefer: respond-async).',
+		default: '',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceFiles'
+				],
+				operation: [
+					'api.projects.directories.jobs.get'
+				]
+			}
 		}
 	},
 	{
@@ -5485,6 +5754,31 @@ export const sourceFilesProperties: INodeProperties[] = [
 		}
 	},
 	{
+		displayName: 'Prefer',
+		name: 'Prefer',
+		description: '**[Recommended]** Set to `respond-async` (RFC 7240) to delete asynchronously. The endpoint then returns 202 with a delete operation to poll.',
+		default: '',
+		type: 'string',
+		routing: {
+			request: {
+				headers: {
+					Prefer: '={{ $value }}'
+				}
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceFiles'
+				],
+				operation: [
+					'api.projects.files.delete'
+				]
+			}
+		},
+		placeholder: 'respond-async'
+	},
+	{
 		displayName: 'Project Id',
 		name: 'projectId',
 		required: true,
@@ -5527,6 +5821,69 @@ export const sourceFilesProperties: INodeProperties[] = [
 			loadOptionsDependsOn: [
 				'projectId'
 			]
+		}
+	},
+	{
+		displayName: 'Project Id',
+		name: 'projectId',
+		required: true,
+		description: 'Project Identifier. Get via [List Projects](#operation/api.projects.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceFiles'
+				],
+				operation: [
+					'api.projects.files.jobs.get'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjects'
+		}
+	},
+	{
+		displayName: 'File Id',
+		name: 'fileId',
+		required: true,
+		description: 'File Identifier. Get via [List Files](#operation/api.projects.files.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceFiles'
+				],
+				operation: [
+					'api.projects.files.jobs.get'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjectFiles',
+			loadOptionsDependsOn: [
+				'projectId'
+			]
+		}
+	},
+	{
+		displayName: 'Identifier',
+		name: 'identifier',
+		required: true,
+		description: 'Delete operation identifier (UUID). Returned by the async DELETE (Prefer: respond-async).',
+		default: '',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceFiles'
+				],
+				operation: [
+					'api.projects.files.jobs.get'
+				]
+			}
 		}
 	},
 	{

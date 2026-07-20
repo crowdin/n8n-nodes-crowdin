@@ -143,6 +143,18 @@ export const branchesProperties: INodeProperties[] = [
 				}
 			},
 			{
+				name: 'Check Delete Branch Job Status',
+				value: 'api.projects.branches.jobs.get',
+				action: 'Check Delete Branch Job Status',
+				description: '**Required scopes:** `project.source.file` (Read only).',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/projects/{{$parameter["projectId"]}}/branches/{{$parameter["branchId"]}}/jobs/{{$parameter["jobIdentifier"]}}'
+					}
+				}
+			},
+			{
 				name: 'Merge Branch',
 				value: 'api.projects.branches.merges.post',
 				action: 'Merge Branch',
@@ -329,6 +341,25 @@ export const branchesProperties: INodeProperties[] = [
 				],
 				operation: [
 					'api.projects.branches.patch'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'GET /projects/{projectId}/branches/{branchId}/jobs/{jobIdentifier}',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'branches'
+				],
+				operation: [
+					'api.projects.branches.jobs.get'
 				]
 			}
 		}
@@ -932,6 +963,31 @@ export const branchesProperties: INodeProperties[] = [
 		}
 	},
 	{
+		displayName: 'Prefer',
+		name: 'Prefer',
+		description: '**[Recommended]** Set to `respond-async` (RFC 7240) to delete asynchronously. The endpoint then returns 202 with a delete operation to poll.',
+		default: '',
+		type: 'string',
+		routing: {
+			request: {
+				headers: {
+					Prefer: '={{ $value }}'
+				}
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'branches'
+				],
+				operation: [
+					'api.projects.branches.delete'
+				]
+			}
+		},
+		placeholder: 'respond-async'
+	},
+	{
 		displayName: 'Project Id',
 		name: 'projectId',
 		required: true,
@@ -974,6 +1030,69 @@ export const branchesProperties: INodeProperties[] = [
 			loadOptionsDependsOn: [
 				'projectId'
 			]
+		}
+	},
+	{
+		displayName: 'Project Id',
+		name: 'projectId',
+		required: true,
+		description: 'Project Identifier. Get via [List Projects](#operation/api.projects.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'branches'
+				],
+				operation: [
+					'api.projects.branches.jobs.get'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjects'
+		}
+	},
+	{
+		displayName: 'Branch Id',
+		name: 'branchId',
+		required: true,
+		description: 'Branch Identifier. Get via [List Branches](#operation/api.projects.branches.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'branches'
+				],
+				operation: [
+					'api.projects.branches.jobs.get'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getBranches',
+			loadOptionsDependsOn: [
+				'projectId'
+			]
+		}
+	},
+	{
+		displayName: 'Identifier',
+		name: 'identifier',
+		required: true,
+		description: 'Delete operation identifier (UUID). Returned by the async DELETE (Prefer: respond-async).',
+		default: '',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: [
+					'branches'
+				],
+				operation: [
+					'api.projects.branches.jobs.get'
+				]
+			}
 		}
 	},
 	{
