@@ -3790,6 +3790,26 @@ export const sourceFilesProperties: INodeProperties[] = [
 				]
 			},
 			{
+				displayName: 'Vdf File Import Options',
+				name: '_vdfFileImportOptions',
+				values: [
+					{
+						displayName: 'Convert Icu',
+						name: 'convertIcu',
+						type: 'boolean',
+						default: true,
+						description: 'Defines whether to convert placeholders to the ICU MessageFormat syntax.'
+					},
+					{
+						displayName: 'Add Gender Argument',
+						name: 'addGenderArgument',
+						type: 'boolean',
+						default: false,
+						description: 'Defines whether to append _gender suffix to variable names when converting gender ICU to ICU MessageFormat.\n\n__Note:__ Can be enabled only when `convertIcu` is `true`.'
+					}
+				]
+			},
+			{
 				displayName: 'Other Files Import Options',
 				name: '_otherFilesImportOptions',
 				values: [
@@ -5301,6 +5321,26 @@ export const sourceFilesProperties: INodeProperties[] = [
 										typeOptions: {
 											loadOptionsMethod: 'getStorages'
 										}
+									}
+								]
+							},
+							{
+								displayName: 'Vdf File Import Options',
+								name: '_vdfFileImportOptions',
+								values: [
+									{
+										displayName: 'Convert Icu',
+										name: 'convertIcu',
+										type: 'boolean',
+										default: true,
+										description: 'Defines whether to convert placeholders to the ICU MessageFormat syntax.'
+									},
+									{
+										displayName: 'Add Gender Argument',
+										name: 'addGenderArgument',
+										type: 'boolean',
+										default: false,
+										description: 'Defines whether to append _gender suffix to variable names when converting gender ICU to ICU MessageFormat.\n\n__Note:__ Can be enabled only when `convertIcu` is `true`.'
 									}
 								]
 							},
