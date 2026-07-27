@@ -5210,6 +5210,33 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 				]
 			},
 			{
+				displayName: 'Vdf file format settings',
+				name: '_vdfFileFormatSettings',
+				values: [
+					{
+						displayName: 'Convert Icu',
+						name: 'convertIcu',
+						type: 'boolean',
+						default: true,
+						description: 'Defines whether to convert placeholders to the ICU MessageFormat syntax.'
+					},
+					{
+						displayName: 'Add Gender Argument',
+						name: 'addGenderArgument',
+						type: 'boolean',
+						default: false,
+						description: 'Defines whether to append _gender suffix to variable names when converting gender ICU to ICU MessageFormat.\n\n__Note:__ Can be enabled only when `convertIcu` is `true`.'
+					},
+					{
+						displayName: 'Export Pattern',
+						name: 'exportPattern',
+						type: 'string',
+						default: '',
+						description: 'File format export pattern. Defines file name and path in resulting translations bundle\n\n __Note:__ Can\'t contain `: * ? " < > |` symbols'
+					}
+				]
+			},
+			{
 				displayName: 'Other file format settings',
 				name: '_otherFileFormatSettings',
 				values: [
@@ -8614,6 +8641,33 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 								type: 'string',
 								default: '',
 								description: 'File format export pattern. Defines file name and path in resulting translations bundle\n\n__Note:__ Can\'t contain `: * ? " < > |` symbols'
+							}
+						]
+					},
+					{
+						name: '_vdfFileFormatSettings',
+						displayName: 'Vdf file format settings',
+						values: [
+							{
+								displayName: 'Convert Icu',
+								name: 'convertIcu',
+								type: 'boolean',
+								default: true,
+								description: 'Defines whether to convert placeholders to the ICU MessageFormat syntax.'
+							},
+							{
+								displayName: 'Add Gender Argument',
+								name: 'addGenderArgument',
+								type: 'boolean',
+								default: false,
+								description: 'Defines whether to append _gender suffix to variable names when converting gender ICU to ICU MessageFormat.\n\n__Note:__ Can be enabled only when `convertIcu` is `true`.'
+							},
+							{
+								displayName: 'Export Pattern',
+								name: 'exportPattern',
+								type: 'string',
+								default: '',
+								description: 'File format export pattern. Defines file name and path in resulting translations bundle\n\n __Note:__ Can\'t contain `: * ? " < > |` symbols'
 							}
 						]
 					},
