@@ -119,6 +119,32 @@ export const sourceFilesProperties: INodeProperties[] = [
 				}
 			},
 			{
+				name: 'Search Branches',
+				value: 'api.branches.getMany',
+				action: 'Search Branches',
+				description: '**Required scopes:** `project.source.file` (Read only).\n\nSearches branches by name/title. Provide up to 50 `projectIds`, or omit them to search all projects you can access in the organization.',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/branches'
+					},
+					send: {
+						paginate: '={{$parameter["returnAll"]}}'
+					},
+					output: {
+						postReceive: [
+							{
+								type: 'rootProperty',
+								enabled: '={{!$parameter["returnAll"]}}',
+								properties: {
+									property: 'data'
+								}
+							}
+						]
+					}
+				}
+			},
+			{
 				name: 'List Directories',
 				value: 'api.projects.directories.getMany',
 				action: 'List Directories',
@@ -216,6 +242,32 @@ export const sourceFilesProperties: INodeProperties[] = [
 					request: {
 						method: 'GET',
 						url: '=/projects/{{$parameter["projectId"]}}/directories/{{$parameter["directoryId"]}}/jobs/{{$parameter["jobIdentifier"]}}'
+					}
+				}
+			},
+			{
+				name: 'Search Directories',
+				value: 'api.directories.getMany',
+				action: 'Search Directories',
+				description: '**Required scopes:** `project.source.file` (Read only).\n\nSearches directories by name/title. Provide up to 50 `projectIds`, or omit them to search all projects you can access in the organization.',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/directories'
+					},
+					send: {
+						paginate: '={{$parameter["returnAll"]}}'
+					},
+					output: {
+						postReceive: [
+							{
+								type: 'rootProperty',
+								enabled: '={{!$parameter["returnAll"]}}',
+								properties: {
+									property: 'data'
+								}
+							}
+						]
 					}
 				}
 			},
@@ -353,6 +405,32 @@ export const sourceFilesProperties: INodeProperties[] = [
 					request: {
 						method: 'GET',
 						url: '=/projects/{{$parameter["projectId"]}}/files/{{$parameter["fileId"]}}/download'
+					}
+				}
+			},
+			{
+				name: 'Search Files',
+				value: 'api.files.getMany',
+				action: 'Search Files',
+				description: '**Required scopes:** `project.source.file` (Read only).\n\nSearches source files by name/title. Provide up to 50 `projectIds`, or omit them to search all projects you can access in the organization.',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/files'
+					},
+					send: {
+						paginate: '={{$parameter["returnAll"]}}'
+					},
+					output: {
+						postReceive: [
+							{
+								type: 'rootProperty',
+								enabled: '={{!$parameter["returnAll"]}}',
+								properties: {
+									property: 'data'
+								}
+							}
+						]
 					}
 				}
 			},
@@ -646,6 +724,25 @@ export const sourceFilesProperties: INodeProperties[] = [
 		}
 	},
 	{
+		displayName: 'GET /branches',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceFiles'
+				],
+				operation: [
+					'api.branches.getMany'
+				]
+			}
+		}
+	},
+	{
 		displayName: 'GET /projects/{projectId}/directories',
 		name: 'operation',
 		type: 'notice',
@@ -755,6 +852,25 @@ export const sourceFilesProperties: INodeProperties[] = [
 				],
 				operation: [
 					'api.projects.directories.jobs.get'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'GET /directories',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceFiles'
+				],
+				operation: [
+					'api.directories.getMany'
 				]
 			}
 		}
@@ -926,6 +1042,25 @@ export const sourceFilesProperties: INodeProperties[] = [
 				],
 				operation: [
 					'api.projects.files.download.get'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'GET /files',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceFiles'
+				],
+				operation: [
+					'api.files.getMany'
 				]
 			}
 		}
@@ -1590,6 +1725,91 @@ export const sourceFilesProperties: INodeProperties[] = [
 		}
 	},
 	{
+		displayName: 'Filter',
+		name: 'filter',
+		required: true,
+		description: 'Search branches by `name` or `title`',
+		default: '',
+		type: 'string',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'filter',
+				value: '={{ $value || undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceFiles'
+				],
+				operation: [
+					'api.branches.getMany'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Project Ids',
+		name: 'projectIds',
+		description: 'Project identifiers to search across. Get via [List Projects](#operation/api.projects.getMany). It can be one project or a list of comma-separated ones (max 50). Optional — omit to search all projects you can access in the organization.',
+		default: [],
+		type: 'multiOptions',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'projectIds',
+				value: '={{ $value.length ? $value.join(\',\') : undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceFiles'
+				],
+				operation: [
+					'api.branches.getMany'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjectsMulti'
+		}
+	},
+	{
+		displayName: 'Limit',
+		name: 'limit',
+		description: 'Max number of results to return',
+		default: 50,
+		type: 'number',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'limit',
+				value: '={{ typeof $value === \'number\' ? $value : undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceFiles'
+				],
+				operation: [
+					'api.branches.getMany'
+				],
+				returnAll: [
+					false
+				]
+			}
+		},
+		typeOptions: {
+			minValue: 1
+		}
+	},
+	{
 		displayName: 'Project Id',
 		name: 'projectId',
 		required: true,
@@ -2205,6 +2425,91 @@ export const sourceFilesProperties: INodeProperties[] = [
 					'api.projects.directories.jobs.get'
 				]
 			}
+		}
+	},
+	{
+		displayName: 'Filter',
+		name: 'filter',
+		required: true,
+		description: 'Search directories by `name` or `title`',
+		default: '',
+		type: 'string',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'filter',
+				value: '={{ $value || undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceFiles'
+				],
+				operation: [
+					'api.directories.getMany'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Project Ids',
+		name: 'projectIds',
+		description: 'Project identifiers to search across. Get via [List Projects](#operation/api.projects.getMany). It can be one project or a list of comma-separated ones (max 50). Optional — omit to search all projects you can access in the organization.',
+		default: [],
+		type: 'multiOptions',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'projectIds',
+				value: '={{ $value.length ? $value.join(\',\') : undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceFiles'
+				],
+				operation: [
+					'api.directories.getMany'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjectsMulti'
+		}
+	},
+	{
+		displayName: 'Limit',
+		name: 'limit',
+		description: 'Max number of results to return',
+		default: 50,
+		type: 'number',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'limit',
+				value: '={{ typeof $value === \'number\' ? $value : undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceFiles'
+				],
+				operation: [
+					'api.directories.getMany'
+				],
+				returnAll: [
+					false
+				]
+			}
+		},
+		typeOptions: {
+			minValue: 1
 		}
 	},
 	{
@@ -3352,6 +3657,36 @@ export const sourceFilesProperties: INodeProperties[] = [
 						type: 'boolean',
 						default: false,
 						description: 'When checked, exposes hidden hyperlinks for translation.'
+					},
+					{
+						displayName: 'Content Segmentation',
+						name: 'contentSegmentation',
+						type: 'boolean',
+						default: true,
+						description: 'Defines whether to split long texts into smaller text segments.'
+					},
+					{
+						displayName: 'Srx Storage Id',
+						name: 'srxStorageId',
+						type: 'options',
+						default: '',
+						description: 'Storage Identifier. Get via [List Storages](#operation/api.storages.getMany).\n\n Storage identifier of the SRX segmentation rules file. Read more about [Custom Segmentation](https://support.crowdin.com/custom-segmentation/#segmentation-examples).',
+						typeOptions: {
+							loadOptionsMethod: 'getStorages'
+						}
+					}
+				]
+			},
+			{
+				displayName: 'Idml File Import Options',
+				name: '_idmlFileImportOptions',
+				values: [
+					{
+						displayName: 'Inline Hyperlink Text',
+						name: 'inlineHyperlinkText',
+						type: 'boolean',
+						default: false,
+						description: 'When checked, a hyperlink\'s text is extracted as part of the surrounding sentence so it can be translated in context, instead of appearing as a separate non-editable tag.\n\n__Note:__ Works only for files imported with the `idml8` parser.'
 					},
 					{
 						displayName: 'Content Segmentation',
@@ -4955,6 +5290,36 @@ export const sourceFilesProperties: INodeProperties[] = [
 								]
 							},
 							{
+								displayName: 'Idml File Import Options',
+								name: '_idmlFileImportOptions',
+								values: [
+									{
+										displayName: 'Inline Hyperlink Text',
+										name: 'inlineHyperlinkText',
+										type: 'boolean',
+										default: false,
+										description: 'When checked, a hyperlink\'s text is extracted as part of the surrounding sentence so it can be translated in context, instead of appearing as a separate non-editable tag.\n\n__Note:__ Works only for files imported with the `idml8` parser.'
+									},
+									{
+										displayName: 'Content Segmentation',
+										name: 'contentSegmentation',
+										type: 'boolean',
+										default: true,
+										description: 'Defines whether to split long texts into smaller text segments.'
+									},
+									{
+										displayName: 'Srx Storage Id',
+										name: 'srxStorageId',
+										type: 'options',
+										default: '',
+										description: 'Storage Identifier. Get via [List Storages](#operation/api.storages.getMany).\n\n Storage identifier of the SRX segmentation rules file. Read more about [Custom Segmentation](https://support.crowdin.com/custom-segmentation/#segmentation-examples).',
+										typeOptions: {
+											loadOptionsMethod: 'getStorages'
+										}
+									}
+								]
+							},
+							{
 								displayName: 'Html File Import Options',
 								name: '_htmlFileUpdateOptions',
 								values: [
@@ -6155,6 +6520,91 @@ export const sourceFilesProperties: INodeProperties[] = [
 		}
 	},
 	{
+		displayName: 'Filter',
+		name: 'filter',
+		required: true,
+		description: 'Search files by `name` or `title`',
+		default: '',
+		type: 'string',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'filter',
+				value: '={{ $value || undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceFiles'
+				],
+				operation: [
+					'api.files.getMany'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Project Ids',
+		name: 'projectIds',
+		description: 'Project identifiers to search across. Get via [List Projects](#operation/api.projects.getMany). It can be one project or a list of comma-separated ones (max 50). Optional — omit to search all projects you can access in the organization.',
+		default: [],
+		type: 'multiOptions',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'projectIds',
+				value: '={{ $value.length ? $value.join(\',\') : undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceFiles'
+				],
+				operation: [
+					'api.files.getMany'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjectsMulti'
+		}
+	},
+	{
+		displayName: 'Limit',
+		name: 'limit',
+		description: 'Max number of results to return',
+		default: 50,
+		type: 'number',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'limit',
+				value: '={{ typeof $value === \'number\' ? $value : undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceFiles'
+				],
+				operation: [
+					'api.files.getMany'
+				],
+				returnAll: [
+					false
+				]
+			}
+		},
+		typeOptions: {
+			minValue: 1
+		}
+	},
+	{
 		displayName: 'Project Id',
 		name: 'projectId',
 		required: true,
@@ -7151,6 +7601,23 @@ export const sourceFilesProperties: INodeProperties[] = [
 					'sourceFiles'
 				],
 				operation: [
+					'api.branches.getMany'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Return All',
+		name: 'returnAll',
+		type: 'boolean',
+		default: true,
+		description: 'Whether to return all results or only up to a given limit',
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceFiles'
+				],
+				operation: [
 					'api.projects.directories.getMany'
 				]
 			}
@@ -7168,7 +7635,41 @@ export const sourceFilesProperties: INodeProperties[] = [
 					'sourceFiles'
 				],
 				operation: [
+					'api.directories.getMany'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Return All',
+		name: 'returnAll',
+		type: 'boolean',
+		default: true,
+		description: 'Whether to return all results or only up to a given limit',
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceFiles'
+				],
+				operation: [
 					'api.projects.files.getMany'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Return All',
+		name: 'returnAll',
+		type: 'boolean',
+		default: true,
+		description: 'Whether to return all results or only up to a given limit',
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceFiles'
+				],
+				operation: [
+					'api.files.getMany'
 				]
 			}
 		}

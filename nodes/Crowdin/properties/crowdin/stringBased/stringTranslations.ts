@@ -255,6 +255,32 @@ export const stringTranslationsProperties: INodeProperties[] = [
 				}
 			},
 			{
+				name: 'Search Translations',
+				value: 'api.translations.getMany',
+				action: 'Search Translations',
+				description: '**Required scopes:** `project.translation` (Read only).\n\nSearches target-language translations by text. Provide up to 50 `projectIds`, or omit them to search all your own projects — or another owner\'s accessible projects via `userId`.',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/translations'
+					},
+					send: {
+						paginate: '={{$parameter["returnAll"]}}'
+					},
+					output: {
+						postReceive: [
+							{
+								type: 'rootProperty',
+								enabled: '={{!$parameter["returnAll"]}}',
+								properties: {
+									property: 'data'
+								}
+							}
+						]
+					}
+				}
+			},
+			{
 				name: 'List Translation Votes',
 				value: 'api.projects.votes.getMany',
 				action: 'List Translation Votes',
@@ -572,6 +598,25 @@ export const stringTranslationsProperties: INodeProperties[] = [
 				],
 				operation: [
 					'api.projects.translations.alignment.post'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'GET /translations',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'stringTranslations'
+				],
+				operation: [
+					'api.translations.getMany'
 				]
 			}
 		}
@@ -1806,7 +1851,7 @@ export const stringTranslationsProperties: INodeProperties[] = [
 		name: 'isPreTranslated',
 		type: 'boolean',
 		default: false,
-		description: 'Defines whether this is a pre-translated translation',
+		description: 'Defines whether this is an auto-translated translation',
 		routing: {
 			send: {
 				property: 'isPreTranslated',
@@ -2171,6 +2216,186 @@ export const stringTranslationsProperties: INodeProperties[] = [
 			}
 		},
 		placeholder: 'Your password has been reset successfully!'
+	},
+	{
+		displayName: 'Filter',
+		name: 'filter',
+		required: true,
+		description: 'Search translations by `text`',
+		default: '',
+		type: 'string',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'filter',
+				value: '={{ $value || undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'stringTranslations'
+				],
+				operation: [
+					'api.translations.getMany'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Project Ids',
+		name: 'projectIds',
+		description: 'Project identifiers to search across. Get via [List Projects](#operation/api.projects.getMany). It can be one project or a list of comma-separated ones (max 50). All projects must belong to the same owner. Optional — omit to search all your accessible projects.',
+		default: [],
+		type: 'multiOptions',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'projectIds',
+				value: '={{ $value.length ? $value.join(\',\') : undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'stringTranslations'
+				],
+				operation: [
+					'api.translations.getMany'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjectsMulti'
+		}
+	},
+	{
+		displayName: 'User Id',
+		name: 'userId',
+		description: 'Owner (user) whose projects to search when `projectIds` is omitted. Only projects you own or manage are searched. Defaults to your own account.',
+		default: '',
+		type: 'options',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'userId',
+				value: '={{ typeof $value === \'number\' ? $value : undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'stringTranslations'
+				],
+				operation: [
+					'api.translations.getMany'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getUsers'
+		}
+	},
+	{
+		displayName: 'Language Ids',
+		name: 'languageIds',
+		description: 'Filter by target language identifier. Get via [Project Target Languages](#operation/api.projects.get). It can be one language or a list of comma-separated ones',
+		default: [],
+		type: 'multiOptions',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'languageIds',
+				value: '={{ $value.length ? $value.join(\',\') : undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'stringTranslations'
+				],
+				operation: [
+					'api.translations.getMany'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getLanguagesMulti'
+		}
+	},
+	{
+		displayName: 'Denormalize Placeholders',
+		name: 'denormalizePlaceholders',
+		description: 'Enable denormalize placeholders',
+		default: '',
+		type: 'options',
+		options: [
+			{
+				name: '-',
+				value: ''
+			},
+			{
+				name: '0',
+				value: 0
+			},
+			{
+				name: '1',
+				value: 1
+			}
+		],
+		routing: {
+			send: {
+				type: 'query',
+				property: 'denormalizePlaceholders',
+				value: '={{ $value || undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'stringTranslations'
+				],
+				operation: [
+					'api.translations.getMany'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Limit',
+		name: 'limit',
+		description: 'Max number of results to return',
+		default: 50,
+		type: 'number',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'limit',
+				value: '={{ typeof $value === \'number\' ? $value : undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'stringTranslations'
+				],
+				operation: [
+					'api.translations.getMany'
+				],
+				returnAll: [
+					false
+				]
+			}
+		},
+		typeOptions: {
+			minValue: 1
+		}
 	},
 	{
 		displayName: 'Project Id',
@@ -2592,6 +2817,23 @@ export const stringTranslationsProperties: INodeProperties[] = [
 				],
 				operation: [
 					'api.projects.translations.getMany'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Return All',
+		name: 'returnAll',
+		type: 'boolean',
+		default: true,
+		description: 'Whether to return all results or only up to a given limit',
+		displayOptions: {
+			show: {
+				resource: [
+					'stringTranslations'
+				],
+				operation: [
+					'api.translations.getMany'
 				]
 			}
 		}

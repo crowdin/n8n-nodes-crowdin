@@ -663,6 +663,31 @@ export const projectsProperties: INodeProperties[] = [
 		placeholder: 'createdAt desc,name,id'
 	},
 	{
+		displayName: 'Filter',
+		name: 'filter',
+		description: 'Filter projects by `name`',
+		default: '',
+		type: 'string',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'filter',
+				value: '={{ $value || undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'projects'
+				],
+				operation: [
+					'api.projects.getMany'
+				]
+			}
+		}
+	},
+	{
 		displayName: 'User Id',
 		name: 'userId',
 		description: 'User Identifier. Get via [Get Authenticated User](#operation/api.user.get)',
@@ -4022,6 +4047,13 @@ export const projectsProperties: INodeProperties[] = [
 				name: '_idmlFileFormatSettings',
 				values: [
 					{
+						displayName: 'Inline Hyperlink Text',
+						name: 'inlineHyperlinkText',
+						type: 'boolean',
+						default: false,
+						description: 'When checked, a hyperlink\'s text is extracted as part of the surrounding sentence so it can be translated in context, instead of appearing as a separate non-editable tag.\n\n__Note:__ Works only for files imported with the `idml8` parser.'
+					},
+					{
 						displayName: 'Content Segmentation',
 						name: 'contentSegmentation',
 						type: 'boolean',
@@ -7239,6 +7271,13 @@ export const projectsProperties: INodeProperties[] = [
 						name: '_idmlFileFormatSettings',
 						displayName: 'Idml file format settings',
 						values: [
+							{
+								displayName: 'Inline Hyperlink Text',
+								name: 'inlineHyperlinkText',
+								type: 'boolean',
+								default: false,
+								description: 'When checked, a hyperlink\'s text is extracted as part of the surrounding sentence so it can be translated in context, instead of appearing as a separate non-editable tag.\n\n__Note:__ Works only for files imported with the `idml8` parser.'
+							},
 							{
 								displayName: 'Content Segmentation',
 								name: 'contentSegmentation',

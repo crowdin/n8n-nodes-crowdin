@@ -189,6 +189,32 @@ export const branchesProperties: INodeProperties[] = [
 						url: '=/projects/{{$parameter["projectId"]}}/branches/{{$parameter["branchId"]}}/merges/{{$parameter["mergeId"]}}/summary'
 					}
 				}
+			},
+			{
+				name: 'Search Branches',
+				value: 'api.branches.getMany',
+				action: 'Search Branches',
+				description: '**Required scopes:** `project.source.file` (Read only).\n\nSearches branches by name/title. Provide up to 50 `projectIds`, or omit them to search all your own projects — or another owner\'s accessible projects via `userId`.',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/branches'
+					},
+					send: {
+						paginate: '={{$parameter["returnAll"]}}'
+					},
+					output: {
+						postReceive: [
+							{
+								type: 'rootProperty',
+								enabled: '={{!$parameter["returnAll"]}}',
+								properties: {
+									property: 'data'
+								}
+							}
+						]
+					}
+				}
 			}
 		],
 		default: 'api.projects.branches.clones.branch.get'
@@ -417,6 +443,25 @@ export const branchesProperties: INodeProperties[] = [
 				],
 				operation: [
 					'api.projects.branches.merges.summary.get'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'GET /branches',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'branches'
+				],
+				operation: [
+					'api.branches.getMany'
 				]
 			}
 		}
@@ -1369,6 +1414,119 @@ export const branchesProperties: INodeProperties[] = [
 		}
 	},
 	{
+		displayName: 'Filter',
+		name: 'filter',
+		required: true,
+		description: 'Search branches by `name` or `title`',
+		default: '',
+		type: 'string',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'filter',
+				value: '={{ $value || undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'branches'
+				],
+				operation: [
+					'api.branches.getMany'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Project Ids',
+		name: 'projectIds',
+		description: 'Project identifiers to search across. Get via [List Projects](#operation/api.projects.getMany). It can be one project or a list of comma-separated ones (max 50). All projects must belong to the same owner. Optional — omit to search all your accessible projects.',
+		default: [],
+		type: 'multiOptions',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'projectIds',
+				value: '={{ $value.length ? $value.join(\',\') : undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'branches'
+				],
+				operation: [
+					'api.branches.getMany'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjectsMulti'
+		}
+	},
+	{
+		displayName: 'User Id',
+		name: 'userId',
+		description: 'Owner (user) whose projects to search when `projectIds` is omitted. Only projects you own or manage are searched. Defaults to your own account.',
+		default: '',
+		type: 'options',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'userId',
+				value: '={{ typeof $value === \'number\' ? $value : undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'branches'
+				],
+				operation: [
+					'api.branches.getMany'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getUsers'
+		}
+	},
+	{
+		displayName: 'Limit',
+		name: 'limit',
+		description: 'Max number of results to return',
+		default: 50,
+		type: 'number',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'limit',
+				value: '={{ typeof $value === \'number\' ? $value : undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'branches'
+				],
+				operation: [
+					'api.branches.getMany'
+				],
+				returnAll: [
+					false
+				]
+			}
+		},
+		typeOptions: {
+			minValue: 1
+		}
+	},
+	{
 		displayName: 'Update Fields',
 		name: 'updateFields',
 		type: 'collection',
@@ -1429,6 +1587,23 @@ export const branchesProperties: INodeProperties[] = [
 				],
 				operation: [
 					'api.projects.branches.getMany'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Return All',
+		name: 'returnAll',
+		type: 'boolean',
+		default: true,
+		description: 'Whether to return all results or only up to a given limit',
+		displayOptions: {
+			show: {
+				resource: [
+					'branches'
+				],
+				operation: [
+					'api.branches.getMany'
 				]
 			}
 		}
