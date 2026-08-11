@@ -852,8 +852,8 @@ export const applicationsProperties: INodeProperties[] = [
 		name: 'consentId',
 		required: true,
 		description: 'Consent Decision Identifier',
-		default: undefined,
-		type: 'number',
+		default: '',
+		type: 'options',
 		displayOptions: {
 			show: {
 				resource: [
@@ -864,15 +864,17 @@ export const applicationsProperties: INodeProperties[] = [
 				]
 			}
 		},
-		placeholder: '0'
+		typeOptions: {
+			loadOptionsMethod: 'getApplicationConsents'
+		}
 	},
 	{
 		displayName: 'Consent Id',
 		name: 'consentId',
 		required: true,
 		description: 'Consent Decision Identifier',
-		default: undefined,
-		type: 'number',
+		default: '',
+		type: 'options',
 		displayOptions: {
 			show: {
 				resource: [
@@ -883,7 +885,9 @@ export const applicationsProperties: INodeProperties[] = [
 				]
 			}
 		},
-		placeholder: '0'
+		typeOptions: {
+			loadOptionsMethod: 'getApplicationConsents'
+		}
 	},
 	{
 		displayName: 'Identifier',
