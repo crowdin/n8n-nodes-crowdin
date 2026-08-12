@@ -203,8 +203,20 @@ export const translationMemoryProperties: INodeProperties[] = [
 			},
 			{
 				name: 'Concordance search in TMs',
-				value: 'api.projects.tms.concordance.post',
+				value: 'api.tms.concordance.post',
 				action: 'Concordance search in TMs',
+				description: '**Required scopes:** `tm` (Read only).',
+				routing: {
+					request: {
+						method: 'POST',
+						url: '=/tms/concordance'
+					}
+				}
+			},
+			{
+				name: 'Concordance search in project TMs',
+				value: 'api.projects.tms.concordance.post',
+				action: 'Concordance search in project TMs',
 				description: '**Required scopes:** `tm` (Read and Write).',
 				routing: {
 					request: {
@@ -484,6 +496,25 @@ export const translationMemoryProperties: INodeProperties[] = [
 		}
 	},
 	{
+		displayName: 'POST /tms/concordance',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'translationMemory'
+				],
+				operation: [
+					'api.tms.concordance.post'
+				]
+			}
+		}
+	},
+	{
 		displayName: 'POST /projects/{projectId}/tms/concordance',
 		name: 'operation',
 		type: 'notice',
@@ -603,6 +634,31 @@ export const translationMemoryProperties: INodeProperties[] = [
 			}
 		},
 		placeholder: 'createdAt desc,name'
+	},
+	{
+		displayName: 'Filter',
+		name: 'filter',
+		description: 'Filter TMs by `name`',
+		default: '',
+		type: 'string',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'filter',
+				value: '={{ $value || undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translationMemory'
+				],
+				operation: [
+					'api.tms.getMany'
+				]
+			}
+		}
 	},
 	{
 		displayName: 'Group Id',
@@ -1211,6 +1267,161 @@ export const translationMemoryProperties: INodeProperties[] = [
 				]
 			}
 		}
+	},
+	{
+		displayName: 'Source Language Id',
+		required: true,
+		name: 'sourceLanguageId',
+		type: 'options',
+		default: '',
+		description: 'Source Language Identifier. Get via [List Supported Languages](#operation/api.languages.getMany)',
+		routing: {
+			send: {
+				property: 'sourceLanguageId',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translationMemory'
+				],
+				operation: [
+					'api.tms.concordance.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getLanguages'
+		}
+	},
+	{
+		displayName: 'Target Language Id',
+		required: true,
+		name: 'targetLanguageId',
+		type: 'options',
+		default: '',
+		description: 'Target Language Identifier. Get via [List Supported Languages](#operation/api.languages.getMany)',
+		routing: {
+			send: {
+				property: 'targetLanguageId',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translationMemory'
+				],
+				operation: [
+					'api.tms.concordance.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getLanguages'
+		}
+	},
+	{
+		displayName: 'Auto Substitution',
+		required: true,
+		name: 'autoSubstitution',
+		type: 'boolean',
+		default: true,
+		description: 'Improves TM suggestions',
+		routing: {
+			send: {
+				property: 'autoSubstitution',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translationMemory'
+				],
+				operation: [
+					'api.tms.concordance.post'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Min Relevant',
+		required: true,
+		name: 'minRelevant',
+		type: 'number',
+		default: undefined,
+		description: 'Show TM suggestions with specified minimum match',
+		routing: {
+			send: {
+				property: 'minRelevant',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translationMemory'
+				],
+				operation: [
+					'api.tms.concordance.post'
+				]
+			}
+		},
+		placeholder: '60'
+	},
+	{
+		displayName: 'Expressions',
+		required: true,
+		name: 'expressions',
+		type: 'fixedCollection',
+		default: {},
+		description: 'Expressions to search',
+		routing: {
+			send: {
+				property: 'expressions',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value.items?.map(i => i._value) || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translationMemory'
+				],
+				operation: [
+					'api.tms.concordance.post'
+				]
+			}
+		},
+		typeOptions: {
+			multipleValues: true
+		},
+		placeholder: 'Add Item',
+		options: [
+			{
+				displayName: 'Items',
+				name: 'items',
+				values: [
+					{
+						displayName: 'Value',
+						name: '_value',
+						type: 'string',
+						default: ''
+					}
+				]
+			}
+		]
 	},
 	{
 		displayName: 'Project Id',

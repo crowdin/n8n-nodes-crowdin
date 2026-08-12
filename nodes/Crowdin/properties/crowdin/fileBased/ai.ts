@@ -473,6 +473,32 @@ export const aiProperties: INodeProperties[] = [
 				}
 			},
 			{
+				name: 'List AI Request Logs',
+				value: 'api.ai.requestLogs.getMany',
+				action: 'List AI Request Logs',
+				description: '**Required scopes:** `ai.request-log` (Read only).',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/users/{{$parameter["userId"]}}/ai/request-logs'
+					},
+					send: {
+						paginate: '={{$parameter["returnAll"]}}'
+					},
+					output: {
+						postReceive: [
+							{
+								type: 'rootProperty',
+								enabled: '={{!$parameter["returnAll"]}}',
+								properties: {
+									property: 'data'
+								}
+							}
+						]
+					}
+				}
+			},
+			{
 				name: 'Get AI Settings',
 				value: 'api.users.ai.settings.get',
 				action: 'Get AI Settings',
@@ -1020,6 +1046,25 @@ export const aiProperties: INodeProperties[] = [
 				],
 				operation: [
 					'api.users.ai.reports.download.download'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'GET /users/{userId}/ai/request-logs',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.requestLogs.getMany'
 				]
 			}
 		}
@@ -3389,7 +3434,21 @@ export const aiProperties: INodeProperties[] = [
 						name: 'json:serviceAccountKey',
 						type: 'json',
 						default: '{}',
-						required: true
+						description: 'Service account key. Required if `workloadIdentityFederationAudience` is not provided.'
+					},
+					{
+						displayName: 'Workload Identity Federation Audience',
+						name: 'workloadIdentityFederationAudience',
+						type: 'string',
+						default: '',
+						description: 'Workload Identity Federation audience. Required if `serviceAccountKey` is not provided.'
+					},
+					{
+						displayName: 'Service Account Email',
+						name: 'serviceAccountEmail',
+						type: 'string',
+						default: '',
+						description: 'Optional service account email to impersonate when using Workload Identity Federation.'
 					},
 					{
 						displayName: 'Base Url',
@@ -4279,6 +4338,472 @@ export const aiProperties: INodeProperties[] = [
 				]
 			}
 		}
+	},
+	{
+		displayName: 'User Id',
+		name: 'userId',
+		required: true,
+		description: 'User Identifier',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.requestLogs.getMany'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getUsers'
+		}
+	},
+	{
+		displayName: 'Limit',
+		name: 'limit',
+		description: 'Max number of results to return',
+		default: 50,
+		type: 'number',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'limit',
+				value: '={{ typeof $value === \'number\' ? $value : undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.requestLogs.getMany'
+				],
+				returnAll: [
+					false
+				]
+			}
+		},
+		typeOptions: {
+			minValue: 1
+		}
+	},
+	{
+		displayName: 'Request Id',
+		name: 'requestId',
+		description: 'Filter by request identifier',
+		default: '',
+		type: 'string',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'requestId',
+				value: '={{ $value || undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.requestLogs.getMany'
+				]
+			}
+		},
+		placeholder: '9d3b1c4e-2f3a-4b5c-8d6e-7f8a9b0c1d2e'
+	},
+	{
+		displayName: 'Project Id',
+		name: 'projectId',
+		description: 'Filter by project. Get via [List Projects](#operation/api.projects.getMany)',
+		default: '',
+		type: 'options',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'projectId',
+				value: '={{ typeof $value === \'number\' ? $value : undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.requestLogs.getMany'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjects'
+		}
+	},
+	{
+		displayName: 'User Id',
+		name: 'userId',
+		description: 'Filter by the user attributed to the AI request (not the `userId` path parameter). Get via [List Users](#operation/api.users.getMany)',
+		default: '',
+		type: 'options',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'userId',
+				value: '={{ typeof $value === \'number\' ? $value : undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.requestLogs.getMany'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getUsers'
+		}
+	},
+	{
+		displayName: 'Ai Provider Id',
+		name: 'aiProviderId',
+		description: 'Filter by AI provider. Get via [List AI Providers](#operation/api.ai.providers.getMany)',
+		default: '',
+		type: 'options',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'aiProviderId',
+				value: '={{ typeof $value === \'number\' ? $value : undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.requestLogs.getMany'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getAiProviders'
+		}
+	},
+	{
+		displayName: 'Model',
+		name: 'model',
+		description: 'Filter by model name',
+		default: '',
+		type: 'string',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'model',
+				value: '={{ $value || undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.requestLogs.getMany'
+				]
+			}
+		},
+		placeholder: 'claude-fable-5'
+	},
+	{
+		displayName: 'Source Action',
+		name: 'sourceAction',
+		description: 'Filter by the feature or channel that produced the request. One of:\n\n * `ai_gateway` - AI Gateway API\n * `ai_proxy` - AI Proxy API\n * `ai_translate_strings` - AI Translate Strings API\n * `ai_file_translate` - AI File Translations API\n * `ai_prompt_completion` - AI Prompt Completion API\n * `pre_translate:manual` - Auto-Translation (manual)\n * `pre_translate:workflow` - Auto-Translation (workflow)\n * `ai_alignment` - Glossary Alignment (Enterprise only)\n * `qa_check` - QA Check\n * `ai_suggestion` - AI suggestion\n * `advisor` - Context Advisor',
+		default: '',
+		type: 'options',
+		options: [
+			{
+				name: '-',
+				value: ''
+			},
+			{
+				name: 'ai_proxy',
+				value: 'ai_proxy'
+			},
+			{
+				name: 'ai_gateway',
+				value: 'ai_gateway'
+			},
+			{
+				name: 'ai_translate_strings',
+				value: 'ai_translate_strings'
+			},
+			{
+				name: 'ai_file_translate',
+				value: 'ai_file_translate'
+			},
+			{
+				name: 'ai_prompt_completion',
+				value: 'ai_prompt_completion'
+			},
+			{
+				name: 'pre_translate:manual',
+				value: 'pre_translate:manual'
+			},
+			{
+				name: 'pre_translate:workflow',
+				value: 'pre_translate:workflow'
+			},
+			{
+				name: 'ai_alignment',
+				value: 'ai_alignment'
+			},
+			{
+				name: 'qa_check',
+				value: 'qa_check'
+			},
+			{
+				name: 'ai_suggestion',
+				value: 'ai_suggestion'
+			},
+			{
+				name: 'advisor',
+				value: 'advisor'
+			}
+		],
+		routing: {
+			send: {
+				type: 'query',
+				property: 'sourceAction',
+				value: '={{ $value || undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.requestLogs.getMany'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Prompt Action',
+		name: 'promptAction',
+		description: 'Filter by prompt action, e.g. `pre_translate`, `qa_check`, `advisor_context_review`, or a `custom:`-prefixed value',
+		default: '',
+		type: 'string',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'promptAction',
+				value: '={{ $value || undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.requestLogs.getMany'
+				]
+			}
+		},
+		placeholder: 'qa_check'
+	},
+	{
+		displayName: 'Statuses',
+		name: 'statuses',
+		description: 'Filter by status, comma-separated',
+		default: 'success,error',
+		type: 'json',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'statuses',
+				value: '={{ $value }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.requestLogs.getMany'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'System Credentials',
+		name: 'systemCredentials',
+		description: 'Filter by whether the request used system-provided credentials',
+		default: true,
+		type: 'boolean',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'systemCredentials',
+				value: '={{ $value }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.requestLogs.getMany'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Is Auto Triggered',
+		name: 'isAutoTriggered',
+		description: 'Filter by whether the request was triggered automatically (e.g. by a workflow) rather than by an interactive user action',
+		default: true,
+		type: 'boolean',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'isAutoTriggered',
+				value: '={{ $value }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.requestLogs.getMany'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Token Name',
+		name: 'tokenName',
+		description: 'Filter by the name of the personal access token used to authenticate the request',
+		default: '',
+		type: 'string',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'tokenName',
+				value: '={{ $value || undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.requestLogs.getMany'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Oauth Client Id',
+		name: 'oauthClientId',
+		description: 'Filter by the OAuth application that authenticated the request, matched on its `client_id`. Returned as `oauthClientId` on each log entry.',
+		default: '',
+		type: 'string',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'oauthClientId',
+				value: '={{ $value || undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.requestLogs.getMany'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Created After',
+		name: 'dateTime:createdAfter',
+		description: 'Return logs created after this date (ISO 8601)',
+		default: '',
+		type: 'dateTime',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'createdAfter',
+				value: '={{ $value || undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.requestLogs.getMany'
+				]
+			}
+		},
+		placeholder: '2026-07-01T10:41:33+00:00'
+	},
+	{
+		displayName: 'Created Before',
+		name: 'dateTime:createdBefore',
+		description: 'Return logs created before this date (ISO 8601)',
+		default: '',
+		type: 'dateTime',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'createdBefore',
+				value: '={{ $value || undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.requestLogs.getMany'
+				]
+			}
+		},
+		placeholder: '2026-07-31T23:59:59+00:00'
 	},
 	{
 		displayName: 'User Id',
@@ -5344,7 +5869,21 @@ export const aiProperties: INodeProperties[] = [
 								name: 'json:serviceAccountKey',
 								type: 'json',
 								default: '{}',
-								required: true
+								description: 'Service account key. Required if `workloadIdentityFederationAudience` is not provided.'
+							},
+							{
+								displayName: 'Workload Identity Federation Audience',
+								name: 'workloadIdentityFederationAudience',
+								type: 'string',
+								default: '',
+								description: 'Workload Identity Federation audience. Required if `serviceAccountKey` is not provided.'
+							},
+							{
+								displayName: 'Service Account Email',
+								name: 'serviceAccountEmail',
+								type: 'string',
+								default: '',
+								description: 'Optional service account email to impersonate when using Workload Identity Federation.'
 							},
 							{
 								displayName: 'Base Url',
@@ -5727,6 +6266,23 @@ export const aiProperties: INodeProperties[] = [
 				],
 				operation: [
 					'api.ai.providers.supported-models.crowdin.getMany'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Return All',
+		name: 'returnAll',
+		type: 'boolean',
+		default: true,
+		description: 'Whether to return all results or only up to a given limit',
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.requestLogs.getMany'
 				]
 			}
 		}

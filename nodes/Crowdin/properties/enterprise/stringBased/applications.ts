@@ -1,7 +1,7 @@
 // Auto-generated - do not edit manually
 
 import type { INodeProperties } from 'n8n-workflow';
-import { transformToJsonPatch, normalizeFieldBody, parseJsonBodyField } from '../../../utils/preSend';
+import { normalizeRootBody, parseJsonBodyField } from '../../../utils/preSend';
 
 export const applicationsProperties: INodeProperties[] = [
 	{
@@ -17,6 +17,18 @@ export const applicationsProperties: INodeProperties[] = [
 			}
 		},
 		options: [
+			{
+				name: 'Upload Application Bundle',
+				value: 'api.applications.installations.bundles.post',
+				action: 'Upload Application Bundle',
+				description: '**Required scopes:** `application` (Read and Write).\n\nUpload a bundle archive for a serverless app installed from manifest content. The bundle must be a ZIP archive that contains a non-empty `app.js` entry point at its root.',
+				routing: {
+					request: {
+						method: 'POST',
+						url: '=/applications/installations/{{$parameter["identifier"]}}/bundles'
+					}
+				}
+			},
 			{
 				name: 'List Application Installations',
 				value: 'api.applications.installations.getMany',
@@ -47,7 +59,7 @@ export const applicationsProperties: INodeProperties[] = [
 				name: 'Install Application',
 				value: 'api.applications.installations.post',
 				action: 'Install Application',
-				description: '**Required scopes:** `application` (Read and Write).',
+				description: '**Required scopes:** `application` (Read and Write).\n\nInstall an application either from a hosted manifest URL or from its manifest content.<br><br>**Note:** Any application - with or without a backend, and regardless of whether it is published to the Crowdin Store - can be installed from a manifest URL (the manifest only needs to be reachable at that URL). Installing from manifest content is supported only for serverless apps - apps that run entirely in the browser with no backend (no `baseUrl`).',
 				routing: {
 					request: {
 						method: 'POST',
@@ -90,19 +102,14 @@ export const applicationsProperties: INodeProperties[] = [
 				}
 			},
 			{
-				name: 'Update Application Permissions',
+				name: 'Edit Application Installation',
 				value: 'api.applications.installations.patch',
-				action: 'Update Application Permissions',
+				action: 'Edit Application Installation',
 				description: '**Required scopes:** `application` (Read and Write).',
 				routing: {
 					request: {
 						method: 'PATCH',
 						url: '=/applications/installations/{{$parameter["identifier"]}}'
-					},
-					send: {
-						preSend: [
-							transformToJsonPatch
-						]
 					}
 				}
 			},
@@ -216,7 +223,26 @@ export const applicationsProperties: INodeProperties[] = [
 				}
 			}
 		],
-		default: 'api.applications.installations.getMany'
+		default: 'api.applications.installations.bundles.post'
+	},
+	{
+		displayName: 'POST /applications/installations/{identifier}/bundles',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.installations.bundles.post'
+				]
+			}
+		}
 	},
 	{
 		displayName: 'GET /applications/installations',
@@ -447,6 +473,56 @@ export const applicationsProperties: INodeProperties[] = [
 		}
 	},
 	{
+		displayName: 'Identifier',
+		name: 'identifier',
+		required: true,
+		description: 'Application Identifier. Get via [List Applications](#operation/api.applications.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.installations.bundles.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getApplicationInstallations'
+		}
+	},
+	{
+		displayName: 'Storage Id',
+		required: true,
+		name: 'storageId',
+		type: 'options',
+		default: '',
+		description: 'Storage Identifier. Get via [List Storages](#operation/api.storages.getMany).<br><br>Storage file must be a ZIP archive containing the application bundle',
+		routing: {
+			send: {
+				property: 'storageId',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.installations.bundles.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getStorages'
+		}
+	},
+	{
 		displayName: 'Limit',
 		name: 'limit',
 		description: 'Max number of results to return',
@@ -532,49 +608,11 @@ export const applicationsProperties: INodeProperties[] = [
 		placeholder: 'createdAt desc'
 	},
 	{
-		displayName: 'Url',
-		required: true,
-		name: 'url',
-		type: 'string',
-		default: '',
-		description: 'Manifest URL',
-		routing: {
-			send: {
-				property: 'url',
-				propertyInDotNotation: false,
-				type: 'body',
-				value: '={{ $value || undefined }}'
-			}
-		},
-		displayOptions: {
-			show: {
-				resource: [
-					'applications'
-				],
-				operation: [
-					'api.applications.installations.post'
-				]
-			}
-		},
-		placeholder: 'https://localhost.dev/crowdin.json'
-	},
-	{
-		displayName: 'Permissions',
-		name: 'permissions',
-		type: 'fixedCollection',
+		displayName: 'Body',
+		name: '_body',
+		description: 'Select configuration type',
 		default: {},
-		description: undefined,
-		routing: {
-			send: {
-				property: 'permissions',
-				propertyInDotNotation: false,
-				type: 'body',
-				value: '={{ $value.fields || undefined }}',
-				preSend: [
-					normalizeFieldBody
-				]
-			}
-		},
+		type: 'fixedCollection',
 		displayOptions: {
 			show: {
 				resource: [
@@ -585,124 +623,19 @@ export const applicationsProperties: INodeProperties[] = [
 				]
 			}
 		},
-		placeholder: 'Add Field',
 		options: [
 			{
-				displayName: 'Fields',
-				name: 'fields',
+				displayName: 'Install an application from a manifest URL',
+				name: '_installAnApplicationFromAManifestUrl',
 				values: [
 					{
-						displayName: 'Project',
-						name: 'project',
-						type: 'fixedCollection',
-						default: {},
-						description: undefined,
-						placeholder: 'Add Field',
-						options: [
-							{
-								displayName: 'Fields',
-								name: 'fields',
-								values: [
-									{
-										displayName: 'Value',
-										name: 'value',
-										type: 'options',
-										default: '',
-										description: undefined,
-										options: [
-											{
-												name: '-',
-												value: ''
-											},
-											{
-												name: 'own',
-												value: 'own'
-											},
-											{
-												name: 'restricted',
-												value: 'restricted'
-											}
-										],
-										placeholder: 'restricted'
-									},
-									{
-										displayName: 'Ids',
-										name: 'ids',
-										type: 'fixedCollection',
-										typeOptions: {
-											multipleValues: true
-										},
-										default: {},
-										description: undefined,
-										placeholder: 'Add Item',
-										options: [
-											{
-												displayName: 'Items',
-												name: 'items',
-												values: [
-													{
-														displayName: 'Value',
-														name: '_value',
-														type: 'number',
-														default: 0,
-														description: undefined,
-														placeholder: '0'
-													}
-												]
-											}
-										]
-									}
-								]
-							}
-						]
-					}
-				]
-			}
-		]
-	},
-	{
-		displayName: 'Modules',
-		name: 'modules',
-		type: 'fixedCollection',
-		default: {},
-		description: undefined,
-		routing: {
-			send: {
-				property: 'modules',
-				propertyInDotNotation: false,
-				type: 'body',
-				value: '={{ $value }}',
-				preSend: [
-					normalizeFieldBody
-				]
-			}
-		},
-		displayOptions: {
-			show: {
-				resource: [
-					'applications'
-				],
-				operation: [
-					'api.applications.installations.post'
-				]
-			}
-		},
-		typeOptions: {
-			multipleValues: true
-		},
-		placeholder: 'Add Item',
-		options: [
-			{
-				displayName: 'Item',
-				name: 'items',
-				values: [
-					{
-						displayName: 'Key',
-						name: 'key',
+						displayName: 'Url',
+						name: 'url',
 						type: 'string',
 						default: '',
-						description: undefined,
-						placeholder: 'some-module-key'
+						description: 'Manifest URL',
+						required: true,
+						placeholder: 'https://localhost.dev/crowdin.json'
 					},
 					{
 						displayName: 'Permissions',
@@ -721,7 +654,7 @@ export const applicationsProperties: INodeProperties[] = [
 										name: 'user',
 										type: 'fixedCollection',
 										default: {},
-										description: undefined,
+										description: 'Use modules permissions instead',
 										placeholder: 'Add Field',
 										options: [
 											{
@@ -733,7 +666,7 @@ export const applicationsProperties: INodeProperties[] = [
 														name: 'value',
 														type: 'options',
 														default: '',
-														description: '\n\n __Note__: For exporters, the `all` value will be set',
+														description: undefined,
 														options: [
 															{
 																name: '-',
@@ -770,7 +703,72 @@ export const applicationsProperties: INodeProperties[] = [
 															multipleValues: true
 														},
 														default: {},
-														description: 'Ids is only available for restricted value',
+														description: 'Ids is available only for restricted value',
+														placeholder: 'Add Item',
+														options: [
+															{
+																displayName: 'Items',
+																name: 'items',
+																values: [
+																	{
+																		displayName: 'Value',
+																		name: '_value',
+																		type: 'number',
+																		default: 0,
+																		description: undefined,
+																		placeholder: '0'
+																	}
+																]
+															}
+														]
+													}
+												]
+											}
+										]
+									},
+									{
+										displayName: 'Project',
+										name: 'project',
+										type: 'fixedCollection',
+										default: {},
+										description: undefined,
+										placeholder: 'Add Field',
+										options: [
+											{
+												displayName: 'Fields',
+												name: 'fields',
+												values: [
+													{
+														displayName: 'Value',
+														name: 'value',
+														type: 'options',
+														default: '',
+														description: undefined,
+														options: [
+															{
+																name: '-',
+																value: ''
+															},
+															{
+																name: 'own',
+																value: 'own'
+															},
+															{
+																name: 'restricted',
+																value: 'restricted'
+															}
+														],
+														placeholder: 'restricted'
+													},
+													{
+														displayName: 'Ids',
+														name: 'ids',
+														type: 'fixedCollection',
+														typeOptions: {
+															multipleValues: true
+														},
+														default: {},
+														description: undefined,
 														placeholder: 'Add Item',
 														options: [
 															{
@@ -796,33 +794,644 @@ export const applicationsProperties: INodeProperties[] = [
 								]
 							}
 						]
+					},
+					{
+						displayName: 'Modules',
+						name: 'modules',
+						type: 'fixedCollection',
+						typeOptions: {
+							multipleValues: true
+						},
+						default: {},
+						description: undefined,
+						placeholder: 'Add Item',
+						options: [
+							{
+								displayName: 'Item',
+								name: 'items',
+								values: [
+									{
+										displayName: 'Key',
+										name: 'key',
+										type: 'string',
+										default: '',
+										description: undefined,
+										placeholder: 'some-module-key'
+									},
+									{
+										displayName: 'Permissions',
+										name: 'permissions',
+										type: 'fixedCollection',
+										default: {},
+										description: undefined,
+										placeholder: 'Add Field',
+										options: [
+											{
+												displayName: 'Fields',
+												name: 'fields',
+												values: [
+													{
+														displayName: 'User',
+														name: 'user',
+														type: 'fixedCollection',
+														default: {},
+														description: undefined,
+														placeholder: 'Add Field',
+														options: [
+															{
+																displayName: 'Fields',
+																name: 'fields',
+																values: [
+																	{
+																		displayName: 'Value',
+																		name: 'value',
+																		type: 'options',
+																		default: '',
+																		description: '\n\n __Note__: For exporters, the `all` value will be set',
+																		options: [
+																			{
+																				name: '-',
+																				value: ''
+																			},
+																			{
+																				name: 'owner',
+																				value: 'owner'
+																			},
+																			{
+																				name: 'managers',
+																				value: 'managers'
+																			},
+																			{
+																				name: 'all',
+																				value: 'all'
+																			},
+																			{
+																				name: 'guests',
+																				value: 'guests'
+																			},
+																			{
+																				name: 'restricted',
+																				value: 'restricted'
+																			}
+																		],
+																		placeholder: 'restricted'
+																	},
+																	{
+																		displayName: 'Ids',
+																		name: 'ids',
+																		type: 'fixedCollection',
+																		typeOptions: {
+																			multipleValues: true
+																		},
+																		default: {},
+																		description: 'Ids is only available for restricted value',
+																		placeholder: 'Add Item',
+																		options: [
+																			{
+																				displayName: 'Items',
+																				name: 'items',
+																				values: [
+																					{
+																						displayName: 'Value',
+																						name: '_value',
+																						type: 'number',
+																						default: 0,
+																						description: undefined,
+																						placeholder: '0'
+																					}
+																				]
+																			}
+																		]
+																	}
+																]
+															}
+														]
+													}
+												]
+											}
+										]
+									}
+								]
+							}
+						]
+					},
+					{
+						displayName: 'Assign Agent',
+						name: 'assignAgent',
+						type: 'boolean',
+						default: false,
+						description: 'Assign Agent as a manager to all existing projects'
+					}
+				]
+			},
+			{
+				displayName: 'Install an application from manifest content',
+				name: '_installAnApplicationFromManifestContent',
+				values: [
+					{
+						displayName: 'Application manifest content',
+						name: 'manifest',
+						type: 'fixedCollection',
+						default: {},
+						description: 'The inline manifest that declares the app - the same document install-from-URL fetches from `URL`. Supported only for serverless apps - apps that run entirely in the browser with no backend (no `baseUrl`).',
+						placeholder: 'Add Field',
+						options: [
+							{
+								displayName: 'Fields',
+								name: 'fields',
+								values: [
+									{
+										displayName: 'Name',
+										name: 'name',
+										type: 'string',
+										default: '',
+										description: 'Display name of the application',
+										placeholder: 'My App'
+									},
+									{
+										displayName: 'Description',
+										name: 'description',
+										type: 'string',
+										default: '',
+										description: 'Short description of what the application does'
+									},
+									{
+										displayName: 'Logo',
+										name: 'logo',
+										type: 'string',
+										default: '',
+										description: 'Relative URL (within the application bundle) of the application logo'
+									},
+									{
+										displayName: 'Scopes',
+										name: 'scopes',
+										type: 'fixedCollection',
+										typeOptions: {
+											multipleValues: true
+										},
+										default: {},
+										description: 'OAuth scopes granted to the app for host-proxied Crowdin API calls.<br><br>Available scopes: `*`, `language`, `user`, `team`, `notification`, `custom_language`, `group`, `tm`, `glossary`, `style-guide`, `mt`, `ai`, `ai.provider`, `ai.prompt`, `ai.proxy`, `ai.translate`, `automation`, `automation.rule`, `automation.rule.execution`, `webhook`, `project`, `project.settings`, `project.member`, `project.status`, `project.status.issue`, `project.status.progress`, `project.status.qa-check`, `project.source`, `project.source.file`, `project.source.string`, `project.translation`, `project.screenshot`, `project.webhook`, `project.task`, `project.dictionary`, `project.report`, `project.advisor`, `client`, `vendor`, `field`, `security-log`, `application`, `organization`, `custom-spellchecker`, `external-qa-check`.<br><br>Each scope supports `:read` and `:write` modifiers (e.g. `project:read`, `project:write`); without a modifier the scope grants both.',
+										placeholder: 'Add Item',
+										options: [
+											{
+												displayName: 'Items',
+												name: 'items',
+												values: [
+													{
+														displayName: 'Value',
+														name: '_value',
+														type: 'string',
+														default: '',
+														description: undefined
+													}
+												]
+											}
+										]
+									},
+									{
+										displayName: 'String Based Available',
+										name: 'stringBasedAvailable',
+										type: 'boolean',
+										default: false,
+										description: 'Whether the app is offered in string-based projects (in addition to file-based projects).'
+									},
+									{
+										displayName: 'Modules',
+										name: 'json:modules',
+										type: 'json',
+										default: '{}',
+										description: 'UI module definitions: an object whose keys are UI module types and whose values are arrays of module definitions.<br><br>`URL` is not allowed (these apps have no `baseUrl`).<br><br>Allowed module types: `editor-right-panel`, `editor-translations-panel`, `editor-asset-panel`, `editor-background-worker`, `project-tools`, `project-menu`, `project-menu-crowdsource`, `project-reports`, `project-integrations`, `profile-resources-menu`, `profile-settings-menu`, `organization-menu`, `organization-settings-menu`, `organization-menu-crowdsource`, `modal`, `chat`, `context-menu`, `navbar-extension`.<br><br>For `context-menu` modules only the `modal` and `redirect` option types are supported (`new_tab` needs a page outside the app bundle, which serverless apps cannot serve).'
+									},
+									{
+										displayName: 'Application default permissions',
+										name: 'default_permissions',
+										type: 'fixedCollection',
+										default: {},
+										description: undefined,
+										placeholder: 'Add Field',
+										options: [
+											{
+												displayName: 'Fields',
+												name: 'fields',
+												values: [
+													{
+														displayName: 'User',
+														name: 'user',
+														type: 'options',
+														default: '',
+														description: 'Which users the app is available to by default',
+														options: [
+															{
+																name: '-',
+																value: ''
+															},
+															{
+																name: 'owner',
+																value: 'owner'
+															},
+															{
+																name: 'managers',
+																value: 'managers'
+															},
+															{
+																name: 'all',
+																value: 'all'
+															},
+															{
+																name: 'guests',
+																value: 'guests'
+															}
+														],
+														placeholder: 'owner'
+													},
+													{
+														displayName: 'Project',
+														name: 'project',
+														type: 'options',
+														default: '',
+														description: 'Which projects the app is available in by default',
+														options: [
+															{
+																name: '-',
+																value: ''
+															},
+															{
+																name: 'own',
+																value: 'own'
+															},
+															{
+																name: 'restricted',
+																value: 'restricted'
+															}
+														],
+														placeholder: 'own'
+													}
+												]
+											}
+										]
+									},
+									{
+										displayName: 'Application bundle',
+										name: 'bundle',
+										type: 'fixedCollection',
+										default: {},
+										description: 'Where the app is loaded from. Either Crowdin hosts the app in its own storage (`internal`) or the app is served from an external URL such as a local dev server (`external`).',
+										options: [
+											{
+												displayName: 'Internal application bundle',
+												name: '_applicationBundleInternal',
+												values: [
+													{
+														displayName: 'Mode',
+														name: 'mode',
+														type: 'options',
+														default: '',
+														description: 'The app is hosted by Crowdin in its own storage (no external URL).',
+														options: [
+															{
+																name: '-',
+																value: ''
+															},
+															{
+																name: 'internal',
+																value: 'internal'
+															}
+														],
+														placeholder: 'internal',
+														required: true
+													}
+												]
+											},
+											{
+												displayName: 'External application bundle',
+												name: '_applicationBundleExternal',
+												values: [
+													{
+														displayName: 'Mode',
+														name: 'mode',
+														type: 'options',
+														default: '',
+														description: 'The app is served from an external URL (e.g. a local dev server).',
+														options: [
+															{
+																name: '-',
+																value: ''
+															},
+															{
+																name: 'external',
+																value: 'external'
+															}
+														],
+														placeholder: 'external',
+														required: true
+													},
+													{
+														displayName: 'Url',
+														name: 'url',
+														type: 'string',
+														default: '',
+														description: 'URL the app is served from; for local development this is your dev server, e.g. `http://localhost:8080/`.',
+														required: true
+													}
+												]
+											}
+										]
+									}
+								]
+							}
+						],
+						required: true
+					},
+					{
+						displayName: 'Permissions',
+						name: 'permissions',
+						type: 'fixedCollection',
+						default: {},
+						description: undefined,
+						placeholder: 'Add Field',
+						options: [
+							{
+								displayName: 'Fields',
+								name: 'fields',
+								values: [
+									{
+										displayName: 'User',
+										name: 'user',
+										type: 'fixedCollection',
+										default: {},
+										description: 'Use modules permissions instead',
+										placeholder: 'Add Field',
+										options: [
+											{
+												displayName: 'Fields',
+												name: 'fields',
+												values: [
+													{
+														displayName: 'Value',
+														name: 'value',
+														type: 'options',
+														default: '',
+														description: undefined,
+														options: [
+															{
+																name: '-',
+																value: ''
+															},
+															{
+																name: 'owner',
+																value: 'owner'
+															},
+															{
+																name: 'managers',
+																value: 'managers'
+															},
+															{
+																name: 'all',
+																value: 'all'
+															},
+															{
+																name: 'guests',
+																value: 'guests'
+															},
+															{
+																name: 'restricted',
+																value: 'restricted'
+															}
+														],
+														placeholder: 'restricted'
+													},
+													{
+														displayName: 'Ids',
+														name: 'ids',
+														type: 'fixedCollection',
+														typeOptions: {
+															multipleValues: true
+														},
+														default: {},
+														description: 'Ids is available only for restricted value',
+														placeholder: 'Add Item',
+														options: [
+															{
+																displayName: 'Items',
+																name: 'items',
+																values: [
+																	{
+																		displayName: 'Value',
+																		name: '_value',
+																		type: 'number',
+																		default: 0,
+																		description: undefined,
+																		placeholder: '0'
+																	}
+																]
+															}
+														]
+													}
+												]
+											}
+										]
+									},
+									{
+										displayName: 'Project',
+										name: 'project',
+										type: 'fixedCollection',
+										default: {},
+										description: undefined,
+										placeholder: 'Add Field',
+										options: [
+											{
+												displayName: 'Fields',
+												name: 'fields',
+												values: [
+													{
+														displayName: 'Value',
+														name: 'value',
+														type: 'options',
+														default: '',
+														description: undefined,
+														options: [
+															{
+																name: '-',
+																value: ''
+															},
+															{
+																name: 'own',
+																value: 'own'
+															},
+															{
+																name: 'restricted',
+																value: 'restricted'
+															}
+														],
+														placeholder: 'restricted'
+													},
+													{
+														displayName: 'Ids',
+														name: 'ids',
+														type: 'fixedCollection',
+														typeOptions: {
+															multipleValues: true
+														},
+														default: {},
+														description: undefined,
+														placeholder: 'Add Item',
+														options: [
+															{
+																displayName: 'Items',
+																name: 'items',
+																values: [
+																	{
+																		displayName: 'Value',
+																		name: '_value',
+																		type: 'number',
+																		default: 0,
+																		description: undefined,
+																		placeholder: '0'
+																	}
+																]
+															}
+														]
+													}
+												]
+											}
+										]
+									}
+								]
+							}
+						]
+					},
+					{
+						displayName: 'Modules',
+						name: 'modules',
+						type: 'fixedCollection',
+						typeOptions: {
+							multipleValues: true
+						},
+						default: {},
+						description: undefined,
+						placeholder: 'Add Item',
+						options: [
+							{
+								displayName: 'Item',
+								name: 'items',
+								values: [
+									{
+										displayName: 'Key',
+										name: 'key',
+										type: 'string',
+										default: '',
+										description: undefined,
+										placeholder: 'some-module-key'
+									},
+									{
+										displayName: 'Permissions',
+										name: 'permissions',
+										type: 'fixedCollection',
+										default: {},
+										description: undefined,
+										placeholder: 'Add Field',
+										options: [
+											{
+												displayName: 'Fields',
+												name: 'fields',
+												values: [
+													{
+														displayName: 'User',
+														name: 'user',
+														type: 'fixedCollection',
+														default: {},
+														description: undefined,
+														placeholder: 'Add Field',
+														options: [
+															{
+																displayName: 'Fields',
+																name: 'fields',
+																values: [
+																	{
+																		displayName: 'Value',
+																		name: 'value',
+																		type: 'options',
+																		default: '',
+																		description: '\n\n __Note__: For exporters, the `all` value will be set',
+																		options: [
+																			{
+																				name: '-',
+																				value: ''
+																			},
+																			{
+																				name: 'owner',
+																				value: 'owner'
+																			},
+																			{
+																				name: 'managers',
+																				value: 'managers'
+																			},
+																			{
+																				name: 'all',
+																				value: 'all'
+																			},
+																			{
+																				name: 'guests',
+																				value: 'guests'
+																			},
+																			{
+																				name: 'restricted',
+																				value: 'restricted'
+																			}
+																		],
+																		placeholder: 'restricted'
+																	},
+																	{
+																		displayName: 'Ids',
+																		name: 'ids',
+																		type: 'fixedCollection',
+																		typeOptions: {
+																			multipleValues: true
+																		},
+																		default: {},
+																		description: 'Ids is only available for restricted value',
+																		placeholder: 'Add Item',
+																		options: [
+																			{
+																				displayName: 'Items',
+																				name: 'items',
+																				values: [
+																					{
+																						displayName: 'Value',
+																						name: '_value',
+																						type: 'number',
+																						default: 0,
+																						description: undefined,
+																						placeholder: '0'
+																					}
+																				]
+																			}
+																		]
+																	}
+																]
+															}
+														]
+													}
+												]
+											}
+										]
+									}
+								]
+							}
+						]
 					}
 				]
 			}
-		]
-	},
-	{
-		displayName: 'Assign Agent',
-		name: 'assignAgent',
-		type: 'boolean',
-		default: false,
-		description: 'Assign Agent as a manager to all existing projects',
+		],
 		routing: {
 			send: {
-				property: 'assignAgent',
+				preSend: [
+					normalizeRootBody
+				],
+				property: '_body',
 				propertyInDotNotation: false,
 				type: 'body',
 				value: '={{ $value }}'
-			}
-		},
-		displayOptions: {
-			show: {
-				resource: [
-					'applications'
-				],
-				operation: [
-					'api.applications.installations.post'
-				]
 			}
 		}
 	},
@@ -912,6 +1521,28 @@ export const applicationsProperties: INodeProperties[] = [
 		},
 		typeOptions: {
 			loadOptionsMethod: 'getApplicationInstallations'
+		}
+	},
+	{
+		displayName: 'Body',
+		name: 'body',
+		type: 'json',
+		default: '{}',
+		description: 'A JSON Patch operation as defined by [RFC 6902](https://tools.ietf.org/html/rfc6902#section-4)',
+		routing: {
+			request: {
+				body: '={{ JSON.parse($value) }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.installations.patch'
+				]
+			}
 		}
 	},
 	{
@@ -1175,112 +1806,6 @@ export const applicationsProperties: INodeProperties[] = [
 				operation: [
 					'api.applications.api.patch'
 				]
-			}
-		}
-	},
-	{
-		displayName: 'Update Fields',
-		name: 'updateFields',
-		type: 'collection',
-		placeholder: 'Add Field',
-		default: {},
-		displayOptions: {
-			show: {
-				resource: [
-					'applications'
-				],
-				operation: [
-					'api.applications.installations.patch'
-				]
-			}
-		},
-		options: [
-			{
-				displayName: 'Permissions',
-				name: 'permissions',
-				type: 'fixedCollection',
-				default: {},
-				description: 'Value for /permissions',
-				placeholder: 'Add Field',
-				options: [
-					{
-						name: 'fields',
-						displayName: 'Fields',
-						values: [
-							{
-								displayName: 'Project',
-								name: 'project',
-								type: 'fixedCollection',
-								default: {},
-								description: undefined,
-								placeholder: 'Add Field',
-								options: [
-									{
-										name: 'fields',
-										displayName: 'Fields',
-										values: [
-											{
-												displayName: 'Value',
-												name: 'value',
-												type: 'options',
-												default: '',
-												description: undefined,
-												options: [
-													{
-														name: '-',
-														value: ''
-													},
-													{
-														name: 'own',
-														value: 'own'
-													},
-													{
-														name: 'restricted',
-														value: 'restricted'
-													}
-												],
-												placeholder: 'restricted'
-											},
-											{
-												displayName: 'Ids',
-												name: 'ids',
-												type: 'fixedCollection',
-												typeOptions: {
-													multipleValues: true
-												},
-												default: {},
-												description: undefined,
-												placeholder: 'Add Item',
-												options: [
-													{
-														name: 'items',
-														displayName: 'Items',
-														values: [
-															{
-																displayName: 'Value',
-																name: '_value',
-																type: 'number',
-																default: 0,
-																description: undefined,
-																placeholder: '0'
-															}
-														]
-													}
-												]
-											}
-										]
-									}
-								]
-							}
-						]
-					}
-				]
-			}
-		],
-		routing: {
-			send: {
-				type: 'body',
-				value: '={{ $value }}'
 			}
 		}
 	},

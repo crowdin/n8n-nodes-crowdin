@@ -169,9 +169,9 @@ export const translationsProperties: INodeProperties[] = [
 				}
 			},
 			{
-				name: 'List Pre-Translations',
+				name: 'List Auto-Translations',
 				value: 'api.projects.pre-translations.getMany',
-				action: 'List Pre-Translations',
+				action: 'List Auto-Translations',
 				description: '**Required scopes:** `project.translation` (Read only).',
 				routing: {
 					request: {
@@ -195,9 +195,9 @@ export const translationsProperties: INodeProperties[] = [
 				}
 			},
 			{
-				name: 'Apply Pre-Translation',
+				name: 'Apply Auto-Translation',
 				value: 'api.projects.pre-translations.post',
-				action: 'Apply Pre-Translation',
+				action: 'Apply Auto-Translation',
 				description: '**Required scopes:** `project.translation` (Read and Write).',
 				routing: {
 					request: {
@@ -207,26 +207,26 @@ export const translationsProperties: INodeProperties[] = [
 				}
 			},
 			{
-				name: 'Pre-Translation Status',
+				name: 'Auto-Translation Status',
 				value: 'api.projects.pre-translations.get',
-				action: 'Pre-Translation Status',
+				action: 'Auto-Translation Status',
 				description: '**Required scopes:** `project.translation` (Read and Write).',
 				routing: {
 					request: {
 						method: 'GET',
-						url: '=/projects/{{$parameter["projectId"]}}/pre-translations/{{$parameter["preTranslationId"]}}'
+						url: '=/projects/{{$parameter["projectId"]}}/pre-translations/{{$parameter["jobIdentifier"]}}'
 					}
 				}
 			},
 			{
-				name: 'Edit Pre-Translation',
+				name: 'Edit Auto-Translation',
 				value: 'api.projects.pre-translations.patch',
-				action: 'Edit Pre-Translation',
+				action: 'Edit Auto-Translation',
 				description: '**Required scopes:** `project.translation` (Read and Write).',
 				routing: {
 					request: {
 						method: 'PATCH',
-						url: '=/projects/{{$parameter["projectId"]}}/pre-translations/{{$parameter["preTranslationId"]}}'
+						url: '=/projects/{{$parameter["projectId"]}}/pre-translations/{{$parameter["jobIdentifier"]}}'
 					},
 					send: {
 						preSend: [
@@ -236,14 +236,14 @@ export const translationsProperties: INodeProperties[] = [
 				}
 			},
 			{
-				name: 'Pre-Translation Report',
+				name: 'Auto-Translation Report',
 				value: 'api.projects.pre-translations.report.getReport',
-				action: 'Pre-Translation Report',
+				action: 'Auto-Translation Report',
 				description: '**Required scopes:** `project.translation` (Read and Write).',
 				routing: {
 					request: {
 						method: 'GET',
-						url: '=/projects/{{$parameter["projectId"]}}/pre-translations/{{$parameter["preTranslationId"]}}/report'
+						url: '=/projects/{{$parameter["projectId"]}}/pre-translations/{{$parameter["jobIdentifier"]}}/report'
 					}
 				}
 			},
@@ -627,7 +627,7 @@ export const translationsProperties: INodeProperties[] = [
 		}
 	},
 	{
-		displayName: 'GET /projects/{projectId}/pre-translations/{preTranslationId}',
+		displayName: 'GET /projects/{projectId}/pre-translations/{jobIdentifier}',
 		name: 'operation',
 		type: 'notice',
 		typeOptions: {
@@ -646,7 +646,7 @@ export const translationsProperties: INodeProperties[] = [
 		}
 	},
 	{
-		displayName: 'PATCH /projects/{projectId}/pre-translations/{preTranslationId}',
+		displayName: 'PATCH /projects/{projectId}/pre-translations/{jobIdentifier}',
 		name: 'operation',
 		type: 'notice',
 		typeOptions: {
@@ -665,7 +665,7 @@ export const translationsProperties: INodeProperties[] = [
 		}
 	},
 	{
-		displayName: 'GET /projects/{projectId}/pre-translations/{preTranslationId}/report',
+		displayName: 'GET /projects/{projectId}/pre-translations/{jobIdentifier}/report',
 		name: 'operation',
 		type: 'notice',
 		typeOptions: {
@@ -2033,7 +2033,7 @@ export const translationsProperties: INodeProperties[] = [
 		name: 'languageIds',
 		type: 'multiOptions',
 		default: [],
-		description: 'Set of languages to which pre-translation should be applied. Get via [List Supported Languages](#operation/api.languages.getMany)',
+		description: 'Set of languages to which auto-translation should be applied. Get via [List Supported Languages](#operation/api.languages.getMany)',
 		routing: {
 			send: {
 				property: 'languageIds',
@@ -2092,7 +2092,7 @@ export const translationsProperties: INodeProperties[] = [
 		name: 'method',
 		type: 'options',
 		default: '',
-		description: 'Defines pre-translation method. Available values:\n- \'tm\' – pre-translation via Translation Memory\n- \'mt\' – pre-translation via Machine Translation. \'mt\' should be used with `engineId` parameter\n- \'ai\' – pre-translation via AI. \'ai\' should be used with `aiPromptId` parameter',
+		description: 'Defines auto-translation method. Available values:\n- \'tm\' – auto-translation via Translation Memory\n- \'mt\' – auto-translation via Machine Translation. \'mt\' should be used with `engineId` parameter\n- \'ai\' – auto-translation via AI. \'ai\' should be used with `aiPromptId` parameter',
 		options: [
 			{
 				name: '-',
@@ -2234,7 +2234,7 @@ export const translationsProperties: INodeProperties[] = [
 		name: 'autoApproveOption',
 		type: 'options',
 		default: '',
-		description: 'Defines which translations added by TM pre-translation should be auto-approved. Available values:\n- \'all\' – all\n- \'perfectMatchOnly\' – with perfect TM match\n- \'exceptAutoSubstituted\' – all (skip auto-substituted suggestions)\n- \'perfectMatchApprovedOnly\' - with perfect TM match (approved previously)\n- \'none\' – no auto-approve',
+		description: 'Defines which translations added by TM auto-translation should be auto-approved. Available values:\n- \'all\' – all\n- \'perfectMatchOnly\' – with perfect TM match\n- \'exceptAutoSubstituted\' – all (skip auto-substituted suggestions)\n- \'perfectMatchApprovedOnly\' - with perfect TM match (approved previously)\n- \'none\' – no auto-approve',
 		options: [
 			{
 				name: '-',
@@ -2335,7 +2335,7 @@ export const translationsProperties: INodeProperties[] = [
 		name: 'scope',
 		type: 'options',
 		default: '',
-		description: 'Which strings to apply pre-translation to. Default is `untranslated`. Available values:\n- \'untranslated\' – strings without an existing translation (default)\n- \'translated\' – strings that already have a translation (re-translation)\n- \'all\' – both untranslated and translated strings\n\n__Note:__ Cannot be used together with the deprecated `translateUntranslatedOnly`.',
+		description: 'Which strings to apply auto-translation to. Default is `untranslated`. Available values:\n- \'untranslated\' – strings without an existing translation (default)\n- \'translated\' – strings that already have a translation (re-translation)\n- \'all\' – both untranslated and translated strings\n\n__Note:__ Cannot be used together with the deprecated `translateUntranslatedOnly`.',
 		options: [
 			{
 				name: '-',
@@ -2404,7 +2404,7 @@ export const translationsProperties: INodeProperties[] = [
 		name: 'replaceTranslationsOption',
 		type: 'options',
 		default: '',
-		description: 'Defines whether to replace existing translations with new pre-translations. Default is `none`. Available values:\n- \'none\' – add the new translation alongside existing ones (default)\n- \'autoTranslated\' – replace auto-generated translations (TM, MT, AI). Human translations are kept\n- \'all\' – replace all existing translations\n\n__Note:__ Values other than `none` require `scope` to be `translated` or `all` (cannot be combined with `scope: "untranslated"` or `translateUntranslatedOnly: true`).',
+		description: 'Defines whether to replace existing translations with new auto-translations. Default is `none`. Available values:\n- \'none\' – add the new translation alongside existing ones (default)\n- \'autoTranslated\' – replace auto-generated translations (TM, MT, AI). Human translations are kept\n- \'all\' – replace all existing translations\n\n__Note:__ Values other than `none` require `scope` to be `translated` or `all` (cannot be combined with `scope: "untranslated"` or `translateUntranslatedOnly: true`).',
 		options: [
 			{
 				name: '-',
@@ -2447,7 +2447,7 @@ export const translationsProperties: INodeProperties[] = [
 		name: 'resetApprovalStatus',
 		type: 'boolean',
 		default: false,
-		description: 'Removes approval on existing translations when applying pre-translations. Default is `false`.\n\n__Note:__ Requires `scope` to be `translated` or `all`. Cannot be used together with `skipApprovedTranslations`, `autoApproveOption` (any value other than `none`), or when `replaceTranslationsOption` is `all` (replaced translations lose approval automatically). Cannot be used with `scope: "untranslated"` or `translateUntranslatedOnly: true`.',
+		description: 'Removes approval on existing translations when applying auto-translations. Default is `false`.\n\n__Note:__ Requires `scope` to be `translated` or `all`. Cannot be used together with `skipApprovedTranslations`, `autoApproveOption` (any value other than `none`), or when `replaceTranslationsOption` is `all` (replaced translations lose approval automatically). Cannot be used with `scope: "untranslated"` or `translateUntranslatedOnly: true`.',
 		routing: {
 			send: {
 				property: 'resetApprovalStatus',
@@ -2472,7 +2472,7 @@ export const translationsProperties: INodeProperties[] = [
 		name: 'minimumMatchRatio',
 		type: 'number',
 		default: 0,
-		description: 'Add translation when TM match is greater or equal to minimum match ratio. This argument will be ignored if `translateWithPerfectMatchOnly` is set.\n\n__Note:__ Works only with TM pre-translation method',
+		description: 'Add translation when TM match is greater or equal to minimum match ratio. This argument will be ignored if `translateWithPerfectMatchOnly` is set.\n\n__Note:__ Works only with TM auto-translation method',
 		routing: {
 			send: {
 				property: 'minimumMatchRatio',
@@ -2498,7 +2498,7 @@ export const translationsProperties: INodeProperties[] = [
 		name: 'translateWithPerfectMatchOnly',
 		type: 'boolean',
 		default: false,
-		description: 'Applies pre-translation only for the strings with perfect match (source text and contextual information are identical)\n\n__Note:__ Works only with TM pre-translation method',
+		description: 'Applies auto-translation only for the strings with perfect match (source text and contextual information are identical)\n\n__Note:__ Works only with TM auto-translation method',
 		routing: {
 			send: {
 				property: 'translateWithPerfectMatchOnly',
@@ -2523,7 +2523,7 @@ export const translationsProperties: INodeProperties[] = [
 		name: 'fallbackLanguages',
 		type: 'fixedCollection',
 		default: {},
-		description: 'Defines fallback languages mapping. The passed value should be an associative array containing both language id and array of fallback language ids:\n\n - `{languageId}` – Crowdin id for the specified language. Get via [List Supported Languages](#operation/api.languages.getMany)\n - `Array of strings` – an array containing fallback language ids. Get via [List Supported Languages](#operation/api.languages.getMany)\n\n__Note:__ Available only for TM Pre-Translation',
+		description: 'Defines fallback languages mapping. The passed value should be an associative array containing both language id and array of fallback language ids:\n\n - `{languageId}` – Crowdin id for the specified language. Get via [List Supported Languages](#operation/api.languages.getMany)\n - `Array of strings` – an array containing fallback language ids. Get via [List Supported Languages](#operation/api.languages.getMany)\n\n__Note:__ Available only for TM Auto-Translation',
 		routing: {
 			send: {
 				property: 'fallbackLanguages',
@@ -2632,7 +2632,7 @@ export const translationsProperties: INodeProperties[] = [
 		name: 'customInstruction',
 		type: 'string',
 		default: '',
-		description: 'Custom instruction for AI pre-translation. This instruction will be appended to the AI prompt text.\n\n__Note:__ Available only for AI pre-translation method',
+		description: 'Custom instruction for AI auto-translation. This instruction will be appended to the AI prompt text.\n\n__Note:__ Available only for AI auto-translation method',
 		routing: {
 			send: {
 				property: 'customInstruction',
@@ -2674,10 +2674,10 @@ export const translationsProperties: INodeProperties[] = [
 		}
 	},
 	{
-		displayName: 'Pre Translation Id',
-		name: 'preTranslationId',
+		displayName: 'Job Identifier',
+		name: 'jobIdentifier',
 		required: true,
-		description: 'Pre-translation Identifier. Get via [Apply Pre-Translation](#operation/api.projects.pre-translations.post)',
+		description: 'Auto-translation Identifier. Get via [Apply Auto-Translation](#operation/api.projects.pre-translations.post)',
 		default: '',
 		type: 'string',
 		displayOptions: {
@@ -2713,10 +2713,10 @@ export const translationsProperties: INodeProperties[] = [
 		}
 	},
 	{
-		displayName: 'Pre Translation Id',
-		name: 'preTranslationId',
+		displayName: 'Job Identifier',
+		name: 'jobIdentifier',
 		required: true,
-		description: 'Pre-translation Identifier. Get via [Apply Pre-Translation](#operation/api.projects.pre-translations.post)',
+		description: 'Auto-translation Identifier. Get via [Apply Auto-Translation](#operation/api.projects.pre-translations.post)',
 		default: '',
 		type: 'string',
 		displayOptions: {
@@ -2752,10 +2752,10 @@ export const translationsProperties: INodeProperties[] = [
 		}
 	},
 	{
-		displayName: 'Pre Translation Id',
-		name: 'preTranslationId',
+		displayName: 'Job Identifier',
+		name: 'jobIdentifier',
 		required: true,
-		description: 'Pre-translation Identifier. Get via [Apply Pre-Translation](#operation/api.projects.pre-translations.post)',
+		description: 'Auto-translation Identifier. Get via [Apply Auto-Translation](#operation/api.projects.pre-translations.post)',
 		default: '',
 		type: 'string',
 		displayOptions: {

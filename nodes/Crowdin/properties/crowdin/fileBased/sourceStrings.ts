@@ -88,6 +88,32 @@ export const sourceStringsProperties: INodeProperties[] = [
 						]
 					}
 				}
+			},
+			{
+				name: 'Search Strings',
+				value: 'api.strings.getMany',
+				action: 'Search Strings',
+				description: '**Required scopes:** `project.source.string` (Read only).\n\nSearches source strings by text/context/key. Provide up to 50 `projectIds`, or omit them to search all your own projects — or another owner\'s accessible projects via `userId`.',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/strings'
+					},
+					send: {
+						paginate: '={{$parameter["returnAll"]}}'
+					},
+					output: {
+						postReceive: [
+							{
+								type: 'rootProperty',
+								enabled: '={{!$parameter["returnAll"]}}',
+								properties: {
+									property: 'data'
+								}
+							}
+						]
+					}
+				}
 			}
 		],
 		default: 'api.projects.strings.getMany'
@@ -164,6 +190,25 @@ export const sourceStringsProperties: INodeProperties[] = [
 				],
 				operation: [
 					'api.projects.strings.delete'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'GET /strings',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceStrings'
+				],
+				operation: [
+					'api.strings.getMany'
 				]
 			}
 		}
@@ -862,6 +907,205 @@ export const sourceStringsProperties: INodeProperties[] = [
 		}
 	},
 	{
+		displayName: 'Filter',
+		name: 'filter',
+		required: true,
+		description: 'Search strings by the fields selected in `scope`',
+		default: '',
+		type: 'string',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'filter',
+				value: '={{ $value || undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceStrings'
+				],
+				operation: [
+					'api.strings.getMany'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Project Ids',
+		name: 'projectIds',
+		description: 'Project identifiers to search across. Get via [List Projects](#operation/api.projects.getMany). It can be one project or a list of comma-separated ones (max 50). All projects must belong to the same owner. Optional — omit to search all your accessible projects.',
+		default: [],
+		type: 'multiOptions',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'projectIds',
+				value: '={{ $value.length ? $value.join(\',\') : undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceStrings'
+				],
+				operation: [
+					'api.strings.getMany'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjectsMulti'
+		}
+	},
+	{
+		displayName: 'User Id',
+		name: 'userId',
+		description: 'Owner (user) whose projects to search when `projectIds` is omitted. Only projects you own or manage are searched. Defaults to your own account.',
+		default: '',
+		type: 'options',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'userId',
+				value: '={{ typeof $value === \'number\' ? $value : undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceStrings'
+				],
+				operation: [
+					'api.strings.getMany'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getUsers'
+		}
+	},
+	{
+		displayName: 'Scope',
+		name: 'scope',
+		description: 'Specify field to be the target of filtering. One of: `all`, `text`, `context`, `key`. Default is `all`',
+		default: '',
+		type: 'options',
+		options: [
+			{
+				name: '-',
+				value: ''
+			},
+			{
+				name: 'all',
+				value: 'all'
+			},
+			{
+				name: 'text',
+				value: 'text'
+			},
+			{
+				name: 'context',
+				value: 'context'
+			},
+			{
+				name: 'key',
+				value: 'key'
+			}
+		],
+		routing: {
+			send: {
+				type: 'query',
+				property: 'scope',
+				value: '={{ $value || undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceStrings'
+				],
+				operation: [
+					'api.strings.getMany'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Denormalize Placeholders',
+		name: 'denormalizePlaceholders',
+		description: 'Enable denormalize placeholders',
+		default: '',
+		type: 'options',
+		options: [
+			{
+				name: '-',
+				value: ''
+			},
+			{
+				name: '0',
+				value: 0
+			},
+			{
+				name: '1',
+				value: 1
+			}
+		],
+		routing: {
+			send: {
+				type: 'query',
+				property: 'denormalizePlaceholders',
+				value: '={{ $value || undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceStrings'
+				],
+				operation: [
+					'api.strings.getMany'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Limit',
+		name: 'limit',
+		description: 'Max number of results to return',
+		default: 50,
+		type: 'number',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'limit',
+				value: '={{ typeof $value === \'number\' ? $value : undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceStrings'
+				],
+				operation: [
+					'api.strings.getMany'
+				],
+				returnAll: [
+					false
+				]
+			}
+		},
+		typeOptions: {
+			minValue: 1
+		}
+	},
+	{
 		displayName: 'Return All',
 		name: 'returnAll',
 		type: 'boolean',
@@ -874,6 +1118,23 @@ export const sourceStringsProperties: INodeProperties[] = [
 				],
 				operation: [
 					'api.projects.strings.getMany'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Return All',
+		name: 'returnAll',
+		type: 'boolean',
+		default: true,
+		description: 'Whether to return all results or only up to a given limit',
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceStrings'
+				],
+				operation: [
+					'api.strings.getMany'
 				]
 			}
 		}

@@ -847,6 +847,31 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 		placeholder: 'createdAt desc,name'
 	},
 	{
+		displayName: 'Filter',
+		name: 'filter',
+		description: 'Filter groups by `name`',
+		default: '',
+		type: 'string',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'filter',
+				value: '={{ $value || undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'projectsAndGroups'
+				],
+				operation: [
+					'api.groups.getMany'
+				]
+			}
+		}
+	},
+	{
 		displayName: 'Parent Id',
 		name: 'parentId',
 		description: 'Parent Group Identifier. Get via [List Groups](#operation/api.groups.getMany)\n\n __Note__: Set 0 to see groups of root group',
@@ -1102,6 +1127,31 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 			}
 		},
 		placeholder: 'createdAt desc,name,id'
+	},
+	{
+		displayName: 'Filter',
+		name: 'filter',
+		description: 'Filter projects by `name`',
+		default: '',
+		type: 'string',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'filter',
+				value: '={{ $value || undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'projectsAndGroups'
+				],
+				operation: [
+					'api.projects.getMany'
+				]
+			}
+		}
 	},
 	{
 		displayName: 'Group Id',
@@ -1524,7 +1574,7 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 						name: 'config',
 						type: 'fixedCollection',
 						default: {},
-						description: '__Note:__ Use only if TM Pre-translation is part of your Workflow Template\n\n__Note:__ If `autoSubstitution` is not set, the value from the project settings will be used',
+						description: '__Note:__ Use only if TM Auto-translation is part of your Workflow Template\n\n__Note:__ If `autoSubstitution` is not set, the value from the project settings will be used',
 						placeholder: 'Add Field',
 						options: [
 							{
@@ -1682,7 +1732,7 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 						name: 'promptId',
 						type: 'options',
 						default: '',
-						description: 'Prompt Pre Translate Identifier. Get via [List Prompts](#operation/api.ai.prompts.getMany)',
+						description: 'Auto-Translation Prompt Identifier (a prompt with the `pre_translate` action). Get via [List Prompts](#operation/api.ai.prompts.getMany)',
 						typeOptions: {
 							loadOptionsMethod: 'getAiPrompts'
 						}
@@ -5182,7 +5232,7 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 								name: 'config',
 								type: 'fixedCollection',
 								default: {},
-								description: '__Note:__ Use only if TM Pre-translation is part of your Workflow Template\n\n__Note:__ If `autoSubstitution` is not set, the value from the project settings will be used',
+								description: '__Note:__ Use only if TM Auto-translation is part of your Workflow Template\n\n__Note:__ If `autoSubstitution` is not set, the value from the project settings will be used',
 								placeholder: 'Add Field',
 								options: [
 									{
@@ -5340,7 +5390,7 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 								name: 'promptId',
 								type: 'options',
 								default: '',
-								description: 'Prompt Pre Translate Identifier. Get via [List Prompts](#operation/api.ai.prompts.getMany)',
+								description: 'Auto-Translation Prompt Identifier (a prompt with the `pre_translate` action). Get via [List Prompts](#operation/api.ai.prompts.getMany)',
 								typeOptions: {
 									loadOptionsMethod: 'getAiPrompts'
 								}

@@ -160,6 +160,7 @@ const SINGLE_SELECT_OPTIONS = {
 	reportSettingsTemplateId: { method: 'getReportSettingsTemplates' },
 	identifier: { method: 'getApplicationInstallations', matchResource: 'applications', expectedType: 'string' },
 	applicationIdentifier: { method: 'getApplicationInstallations', expectedType: 'string' },
+	consentId: { method: 'getApplicationConsents', matchResource: 'applications' },
 	savingsReportSettingsTemplateId: { method: 'getReportSettingsTemplates' },
 	vendorId: { method: 'getVendors' },
 	securityLogId: { method: 'getSecurityLogs' },

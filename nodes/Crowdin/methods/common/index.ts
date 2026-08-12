@@ -576,6 +576,23 @@ export function createCommonLoadOptions(config: ApiConfig): LoadOptionsMethods {
 
 		// ===== Special methods that can't use the pattern =====
 
+		async getApplicationConsents(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+			interface ApplicationConsent extends ApiItem {
+				identifier: string;
+				name?: string | null;
+			}
+			const consents = await fetchAllPagesRaw<ApplicationConsent>(
+				this,
+				config,
+				'/applications/consents',
+			);
+			const options = consents.map((consent) => ({
+				name: `${consent.name || consent.identifier} (ID: ${consent.id})`,
+				value: consent.id,
+			}));
+			return [{ name: '-', value: '' }, ...options];
+		},
+
 		async getCommentAttachments(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
 			const projectId = getProjectId(this);
 			const commentId = getCommentId(this);

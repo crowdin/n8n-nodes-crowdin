@@ -68,7 +68,7 @@ const resourceProperty: INodeProperties = {
 		{
 			name: 'Translations',
 			value: 'translations',
-			description: '\nTranslators can work with entirely untranslated project or you can pre-translate the files to ease the translations process.\n\nUse API to pre-translate files via Machine Translation (MT) or Translation Memory (TM), upload your existing translations, and download translations correspondingly. Pre-translate and build are [asynchronous operations](#section/Introduction/Asynchronous-Operations) and shall be completed with sequence of API methods.\n\n__Note:__ If there are no new translations or changes in build parameters, Crowdin will return the current build for such requests.\n'
+			description: '\nTranslators can work with entirely untranslated project or you can auto-translate the files to ease the translations process.\n\nUse API to auto-translate files via Machine Translation (MT) or Translation Memory (TM), upload your existing translations, and download translations correspondingly. Auto-translate and build are [asynchronous operations](#section/Introduction/Asynchronous-Operations) and shall be completed with sequence of API methods.\n\n__Note:__ If there are no new translations or changes in build parameters, Crowdin will return the current build for such requests.\n'
 		},
 		{
 			name: 'String/Asset Translations',
@@ -93,7 +93,7 @@ const resourceProperty: INodeProperties = {
 		{
 			name: 'Workflows',
 			value: 'workflows',
-			description: '\nWorkflows are the sequences of steps that content in your project should go through (e.g. pre-translation, translation, proofreading). You can use a default template or create the one that works best for you and assign it to the needed projects.\n\nUse API to get the list of workflow templates available in your organization and to check the details of a specific template.\n'
+			description: '\nWorkflows are the sequences of steps that content in your project should go through (e.g. auto-translation, translation, proofreading). You can use a default template or create the one that works best for you and assign it to the needed projects.\n\nUse API to get the list of workflow templates available in your organization and to check the details of a specific template.\n'
 		},
 		{
 			name: 'Reports',
@@ -128,7 +128,7 @@ const resourceProperty: INodeProperties = {
 		{
 			name: 'Machine Translation Engines',
 			value: 'machineTranslationEngines',
-			description: '\nMachine Translation Engines (MTE) are the sources for pre-translations. You can currently connect Google Translate, Microsoft Translator, Crowdin Translate, DeepL Pro and Amazon Translate engines.\n\nUse API to add, update, and delete specific MTE.\n'
+			description: '\nMachine Translation Engines (MTE) are the sources for auto-translations. You can currently connect Google Translate, Microsoft Translator, Crowdin Translate, DeepL Pro and Amazon Translate engines.\n\nUse API to add, update, and delete specific MTE.\n'
 		},
 		{
 			name: 'Screenshots',

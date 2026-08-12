@@ -59,7 +59,7 @@ const resourceProperty: INodeProperties = {
 		{
 			name: 'Translations',
 			value: 'translations',
-			description: '\nTranslators can work with entirely untranslated project or you can pre-translate the files to ease the translations process.\n\nUse API to pre-translate files via Machine Translation (MT) or Translation Memory (TM), upload your existing translations, and download translations correspondingly. Pre-translate and build are [asynchronous operations](#section/Introduction/Asynchronous-Operations) and shall be completed with sequence of API methods.\n\n__Note:__ If there are no new translations or changes in build parameters, Crowdin will return the current build for such requests.\n'
+			description: '\nTranslators can work with entirely untranslated project or you can auto-translate the files to ease the translations process.\n\nUse API to auto-translate files via Machine Translation (MT) or Translation Memory (TM), upload your existing translations, and download translations correspondingly. Auto-translate and build are [asynchronous operations](#section/Introduction/Asynchronous-Operations) and shall be completed with sequence of API methods.\n\n__Note:__ If there are no new translations or changes in build parameters, Crowdin will return the current build for such requests.\n'
 		},
 		{
 			name: 'String/Asset Translations',
@@ -109,7 +109,7 @@ const resourceProperty: INodeProperties = {
 		{
 			name: 'Machine Translation Engines',
 			value: 'machineTranslationEngines',
-			description: '\nMachine Translation Engines (MTE) are the sources for pre-translations. You can currently connect Google Translate, Microsoft Translator, Crowdin Translate, DeepL Pro and Amazon Translate engines.\n\nUse API to add, update, and delete specific MTE.\n'
+			description: '\nMachine Translation Engines (MTE) are the sources for auto-translations. You can currently connect Google Translate, Microsoft Translator, Crowdin Translate, DeepL Pro and Amazon Translate engines.\n\nUse API to add, update, and delete specific MTE.\n'
 		},
 		{
 			name: 'Screenshots',

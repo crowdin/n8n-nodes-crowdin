@@ -663,6 +663,31 @@ export const projectsProperties: INodeProperties[] = [
 		placeholder: 'createdAt desc,name,id'
 	},
 	{
+		displayName: 'Filter',
+		name: 'filter',
+		description: 'Filter projects by `name`',
+		default: '',
+		type: 'string',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'filter',
+				value: '={{ $value || undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'projects'
+				],
+				operation: [
+					'api.projects.getMany'
+				]
+			}
+		}
+	},
+	{
 		displayName: 'User Id',
 		name: 'userId',
 		description: 'User Identifier. Get via [Get Authenticated User](#operation/api.user.get)',

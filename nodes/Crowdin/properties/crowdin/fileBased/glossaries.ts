@@ -240,8 +240,20 @@ export const glossariesProperties: INodeProperties[] = [
 			},
 			{
 				name: 'Concordance search in Glossaries',
-				value: 'api.projects.glossaries.concordance.post',
+				value: 'api.glossaries.concordance.post',
 				action: 'Concordance search in Glossaries',
+				description: '**Required scopes:** `glossary` (Read only).',
+				routing: {
+					request: {
+						method: 'POST',
+						url: '=/glossaries/concordance'
+					}
+				}
+			},
+			{
+				name: 'Concordance search in project Glossaries',
+				value: 'api.projects.glossaries.concordance.post',
+				action: 'Concordance search in project Glossaries',
 				description: '**Required scopes:** `glossary` (Read and Write).',
 				routing: {
 					request: {
@@ -626,6 +638,25 @@ export const glossariesProperties: INodeProperties[] = [
 				],
 				operation: [
 					'api.glossaries.imports.get'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'POST /glossaries/concordance',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'glossaries'
+				],
+				operation: [
+					'api.glossaries.concordance.post'
 				]
 			}
 		}
@@ -1281,6 +1312,31 @@ export const glossariesProperties: INodeProperties[] = [
 		},
 		typeOptions: {
 			loadOptionsMethod: 'getUsers'
+		}
+	},
+	{
+		displayName: 'Filter',
+		name: 'filter',
+		description: 'Filter glossaries by `name`',
+		default: '',
+		type: 'string',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'filter',
+				value: '={{ $value || undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'glossaries'
+				],
+				operation: [
+					'api.glossaries.getMany'
+				]
+			}
 		}
 	},
 	{
@@ -2248,6 +2304,136 @@ export const glossariesProperties: INodeProperties[] = [
 					'api.glossaries.imports.get'
 				]
 			}
+		}
+	},
+	{
+		displayName: 'Source Language Id',
+		required: true,
+		name: 'sourceLanguageId',
+		type: 'options',
+		default: '',
+		description: 'Source Language Identifier. Get via [List Supported Languages](#operation/api.languages.getMany)',
+		routing: {
+			send: {
+				property: 'sourceLanguageId',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'glossaries'
+				],
+				operation: [
+					'api.glossaries.concordance.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getLanguages'
+		}
+	},
+	{
+		displayName: 'Target Language Id',
+		required: true,
+		name: 'targetLanguageId',
+		type: 'options',
+		default: '',
+		description: 'Target Language Identifier. Get via [List Supported Languages](#operation/api.languages.getMany)',
+		routing: {
+			send: {
+				property: 'targetLanguageId',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'glossaries'
+				],
+				operation: [
+					'api.glossaries.concordance.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getLanguages'
+		}
+	},
+	{
+		displayName: 'Expressions',
+		required: true,
+		name: 'expressions',
+		type: 'fixedCollection',
+		default: {},
+		description: 'Expressions to search',
+		routing: {
+			send: {
+				property: 'expressions',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value.items?.map(i => i._value) || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'glossaries'
+				],
+				operation: [
+					'api.glossaries.concordance.post'
+				]
+			}
+		},
+		typeOptions: {
+			multipleValues: true
+		},
+		placeholder: 'Add Item',
+		options: [
+			{
+				displayName: 'Items',
+				name: 'items',
+				values: [
+					{
+						displayName: 'Value',
+						name: '_value',
+						type: 'string',
+						default: ''
+					}
+				]
+			}
+		]
+	},
+	{
+		displayName: 'User Id',
+		name: 'userId',
+		type: 'options',
+		default: '',
+		description: 'Owner (user) whose glossaries to search. Only glossaries you own or manage are searched. Defaults to your own account.',
+		routing: {
+			send: {
+				property: 'userId',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ typeof $value === \'number\' ? $value : undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'glossaries'
+				],
+				operation: [
+					'api.glossaries.concordance.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getUsers'
 		}
 	},
 	{
