@@ -2061,7 +2061,7 @@ export const translationsProperties: INodeProperties[] = [
 		name: 'fileIds',
 		type: 'multiOptions',
 		default: [],
-		description: 'Files array that should be translated',
+		description: 'Files array that should be translated\n\n__Note:__ Required unless `directoryIds` or `branchIds` is set',
 		routing: {
 			send: {
 				property: 'fileIds',
@@ -2082,6 +2082,68 @@ export const translationsProperties: INodeProperties[] = [
 		},
 		typeOptions: {
 			loadOptionsMethod: 'getProjectFilesMulti',
+			loadOptionsDependsOn: [
+				'projectId'
+			]
+		}
+	},
+	{
+		displayName: 'Directory Ids',
+		name: 'directoryIds',
+		type: 'multiOptions',
+		default: [],
+		description: 'Directories array that should be translated. Includes all nested files',
+		routing: {
+			send: {
+				property: 'directoryIds',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.pre-translations.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjectDirectoriesMulti',
+			loadOptionsDependsOn: [
+				'projectId'
+			]
+		}
+	},
+	{
+		displayName: 'Branch Ids',
+		name: 'branchIds',
+		type: 'multiOptions',
+		default: [],
+		description: 'Branches array that should be translated. Includes all nested files',
+		routing: {
+			send: {
+				property: 'branchIds',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.pre-translations.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getBranchesMulti',
 			loadOptionsDependsOn: [
 				'projectId'
 			]
