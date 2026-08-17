@@ -1619,6 +1619,14 @@ export const projectsProperties: INodeProperties[] = [
 						default: false,
 						description: undefined,
 						placeholder: 'true'
+					},
+					{
+						displayName: 'Mdx',
+						name: 'mdx',
+						type: 'boolean',
+						default: true,
+						description: undefined,
+						placeholder: 'true'
 					}
 				]
 			}
@@ -1797,6 +1805,14 @@ export const projectsProperties: INodeProperties[] = [
 						default: false,
 						description: undefined,
 						placeholder: 'true'
+					},
+					{
+						displayName: 'Mdx',
+						name: 'mdx',
+						type: 'boolean',
+						default: false,
+						description: undefined,
+						placeholder: 'false'
 					}
 				]
 			}
@@ -3955,6 +3971,14 @@ export const projectsProperties: INodeProperties[] = [
 								default: false,
 								description: undefined,
 								placeholder: 'true'
+							},
+							{
+								displayName: 'Mdx',
+								name: 'mdx',
+								type: 'boolean',
+								default: true,
+								description: undefined,
+								placeholder: 'true'
 							}
 						]
 					}
@@ -4115,6 +4139,14 @@ export const projectsProperties: INodeProperties[] = [
 								default: false,
 								description: undefined,
 								placeholder: 'true'
+							},
+							{
+								displayName: 'Mdx',
+								name: 'mdx',
+								type: 'boolean',
+								default: false,
+								description: undefined,
+								placeholder: 'false'
 							}
 						]
 					}

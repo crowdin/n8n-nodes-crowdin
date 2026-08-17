@@ -349,7 +349,7 @@ export const styleGuidesProperties: INodeProperties[] = [
 		name: 'aiInstructions',
 		type: 'string',
 		default: '',
-		description: 'Rules to be used by AI models',
+		description: 'Rules to be used by AI models\n\n__Note:__ `maxLength` counts bytes, not characters — a non-Latin value reaches the limit two to four times sooner than its character count suggests',
 		routing: {
 			send: {
 				property: 'aiInstructions',
@@ -582,7 +582,7 @@ export const styleGuidesProperties: INodeProperties[] = [
 				name: 'aiInstructions',
 				type: 'string',
 				default: '',
-				description: 'Rules to be used by AI models'
+				description: 'Rules to be used by AI models\n\n__Note:__ `maxLength` counts bytes, not characters — a non-Latin value reaches the limit two to four times sooner than its character count suggests'
 			},
 			{
 				displayName: 'Language Ids',
