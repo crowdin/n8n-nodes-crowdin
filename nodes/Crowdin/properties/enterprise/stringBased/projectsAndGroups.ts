@@ -386,7 +386,7 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 				name: 'Edit Project Strings Exporter Settings',
 				value: 'api.projects.strings-exporter-settings.patch',
 				action: 'Edit Project Strings Exporter Settings',
-				description: '**Required scopes:** `project.settings` (Read and Write).',
+				description: '**Required scopes:** `project.settings` (Read and Write).\n\nEdit project strings exporter settings\n\n__Note:__ Replacing `/format` requires replacing `/settings` in the same request — settings are format-specific',
 				routing: {
 					request: {
 						method: 'PATCH',

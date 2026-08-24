@@ -901,7 +901,7 @@ export const tasksProperties: INodeProperties[] = [
 	{
 		displayName: 'Source Language Ids',
 		name: 'sourceLanguageIds',
-		description: 'Filter by source language IDs. It can be one ID or a list of comma-separated ID values. Cannot be used together with projectIds',
+		description: 'Filter by source language IDs. It can be one ID or a list of comma-separated ID values',
 		default: [],
 		type: 'multiOptions',
 		routing: {
@@ -2233,7 +2233,8 @@ export const tasksProperties: INodeProperties[] = [
 						name: 'vendor',
 						type: 'string',
 						default: '',
-						description: 'Vendor identifier. Required when `type` is `3`. Browse available vendors at [Crowdin Store](https://crowdin.com/store/vendors).'
+						description: 'Vendor identifier. Required when `type` is `3`. Built-in vendors: `crowdin_language_service`, `oht`, `gengo`, `undertow`. For any other vendor, use its identifier from [Crowdin Store](https://crowdin.com/store/vendors).',
+						placeholder: 'crowdin_language_service'
 					},
 					{
 						displayName: 'Assignees',
@@ -2375,8 +2376,9 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'vendor',
 										type: 'string',
 										default: '',
-										description: 'Vendor identifier. Browse available vendors at [Crowdin Store](https://crowdin.com/store/vendors).\n\n__Note:__ Additional vendor-specific settings (e.g. expertise, tone, quality) are configured per vendor in the store.',
-										required: true
+										description: 'Vendor identifier. Built-in vendors: `crowdin_language_service`, `oht`, `gengo`, `undertow`. For any other vendor, use its identifier from [Crowdin Store](https://crowdin.com/store/vendors).\n\n__Note:__ Additional vendor-specific settings (e.g. expertise, tone, quality) are configured per vendor in the store.',
+										required: true,
+										placeholder: 'crowdin_language_service'
 									},
 									{
 										displayName: 'Label Ids',
@@ -2618,8 +2620,9 @@ export const tasksProperties: INodeProperties[] = [
 										name: 'vendor',
 										type: 'string',
 										default: '',
-										description: 'Vendor identifier. Browse available vendors at [Crowdin Store](https://crowdin.com/store/vendors).\n\n__Note:__ Additional vendor-specific settings (e.g. expertise, tone, quality) are configured per vendor in the store.',
-										required: true
+										description: 'Vendor identifier. Built-in vendors: `crowdin_language_service`, `oht`, `gengo`, `undertow`. For any other vendor, use its identifier from [Crowdin Store](https://crowdin.com/store/vendors).\n\n__Note:__ Additional vendor-specific settings (e.g. expertise, tone, quality) are configured per vendor in the store.',
+										required: true,
+										placeholder: 'crowdin_language_service'
 									},
 									{
 										displayName: 'Label Ids',
