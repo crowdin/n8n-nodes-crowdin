@@ -933,7 +933,7 @@ export const tasksProperties: INodeProperties[] = [
 	{
 		displayName: 'Source Language Ids',
 		name: 'sourceLanguageIds',
-		description: 'Filter by source language IDs. It can be one ID or a list of comma-separated ID values. Cannot be used together with projectIds',
+		description: 'Filter by source language IDs. It can be one ID or a list of comma-separated ID values',
 		default: [],
 		type: 'multiOptions',
 		routing: {

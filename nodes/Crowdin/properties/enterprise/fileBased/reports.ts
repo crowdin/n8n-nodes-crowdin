@@ -1716,7 +1716,7 @@ export const reportsProperties: INodeProperties[] = [
 															multipleValues: true
 														},
 														default: {},
-														description: undefined,
+														description: 'Must include the `100` match type.',
 														placeholder: 'Add Item',
 														options: [
 															{
@@ -1754,7 +1754,7 @@ export const reportsProperties: INodeProperties[] = [
 															multipleValues: true
 														},
 														default: {},
-														description: '\n\n__Note:__ The `aiMatch` field is optional. If this field is not filled in, the schema will be taken from the `mtMatch` field.',
+														description: '\n\n__Note:__ The `aiMatch` field is optional. If this field is not filled in, the schema will be taken from the `mtMatch` field. When filled in, it must include the `100` match type.',
 														placeholder: 'Add Item',
 														options: [
 															{
@@ -1791,7 +1791,7 @@ export const reportsProperties: INodeProperties[] = [
 															multipleValues: true
 														},
 														default: {},
-														description: undefined,
+														description: 'Must include the `100` match type.',
 														placeholder: 'Add Item',
 														options: [
 															{
@@ -2220,7 +2220,7 @@ export const reportsProperties: INodeProperties[] = [
 															multipleValues: true
 														},
 														default: {},
-														description: undefined,
+														description: 'Must include the `100` match type.',
 														placeholder: 'Add Item',
 														options: [
 															{
@@ -2258,7 +2258,7 @@ export const reportsProperties: INodeProperties[] = [
 															multipleValues: true
 														},
 														default: {},
-														description: '\n\n __Note:__ The `aiMatch` field is optional. If this field is not filled in, the schema will be taken from the `mtMatch` field.',
+														description: '\n\n __Note:__ The `aiMatch` field is optional. If this field is not filled in, the schema will be taken from the `mtMatch` field. When filled in, it must include the `100` match type.',
 														placeholder: 'Add Item',
 														options: [
 															{
@@ -2295,7 +2295,7 @@ export const reportsProperties: INodeProperties[] = [
 															multipleValues: true
 														},
 														default: {},
-														description: undefined,
+														description: 'Must include the `100` match type.',
 														placeholder: 'Add Item',
 														options: [
 															{
@@ -2797,7 +2797,7 @@ export const reportsProperties: INodeProperties[] = [
 												value: 'project'
 											}
 										],
-										placeholder: 'user'
+										placeholder: 'type'
 									},
 									{
 										displayName: 'Type Tasks',
@@ -2947,7 +2947,7 @@ export const reportsProperties: INodeProperties[] = [
 												value: 'project'
 											}
 										],
-										placeholder: 'user'
+										placeholder: 'type'
 									},
 									{
 										displayName: 'Type Tasks',
@@ -3105,7 +3105,7 @@ export const reportsProperties: INodeProperties[] = [
 												value: 'project'
 											}
 										],
-										placeholder: 'user'
+										placeholder: 'type'
 									},
 									{
 										displayName: 'Type Tasks',
@@ -3279,7 +3279,7 @@ export const reportsProperties: INodeProperties[] = [
 												value: 'project'
 											}
 										],
-										placeholder: 'user'
+										placeholder: 'type'
 									},
 									{
 										displayName: 'Type Tasks',
@@ -4766,7 +4766,7 @@ export const reportsProperties: INodeProperties[] = [
 						name: 'projectId',
 						type: 'options',
 						default: '',
-						description: 'Project Identifier. Get via [List Projects](#operation/api.projects.getMany)',
+						description: 'Project Identifier. Get via [List Projects](#operation/api.projects.getMany)\n\n__Note:__ Can\'t be used together with `groupId`',
 						typeOptions: {
 							loadOptionsMethod: 'getProjects'
 						}
@@ -4776,7 +4776,7 @@ export const reportsProperties: INodeProperties[] = [
 						name: 'groupId',
 						type: 'options',
 						default: '',
-						description: 'Group Identifier. Get via [List Groups](#operation/api.groups.getMany)',
+						description: 'Group Identifier. Get via [List Groups](#operation/api.groups.getMany)\n\n__Note:__ Can\'t be used together with `projectId`',
 						typeOptions: {
 							loadOptionsMethod: 'getGroups'
 						}
@@ -5088,7 +5088,7 @@ export const reportsProperties: INodeProperties[] = [
 															multipleValues: true
 														},
 														default: {},
-														description: undefined,
+														description: 'Must include the `100` match type.',
 														placeholder: 'Add Item',
 														options: [
 															{
@@ -5126,7 +5126,7 @@ export const reportsProperties: INodeProperties[] = [
 															multipleValues: true
 														},
 														default: {},
-														description: '\n\n __Note:__ The `aiMatch` field is optional. If this field is not filled in, the schema will be taken from the `mtMatch` field.',
+														description: '\n\n __Note:__ The `aiMatch` field is optional. If this field is not filled in, the schema will be taken from the `mtMatch` field. When filled in, it must include the `100` match type.',
 														placeholder: 'Add Item',
 														options: [
 															{
@@ -5163,7 +5163,7 @@ export const reportsProperties: INodeProperties[] = [
 															multipleValues: true
 														},
 														default: {},
-														description: undefined,
+														description: 'Must include the `100` match type.',
 														placeholder: 'Add Item',
 														options: [
 															{
@@ -5250,7 +5250,7 @@ export const reportsProperties: INodeProperties[] = [
 						name: 'projectId',
 						type: 'options',
 						default: '',
-						description: 'Project Identifier. Get via [List Projects](#operation/api.projects.getMany)',
+						description: 'Project Identifier. Get via [List Projects](#operation/api.projects.getMany)\n\n__Note:__ Can\'t be used together with `groupId`',
 						typeOptions: {
 							loadOptionsMethod: 'getProjects'
 						}
@@ -5260,7 +5260,7 @@ export const reportsProperties: INodeProperties[] = [
 						name: 'groupId',
 						type: 'options',
 						default: '',
-						description: 'Group Identifier. Get via [List Groups](#operation/api.groups.getMany)',
+						description: 'Group Identifier. Get via [List Groups](#operation/api.groups.getMany)\n\n__Note:__ Can\'t be used together with `projectId`',
 						typeOptions: {
 							loadOptionsMethod: 'getGroups'
 						}
@@ -5947,7 +5947,7 @@ export const reportsProperties: INodeProperties[] = [
 															multipleValues: true
 														},
 														default: {},
-														description: undefined,
+														description: 'Must include the `100` match type.',
 														placeholder: 'Add Item',
 														options: [
 															{
@@ -5985,7 +5985,7 @@ export const reportsProperties: INodeProperties[] = [
 															multipleValues: true
 														},
 														default: {},
-														description: '\n\n__Note:__ The `aiMatch` field is optional. If this field is not filled in, the schema will be taken from the `mtMatch` field.',
+														description: '\n\n__Note:__ The `aiMatch` field is optional. If this field is not filled in, the schema will be taken from the `mtMatch` field. When filled in, it must include the `100` match type.',
 														placeholder: 'Add Item',
 														options: [
 															{
@@ -6022,7 +6022,7 @@ export const reportsProperties: INodeProperties[] = [
 															multipleValues: true
 														},
 														default: {},
-														description: undefined,
+														description: 'Must include the `100` match type.',
 														placeholder: 'Add Item',
 														options: [
 															{
@@ -6451,7 +6451,7 @@ export const reportsProperties: INodeProperties[] = [
 															multipleValues: true
 														},
 														default: {},
-														description: undefined,
+														description: 'Must include the `100` match type.',
 														placeholder: 'Add Item',
 														options: [
 															{
@@ -6489,7 +6489,7 @@ export const reportsProperties: INodeProperties[] = [
 															multipleValues: true
 														},
 														default: {},
-														description: '\n\n __Note:__ The `aiMatch` field is optional. If this field is not filled in, the schema will be taken from the `mtMatch` field.',
+														description: '\n\n __Note:__ The `aiMatch` field is optional. If this field is not filled in, the schema will be taken from the `mtMatch` field. When filled in, it must include the `100` match type.',
 														placeholder: 'Add Item',
 														options: [
 															{
@@ -6526,7 +6526,7 @@ export const reportsProperties: INodeProperties[] = [
 															multipleValues: true
 														},
 														default: {},
-														description: undefined,
+														description: 'Must include the `100` match type.',
 														placeholder: 'Add Item',
 														options: [
 															{
@@ -7028,7 +7028,7 @@ export const reportsProperties: INodeProperties[] = [
 												value: 'project'
 											}
 										],
-										placeholder: 'user'
+										placeholder: 'type'
 									},
 									{
 										displayName: 'Type Tasks',
@@ -7178,7 +7178,7 @@ export const reportsProperties: INodeProperties[] = [
 												value: 'project'
 											}
 										],
-										placeholder: 'user'
+										placeholder: 'type'
 									},
 									{
 										displayName: 'Type Tasks',
@@ -7336,7 +7336,7 @@ export const reportsProperties: INodeProperties[] = [
 												value: 'project'
 											}
 										],
-										placeholder: 'user'
+										placeholder: 'type'
 									},
 									{
 										displayName: 'Type Tasks',
@@ -7510,7 +7510,7 @@ export const reportsProperties: INodeProperties[] = [
 												value: 'project'
 											}
 										],
-										placeholder: 'user'
+										placeholder: 'type'
 									},
 									{
 										displayName: 'Type Tasks',
@@ -9775,7 +9775,7 @@ export const reportsProperties: INodeProperties[] = [
 															multipleValues: true
 														},
 														default: {},
-														description: undefined,
+														description: 'Must include the `perfect` and `100` match types.',
 														placeholder: 'Add Item',
 														options: [
 															{
@@ -10188,7 +10188,7 @@ export const reportsProperties: INodeProperties[] = [
 															multipleValues: true
 														},
 														default: {},
-														description: undefined,
+														description: 'Must include the `perfect` and `100` match types.',
 														placeholder: 'Add Item',
 														options: [
 															{
@@ -10634,7 +10634,7 @@ export const reportsProperties: INodeProperties[] = [
 															multipleValues: true
 														},
 														default: {},
-														description: undefined,
+														description: 'Must include the `100` match type.',
 														placeholder: 'Add Item',
 														options: [
 															{
@@ -10672,7 +10672,7 @@ export const reportsProperties: INodeProperties[] = [
 															multipleValues: true
 														},
 														default: {},
-														description: '\n\n __Note:__ The `aiMatch` field is optional. If this field is not filled in, the schema will be taken from the `mtMatch` field.',
+														description: '\n\n __Note:__ The `aiMatch` field is optional. If this field is not filled in, the schema will be taken from the `mtMatch` field. When filled in, it must include the `100` match type.',
 														placeholder: 'Add Item',
 														options: [
 															{
@@ -10709,7 +10709,7 @@ export const reportsProperties: INodeProperties[] = [
 															multipleValues: true
 														},
 														default: {},
-														description: undefined,
+														description: 'Must include the `100` match type.',
 														placeholder: 'Add Item',
 														options: [
 															{
@@ -11205,7 +11205,7 @@ export const reportsProperties: INodeProperties[] = [
 															multipleValues: true
 														},
 														default: {},
-														description: undefined,
+														description: 'Must include the `100` match type.',
 														placeholder: 'Add Item',
 														options: [
 															{
@@ -11243,7 +11243,7 @@ export const reportsProperties: INodeProperties[] = [
 															multipleValues: true
 														},
 														default: {},
-														description: '\n\n __Note:__ The `aiMatch` field is optional. If this field is not filled in, the schema will be taken from the `mtMatch` field.',
+														description: '\n\n __Note:__ The `aiMatch` field is optional. If this field is not filled in, the schema will be taken from the `mtMatch` field. When filled in, it must include the `100` match type.',
 														placeholder: 'Add Item',
 														options: [
 															{
@@ -11280,7 +11280,7 @@ export const reportsProperties: INodeProperties[] = [
 															multipleValues: true
 														},
 														default: {},
-														description: undefined,
+														description: 'Must include the `100` match type.',
 														placeholder: 'Add Item',
 														options: [
 															{
@@ -12234,7 +12234,7 @@ export const reportsProperties: INodeProperties[] = [
 												value: 'type'
 											}
 										],
-										placeholder: 'user'
+										placeholder: 'type'
 									},
 									{
 										displayName: 'Type Tasks',
@@ -12370,7 +12370,7 @@ export const reportsProperties: INodeProperties[] = [
 												value: 'type'
 											}
 										],
-										placeholder: 'user'
+										placeholder: 'type'
 									},
 									{
 										displayName: 'Type Tasks',
@@ -12514,7 +12514,7 @@ export const reportsProperties: INodeProperties[] = [
 												value: 'type'
 											}
 										],
-										placeholder: 'user'
+										placeholder: 'type'
 									},
 									{
 										displayName: 'Type Tasks',
@@ -12674,7 +12674,7 @@ export const reportsProperties: INodeProperties[] = [
 												value: 'type'
 											}
 										],
-										placeholder: 'user'
+										placeholder: 'type'
 									},
 									{
 										displayName: 'Type Tasks',
@@ -14114,7 +14114,7 @@ export const reportsProperties: INodeProperties[] = [
 											multipleValues: true
 										},
 										default: {},
-										description: 'Individual rates (Custom rates for certain languages or users)',
+										description: 'Individual rates (Custom rates for certain languages)',
 										placeholder: 'Add Item',
 										options: [
 											{
@@ -14213,7 +14213,7 @@ export const reportsProperties: INodeProperties[] = [
 															multipleValues: true
 														},
 														default: {},
-														description: undefined,
+														description: 'Must include the `100` match type.',
 														placeholder: 'Add Item',
 														options: [
 															{
@@ -14251,7 +14251,7 @@ export const reportsProperties: INodeProperties[] = [
 															multipleValues: true
 														},
 														default: {},
-														description: '\n\n __Note:__ The `aiMatch` field is optional. If this field is not filled in, the schema will be taken from the `mtMatch` field.',
+														description: '\n\n __Note:__ The `aiMatch` field is optional. If this field is not filled in, the schema will be taken from the `mtMatch` field. When filled in, it must include the `100` match type.',
 														placeholder: 'Add Item',
 														options: [
 															{
@@ -14288,7 +14288,7 @@ export const reportsProperties: INodeProperties[] = [
 															multipleValues: true
 														},
 														default: {},
-														description: undefined,
+														description: 'Must include the `100` match type.',
 														placeholder: 'Add Item',
 														options: [
 															{
@@ -14538,7 +14538,7 @@ export const reportsProperties: INodeProperties[] = [
 											multipleValues: true
 										},
 										default: {},
-										description: 'Individual rates (Custom rates for certain languages or users)',
+										description: 'Individual rates (Custom rates for certain languages)',
 										placeholder: 'Add Item',
 										options: [
 											{
@@ -14554,17 +14554,6 @@ export const reportsProperties: INodeProperties[] = [
 														},
 														default: [],
 														description: 'Array of language ids',
-														required: true
-													},
-													{
-														displayName: 'User Ids',
-														name: 'userIds',
-														type: 'multiOptions',
-														typeOptions: {
-															loadOptionsMethod: 'getUsersMulti'
-														},
-														default: [],
-														description: 'Array of user ids',
 														required: true
 													},
 													{
