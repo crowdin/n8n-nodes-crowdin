@@ -3023,7 +3023,14 @@ export const aiProperties: INodeProperties[] = [
 						name: 'json:headers',
 						type: 'json',
 						default: '{}',
-						description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden.'
+						description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden unless `sendCustomHeadersOnly` is `true`.'
+					},
+					{
+						displayName: 'Send Custom Headers Only',
+						name: 'sendCustomHeadersOnly',
+						type: 'boolean',
+						default: false,
+						description: 'If `true`, only the headers from `headers` are sent — the headers Crowdin manages for this provider (`Authorization`) are skipped, so the request must carry everything the endpoint requires. Default is `false`.\n\n__Note:__ Can only be set to `true` when `headers` contains at least one header'
 					}
 				]
 			},
@@ -3074,7 +3081,14 @@ export const aiProperties: INodeProperties[] = [
 						name: 'json:headers',
 						type: 'json',
 						default: '{}',
-						description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden.'
+						description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden unless `sendCustomHeadersOnly` is `true`.'
+					},
+					{
+						displayName: 'Send Custom Headers Only',
+						name: 'sendCustomHeadersOnly',
+						type: 'boolean',
+						default: false,
+						description: 'If `true`, only the headers from `headers` are sent — the headers Crowdin manages for this provider (`api-key`) are skipped, so the request must carry everything the endpoint requires. Default is `false`.\n\n__Note:__ Can only be set to `true` when `headers` contains at least one header'
 					}
 				]
 			},
@@ -3129,7 +3143,14 @@ export const aiProperties: INodeProperties[] = [
 						name: 'json:headers',
 						type: 'json',
 						default: '{}',
-						description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden.'
+						description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden unless `sendCustomHeadersOnly` is `true`.'
+					},
+					{
+						displayName: 'Send Custom Headers Only',
+						name: 'sendCustomHeadersOnly',
+						type: 'boolean',
+						default: false,
+						description: 'If `true`, only the headers from `headers` are sent — the headers Crowdin manages for this provider (`Authorization`) are skipped, so the request must carry everything the endpoint requires. Default is `false`.\n\n__Note:__ Can only be set to `true` when `headers` contains at least one header. Can\'t be used with `workloadIdentityFederationAudience`'
 					}
 				]
 			},
@@ -3160,7 +3181,14 @@ export const aiProperties: INodeProperties[] = [
 						name: 'json:headers',
 						type: 'json',
 						default: '{}',
-						description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden.'
+						description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden unless `sendCustomHeadersOnly` is `true`.'
+					},
+					{
+						displayName: 'Send Custom Headers Only',
+						name: 'sendCustomHeadersOnly',
+						type: 'boolean',
+						default: false,
+						description: 'If `true`, only the headers from `headers` are sent — the headers Crowdin manages for this provider (`x-goog-api-key`) are skipped, so the request must carry everything the endpoint requires. Default is `false`.\n\n__Note:__ Can only be set to `true` when `headers` contains at least one header'
 					}
 				]
 			},
@@ -3190,7 +3218,14 @@ export const aiProperties: INodeProperties[] = [
 						name: 'json:headers',
 						type: 'json',
 						default: '{}',
-						description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden.'
+						description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden unless `sendCustomHeadersOnly` is `true`.'
+					},
+					{
+						displayName: 'Send Custom Headers Only',
+						name: 'sendCustomHeadersOnly',
+						type: 'boolean',
+						default: false,
+						description: 'If `true`, only the headers from `headers` are sent — the headers Crowdin manages for this provider (`Authorization`, `Accept`) are skipped, so the request must carry everything the endpoint requires. Default is `false`.\n\n__Note:__ Can only be set to `true` when `headers` contains at least one header'
 					}
 				]
 			},
@@ -3220,7 +3255,14 @@ export const aiProperties: INodeProperties[] = [
 						name: 'json:headers',
 						type: 'json',
 						default: '{}',
-						description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden.'
+						description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden unless `sendCustomHeadersOnly` is `true`.'
+					},
+					{
+						displayName: 'Send Custom Headers Only',
+						name: 'sendCustomHeadersOnly',
+						type: 'boolean',
+						default: false,
+						description: 'If `true`, only the headers from `headers` are sent — the headers Crowdin manages for this provider (`x-api-key`, `anthropic-version`, `accept`) are skipped, so the request must carry everything the endpoint requires. Default is `false`.\n\n__Note:__ Can only be set to `true` when `headers` contains at least one header'
 					}
 				]
 			},
@@ -3250,7 +3292,14 @@ export const aiProperties: INodeProperties[] = [
 						name: 'json:headers',
 						type: 'json',
 						default: '{}',
-						description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden.'
+						description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden unless `sendCustomHeadersOnly` is `true`.'
+					},
+					{
+						displayName: 'Send Custom Headers Only',
+						name: 'sendCustomHeadersOnly',
+						type: 'boolean',
+						default: false,
+						description: 'If `true`, only the headers from `headers` are sent — the headers Crowdin manages for this provider (`Authorization`) are skipped, so the request must carry everything the endpoint requires. Default is `false`.\n\n__Note:__ Can only be set to `true` when `headers` contains at least one header'
 					}
 				]
 			},
@@ -3294,7 +3343,14 @@ export const aiProperties: INodeProperties[] = [
 						name: 'json:headers',
 						type: 'json',
 						default: '{}',
-						description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden.'
+						description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden unless `sendCustomHeadersOnly` is `true`.'
+					},
+					{
+						displayName: 'Send Custom Headers Only',
+						name: 'sendCustomHeadersOnly',
+						type: 'boolean',
+						default: false,
+						description: 'If `true`, only the headers from `headers` are sent — the headers Crowdin manages for this provider (`Authorization`) are skipped, so the request must carry everything the endpoint requires. Default is `false`.\n\n__Note:__ Can only be set to `true` when `headers` contains at least one header'
 					}
 				]
 			},
@@ -3324,7 +3380,14 @@ export const aiProperties: INodeProperties[] = [
 						name: 'json:headers',
 						type: 'json',
 						default: '{}',
-						description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden.'
+						description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden unless `sendCustomHeadersOnly` is `true`.'
+					},
+					{
+						displayName: 'Send Custom Headers Only',
+						name: 'sendCustomHeadersOnly',
+						type: 'boolean',
+						default: false,
+						description: 'If `true`, only the headers from `headers` are sent — the headers Crowdin manages for this provider (`Authorization`) are skipped, so the request must carry everything the endpoint requires. Default is `false`.\n\n__Note:__ Can only be set to `true` when `headers` contains at least one header'
 					}
 				]
 			},
@@ -3384,7 +3447,14 @@ export const aiProperties: INodeProperties[] = [
 						name: 'json:headers',
 						type: 'json',
 						default: '{}',
-						description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden.'
+						description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden unless `sendCustomHeadersOnly` is `true`.'
+					},
+					{
+						displayName: 'Send Custom Headers Only',
+						name: 'sendCustomHeadersOnly',
+						type: 'boolean',
+						default: false,
+						description: 'If `true`, only the headers from `headers` are sent — the headers Crowdin manages for this provider (`api-key` on the OpenAI route, `x-api-key`, `anthropic-version` and `accept` on the Anthropic route) are skipped, so the request must carry everything the endpoint requires. Default is `false`.\n\n__Note:__ Can only be set to `true` when `headers` contains at least one header'
 					}
 				]
 			},
@@ -5289,7 +5359,14 @@ export const aiProperties: INodeProperties[] = [
 								name: 'json:headers',
 								type: 'json',
 								default: '{}',
-								description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden.'
+								description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden unless `sendCustomHeadersOnly` is `true`.'
+							},
+							{
+								displayName: 'Send Custom Headers Only',
+								name: 'sendCustomHeadersOnly',
+								type: 'boolean',
+								default: false,
+								description: 'If `true`, only the headers from `headers` are sent — the headers Crowdin manages for this provider (`Authorization`) are skipped, so the request must carry everything the endpoint requires. Default is `false`.\n\n__Note:__ Can only be set to `true` when `headers` contains at least one header'
 							}
 						]
 					},
@@ -5340,7 +5417,14 @@ export const aiProperties: INodeProperties[] = [
 								name: 'json:headers',
 								type: 'json',
 								default: '{}',
-								description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden.'
+								description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden unless `sendCustomHeadersOnly` is `true`.'
+							},
+							{
+								displayName: 'Send Custom Headers Only',
+								name: 'sendCustomHeadersOnly',
+								type: 'boolean',
+								default: false,
+								description: 'If `true`, only the headers from `headers` are sent — the headers Crowdin manages for this provider (`api-key`) are skipped, so the request must carry everything the endpoint requires. Default is `false`.\n\n__Note:__ Can only be set to `true` when `headers` contains at least one header'
 							}
 						]
 					},
@@ -5395,7 +5479,14 @@ export const aiProperties: INodeProperties[] = [
 								name: 'json:headers',
 								type: 'json',
 								default: '{}',
-								description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden.'
+								description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden unless `sendCustomHeadersOnly` is `true`.'
+							},
+							{
+								displayName: 'Send Custom Headers Only',
+								name: 'sendCustomHeadersOnly',
+								type: 'boolean',
+								default: false,
+								description: 'If `true`, only the headers from `headers` are sent — the headers Crowdin manages for this provider (`Authorization`) are skipped, so the request must carry everything the endpoint requires. Default is `false`.\n\n__Note:__ Can only be set to `true` when `headers` contains at least one header. Can\'t be used with `workloadIdentityFederationAudience`'
 							}
 						]
 					},
@@ -5426,7 +5517,14 @@ export const aiProperties: INodeProperties[] = [
 								name: 'json:headers',
 								type: 'json',
 								default: '{}',
-								description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden.'
+								description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden unless `sendCustomHeadersOnly` is `true`.'
+							},
+							{
+								displayName: 'Send Custom Headers Only',
+								name: 'sendCustomHeadersOnly',
+								type: 'boolean',
+								default: false,
+								description: 'If `true`, only the headers from `headers` are sent — the headers Crowdin manages for this provider (`x-goog-api-key`) are skipped, so the request must carry everything the endpoint requires. Default is `false`.\n\n__Note:__ Can only be set to `true` when `headers` contains at least one header'
 							}
 						]
 					},
@@ -5456,7 +5554,14 @@ export const aiProperties: INodeProperties[] = [
 								name: 'json:headers',
 								type: 'json',
 								default: '{}',
-								description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden.'
+								description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden unless `sendCustomHeadersOnly` is `true`.'
+							},
+							{
+								displayName: 'Send Custom Headers Only',
+								name: 'sendCustomHeadersOnly',
+								type: 'boolean',
+								default: false,
+								description: 'If `true`, only the headers from `headers` are sent — the headers Crowdin manages for this provider (`Authorization`, `Accept`) are skipped, so the request must carry everything the endpoint requires. Default is `false`.\n\n__Note:__ Can only be set to `true` when `headers` contains at least one header'
 							}
 						]
 					},
@@ -5486,7 +5591,14 @@ export const aiProperties: INodeProperties[] = [
 								name: 'json:headers',
 								type: 'json',
 								default: '{}',
-								description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden.'
+								description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden unless `sendCustomHeadersOnly` is `true`.'
+							},
+							{
+								displayName: 'Send Custom Headers Only',
+								name: 'sendCustomHeadersOnly',
+								type: 'boolean',
+								default: false,
+								description: 'If `true`, only the headers from `headers` are sent — the headers Crowdin manages for this provider (`x-api-key`, `anthropic-version`, `accept`) are skipped, so the request must carry everything the endpoint requires. Default is `false`.\n\n__Note:__ Can only be set to `true` when `headers` contains at least one header'
 							}
 						]
 					},
@@ -5516,7 +5628,14 @@ export const aiProperties: INodeProperties[] = [
 								name: 'json:headers',
 								type: 'json',
 								default: '{}',
-								description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden.'
+								description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden unless `sendCustomHeadersOnly` is `true`.'
+							},
+							{
+								displayName: 'Send Custom Headers Only',
+								name: 'sendCustomHeadersOnly',
+								type: 'boolean',
+								default: false,
+								description: 'If `true`, only the headers from `headers` are sent — the headers Crowdin manages for this provider (`Authorization`) are skipped, so the request must carry everything the endpoint requires. Default is `false`.\n\n__Note:__ Can only be set to `true` when `headers` contains at least one header'
 							}
 						]
 					},
@@ -5560,7 +5679,14 @@ export const aiProperties: INodeProperties[] = [
 								name: 'json:headers',
 								type: 'json',
 								default: '{}',
-								description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden.'
+								description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden unless `sendCustomHeadersOnly` is `true`.'
+							},
+							{
+								displayName: 'Send Custom Headers Only',
+								name: 'sendCustomHeadersOnly',
+								type: 'boolean',
+								default: false,
+								description: 'If `true`, only the headers from `headers` are sent — the headers Crowdin manages for this provider (`Authorization`) are skipped, so the request must carry everything the endpoint requires. Default is `false`.\n\n__Note:__ Can only be set to `true` when `headers` contains at least one header'
 							}
 						]
 					},
@@ -5590,7 +5716,14 @@ export const aiProperties: INodeProperties[] = [
 								name: 'json:headers',
 								type: 'json',
 								default: '{}',
-								description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden.'
+								description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden unless `sendCustomHeadersOnly` is `true`.'
+							},
+							{
+								displayName: 'Send Custom Headers Only',
+								name: 'sendCustomHeadersOnly',
+								type: 'boolean',
+								default: false,
+								description: 'If `true`, only the headers from `headers` are sent — the headers Crowdin manages for this provider (`Authorization`) are skipped, so the request must carry everything the endpoint requires. Default is `false`.\n\n__Note:__ Can only be set to `true` when `headers` contains at least one header'
 							}
 						]
 					},
@@ -5650,7 +5783,14 @@ export const aiProperties: INodeProperties[] = [
 								name: 'json:headers',
 								type: 'json',
 								default: '{}',
-								description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden.'
+								description: 'Custom HTTP headers sent with every request to the provider. Authorization headers are managed by the provider and can\'t be overridden unless `sendCustomHeadersOnly` is `true`.'
+							},
+							{
+								displayName: 'Send Custom Headers Only',
+								name: 'sendCustomHeadersOnly',
+								type: 'boolean',
+								default: false,
+								description: 'If `true`, only the headers from `headers` are sent — the headers Crowdin manages for this provider (`api-key` on the OpenAI route, `x-api-key`, `anthropic-version` and `accept` on the Anthropic route) are skipped, so the request must carry everything the endpoint requires. Default is `false`.\n\n__Note:__ Can only be set to `true` when `headers` contains at least one header'
 							}
 						]
 					},
