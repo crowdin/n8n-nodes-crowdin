@@ -21,7 +21,7 @@ export const applicationsProperties: INodeProperties[] = [
 				name: 'List Application Consent Decisions',
 				value: 'api.applications.consents.getMany',
 				action: 'List Application Consent Decisions',
-				description: '**Required scopes:** `application` (Read only).\n\nList the current user\'s consent decisions - which applications the user allowed (`granted`) or refused (`denied`) to call the Crowdin API on their behalf.',
+				description: '**Required scopes:** `application.consent` (Read only).\n\nList the current user\'s consent decisions - which applications the user allowed (`granted`) or refused (`denied`) to call the Crowdin API on their behalf.',
 				routing: {
 					request: {
 						method: 'GET',
@@ -47,7 +47,7 @@ export const applicationsProperties: INodeProperties[] = [
 				name: 'Create Application Consent Decision',
 				value: 'api.applications.consents.post',
 				action: 'Create Application Consent Decision',
-				description: '**Required scopes:** `application` (Read and Write).\n\nRecord the current user\'s consent decision (`granted` or `denied`) for an application installed by another user. In the normal flow Crowdin records the decision itself when the user responds to the consent prompt shown for the application - use this endpoint to record a decision programmatically. A user has at most one decision per installation - creating a second one returns `409`; use [Edit Application Consent Decision](#operation/api.applications.consents.patch) to change an existing decision.',
+				description: '**Required scopes:** `application.consent` (Read and Write).\n\nRecord the current user\'s consent decision (`granted` or `denied`) for an application installed by another user. In the normal flow Crowdin records the decision itself when the user responds to the consent prompt shown for the application - use this endpoint to record a decision programmatically. A user has at most one decision per installation - creating a second one returns `409`; use [Edit Application Consent Decision](#operation/api.applications.consents.patch) to change an existing decision.',
 				routing: {
 					request: {
 						method: 'POST',
@@ -59,7 +59,7 @@ export const applicationsProperties: INodeProperties[] = [
 				name: 'Delete Application Consent Decision',
 				value: 'api.applications.consents.delete',
 				action: 'Delete Application Consent Decision',
-				description: '**Required scopes:** `application` (Read and Write).\n\nForget the current user\'s consent decision for an application. The next call from that application will prompt for consent again.',
+				description: '**Required scopes:** `application.consent` (Read and Write).\n\nForget the current user\'s consent decision for an application. The next call from that application will prompt for consent again.',
 				routing: {
 					request: {
 						method: 'DELETE',
@@ -81,7 +81,7 @@ export const applicationsProperties: INodeProperties[] = [
 				name: 'Edit Application Consent Decision',
 				value: 'api.applications.consents.patch',
 				action: 'Edit Application Consent Decision',
-				description: '**Required scopes:** `application` (Read and Write).\n\nChange an existing consent decision: switch its `status` between `granted` and `denied`, or update the `scopes` snapshot.',
+				description: '**Required scopes:** `application.consent` (Read and Write).\n\nChange an existing consent decision: switch its `status` between `granted` and `denied`, or update the `scopes` snapshot.',
 				routing: {
 					request: {
 						method: 'PATCH',
@@ -98,7 +98,7 @@ export const applicationsProperties: INodeProperties[] = [
 				name: 'Upload Application Bundle',
 				value: 'api.applications.installations.bundles.post',
 				action: 'Upload Application Bundle',
-				description: '**Required scopes:** `application` (Read and Write).\n\nUpload a bundle archive for a serverless app installed from manifest content. The bundle must be a ZIP archive that contains a non-empty `app.js` entry point at its root.',
+				description: '**Required scopes:** `application.installation` (Read and Write).\n\nUpload a bundle archive for a serverless app installed from manifest content. The bundle must be a ZIP archive that contains a non-empty `app.js` entry point at its root.',
 				routing: {
 					request: {
 						method: 'POST',
@@ -110,7 +110,7 @@ export const applicationsProperties: INodeProperties[] = [
 				name: 'List Application Installations',
 				value: 'api.applications.installations.getMany',
 				action: 'List Application Installations',
-				description: '**Required scopes:** `application` (Read only).',
+				description: '**Required scopes:** `application.installation` (Read only).',
 				routing: {
 					request: {
 						method: 'GET',
@@ -136,7 +136,7 @@ export const applicationsProperties: INodeProperties[] = [
 				name: 'Install Application',
 				value: 'api.applications.installations.post',
 				action: 'Install Application',
-				description: '**Required scopes:** `application` (Read and Write).\n\nInstall an application either from a hosted manifest URL or from its manifest content.<br><br>**Note:** Any application - with or without a backend, and regardless of whether it is published to the Crowdin Store - can be installed from a manifest URL (the manifest only needs to be reachable at that URL). Installing from manifest content is supported only for serverless apps - apps that run entirely in the browser with no backend (no `baseUrl`).',
+				description: '**Required scopes:** `application.installation` (Read and Write).\n\nInstall an application either from a hosted manifest URL or from its manifest content.<br><br>**Note:** Any application - with or without a backend, and regardless of whether it is published to the Crowdin Store - can be installed from a manifest URL (the manifest only needs to be reachable at that URL). Installing from manifest content is supported only for serverless apps - apps that run entirely in the browser with no backend (no `baseUrl`).',
 				routing: {
 					request: {
 						method: 'POST',
@@ -148,7 +148,7 @@ export const applicationsProperties: INodeProperties[] = [
 				name: 'Get Application Installation',
 				value: 'api.applications.installations.get',
 				action: 'Get Application Installation',
-				description: '**Required scopes:** `application` (Read only).',
+				description: '**Required scopes:** `application.installation` (Read only).',
 				routing: {
 					request: {
 						method: 'GET',
@@ -160,7 +160,7 @@ export const applicationsProperties: INodeProperties[] = [
 				name: 'Delete Application Installation',
 				value: 'api.applications.installations.delete',
 				action: 'Delete Application Installation',
-				description: '**Required scopes:** `application` (Read and Write).',
+				description: '**Required scopes:** `application.installation` (Read and Write).',
 				routing: {
 					request: {
 						method: 'DELETE',
@@ -182,7 +182,7 @@ export const applicationsProperties: INodeProperties[] = [
 				name: 'Edit Application Installation',
 				value: 'api.applications.installations.patch',
 				action: 'Edit Application Installation',
-				description: '**Required scopes:** `application` (Read and Write).',
+				description: '**Required scopes:** `application.installation` (Read and Write).',
 				routing: {
 					request: {
 						method: 'PATCH',
@@ -194,7 +194,7 @@ export const applicationsProperties: INodeProperties[] = [
 				name: 'Get Application Installation Update',
 				value: 'api.applications.installations.update.get',
 				action: 'Get Application Installation Update',
-				description: '**Required scopes:** `application` (Read only).\n\nReturns the diff between the currently installed application and the latest cached manifest, tagged with `manifestHash` for optimistic-locking on apply.',
+				description: '**Required scopes:** `application.installation` (Read only).\n\nReturns the diff between the currently installed application and the latest cached manifest, tagged with `manifestHash` for optimistic-locking on apply.',
 				routing: {
 					request: {
 						method: 'GET',
@@ -206,7 +206,7 @@ export const applicationsProperties: INodeProperties[] = [
 				name: 'Apply Application Installation Update',
 				value: 'api.applications.installations.update.post',
 				action: 'Apply Application Installation Update',
-				description: '**Required scopes:** `application` (Read and Write).\n\nApply the latest cached manifest to an installed application. Requires `manifestHash` from a recent GET /update call as an optimistic-locking token. If the cached manifest has changed since, returns 409 with the fresh diff in the response body.',
+				description: '**Required scopes:** `application.installation` (Read and Write).\n\nApply the latest cached manifest to an installed application. Requires `manifestHash` from a recent GET /update call as an optimistic-locking token. If the cached manifest has changed since, returns 409 with the fresh diff in the response body.',
 				routing: {
 					request: {
 						method: 'POST',
@@ -218,7 +218,7 @@ export const applicationsProperties: INodeProperties[] = [
 				name: 'Get Application Data',
 				value: 'api.applications.api.get',
 				action: 'Get Application Data',
-				description: '**Required scopes:** `application` (Read only).\n\nRetrieves data from the specified application.\n\n__Note__: Query parameters are application-specific and vary depending on the application being accessed.',
+				description: '**Required scopes:** `application.proxy` (Read only).\n\nRetrieves data from the specified application.\n\n__Note__: Query parameters are application-specific and vary depending on the application being accessed.',
 				routing: {
 					request: {
 						method: 'GET',
@@ -230,7 +230,7 @@ export const applicationsProperties: INodeProperties[] = [
 				name: 'Update or Restore Application Data',
 				value: 'api.applications.api.put',
 				action: 'Update or Restore Application Data',
-				description: '**Required scopes:** `application` (Read and Write).\n\nUpdates or restores data in the specified application.\n\n__Note__: Both the query parameters and request body are application-specific and vary depending on the application being accessed.',
+				description: '**Required scopes:** `application.proxy` (Read and Write).\n\nUpdates or restores data in the specified application.\n\n__Note__: Both the query parameters and request body are application-specific and vary depending on the application being accessed.',
 				routing: {
 					request: {
 						method: 'PUT',
@@ -247,7 +247,7 @@ export const applicationsProperties: INodeProperties[] = [
 				name: 'Add Application Data',
 				value: 'api.applications.api.post',
 				action: 'Add Application Data',
-				description: '**Required scopes:** `application` (Read and Write).\n\nAdds new data to the specified application.\n\n__Note__: Both the query parameters and request body are application-specific and vary depending on the application being accessed.',
+				description: '**Required scopes:** `application.proxy` (Read and Write).\n\nAdds new data to the specified application.\n\n__Note__: Both the query parameters and request body are application-specific and vary depending on the application being accessed.',
 				routing: {
 					request: {
 						method: 'POST',
@@ -264,7 +264,7 @@ export const applicationsProperties: INodeProperties[] = [
 				name: 'Delete Application Data',
 				value: 'api.applications.api.delete',
 				action: 'Delete Application Data',
-				description: '**Required scopes:** `application` (Read and Write).\n\nDeletes data from the specified application.\n\n__Note__: Query parameters are application-specific and vary depending on the application being accessed.',
+				description: '**Required scopes:** `application.proxy` (Read and Write).\n\nDeletes data from the specified application.\n\n__Note__: Query parameters are application-specific and vary depending on the application being accessed.',
 				routing: {
 					request: {
 						method: 'DELETE',
@@ -286,7 +286,7 @@ export const applicationsProperties: INodeProperties[] = [
 				name: 'Edit Application Data',
 				value: 'api.applications.api.patch',
 				action: 'Edit Application Data',
-				description: '**Required scopes:** `application` (Read and Write).\n\nEdits existing data in the specified application.\n\n__Note__: Both the query parameters and request body are application-specific and vary depending on the application being accessed.',
+				description: '**Required scopes:** `application.proxy` (Read and Write).\n\nEdits existing data in the specified application.\n\n__Note__: Both the query parameters and request body are application-specific and vary depending on the application being accessed.',
 				routing: {
 					request: {
 						method: 'PATCH',
@@ -809,7 +809,7 @@ export const applicationsProperties: INodeProperties[] = [
 		name: 'scopes',
 		type: 'fixedCollection',
 		default: {},
-		description: 'Scopes the decision was made for - a snapshot of the application scopes at decision time.<br><br>Available scopes: `*`, `language`, `user`, `team`, `notification`, `custom_language`, `group`, `tm`, `glossary`, `style-guide`, `mt`, `ai`, `ai.provider`, `ai.prompt`, `ai.proxy`, `ai.translate`, `automation`, `automation.rule`, `automation.rule.execution`, `webhook`, `project`, `project.settings`, `project.member`, `project.status`, `project.status.issue`, `project.status.progress`, `project.status.qa-check`, `project.source`, `project.source.file`, `project.source.string`, `project.translation`, `project.screenshot`, `project.webhook`, `project.task`, `project.dictionary`, `project.report`, `project.advisor`, `client`, `vendor`, `field`, `security-log`, `application`, `organization`, `custom-spellchecker`, `external-qa-check`.<br><br>Each scope supports `:read` and `:write` modifiers (e.g. `project:read`, `project:write`); without a modifier the scope grants both',
+		description: 'Scopes the decision was made for - a snapshot of the application scopes at decision time.<br><br>Available scopes: `*`, `language`, `user`, `team`, `notification`, `custom_language`, `group`, `tm`, `glossary`, `style-guide`, `mt`, `ai`, `ai.provider`, `ai.prompt`, `ai.proxy`, `ai.translate`, `automation`, `automation.rule`, `automation.rule.execution`, `webhook`, `project`, `project.settings`, `project.member`, `project.status`, `project.status.issue`, `project.status.progress`, `project.status.qa-check`, `project.source`, `project.source.file`, `project.source.string`, `project.translation`, `project.screenshot`, `project.webhook`, `project.task`, `project.dictionary`, `project.report`, `project.advisor`, `client`, `vendor`, `field`, `security-log`, `application`, `application.installation`, `application.proxy`, `application.consent`, `application.storage`, `organization`, `custom-spellchecker`, `external-qa-check`.<br><br>Each scope supports `:read` and `:write` modifiers (e.g. `project:read`, `project:write`); without a modifier the scope grants both',
 		routing: {
 			send: {
 				property: 'scopes',
@@ -1387,7 +1387,7 @@ export const applicationsProperties: INodeProperties[] = [
 											multipleValues: true
 										},
 										default: {},
-										description: 'OAuth scopes granted to the app for host-proxied Crowdin API calls.<br><br>Available scopes: `*`, `language`, `user`, `team`, `notification`, `custom_language`, `group`, `tm`, `glossary`, `style-guide`, `mt`, `ai`, `ai.provider`, `ai.prompt`, `ai.proxy`, `ai.translate`, `automation`, `automation.rule`, `automation.rule.execution`, `webhook`, `project`, `project.settings`, `project.member`, `project.status`, `project.status.issue`, `project.status.progress`, `project.status.qa-check`, `project.source`, `project.source.file`, `project.source.string`, `project.translation`, `project.screenshot`, `project.webhook`, `project.task`, `project.dictionary`, `project.report`, `project.advisor`, `client`, `vendor`, `field`, `security-log`, `application`, `organization`, `custom-spellchecker`, `external-qa-check`.<br><br>Each scope supports `:read` and `:write` modifiers (e.g. `project:read`, `project:write`); without a modifier the scope grants both.',
+										description: 'OAuth scopes granted to the app for host-proxied Crowdin API calls.<br><br>Available scopes: `*`, `language`, `user`, `team`, `notification`, `custom_language`, `group`, `tm`, `glossary`, `style-guide`, `mt`, `ai`, `ai.provider`, `ai.prompt`, `ai.proxy`, `ai.translate`, `automation`, `automation.rule`, `automation.rule.execution`, `webhook`, `project`, `project.settings`, `project.member`, `project.status`, `project.status.issue`, `project.status.progress`, `project.status.qa-check`, `project.source`, `project.source.file`, `project.source.string`, `project.translation`, `project.screenshot`, `project.webhook`, `project.task`, `project.dictionary`, `project.report`, `project.advisor`, `client`, `vendor`, `field`, `security-log`, `application`, `application.installation`, `application.proxy`, `application.consent`, `application.storage`, `organization`, `custom-spellchecker`, `external-qa-check`.<br><br>Each scope supports `:read` and `:write` modifiers (e.g. `project:read`, `project:write`); without a modifier the scope grants both.',
 										placeholder: 'Add Item',
 										options: [
 											{
@@ -2269,7 +2269,7 @@ export const applicationsProperties: INodeProperties[] = [
 				name: 'scopes',
 				type: 'fixedCollection',
 				default: {},
-				description: 'Scopes the decision was made for - a snapshot of the application scopes at decision time.<br><br>Available scopes: `*`, `language`, `user`, `team`, `notification`, `custom_language`, `group`, `tm`, `glossary`, `style-guide`, `mt`, `ai`, `ai.provider`, `ai.prompt`, `ai.proxy`, `ai.translate`, `automation`, `automation.rule`, `automation.rule.execution`, `webhook`, `project`, `project.settings`, `project.member`, `project.status`, `project.status.issue`, `project.status.progress`, `project.status.qa-check`, `project.source`, `project.source.file`, `project.source.string`, `project.translation`, `project.screenshot`, `project.webhook`, `project.task`, `project.dictionary`, `project.report`, `project.advisor`, `client`, `vendor`, `field`, `security-log`, `application`, `organization`, `custom-spellchecker`, `external-qa-check`.<br><br>Each scope supports `:read` and `:write` modifiers (e.g. `project:read`, `project:write`); without a modifier the scope grants both',
+				description: 'Scopes the decision was made for - a snapshot of the application scopes at decision time.<br><br>Available scopes: `*`, `language`, `user`, `team`, `notification`, `custom_language`, `group`, `tm`, `glossary`, `style-guide`, `mt`, `ai`, `ai.provider`, `ai.prompt`, `ai.proxy`, `ai.translate`, `automation`, `automation.rule`, `automation.rule.execution`, `webhook`, `project`, `project.settings`, `project.member`, `project.status`, `project.status.issue`, `project.status.progress`, `project.status.qa-check`, `project.source`, `project.source.file`, `project.source.string`, `project.translation`, `project.screenshot`, `project.webhook`, `project.task`, `project.dictionary`, `project.report`, `project.advisor`, `client`, `vendor`, `field`, `security-log`, `application`, `application.installation`, `application.proxy`, `application.consent`, `application.storage`, `organization`, `custom-spellchecker`, `external-qa-check`.<br><br>Each scope supports `:read` and `:write` modifiers (e.g. `project:read`, `project:write`); without a modifier the scope grants both',
 				typeOptions: {
 					multipleValues: true
 				},

@@ -91,6 +91,14 @@ const SKIP_OPERATIONS = [
 	'api.ai.providers.gateway.enterprise.put',
 	'api.ai.providers.gateway.enterprise.patch',
 	'api.ai.providers.gateway.enterprise.delete',
+	// Application KV Storage: authenticates the calling application, not the user.
+	// Personal access tokens and OAuth tokens both get 403, so these operations
+	// can never work from an n8n credential.
+	'api.applications.storage.kv.records.getMany',
+	'api.applications.storage.kv.records.post',
+	'api.applications.storage.kv.records.get',
+	'api.applications.storage.kv.records.patch',
+	'api.applications.storage.kv.records.delete',
 ];
 
 // ============================================================================
