@@ -1,7 +1,7 @@
 // Auto-generated - do not edit manually
 
 import type { INodeProperties } from 'n8n-workflow';
-import { transformToJsonPatch, normalizeRootBody, normalizeFieldBody, extractBatchItems } from '../../../utils/preSend';
+import { transformToJsonPatch, normalizeRootBody, extractBatchItems } from '../../../utils/preSend';
 
 export const translationsProperties: INodeProperties[] = [
 	{
@@ -2028,575 +2028,11 @@ export const translationsProperties: INodeProperties[] = [
 		}
 	},
 	{
-		displayName: 'Language Ids',
-		required: true,
-		name: 'languageIds',
-		type: 'multiOptions',
-		default: [],
-		description: 'Set of languages to which auto-translation should be applied. Get via [List Supported Languages](#operation/api.languages.getMany)',
-		routing: {
-			send: {
-				property: 'languageIds',
-				propertyInDotNotation: false,
-				type: 'body',
-				value: '={{ $value }}'
-			}
-		},
-		displayOptions: {
-			show: {
-				resource: [
-					'translations'
-				],
-				operation: [
-					'api.projects.pre-translations.post'
-				]
-			}
-		},
-		typeOptions: {
-			loadOptionsMethod: 'getLanguagesMulti'
-		}
-	},
-	{
-		displayName: 'File Ids',
-		name: 'fileIds',
-		type: 'multiOptions',
-		default: [],
-		description: 'Files array that should be translated\n\n__Note:__ Required unless `directoryIds` or `branchIds` is set',
-		routing: {
-			send: {
-				property: 'fileIds',
-				propertyInDotNotation: false,
-				type: 'body',
-				value: '={{ $value }}'
-			}
-		},
-		displayOptions: {
-			show: {
-				resource: [
-					'translations'
-				],
-				operation: [
-					'api.projects.pre-translations.post'
-				]
-			}
-		},
-		typeOptions: {
-			loadOptionsMethod: 'getProjectFilesMulti',
-			loadOptionsDependsOn: [
-				'projectId'
-			]
-		}
-	},
-	{
-		displayName: 'Directory Ids',
-		name: 'directoryIds',
-		type: 'multiOptions',
-		default: [],
-		description: 'Directories array that should be translated. Includes all nested files',
-		routing: {
-			send: {
-				property: 'directoryIds',
-				propertyInDotNotation: false,
-				type: 'body',
-				value: '={{ $value }}'
-			}
-		},
-		displayOptions: {
-			show: {
-				resource: [
-					'translations'
-				],
-				operation: [
-					'api.projects.pre-translations.post'
-				]
-			}
-		},
-		typeOptions: {
-			loadOptionsMethod: 'getProjectDirectoriesMulti',
-			loadOptionsDependsOn: [
-				'projectId'
-			]
-		}
-	},
-	{
-		displayName: 'Branch Ids',
-		name: 'branchIds',
-		type: 'multiOptions',
-		default: [],
-		description: 'Branches array that should be translated. Includes all nested files',
-		routing: {
-			send: {
-				property: 'branchIds',
-				propertyInDotNotation: false,
-				type: 'body',
-				value: '={{ $value }}'
-			}
-		},
-		displayOptions: {
-			show: {
-				resource: [
-					'translations'
-				],
-				operation: [
-					'api.projects.pre-translations.post'
-				]
-			}
-		},
-		typeOptions: {
-			loadOptionsMethod: 'getBranchesMulti',
-			loadOptionsDependsOn: [
-				'projectId'
-			]
-		}
-	},
-	{
-		displayName: 'Method',
-		name: 'method',
-		type: 'options',
-		default: '',
-		description: 'Defines auto-translation method. Available values:\n- \'tm\' – auto-translation via Translation Memory\n- \'mt\' – auto-translation via Machine Translation. \'mt\' should be used with `engineId` parameter\n- \'ai\' – auto-translation via AI. \'ai\' should be used with `aiPromptId` parameter',
-		options: [
-			{
-				name: '-',
-				value: ''
-			},
-			{
-				name: 'tm',
-				value: 'tm'
-			},
-			{
-				name: 'mt',
-				value: 'mt'
-			},
-			{
-				name: 'ai',
-				value: 'ai'
-			}
-		],
-		routing: {
-			send: {
-				property: 'method',
-				propertyInDotNotation: false,
-				type: 'body',
-				value: '={{ $value || undefined }}'
-			}
-		},
-		displayOptions: {
-			show: {
-				resource: [
-					'translations'
-				],
-				operation: [
-					'api.projects.pre-translations.post'
-				]
-			}
-		}
-	},
-	{
-		displayName: 'Priority',
-		name: 'priority',
-		type: 'options',
-		default: '',
-		description: undefined,
-		options: [
-			{
-				name: '-',
-				value: ''
-			},
-			{
-				name: 'low',
-				value: 'low'
-			},
-			{
-				name: 'normal',
-				value: 'normal'
-			},
-			{
-				name: 'high',
-				value: 'high'
-			}
-		],
-		routing: {
-			send: {
-				property: 'priority',
-				propertyInDotNotation: false,
-				type: 'body',
-				value: '={{ $value || undefined }}'
-			}
-		},
-		displayOptions: {
-			show: {
-				resource: [
-					'translations'
-				],
-				operation: [
-					'api.projects.pre-translations.post'
-				]
-			}
-		}
-	},
-	{
-		displayName: 'Engine Id',
-		name: 'engineId',
-		type: 'options',
-		default: '',
-		description: 'Machine Translation engine Identifier. Get via [List MTs](#operation/api.mts.getMany)',
-		routing: {
-			send: {
-				property: 'engineId',
-				propertyInDotNotation: false,
-				type: 'body',
-				value: '={{ typeof $value === \'number\' ? $value : undefined }}'
-			}
-		},
-		displayOptions: {
-			show: {
-				resource: [
-					'translations'
-				],
-				operation: [
-					'api.projects.pre-translations.post'
-				]
-			}
-		},
-		typeOptions: {
-			loadOptionsMethod: 'getMTEngines'
-		}
-	},
-	{
-		displayName: 'Ai Prompt Id',
-		name: 'aiPromptId',
-		type: 'options',
-		default: '',
-		description: 'AI Prompt Identifier. Get via [List AI Prompts](#operation/api.ai.prompts.getMany)',
-		routing: {
-			send: {
-				property: 'aiPromptId',
-				propertyInDotNotation: false,
-				type: 'body',
-				value: '={{ typeof $value === \'number\' ? $value : undefined }}'
-			}
-		},
-		displayOptions: {
-			show: {
-				resource: [
-					'translations'
-				],
-				operation: [
-					'api.projects.pre-translations.post'
-				]
-			}
-		},
-		typeOptions: {
-			loadOptionsMethod: 'getAiPrompts'
-		}
-	},
-	{
-		displayName: 'Auto Approve Option',
-		name: 'autoApproveOption',
-		type: 'options',
-		default: '',
-		description: 'Defines which translations added by TM auto-translation should be auto-approved. Available values:\n- \'all\' – all\n- \'perfectMatchOnly\' – with perfect TM match\n- \'exceptAutoSubstituted\' – all (skip auto-substituted suggestions)\n- \'perfectMatchApprovedOnly\' - with perfect TM match (approved previously)\n- \'none\' – no auto-approve',
-		options: [
-			{
-				name: '-',
-				value: ''
-			},
-			{
-				name: 'all',
-				value: 'all'
-			},
-			{
-				name: 'exceptAutoSubstituted',
-				value: 'exceptAutoSubstituted'
-			},
-			{
-				name: 'perfectMatchApprovedOnly',
-				value: 'perfectMatchApprovedOnly'
-			},
-			{
-				name: 'perfectMatchOnly',
-				value: 'perfectMatchOnly'
-			},
-			{
-				name: 'none',
-				value: 'none'
-			}
-		],
-		routing: {
-			send: {
-				property: 'autoApproveOption',
-				propertyInDotNotation: false,
-				type: 'body',
-				value: '={{ $value || undefined }}'
-			}
-		},
-		displayOptions: {
-			show: {
-				resource: [
-					'translations'
-				],
-				operation: [
-					'api.projects.pre-translations.post'
-				]
-			}
-		}
-	},
-	{
-		displayName: 'Duplicate Translations',
-		name: 'duplicateTranslations',
-		type: 'boolean',
-		default: false,
-		description: 'Adds translations even if the same translation already exists. Default is `false`.\n\n__Note:__ Cannot be used when `replaceTranslationsOption` is `all` (replacing all translations already overrides duplicate handling).',
-		routing: {
-			send: {
-				property: 'duplicateTranslations',
-				propertyInDotNotation: false,
-				type: 'body',
-				value: '={{ $value }}'
-			}
-		},
-		displayOptions: {
-			show: {
-				resource: [
-					'translations'
-				],
-				operation: [
-					'api.projects.pre-translations.post'
-				]
-			}
-		}
-	},
-	{
-		displayName: 'Skip Approved Translations',
-		name: 'skipApprovedTranslations',
-		type: 'boolean',
-		default: false,
-		description: 'Skip strings that already have approved translations. Default is `false`.\n\n__Note:__ Cannot be used together with `resetApprovalStatus`.',
-		routing: {
-			send: {
-				property: 'skipApprovedTranslations',
-				propertyInDotNotation: false,
-				type: 'body',
-				value: '={{ $value }}'
-			}
-		},
-		displayOptions: {
-			show: {
-				resource: [
-					'translations'
-				],
-				operation: [
-					'api.projects.pre-translations.post'
-				]
-			}
-		}
-	},
-	{
-		displayName: 'Scope',
-		name: 'scope',
-		type: 'options',
-		default: '',
-		description: 'Which strings to apply auto-translation to. Default is `untranslated`. Available values:\n- \'untranslated\' – strings without an existing translation (default)\n- \'translated\' – strings that already have a translation (re-translation)\n- \'all\' – both untranslated and translated strings\n\n__Note:__ Cannot be used together with the deprecated `translateUntranslatedOnly`.',
-		options: [
-			{
-				name: '-',
-				value: ''
-			},
-			{
-				name: 'untranslated',
-				value: 'untranslated'
-			},
-			{
-				name: 'translated',
-				value: 'translated'
-			},
-			{
-				name: 'all',
-				value: 'all'
-			}
-		],
-		routing: {
-			send: {
-				property: 'scope',
-				propertyInDotNotation: false,
-				type: 'body',
-				value: '={{ $value || undefined }}'
-			}
-		},
-		displayOptions: {
-			show: {
-				resource: [
-					'translations'
-				],
-				operation: [
-					'api.projects.pre-translations.post'
-				]
-			}
-		}
-	},
-	{
-		displayName: 'Translation Modified Before',
-		name: 'dateTime:translationModifiedBefore',
-		type: 'dateTime',
-		default: '',
-		description: 'Re-translates only if a string\'s current translation was modified prior to this date. Useful after modifying contextual resources like screenshots, style guides, or glossaries.\n\n__Note:__ Requires `scope` to be `translated` or `all`. Cannot be used with `scope: "untranslated"` or `translateUntranslatedOnly: true`.',
-		routing: {
-			send: {
-				property: 'translationModifiedBefore',
-				propertyInDotNotation: false,
-				type: 'body',
-				value: '={{ $value || undefined }}'
-			}
-		},
-		displayOptions: {
-			show: {
-				resource: [
-					'translations'
-				],
-				operation: [
-					'api.projects.pre-translations.post'
-				]
-			}
-		},
-		placeholder: '2026-01-01T00:00:00+00:00'
-	},
-	{
-		displayName: 'Replace Translations Option',
-		name: 'replaceTranslationsOption',
-		type: 'options',
-		default: '',
-		description: 'Defines whether to replace existing translations with new auto-translations. Default is `none`. Available values:\n- \'none\' – add the new translation alongside existing ones (default)\n- \'autoTranslated\' – replace auto-generated translations (TM, MT, AI). Human translations are kept\n- \'all\' – replace all existing translations\n\n__Note:__ Values other than `none` require `scope` to be `translated` or `all` (cannot be combined with `scope: "untranslated"` or `translateUntranslatedOnly: true`).',
-		options: [
-			{
-				name: '-',
-				value: ''
-			},
-			{
-				name: 'none',
-				value: 'none'
-			},
-			{
-				name: 'autoTranslated',
-				value: 'autoTranslated'
-			},
-			{
-				name: 'all',
-				value: 'all'
-			}
-		],
-		routing: {
-			send: {
-				property: 'replaceTranslationsOption',
-				propertyInDotNotation: false,
-				type: 'body',
-				value: '={{ $value || undefined }}'
-			}
-		},
-		displayOptions: {
-			show: {
-				resource: [
-					'translations'
-				],
-				operation: [
-					'api.projects.pre-translations.post'
-				]
-			}
-		}
-	},
-	{
-		displayName: 'Reset Approval Status',
-		name: 'resetApprovalStatus',
-		type: 'boolean',
-		default: false,
-		description: 'Removes approval on existing translations when applying auto-translations. Default is `false`.\n\n__Note:__ Requires `scope` to be `translated` or `all`. Cannot be used together with `skipApprovedTranslations`, `autoApproveOption` (any value other than `none`), or when `replaceTranslationsOption` is `all` (replaced translations lose approval automatically). Cannot be used with `scope: "untranslated"` or `translateUntranslatedOnly: true`.',
-		routing: {
-			send: {
-				property: 'resetApprovalStatus',
-				propertyInDotNotation: false,
-				type: 'body',
-				value: '={{ $value }}'
-			}
-		},
-		displayOptions: {
-			show: {
-				resource: [
-					'translations'
-				],
-				operation: [
-					'api.projects.pre-translations.post'
-				]
-			}
-		}
-	},
-	{
-		displayName: 'Minimum Match Ratio',
-		name: 'minimumMatchRatio',
-		type: 'number',
-		default: 0,
-		description: 'Add translation when TM match is greater or equal to minimum match ratio. This argument will be ignored if `translateWithPerfectMatchOnly` is set.\n\n__Note:__ Works only with TM auto-translation method',
-		routing: {
-			send: {
-				property: 'minimumMatchRatio',
-				propertyInDotNotation: false,
-				type: 'body',
-				value: '={{ $value !== 0 ? $value : undefined }}'
-			}
-		},
-		displayOptions: {
-			show: {
-				resource: [
-					'translations'
-				],
-				operation: [
-					'api.projects.pre-translations.post'
-				]
-			}
-		},
-		placeholder: '100'
-	},
-	{
-		displayName: 'Translate With Perfect Match Only',
-		name: 'translateWithPerfectMatchOnly',
-		type: 'boolean',
-		default: false,
-		description: 'Applies auto-translation only for the strings with perfect match (source text and contextual information are identical)\n\n__Note:__ Works only with TM auto-translation method',
-		routing: {
-			send: {
-				property: 'translateWithPerfectMatchOnly',
-				propertyInDotNotation: false,
-				type: 'body',
-				value: '={{ $value }}'
-			}
-		},
-		displayOptions: {
-			show: {
-				resource: [
-					'translations'
-				],
-				operation: [
-					'api.projects.pre-translations.post'
-				]
-			}
-		}
-	},
-	{
-		displayName: 'Fallback Languages',
-		name: 'fallbackLanguages',
-		type: 'fixedCollection',
+		displayName: 'Body',
+		name: '_body',
+		description: 'Select configuration type',
 		default: {},
-		description: 'Defines fallback languages mapping. The passed value should be an associative array containing both language id and array of fallback language ids:\n\n - `{languageId}` – Crowdin id for the specified language. Get via [List Supported Languages](#operation/api.languages.getMany)\n - `Array of strings` – an array containing fallback language ids. Get via [List Supported Languages](#operation/api.languages.getMany)\n\n__Note:__ Available only for TM Auto-Translation',
-		routing: {
-			send: {
-				property: 'fallbackLanguages',
-				propertyInDotNotation: false,
-				type: 'body',
-				value: '={{ $value.fields || undefined }}',
-				preSend: [
-					normalizeFieldBody
-				]
-			}
-		},
+		type: 'fixedCollection',
 		displayOptions: {
 			show: {
 				resource: [
@@ -2607,110 +2043,581 @@ export const translationsProperties: INodeProperties[] = [
 				]
 			}
 		},
-		placeholder: 'Add Field',
 		options: [
 			{
-				displayName: 'Fields',
-				name: 'fields',
+				displayName: 'By Files',
+				name: '_byFiles',
 				values: [
 					{
-						displayName: 'Language Id',
-						name: 'languageId',
-						type: 'options',
+						displayName: 'Language Ids',
+						name: 'languageIds',
+						type: 'multiOptions',
 						typeOptions: {
-							loadOptionsMethod: 'getLanguages'
+							loadOptionsMethod: 'getLanguagesMulti'
 						},
+						default: [],
+						description: 'Set of languages to which auto-translation should be applied. Get via [List Supported Languages](#operation/api.languages.getMany)',
+						required: true
+					},
+					{
+						displayName: 'File Ids',
+						name: 'fileIds',
+						type: 'multiOptions',
+						typeOptions: {
+							loadOptionsMethod: 'getProjectFilesMulti',
+							loadOptionsDependsOn: [
+								'projectId'
+							]
+						},
+						default: [],
+						description: 'Files array that should be translated\n\n__Note:__ Required unless `directoryIds` or `branchIds` is set'
+					},
+					{
+						displayName: 'Directory Ids',
+						name: 'directoryIds',
+						type: 'multiOptions',
+						typeOptions: {
+							loadOptionsMethod: 'getProjectDirectoriesMulti',
+							loadOptionsDependsOn: [
+								'projectId'
+							]
+						},
+						default: [],
+						description: 'Directories array that should be translated. Includes all nested files'
+					},
+					{
+						displayName: 'Branch Ids',
+						name: 'branchIds',
+						type: 'multiOptions',
+						typeOptions: {
+							loadOptionsMethod: 'getBranchesMulti',
+							loadOptionsDependsOn: [
+								'projectId'
+							]
+						},
+						default: [],
+						description: 'Branches array that should be translated. Includes all nested files'
+					},
+					{
+						displayName: 'Label Ids',
+						name: 'labelIds',
+						type: 'multiOptions',
+						typeOptions: {
+							loadOptionsMethod: 'getProjectLabelsMulti',
+							loadOptionsDependsOn: [
+								'projectId'
+							]
+						},
+						default: [],
+						description: 'Label Identifiers. Get via [List Labels](#operation/api.projects.labels.getMany)'
+					},
+					{
+						displayName: 'Exclude Label Ids',
+						name: 'excludeLabelIds',
+						type: 'multiOptions',
+						typeOptions: {
+							loadOptionsMethod: 'getProjectLabelsMulti',
+							loadOptionsDependsOn: [
+								'projectId'
+							]
+						},
+						default: [],
+						description: 'Label Identifiers. Get via [List Labels](#operation/api.projects.labels.getMany)'
+					},
+					{
+						displayName: 'Method',
+						name: 'method',
+						type: 'options',
 						default: '',
-						description: undefined
+						description: 'Defines auto-translation method. Available values:\n- \'tm\' – auto-translation via Translation Memory\n- \'mt\' – auto-translation via Machine Translation. \'mt\' should be used with `engineId` parameter\n- \'ai\' – auto-translation via AI. \'ai\' should be used with `aiPromptId` parameter',
+						options: [
+							{
+								name: '-',
+								value: ''
+							},
+							{
+								name: 'tm',
+								value: 'tm'
+							},
+							{
+								name: 'mt',
+								value: 'mt'
+							},
+							{
+								name: 'ai',
+								value: 'ai'
+							}
+						],
+						placeholder: 'mt'
+					},
+					{
+						displayName: 'Priority',
+						name: 'priority',
+						type: 'options',
+						default: '',
+						description: undefined,
+						options: [
+							{
+								name: '-',
+								value: ''
+							},
+							{
+								name: 'low',
+								value: 'low'
+							},
+							{
+								name: 'normal',
+								value: 'normal'
+							},
+							{
+								name: 'high',
+								value: 'high'
+							}
+						]
+					},
+					{
+						displayName: 'Engine Id',
+						name: 'engineId',
+						type: 'options',
+						default: '',
+						description: 'Machine Translation engine Identifier. Get via [List MTs](#operation/api.mts.getMany)',
+						typeOptions: {
+							loadOptionsMethod: 'getMTEngines'
+						}
+					},
+					{
+						displayName: 'Ai Prompt Id',
+						name: 'aiPromptId',
+						type: 'options',
+						default: '',
+						description: 'AI Prompt Identifier. Get via [List AI Prompts](#operation/api.ai.prompts.getMany)',
+						typeOptions: {
+							loadOptionsMethod: 'getAiPrompts'
+						}
+					},
+					{
+						displayName: 'Auto Approve Option',
+						name: 'autoApproveOption',
+						type: 'options',
+						default: '',
+						description: 'Defines which translations added by TM auto-translation should be auto-approved. Available values:\n- \'all\' – all\n- \'perfectMatchOnly\' – with perfect TM match\n- \'exceptAutoSubstituted\' – all (skip auto-substituted suggestions)\n- \'perfectMatchApprovedOnly\' - with perfect TM match (approved previously)\n- \'none\' – no auto-approve',
+						options: [
+							{
+								name: '-',
+								value: ''
+							},
+							{
+								name: 'all',
+								value: 'all'
+							},
+							{
+								name: 'exceptAutoSubstituted',
+								value: 'exceptAutoSubstituted'
+							},
+							{
+								name: 'perfectMatchApprovedOnly',
+								value: 'perfectMatchApprovedOnly'
+							},
+							{
+								name: 'perfectMatchOnly',
+								value: 'perfectMatchOnly'
+							},
+							{
+								name: 'none',
+								value: 'none'
+							}
+						]
+					},
+					{
+						displayName: 'Duplicate Translations',
+						name: 'duplicateTranslations',
+						type: 'boolean',
+						default: false,
+						description: 'Adds translations even if the same translation already exists. Default is `false`.\n\n__Note:__ Cannot be used when `replaceTranslationsOption` is `all` (replacing all translations already overrides duplicate handling).'
+					},
+					{
+						displayName: 'Skip Approved Translations',
+						name: 'skipApprovedTranslations',
+						type: 'boolean',
+						default: false,
+						description: 'Skip strings that already have approved translations. Default is `false`.\n\n__Note:__ Cannot be used together with `resetApprovalStatus`.'
+					},
+					{
+						displayName: 'Scope',
+						name: 'scope',
+						type: 'options',
+						default: '',
+						description: 'Which strings to apply auto-translation to. Default is `untranslated`. Available values:\n- \'untranslated\' – strings without an existing translation (default)\n- \'translated\' – strings that already have a translation (re-translation)\n- \'all\' – both untranslated and translated strings\n\n__Note:__ Cannot be used together with the deprecated `translateUntranslatedOnly`.',
+						options: [
+							{
+								name: '-',
+								value: ''
+							},
+							{
+								name: 'untranslated',
+								value: 'untranslated'
+							},
+							{
+								name: 'translated',
+								value: 'translated'
+							},
+							{
+								name: 'all',
+								value: 'all'
+							}
+						]
+					},
+					{
+						displayName: 'Translation Modified Before',
+						name: 'dateTime:translationModifiedBefore',
+						type: 'dateTime',
+						default: '',
+						description: 'Re-translates only if a string\'s current translation was modified prior to this date. Useful after modifying contextual resources like screenshots, style guides, or glossaries.\n\n__Note:__ Requires `scope` to be `translated` or `all`. Cannot be used with `scope: "untranslated"` or `translateUntranslatedOnly: true`.',
+						placeholder: '2026-01-01T00:00:00+00:00'
+					},
+					{
+						displayName: 'Replace Translations Option',
+						name: 'replaceTranslationsOption',
+						type: 'options',
+						default: '',
+						description: 'Defines whether to replace existing translations with new auto-translations. Default is `none`. Available values:\n- \'none\' – add the new translation alongside existing ones (default)\n- \'autoTranslated\' – replace auto-generated translations (TM, MT, AI). Human translations are kept\n- \'all\' – replace all existing translations\n\n__Note:__ Values other than `none` require `scope` to be `translated` or `all` (cannot be combined with `scope: "untranslated"` or `translateUntranslatedOnly: true`).',
+						options: [
+							{
+								name: '-',
+								value: ''
+							},
+							{
+								name: 'none',
+								value: 'none'
+							},
+							{
+								name: 'autoTranslated',
+								value: 'autoTranslated'
+							},
+							{
+								name: 'all',
+								value: 'all'
+							}
+						]
+					},
+					{
+						displayName: 'Reset Approval Status',
+						name: 'resetApprovalStatus',
+						type: 'boolean',
+						default: false,
+						description: 'Removes approval on existing translations when applying auto-translations. Default is `false`.\n\n__Note:__ Requires `scope` to be `translated` or `all`. Cannot be used together with `skipApprovedTranslations`, `autoApproveOption` (any value other than `none`), or when `replaceTranslationsOption` is `all` (replaced translations lose approval automatically). Cannot be used with `scope: "untranslated"` or `translateUntranslatedOnly: true`.'
+					},
+					{
+						displayName: 'Minimum Match Ratio',
+						name: 'minimumMatchRatio',
+						type: 'number',
+						default: 0,
+						description: 'Add translation when TM match is greater or equal to minimum match ratio. This argument will be ignored if `translateWithPerfectMatchOnly` is set.\n\n__Note:__ Works only with TM auto-translation method',
+						placeholder: '100'
+					},
+					{
+						displayName: 'Translate With Perfect Match Only',
+						name: 'translateWithPerfectMatchOnly',
+						type: 'boolean',
+						default: false,
+						description: 'Applies auto-translation only for the strings with perfect match (source text and contextual information are identical)\n\n__Note:__ Works only with TM auto-translation method'
+					},
+					{
+						displayName: 'Fallback Languages',
+						name: 'fallbackLanguages',
+						type: 'fixedCollection',
+						default: {},
+						description: 'Defines fallback languages mapping. The passed value should be an associative array containing both language id and array of fallback language ids:\n\n - `{languageId}` – Crowdin id for the specified language. Get via [List Supported Languages](#operation/api.languages.getMany)\n - `Array of strings` – an array containing fallback language ids. Get via [List Supported Languages](#operation/api.languages.getMany)\n\n__Note:__ Available only for TM Auto-Translation',
+						placeholder: 'Add Field',
+						options: [
+							{
+								displayName: 'Fields',
+								name: 'fields',
+								values: [
+									{
+										displayName: 'Language Id',
+										name: 'languageId',
+										type: 'options',
+										typeOptions: {
+											loadOptionsMethod: 'getLanguages'
+										},
+										default: '',
+										description: undefined
+									}
+								]
+							}
+						]
+					},
+					{
+						displayName: 'Custom Instruction',
+						name: 'customInstruction',
+						type: 'string',
+						default: '',
+						description: 'Custom instruction for AI auto-translation. This instruction will be appended to the AI prompt text.\n\n__Note:__ Available only for AI auto-translation method'
+					}
+				]
+			},
+			{
+				displayName: 'By Task',
+				name: '_byTask',
+				values: [
+					{
+						displayName: 'Task Id',
+						name: 'taskId',
+						type: 'options',
+						default: '',
+						description: 'Task Identifier. Get via [List Tasks](#operation/api.projects.tasks.getMany)',
+						required: true,
+						typeOptions: {
+							loadOptionsMethod: 'getProjectTasks',
+							loadOptionsDependsOn: [
+								'projectId'
+							]
+						}
+					},
+					{
+						displayName: 'Method',
+						name: 'method',
+						type: 'options',
+						default: '',
+						description: 'Defines auto-translation method. Available values:\n- \'tm\' – auto-translation via Translation Memory\n- \'mt\' – auto-translation via Machine Translation. \'mt\' should be used with `engineId` parameter\n- \'ai\' – auto-translation via AI. \'ai\' should be used with `aiPromptId` parameter',
+						options: [
+							{
+								name: '-',
+								value: ''
+							},
+							{
+								name: 'tm',
+								value: 'tm'
+							},
+							{
+								name: 'mt',
+								value: 'mt'
+							},
+							{
+								name: 'ai',
+								value: 'ai'
+							}
+						],
+						placeholder: 'mt'
+					},
+					{
+						displayName: 'Priority',
+						name: 'priority',
+						type: 'options',
+						default: '',
+						description: undefined,
+						options: [
+							{
+								name: '-',
+								value: ''
+							},
+							{
+								name: 'low',
+								value: 'low'
+							},
+							{
+								name: 'normal',
+								value: 'normal'
+							},
+							{
+								name: 'high',
+								value: 'high'
+							}
+						]
+					},
+					{
+						displayName: 'Engine Id',
+						name: 'engineId',
+						type: 'options',
+						default: '',
+						description: 'Machine Translation engine Identifier. Get via [List MTs](#operation/api.mts.getMany)',
+						typeOptions: {
+							loadOptionsMethod: 'getMTEngines'
+						}
+					},
+					{
+						displayName: 'Ai Prompt Id',
+						name: 'aiPromptId',
+						type: 'options',
+						default: '',
+						description: 'AI Prompt Identifier. Get via [List AI Prompts](#operation/api.ai.prompts.getMany)',
+						typeOptions: {
+							loadOptionsMethod: 'getAiPrompts'
+						}
+					},
+					{
+						displayName: 'Auto Approve Option',
+						name: 'autoApproveOption',
+						type: 'options',
+						default: '',
+						description: 'Defines which translations added by TM auto-translation should be auto-approved. Available values:\n- \'all\' – all\n- \'perfectMatchOnly\' – with perfect TM match\n- \'exceptAutoSubstituted\' – all (skip auto-substituted suggestions)\n- \'perfectMatchApprovedOnly\' - with perfect TM match (approved previously)\n- \'none\' – no auto-approve',
+						options: [
+							{
+								name: '-',
+								value: ''
+							},
+							{
+								name: 'all',
+								value: 'all'
+							},
+							{
+								name: 'exceptAutoSubstituted',
+								value: 'exceptAutoSubstituted'
+							},
+							{
+								name: 'perfectMatchApprovedOnly',
+								value: 'perfectMatchApprovedOnly'
+							},
+							{
+								name: 'perfectMatchOnly',
+								value: 'perfectMatchOnly'
+							},
+							{
+								name: 'none',
+								value: 'none'
+							}
+						]
+					},
+					{
+						displayName: 'Duplicate Translations',
+						name: 'duplicateTranslations',
+						type: 'boolean',
+						default: false,
+						description: 'Adds translations even if the same translation already exists. Default is `false`.\n\n__Note:__ Cannot be used when `replaceTranslationsOption` is `all` (replacing all translations already overrides duplicate handling).'
+					},
+					{
+						displayName: 'Skip Approved Translations',
+						name: 'skipApprovedTranslations',
+						type: 'boolean',
+						default: false,
+						description: 'Skip strings that already have approved translations. Default is `false`.\n\n__Note:__ Cannot be used together with `resetApprovalStatus`.'
+					},
+					{
+						displayName: 'Scope',
+						name: 'scope',
+						type: 'options',
+						default: '',
+						description: 'Which strings to apply auto-translation to. Default is `untranslated`. Available values:\n- \'untranslated\' – strings without an existing translation (default)\n- \'translated\' – strings that already have a translation (re-translation)\n- \'all\' – both untranslated and translated strings\n\n__Note:__ Cannot be used together with the deprecated `translateUntranslatedOnly`.',
+						options: [
+							{
+								name: '-',
+								value: ''
+							},
+							{
+								name: 'untranslated',
+								value: 'untranslated'
+							},
+							{
+								name: 'translated',
+								value: 'translated'
+							},
+							{
+								name: 'all',
+								value: 'all'
+							}
+						]
+					},
+					{
+						displayName: 'Translation Modified Before',
+						name: 'dateTime:translationModifiedBefore',
+						type: 'dateTime',
+						default: '',
+						description: 'Re-translates only if a string\'s current translation was modified prior to this date. Useful after modifying contextual resources like screenshots, style guides, or glossaries.\n\n__Note:__ Requires `scope` to be `translated` or `all`. Cannot be used with `scope: "untranslated"` or `translateUntranslatedOnly: true`.',
+						placeholder: '2026-01-01T00:00:00+00:00'
+					},
+					{
+						displayName: 'Replace Translations Option',
+						name: 'replaceTranslationsOption',
+						type: 'options',
+						default: '',
+						description: 'Defines whether to replace existing translations with new auto-translations. Default is `none`. Available values:\n- \'none\' – add the new translation alongside existing ones (default)\n- \'autoTranslated\' – replace auto-generated translations (TM, MT, AI). Human translations are kept\n- \'all\' – replace all existing translations\n\n__Note:__ Values other than `none` require `scope` to be `translated` or `all` (cannot be combined with `scope: "untranslated"` or `translateUntranslatedOnly: true`).',
+						options: [
+							{
+								name: '-',
+								value: ''
+							},
+							{
+								name: 'none',
+								value: 'none'
+							},
+							{
+								name: 'autoTranslated',
+								value: 'autoTranslated'
+							},
+							{
+								name: 'all',
+								value: 'all'
+							}
+						]
+					},
+					{
+						displayName: 'Reset Approval Status',
+						name: 'resetApprovalStatus',
+						type: 'boolean',
+						default: false,
+						description: 'Removes approval on existing translations when applying auto-translations. Default is `false`.\n\n__Note:__ Requires `scope` to be `translated` or `all`. Cannot be used together with `skipApprovedTranslations`, `autoApproveOption` (any value other than `none`), or when `replaceTranslationsOption` is `all` (replaced translations lose approval automatically). Cannot be used with `scope: "untranslated"` or `translateUntranslatedOnly: true`.'
+					},
+					{
+						displayName: 'Minimum Match Ratio',
+						name: 'minimumMatchRatio',
+						type: 'number',
+						default: 0,
+						description: 'Add translation when TM match is greater or equal to minimum match ratio. This argument will be ignored if `translateWithPerfectMatchOnly` is set.\n\n__Note:__ Works only with TM auto-translation method',
+						placeholder: '100'
+					},
+					{
+						displayName: 'Translate With Perfect Match Only',
+						name: 'translateWithPerfectMatchOnly',
+						type: 'boolean',
+						default: false,
+						description: 'Applies auto-translation only for the strings with perfect match (source text and contextual information are identical)\n\n__Note:__ Works only with TM auto-translation method'
+					},
+					{
+						displayName: 'Fallback Languages',
+						name: 'fallbackLanguages',
+						type: 'fixedCollection',
+						default: {},
+						description: 'Defines fallback languages mapping. The passed value should be an associative array containing both language id and array of fallback language ids:\n\n - `{languageId}` – Crowdin id for the specified language. Get via [List Supported Languages](#operation/api.languages.getMany)\n - `Array of strings` – an array containing fallback language ids. Get via [List Supported Languages](#operation/api.languages.getMany)\n\n__Note:__ Available only for TM Auto-Translation',
+						placeholder: 'Add Field',
+						options: [
+							{
+								displayName: 'Fields',
+								name: 'fields',
+								values: [
+									{
+										displayName: 'Language Id',
+										name: 'languageId',
+										type: 'options',
+										typeOptions: {
+											loadOptionsMethod: 'getLanguages'
+										},
+										default: '',
+										description: undefined
+									}
+								]
+							}
+						]
+					},
+					{
+						displayName: 'Custom Instruction',
+						name: 'customInstruction',
+						type: 'string',
+						default: '',
+						description: 'Custom instruction for AI auto-translation. This instruction will be appended to the AI prompt text.\n\n__Note:__ Available only for AI auto-translation method'
 					}
 				]
 			}
-		]
-	},
-	{
-		displayName: 'Label Ids',
-		name: 'labelIds',
-		type: 'multiOptions',
-		default: [],
-		description: 'Label Identifiers. Get via [List Labels](#operation/api.projects.labels.getMany)',
+		],
 		routing: {
 			send: {
-				property: 'labelIds',
+				preSend: [
+					normalizeRootBody
+				],
+				property: '_body',
 				propertyInDotNotation: false,
 				type: 'body',
 				value: '={{ $value }}'
-			}
-		},
-		displayOptions: {
-			show: {
-				resource: [
-					'translations'
-				],
-				operation: [
-					'api.projects.pre-translations.post'
-				]
-			}
-		},
-		typeOptions: {
-			loadOptionsMethod: 'getProjectLabelsMulti',
-			loadOptionsDependsOn: [
-				'projectId'
-			]
-		}
-	},
-	{
-		displayName: 'Exclude Label Ids',
-		name: 'excludeLabelIds',
-		type: 'multiOptions',
-		default: [],
-		description: 'Label Identifiers. Get via [List Labels](#operation/api.projects.labels.getMany)',
-		routing: {
-			send: {
-				property: 'excludeLabelIds',
-				propertyInDotNotation: false,
-				type: 'body',
-				value: '={{ $value }}'
-			}
-		},
-		displayOptions: {
-			show: {
-				resource: [
-					'translations'
-				],
-				operation: [
-					'api.projects.pre-translations.post'
-				]
-			}
-		},
-		typeOptions: {
-			loadOptionsMethod: 'getProjectLabelsMulti',
-			loadOptionsDependsOn: [
-				'projectId'
-			]
-		}
-	},
-	{
-		displayName: 'Custom Instruction',
-		name: 'customInstruction',
-		type: 'string',
-		default: '',
-		description: 'Custom instruction for AI auto-translation. This instruction will be appended to the AI prompt text.\n\n__Note:__ Available only for AI auto-translation method',
-		routing: {
-			send: {
-				property: 'customInstruction',
-				propertyInDotNotation: false,
-				type: 'body',
-				value: '={{ $value || undefined }}'
-			}
-		},
-		displayOptions: {
-			show: {
-				resource: [
-					'translations'
-				],
-				operation: [
-					'api.projects.pre-translations.post'
-				]
 			}
 		}
 	},
@@ -4560,31 +4467,6 @@ export const translationsProperties: INodeProperties[] = [
 					{
 						name: 'finished',
 						value: 'finished'
-					}
-				]
-			},
-			{
-				displayName: 'Priority',
-				name: 'priority',
-				type: 'options',
-				default: '',
-				description: 'Value for /priority',
-				options: [
-					{
-						name: '-',
-						value: ''
-					},
-					{
-						name: 'low',
-						value: 'low'
-					},
-					{
-						name: 'normal',
-						value: 'normal'
-					},
-					{
-						name: 'high',
-						value: 'high'
 					}
 				]
 			}

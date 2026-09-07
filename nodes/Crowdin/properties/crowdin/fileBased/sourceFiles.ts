@@ -3555,6 +3555,286 @@ export const sourceFilesProperties: INodeProperties[] = [
 						typeOptions: {
 							loadOptionsMethod: 'getStorages'
 						}
+					},
+					{
+						displayName: 'Translate Doc Properties',
+						name: 'translateDocProperties',
+						type: 'boolean',
+						default: false,
+						description: 'When checked, exposes document properties such as title, subject, and creator for translation.\n\n__Note:__ Works only for files with the following extensions: *.docx, *.dotx, *.docm, *.dotm, *.xlsx, *.xltx, *.xlsm, *.xltm'
+					},
+					{
+						displayName: 'Translate Comments',
+						name: 'translateComments',
+						type: 'boolean',
+						default: true,
+						description: 'When checked, exposes comments for translation.\n\n__Note:__ Works only for files with the following extensions: *.docx, *.dotx, *.docm, *.dotm, *.xlsx, *.xltx, *.xlsm, *.xltm'
+					},
+					{
+						displayName: 'Ignore Whitespace Styles',
+						name: 'ignoreWhitespaceStyles',
+						type: 'boolean',
+						default: false,
+						description: 'When checked, formatting that differs only in whitespace no longer produces separate tags.\n\n__Note:__ Can be set only when `cleanTagsAggressively` is enabled'
+					},
+					{
+						displayName: 'Add Tab As Character',
+						name: 'addTabAsCharacter',
+						type: 'boolean',
+						default: false,
+						description: 'When checked, a tab inside a text run is exposed as a character instead of a tag.'
+					},
+					{
+						displayName: 'Add Line Separator As Character',
+						name: 'addLineSeparatorAsCharacter',
+						type: 'boolean',
+						default: false,
+						description: 'When checked, a line break inside a text run is exposed as `lineSeparatorReplacement` instead of a tag.'
+					},
+					{
+						displayName: 'Line Separator Replacement',
+						name: 'lineSeparatorReplacement',
+						type: 'string',
+						default: '',
+						description: 'Character that replaces a line break when `addLineSeparatorAsCharacter` is enabled.\n\n__Note:__ Must be exactly one character',
+						placeholder: '\n'
+					},
+					{
+						displayName: 'Replace No Break Hyphen Tag',
+						name: 'replaceNoBreakHyphenTag',
+						type: 'boolean',
+						default: false,
+						description: 'When checked, a non-breaking hyphen is exposed as a character instead of a tag.'
+					},
+					{
+						displayName: 'Ignore Soft Hyphen Tag',
+						name: 'ignoreSoftHyphenTag',
+						type: 'boolean',
+						default: false,
+						description: 'When checked, soft hyphens are removed instead of being exposed as tags.'
+					},
+					{
+						displayName: 'Complex Field Definitions To Extract',
+						name: 'complexFieldDefinitionsToExtract',
+						type: 'fixedCollection',
+						typeOptions: {
+							multipleValues: true
+						},
+						default: {},
+						description: 'Word complex field types whose text is exposed for translation.\n\n__Note:__ `HYPERLINK` is always extracted and can\'t be removed',
+						placeholder: 'Add Item',
+						options: [
+							{
+								displayName: 'Items',
+								name: 'items',
+								values: [
+									{
+										displayName: 'Value',
+										name: '_value',
+										type: 'string',
+										default: '',
+										description: undefined
+									}
+								]
+							}
+						]
+					},
+					{
+						displayName: 'Translate Word Headers Footers',
+						name: 'translateWordHeadersFooters',
+						type: 'boolean',
+						default: true,
+						description: 'When checked, exposes headers and footers for translation.\n\n__Note:__ Works only for files with the following extensions: *.docx, *.dotx, *.docm, *.dotm'
+					},
+					{
+						displayName: 'Translate Word Graphic Name',
+						name: 'translateWordGraphicName',
+						type: 'boolean',
+						default: true,
+						description: 'When checked, exposes the name of a shape or image for translation.\n\n__Note:__ Works only for files with the following extensions: *.docx, *.dotx, *.docm, *.dotm, *.pptx, *.potx, *.ppsx, *.pptm, *.potm, *.ppsm'
+					},
+					{
+						displayName: 'Translate Word Graphic Description',
+						name: 'translateWordGraphicDescription',
+						type: 'boolean',
+						default: false,
+						description: 'When checked, exposes the alternative text of a shape or image for translation.\n\n__Note:__ Works only for files with the following extensions: *.docx, *.dotx, *.docm, *.dotm, *.pptx, *.potx, *.ppsx, *.pptm, *.potm, *.ppsm'
+					},
+					{
+						displayName: 'Ignore Word Font Colors',
+						name: 'ignoreWordFontColors',
+						type: 'boolean',
+						default: false,
+						description: 'When checked, excludes text whose font color falls between `wordFontColorsMinIgnoranceThreshold` and `wordFontColorsMaxIgnoranceThreshold` from translation.\n\n__Note:__ Works only for files with the following extensions: *.docx, *.dotx, *.docm, *.dotm'
+					},
+					{
+						displayName: 'Word Font Colors Min Ignorance Threshold',
+						name: 'wordFontColorsMinIgnoranceThreshold',
+						type: 'string',
+						default: '',
+						description: 'Darkest font color ignored when `ignoreWordFontColors` is enabled, as six hexadecimal digits with an optional leading hash. Empty means black. Must not be lighter than `wordFontColorsMaxIgnoranceThreshold` in any color channel.\n\n__Note:__ Works only for files with the following extensions: *.docx, *.dotx, *.docm, *.dotm',
+						placeholder: 'A6A6A6'
+					},
+					{
+						displayName: 'Word Font Colors Max Ignorance Threshold',
+						name: 'wordFontColorsMaxIgnoranceThreshold',
+						type: 'string',
+						default: '',
+						description: 'Lightest font color ignored when `ignoreWordFontColors` is enabled, as six hexadecimal digits with an optional leading hash. Empty means white.\n\n__Note:__ Works only for files with the following extensions: *.docx, *.dotx, *.docm, *.dotm',
+						placeholder: 'FFFFFF'
+					},
+					{
+						displayName: 'Exclude Word Styles',
+						name: 'excludeWordStyles',
+						type: 'fixedCollection',
+						typeOptions: {
+							multipleValues: true
+						},
+						default: {},
+						description: 'Paragraph style names singled out by `translateWordInExcludeStyleMode`, for example `Heading1`.\n\n__Note:__ Works only for files with the following extensions: *.docx, *.dotx, *.docm, *.dotm',
+						placeholder: 'Add Item',
+						options: [
+							{
+								displayName: 'Items',
+								name: 'items',
+								values: [
+									{
+										displayName: 'Value',
+										name: '_value',
+										type: 'string',
+										default: '',
+										description: undefined
+									}
+								]
+							}
+						]
+					},
+					{
+						displayName: 'Translate Word In Exclude Style Mode',
+						name: 'translateWordInExcludeStyleMode',
+						type: 'boolean',
+						default: true,
+						description: 'How `excludeWordStyles` is read. If `true`, the listed styles are excluded from translation; if `false`, only they are translated.\n\n__Note:__ Works only for files with the following extensions: *.docx, *.dotx, *.docm, *.dotm'
+					},
+					{
+						displayName: 'Word Highlight Colors',
+						name: 'wordHighlightColors',
+						type: 'fixedCollection',
+						typeOptions: {
+							multipleValues: true
+						},
+						default: {},
+						description: 'Word highlight colors singled out by `translateWordInExcludeHighlightMode`. One of: `black`, `blue`, `cyan`, `green`, `magenta`, `red`, `yellow`, `white`, `darkBlue`, `darkCyan`, `darkGreen`, `darkMagenta`, `darkRed`, `darkYellow`, `darkGray`, `lightGray`, `none`.\n\n__Note:__ Works only for files with the following extensions: *.docx, *.dotx, *.docm, *.dotm',
+						placeholder: 'Add Item',
+						options: [
+							{
+								displayName: 'Items',
+								name: 'items',
+								values: [
+									{
+										displayName: 'Value',
+										name: '_value',
+										type: 'string',
+										default: '',
+										description: undefined
+									}
+								]
+							}
+						]
+					},
+					{
+						displayName: 'Translate Word In Exclude Highlight Mode',
+						name: 'translateWordInExcludeHighlightMode',
+						type: 'boolean',
+						default: true,
+						description: 'How `wordHighlightColors` is read. If `true`, text with the listed highlights is excluded from translation; if `false`, only it is translated.\n\n__Note:__ Works only for files with the following extensions: *.docx, *.dotx, *.docm, *.dotm'
+					},
+					{
+						displayName: 'Translate Word Exclude Colors',
+						name: 'translateWordExcludeColors',
+						type: 'boolean',
+						default: false,
+						description: 'When checked, excludes text whose color is listed in `wordExcludedColors` from translation.\n\n__Note:__ Works only for files with the following extensions: *.docx, *.dotx, *.docm, *.dotm'
+					},
+					{
+						displayName: 'Word Excluded Colors',
+						name: 'wordExcludedColors',
+						type: 'fixedCollection',
+						typeOptions: {
+							multipleValues: true
+						},
+						default: {},
+						description: 'Text colors excluded from translation when `translateWordExcludeColors` is enabled, each six hexadecimal digits with an optional leading hash.\n\n__Note:__ Works only for files with the following extensions: *.docx, *.dotx, *.docm, *.dotm',
+						placeholder: 'Add Item',
+						options: [
+							{
+								displayName: 'Items',
+								name: 'items',
+								values: [
+									{
+										displayName: 'Value',
+										name: '_value',
+										type: 'string',
+										default: '',
+										description: undefined
+									}
+								]
+							}
+						]
+					},
+					{
+						displayName: 'Translate Excel Cells Copied',
+						name: 'translateExcelCellsCopied',
+						type: 'boolean',
+						default: true,
+						description: 'When checked, a cell whose text is shared with another cell is exposed once for translation.\n\n__Note:__ Works only for files with the following extensions: *.xlsx, *.xltx, *.xlsm, *.xltm'
+					},
+					{
+						displayName: 'Translate Excel Sheet Names',
+						name: 'translateExcelSheetNames',
+						type: 'boolean',
+						default: false,
+						description: 'When checked, exposes worksheet names for translation.\n\n__Note:__ Works only for files with the following extensions: *.xlsx, *.xltx, *.xlsm, *.xltm'
+					},
+					{
+						displayName: 'Excel Excluded Colors',
+						name: 'excelExcludedColors',
+						type: 'fixedCollection',
+						typeOptions: {
+							multipleValues: true
+						},
+						default: {},
+						description: 'Cell fill colors whose cells are excluded from translation, each the six-digit RGB with an optional leading hash, not the eight-digit ARGB stored in the file.\n\n__Note:__ Works only for files with the following extensions: *.xlsx, *.xltx, *.xlsm, *.xltm',
+						placeholder: 'Add Item',
+						options: [
+							{
+								displayName: 'Items',
+								name: 'items',
+								values: [
+									{
+										displayName: 'Value',
+										name: '_value',
+										type: 'string',
+										default: '',
+										description: undefined
+									}
+								]
+							}
+						]
+					},
+					{
+						displayName: 'Translate Excel Diagram Data',
+						name: 'translateExcelDiagramData',
+						type: 'boolean',
+						default: false,
+						description: 'When checked, exposes text inside SmartArt and diagram data for translation.\n\n__Note:__ Works only for files with the following extensions: *.xlsx, *.xltx, *.xlsm, *.xltm'
+					},
+					{
+						displayName: 'Translate Excel Drawings',
+						name: 'translateExcelDrawings',
+						type: 'boolean',
+						default: false,
+						description: 'When checked, exposes text inside drawings and shapes on a worksheet for translation.\n\n__Note:__ Works only for files with the following extensions: *.xlsx, *.xltx, *.xlsm, *.xltm'
 					}
 				]
 			},
@@ -4552,6 +4832,33 @@ export const sourceFilesProperties: INodeProperties[] = [
 						]
 					}
 				]
+			},
+			{
+				displayName: 'Docx File Export Options',
+				name: '_docxFileExportOptions',
+				values: [
+					{
+						displayName: 'Export Pattern',
+						name: 'exportPattern',
+						type: 'string',
+						default: '',
+						description: 'File export pattern. Defines file name and path in resulting translations bundle\n\n__Note:__ Can\'t contain `: * ? " < > |` symbols'
+					},
+					{
+						displayName: 'Allow Word Style Optimization',
+						name: 'allowWordStyleOptimization',
+						type: 'boolean',
+						default: true,
+						description: 'When checked, run properties in the exported document are minified against the style definitions instead of being kept verbatim.'
+					},
+					{
+						displayName: 'Translate Excel Exclude Colors',
+						name: 'translateExcelExcludeColors',
+						type: 'boolean',
+						default: false,
+						description: 'When checked, excludes colored text runs inside a spreadsheet cell from translation.\n\n__Note:__ Applied when the file is parsed, even though it is set through `exportOptions`'
+					}
+				]
 			}
 		],
 		routing: {
@@ -5167,6 +5474,286 @@ export const sourceFilesProperties: INodeProperties[] = [
 										typeOptions: {
 											loadOptionsMethod: 'getStorages'
 										}
+									},
+									{
+										displayName: 'Translate Doc Properties',
+										name: 'translateDocProperties',
+										type: 'boolean',
+										default: false,
+										description: 'When checked, exposes document properties such as title, subject, and creator for translation.\n\n__Note:__ Works only for files with the following extensions: *.docx, *.dotx, *.docm, *.dotm, *.xlsx, *.xltx, *.xlsm, *.xltm'
+									},
+									{
+										displayName: 'Translate Comments',
+										name: 'translateComments',
+										type: 'boolean',
+										default: true,
+										description: 'When checked, exposes comments for translation.\n\n__Note:__ Works only for files with the following extensions: *.docx, *.dotx, *.docm, *.dotm, *.xlsx, *.xltx, *.xlsm, *.xltm'
+									},
+									{
+										displayName: 'Ignore Whitespace Styles',
+										name: 'ignoreWhitespaceStyles',
+										type: 'boolean',
+										default: false,
+										description: 'When checked, formatting that differs only in whitespace no longer produces separate tags.\n\n__Note:__ Can be set only when `cleanTagsAggressively` is enabled'
+									},
+									{
+										displayName: 'Add Tab As Character',
+										name: 'addTabAsCharacter',
+										type: 'boolean',
+										default: false,
+										description: 'When checked, a tab inside a text run is exposed as a character instead of a tag.'
+									},
+									{
+										displayName: 'Add Line Separator As Character',
+										name: 'addLineSeparatorAsCharacter',
+										type: 'boolean',
+										default: false,
+										description: 'When checked, a line break inside a text run is exposed as `lineSeparatorReplacement` instead of a tag.'
+									},
+									{
+										displayName: 'Line Separator Replacement',
+										name: 'lineSeparatorReplacement',
+										type: 'string',
+										default: '',
+										description: 'Character that replaces a line break when `addLineSeparatorAsCharacter` is enabled.\n\n__Note:__ Must be exactly one character',
+										placeholder: '\n'
+									},
+									{
+										displayName: 'Replace No Break Hyphen Tag',
+										name: 'replaceNoBreakHyphenTag',
+										type: 'boolean',
+										default: false,
+										description: 'When checked, a non-breaking hyphen is exposed as a character instead of a tag.'
+									},
+									{
+										displayName: 'Ignore Soft Hyphen Tag',
+										name: 'ignoreSoftHyphenTag',
+										type: 'boolean',
+										default: false,
+										description: 'When checked, soft hyphens are removed instead of being exposed as tags.'
+									},
+									{
+										displayName: 'Complex Field Definitions To Extract',
+										name: 'complexFieldDefinitionsToExtract',
+										type: 'fixedCollection',
+										typeOptions: {
+											multipleValues: true
+										},
+										default: {},
+										description: 'Word complex field types whose text is exposed for translation.\n\n__Note:__ `HYPERLINK` is always extracted and can\'t be removed',
+										placeholder: 'Add Item',
+										options: [
+											{
+												displayName: 'Items',
+												name: 'items',
+												values: [
+													{
+														displayName: 'Value',
+														name: '_value',
+														type: 'string',
+														default: '',
+														description: undefined
+													}
+												]
+											}
+										]
+									},
+									{
+										displayName: 'Translate Word Headers Footers',
+										name: 'translateWordHeadersFooters',
+										type: 'boolean',
+										default: true,
+										description: 'When checked, exposes headers and footers for translation.\n\n__Note:__ Works only for files with the following extensions: *.docx, *.dotx, *.docm, *.dotm'
+									},
+									{
+										displayName: 'Translate Word Graphic Name',
+										name: 'translateWordGraphicName',
+										type: 'boolean',
+										default: true,
+										description: 'When checked, exposes the name of a shape or image for translation.\n\n__Note:__ Works only for files with the following extensions: *.docx, *.dotx, *.docm, *.dotm, *.pptx, *.potx, *.ppsx, *.pptm, *.potm, *.ppsm'
+									},
+									{
+										displayName: 'Translate Word Graphic Description',
+										name: 'translateWordGraphicDescription',
+										type: 'boolean',
+										default: false,
+										description: 'When checked, exposes the alternative text of a shape or image for translation.\n\n__Note:__ Works only for files with the following extensions: *.docx, *.dotx, *.docm, *.dotm, *.pptx, *.potx, *.ppsx, *.pptm, *.potm, *.ppsm'
+									},
+									{
+										displayName: 'Ignore Word Font Colors',
+										name: 'ignoreWordFontColors',
+										type: 'boolean',
+										default: false,
+										description: 'When checked, excludes text whose font color falls between `wordFontColorsMinIgnoranceThreshold` and `wordFontColorsMaxIgnoranceThreshold` from translation.\n\n__Note:__ Works only for files with the following extensions: *.docx, *.dotx, *.docm, *.dotm'
+									},
+									{
+										displayName: 'Word Font Colors Min Ignorance Threshold',
+										name: 'wordFontColorsMinIgnoranceThreshold',
+										type: 'string',
+										default: '',
+										description: 'Darkest font color ignored when `ignoreWordFontColors` is enabled, as six hexadecimal digits with an optional leading hash. Empty means black. Must not be lighter than `wordFontColorsMaxIgnoranceThreshold` in any color channel.\n\n__Note:__ Works only for files with the following extensions: *.docx, *.dotx, *.docm, *.dotm',
+										placeholder: 'A6A6A6'
+									},
+									{
+										displayName: 'Word Font Colors Max Ignorance Threshold',
+										name: 'wordFontColorsMaxIgnoranceThreshold',
+										type: 'string',
+										default: '',
+										description: 'Lightest font color ignored when `ignoreWordFontColors` is enabled, as six hexadecimal digits with an optional leading hash. Empty means white.\n\n__Note:__ Works only for files with the following extensions: *.docx, *.dotx, *.docm, *.dotm',
+										placeholder: 'FFFFFF'
+									},
+									{
+										displayName: 'Exclude Word Styles',
+										name: 'excludeWordStyles',
+										type: 'fixedCollection',
+										typeOptions: {
+											multipleValues: true
+										},
+										default: {},
+										description: 'Paragraph style names singled out by `translateWordInExcludeStyleMode`, for example `Heading1`.\n\n__Note:__ Works only for files with the following extensions: *.docx, *.dotx, *.docm, *.dotm',
+										placeholder: 'Add Item',
+										options: [
+											{
+												displayName: 'Items',
+												name: 'items',
+												values: [
+													{
+														displayName: 'Value',
+														name: '_value',
+														type: 'string',
+														default: '',
+														description: undefined
+													}
+												]
+											}
+										]
+									},
+									{
+										displayName: 'Translate Word In Exclude Style Mode',
+										name: 'translateWordInExcludeStyleMode',
+										type: 'boolean',
+										default: true,
+										description: 'How `excludeWordStyles` is read. If `true`, the listed styles are excluded from translation; if `false`, only they are translated.\n\n__Note:__ Works only for files with the following extensions: *.docx, *.dotx, *.docm, *.dotm'
+									},
+									{
+										displayName: 'Word Highlight Colors',
+										name: 'wordHighlightColors',
+										type: 'fixedCollection',
+										typeOptions: {
+											multipleValues: true
+										},
+										default: {},
+										description: 'Word highlight colors singled out by `translateWordInExcludeHighlightMode`. One of: `black`, `blue`, `cyan`, `green`, `magenta`, `red`, `yellow`, `white`, `darkBlue`, `darkCyan`, `darkGreen`, `darkMagenta`, `darkRed`, `darkYellow`, `darkGray`, `lightGray`, `none`.\n\n__Note:__ Works only for files with the following extensions: *.docx, *.dotx, *.docm, *.dotm',
+										placeholder: 'Add Item',
+										options: [
+											{
+												displayName: 'Items',
+												name: 'items',
+												values: [
+													{
+														displayName: 'Value',
+														name: '_value',
+														type: 'string',
+														default: '',
+														description: undefined
+													}
+												]
+											}
+										]
+									},
+									{
+										displayName: 'Translate Word In Exclude Highlight Mode',
+										name: 'translateWordInExcludeHighlightMode',
+										type: 'boolean',
+										default: true,
+										description: 'How `wordHighlightColors` is read. If `true`, text with the listed highlights is excluded from translation; if `false`, only it is translated.\n\n__Note:__ Works only for files with the following extensions: *.docx, *.dotx, *.docm, *.dotm'
+									},
+									{
+										displayName: 'Translate Word Exclude Colors',
+										name: 'translateWordExcludeColors',
+										type: 'boolean',
+										default: false,
+										description: 'When checked, excludes text whose color is listed in `wordExcludedColors` from translation.\n\n__Note:__ Works only for files with the following extensions: *.docx, *.dotx, *.docm, *.dotm'
+									},
+									{
+										displayName: 'Word Excluded Colors',
+										name: 'wordExcludedColors',
+										type: 'fixedCollection',
+										typeOptions: {
+											multipleValues: true
+										},
+										default: {},
+										description: 'Text colors excluded from translation when `translateWordExcludeColors` is enabled, each six hexadecimal digits with an optional leading hash.\n\n__Note:__ Works only for files with the following extensions: *.docx, *.dotx, *.docm, *.dotm',
+										placeholder: 'Add Item',
+										options: [
+											{
+												displayName: 'Items',
+												name: 'items',
+												values: [
+													{
+														displayName: 'Value',
+														name: '_value',
+														type: 'string',
+														default: '',
+														description: undefined
+													}
+												]
+											}
+										]
+									},
+									{
+										displayName: 'Translate Excel Cells Copied',
+										name: 'translateExcelCellsCopied',
+										type: 'boolean',
+										default: true,
+										description: 'When checked, a cell whose text is shared with another cell is exposed once for translation.\n\n__Note:__ Works only for files with the following extensions: *.xlsx, *.xltx, *.xlsm, *.xltm'
+									},
+									{
+										displayName: 'Translate Excel Sheet Names',
+										name: 'translateExcelSheetNames',
+										type: 'boolean',
+										default: false,
+										description: 'When checked, exposes worksheet names for translation.\n\n__Note:__ Works only for files with the following extensions: *.xlsx, *.xltx, *.xlsm, *.xltm'
+									},
+									{
+										displayName: 'Excel Excluded Colors',
+										name: 'excelExcludedColors',
+										type: 'fixedCollection',
+										typeOptions: {
+											multipleValues: true
+										},
+										default: {},
+										description: 'Cell fill colors whose cells are excluded from translation, each the six-digit RGB with an optional leading hash, not the eight-digit ARGB stored in the file.\n\n__Note:__ Works only for files with the following extensions: *.xlsx, *.xltx, *.xlsm, *.xltm',
+										placeholder: 'Add Item',
+										options: [
+											{
+												displayName: 'Items',
+												name: 'items',
+												values: [
+													{
+														displayName: 'Value',
+														name: '_value',
+														type: 'string',
+														default: '',
+														description: undefined
+													}
+												]
+											}
+										]
+									},
+									{
+										displayName: 'Translate Excel Diagram Data',
+										name: 'translateExcelDiagramData',
+										type: 'boolean',
+										default: false,
+										description: 'When checked, exposes text inside SmartArt and diagram data for translation.\n\n__Note:__ Works only for files with the following extensions: *.xlsx, *.xltx, *.xlsm, *.xltm'
+									},
+									{
+										displayName: 'Translate Excel Drawings',
+										name: 'translateExcelDrawings',
+										type: 'boolean',
+										default: false,
+										description: 'When checked, exposes text inside drawings and shapes on a worksheet for translation.\n\n__Note:__ Works only for files with the following extensions: *.xlsx, *.xltx, *.xlsm, *.xltm'
 									}
 								]
 							},
@@ -6094,6 +6681,33 @@ export const sourceFilesProperties: INodeProperties[] = [
 												value: 'evenly_distribute_cells'
 											}
 										]
+									}
+								]
+							},
+							{
+								displayName: 'Docx File Export Options',
+								name: '_docxFileExportOptions',
+								values: [
+									{
+										displayName: 'Export Pattern',
+										name: 'exportPattern',
+										type: 'string',
+										default: '',
+										description: 'File export pattern. Defines file name and path in resulting translations bundle\n\n__Note:__ Can\'t contain `: * ? " < > |` symbols'
+									},
+									{
+										displayName: 'Allow Word Style Optimization',
+										name: 'allowWordStyleOptimization',
+										type: 'boolean',
+										default: true,
+										description: 'When checked, run properties in the exported document are minified against the style definitions instead of being kept verbatim.'
+									},
+									{
+										displayName: 'Translate Excel Exclude Colors',
+										name: 'translateExcelExcludeColors',
+										type: 'boolean',
+										default: false,
+										description: 'When checked, excludes colored text runs inside a spreadsheet cell from translation.\n\n__Note:__ Applied when the file is parsed, even though it is set through `exportOptions`'
 									}
 								]
 							}
