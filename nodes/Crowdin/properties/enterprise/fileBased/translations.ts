@@ -2276,6 +2276,14 @@ export const translationsProperties: INodeProperties[] = [
 						placeholder: '2026-01-01T00:00:00+00:00'
 					},
 					{
+						displayName: 'Translation Modified After',
+						name: 'dateTime:translationModifiedAfter',
+						type: 'dateTime',
+						default: '',
+						description: 'Re-translates only if a string\'s current translation was modified after this date. Can be combined with `translationModifiedBefore` to define a date range.\n\n__Note:__ Cannot be later than `translationModifiedBefore`. Requires `scope` to be `translated` or `all`. Cannot be used with `scope: "untranslated"` or `translateUntranslatedOnly: true`.',
+						placeholder: '2026-01-01T00:00:00+00:00'
+					},
+					{
 						displayName: 'Replace Translations Option',
 						name: 'replaceTranslationsOption',
 						type: 'options',
@@ -2524,6 +2532,14 @@ export const translationsProperties: INodeProperties[] = [
 						type: 'dateTime',
 						default: '',
 						description: 'Re-translates only if a string\'s current translation was modified prior to this date. Useful after modifying contextual resources like screenshots, style guides, or glossaries.\n\n__Note:__ Requires `scope` to be `translated` or `all`. Cannot be used with `scope: "untranslated"` or `translateUntranslatedOnly: true`.',
+						placeholder: '2026-01-01T00:00:00+00:00'
+					},
+					{
+						displayName: 'Translation Modified After',
+						name: 'dateTime:translationModifiedAfter',
+						type: 'dateTime',
+						default: '',
+						description: 'Re-translates only if a string\'s current translation was modified after this date. Can be combined with `translationModifiedBefore` to define a date range.\n\n__Note:__ Cannot be later than `translationModifiedBefore`. Requires `scope` to be `translated` or `all`. Cannot be used with `scope: "untranslated"` or `translateUntranslatedOnly: true`.',
 						placeholder: '2026-01-01T00:00:00+00:00'
 					},
 					{
