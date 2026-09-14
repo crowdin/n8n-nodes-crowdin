@@ -440,7 +440,7 @@ export const aiProperties: INodeProperties[] = [
 				name: 'Generate AI Report',
 				value: 'api.ai.reports.post',
 				action: 'Generate AI Report',
-				description: '**Required scopes:** `ai.provider` (Read only).',
+				description: '**Required scopes:** `ai.provider` (Read only).\n\nGeneration is asynchronous and takes three requests. This one starts it and returns the report `identifier`. Then poll [Check AI Report Generation Status](#operation/api.ai.reports.get) until its `status` is `finished`; `progress` counts up to 100 meanwhile. Finally [Download AI Report](#operation/api.ai.reports.download.download) returns a short-lived `URL`. Fetch that URL to get the report file itself.',
 				routing: {
 					request: {
 						method: 'POST',
@@ -3761,7 +3761,7 @@ export const aiProperties: INodeProperties[] = [
 						name: 'type',
 						type: 'options',
 						default: 'tokens-usage-raw-data',
-						description: 'tokens-usage-raw-data',
+						description: undefined,
 						required: true,
 						options: [
 							{
@@ -3776,7 +3776,7 @@ export const aiProperties: INodeProperties[] = [
 						name: 'schema',
 						type: 'fixedCollection',
 						default: {},
-						description: 'Tokens Usage Raw Data Report schema',
+						description: 'The generated file holds one record per AI call: when it happened, the project, prompt, provider and model behind it, the user charged for it, and its input tokens, output tokens and cost',
 						options: [
 							{
 								displayName: 'General',
@@ -3796,7 +3796,7 @@ export const aiProperties: INodeProperties[] = [
 										name: 'dateTime:dateTo',
 										type: 'dateTime',
 										default: '',
-										description: 'Report date to in UTC, ISO 8601',
+										description: 'Report date to in UTC, ISO 8601. Part of the period, so a whole day runs from `00:00:00` to `23:59:59`',
 										placeholder: '2024-09-27T07:00:14+00:00',
 										required: true
 									},
@@ -3805,7 +3805,7 @@ export const aiProperties: INodeProperties[] = [
 										name: 'format',
 										type: 'options',
 										default: '',
-										description: 'Defines report target format',
+										description: '`csv` is a header row plus one data row per record; `json` wraps the same records and echoes the filters the report was built with',
 										options: [
 											{
 												name: '-',
@@ -3830,7 +3830,7 @@ export const aiProperties: INodeProperties[] = [
 											loadOptionsMethod: 'getProjectsMulti'
 										},
 										default: [],
-										description: 'Array of project ids. Get via [List Projects](#operation/api.projects.getMany)'
+										description: 'Count only usage from these projects, ids via [List Projects](#operation/api.projects.getMany). Organization-level AI usage belongs to no project, so it drops out once this filter is set'
 									},
 									{
 										displayName: 'Prompt Ids',
@@ -3840,7 +3840,7 @@ export const aiProperties: INodeProperties[] = [
 											loadOptionsMethod: 'getAiPromptsMulti'
 										},
 										default: [],
-										description: 'Array of AI Prompt ids. Get via [List TMs](#operation/api.ai.prompts.getMany)'
+										description: 'Count only usage made through these AI prompts, ids via [List AI Prompts](#operation/api.ai.prompts.getMany)'
 									},
 									{
 										displayName: 'User Ids',
@@ -3850,7 +3850,114 @@ export const aiProperties: INodeProperties[] = [
 											loadOptionsMethod: 'getUsersMulti'
 										},
 										default: [],
-										description: 'Array of user ids'
+										description: 'Count only usage by these users; by default everyone in the organization is included'
+									}
+								]
+							}
+						],
+						required: true
+					}
+				]
+			},
+			{
+				displayName: 'Costs By Users',
+				name: '_costsByUsers',
+				values: [
+					{
+						displayName: 'Type',
+						name: 'type',
+						type: 'options',
+						default: 'costs-by-users',
+						description: undefined,
+						required: true,
+						options: [
+							{
+								name: 'costs-by-users',
+								value: 'costs-by-users'
+							}
+						],
+						placeholder: 'costs-by-users'
+					},
+					{
+						displayName: 'Schema',
+						name: 'schema',
+						type: 'fixedCollection',
+						default: {},
+						description: 'The generated file holds one row per user: `userId`, `userFullName` and `totalCost`, their AI spend for the period in USD; users who made no AI calls in it are omitted. Pass a calendar day or month with no filters to get exactly the figures the AI Limits page shows',
+						options: [
+							{
+								displayName: 'General',
+								name: '_aiReportCostsByUsersGeneral',
+								values: [
+									{
+										displayName: 'Date From',
+										name: 'dateTime:dateFrom',
+										type: 'dateTime',
+										default: '',
+										description: 'Report date from in UTC, ISO 8601',
+										placeholder: '2024-01-23T07:00:14+00:00',
+										required: true
+									},
+									{
+										displayName: 'Date To',
+										name: 'dateTime:dateTo',
+										type: 'dateTime',
+										default: '',
+										description: 'Report date to in UTC, ISO 8601. Part of the period, so a whole day runs from `00:00:00` to `23:59:59`',
+										placeholder: '2024-09-27T07:00:14+00:00',
+										required: true
+									},
+									{
+										displayName: 'Format',
+										name: 'format',
+										type: 'options',
+										default: '',
+										description: '`csv` is a header row plus one data row per record; `json` wraps the same records and echoes the filters the report was built with',
+										options: [
+											{
+												name: '-',
+												value: ''
+											},
+											{
+												name: 'json',
+												value: 'json'
+											},
+											{
+												name: 'csv',
+												value: 'csv'
+											}
+										],
+										placeholder: 'json'
+									},
+									{
+										displayName: 'Project Ids',
+										name: 'projectIds',
+										type: 'multiOptions',
+										typeOptions: {
+											loadOptionsMethod: 'getProjectsMulti'
+										},
+										default: [],
+										description: 'Count only usage from these projects, ids via [List Projects](#operation/api.projects.getMany). Organization-level AI usage belongs to no project, so it drops out once this filter is set'
+									},
+									{
+										displayName: 'Prompt Ids',
+										name: 'promptIds',
+										type: 'multiOptions',
+										typeOptions: {
+											loadOptionsMethod: 'getAiPromptsMulti'
+										},
+										default: [],
+										description: 'Count only usage made through these AI prompts, ids via [List AI Prompts](#operation/api.ai.prompts.getMany)'
+									},
+									{
+										displayName: 'User Ids',
+										name: 'userIds',
+										type: 'multiOptions',
+										typeOptions: {
+											loadOptionsMethod: 'getUsersMulti'
+										},
+										default: [],
+										description: 'Count only usage by these users; by default everyone in the organization is included'
 									}
 								]
 							}

@@ -1843,6 +1843,27 @@ export const tasksProperties: INodeProperties[] = [
 										placeholder: 'true'
 									},
 									{
+										displayName: 'Skip Assigned Strings Scope',
+										name: 'skipAssignedStringsScope',
+										type: 'options',
+										default: '',
+										description: 'Defines which other tasks the `skipAssignedStrings` filter considers:\n- "all" - tasks on any workflow step, and tasks not assigned to a workflow step\n- "sameWorkflowStep" - only tasks on the same workflow step as this task\n\n__Note:__ Can only be used when `skipAssignedStrings` is `true`. `sameWorkflowStep` requires a project with an assigned workflow and a task on a workflow step. Both values match only tasks in the same target language and the same task type group (translation or proofreading)',
+										options: [
+											{
+												name: '-',
+												value: ''
+											},
+											{
+												name: 'all',
+												value: 'all'
+											},
+											{
+												name: 'sameWorkflowStep',
+												value: 'sameWorkflowStep'
+											}
+										]
+									},
+									{
 										displayName: 'Assignees',
 										name: 'assignees',
 										type: 'fixedCollection',
@@ -2122,6 +2143,27 @@ export const tasksProperties: INodeProperties[] = [
 										default: false,
 										description: 'Skip strings already included in other tasks',
 										placeholder: 'true'
+									},
+									{
+										displayName: 'Skip Assigned Strings Scope',
+										name: 'skipAssignedStringsScope',
+										type: 'options',
+										default: '',
+										description: 'Defines which other tasks the `skipAssignedStrings` filter considers:\n- "all" - tasks on any workflow step, and tasks not assigned to a workflow step\n- "sameWorkflowStep" - only tasks on the same workflow step as this task\n\n__Note:__ Can only be used when `skipAssignedStrings` is `true`. `sameWorkflowStep` requires a project with an assigned workflow and a task on a workflow step. Both values match only tasks in the same target language and the same task type group (translation or proofreading)',
+										options: [
+											{
+												name: '-',
+												value: ''
+											},
+											{
+												name: 'all',
+												value: 'all'
+											},
+											{
+												name: 'sameWorkflowStep',
+												value: 'sameWorkflowStep'
+											}
+										]
 									},
 									{
 										displayName: 'Assignees',
@@ -2438,6 +2480,27 @@ export const tasksProperties: INodeProperties[] = [
 										placeholder: 'true'
 									},
 									{
+										displayName: 'Skip Assigned Strings Scope',
+										name: 'skipAssignedStringsScope',
+										type: 'options',
+										default: '',
+										description: 'Defines which other tasks the `skipAssignedStrings` filter considers:\n- "all" - tasks on any workflow step, and tasks not assigned to a workflow step\n- "sameWorkflowStep" - only tasks on the same workflow step as this task\n\n__Note:__ Can only be used when `skipAssignedStrings` is `true`. `sameWorkflowStep` requires a project with an assigned workflow and a task on a workflow step. Both values match only tasks in the same target language and the same task type group (translation or proofreading)',
+										options: [
+											{
+												name: '-',
+												value: ''
+											},
+											{
+												name: 'all',
+												value: 'all'
+											},
+											{
+												name: 'sameWorkflowStep',
+												value: 'sameWorkflowStep'
+											}
+										]
+									},
+									{
 										displayName: 'Include Pre Translated Strings Only',
 										name: 'includePreTranslatedStringsOnly',
 										type: 'boolean',
@@ -2614,6 +2677,27 @@ export const tasksProperties: INodeProperties[] = [
 										default: false,
 										description: 'Skip strings already included in other tasks',
 										placeholder: 'true'
+									},
+									{
+										displayName: 'Skip Assigned Strings Scope',
+										name: 'skipAssignedStringsScope',
+										type: 'options',
+										default: '',
+										description: 'Defines which other tasks the `skipAssignedStrings` filter considers:\n- "all" - tasks on any workflow step, and tasks not assigned to a workflow step\n- "sameWorkflowStep" - only tasks on the same workflow step as this task\n\n__Note:__ Can only be used when `skipAssignedStrings` is `true`. `sameWorkflowStep` requires a project with an assigned workflow and a task on a workflow step. Both values match only tasks in the same target language and the same task type group (translation or proofreading)',
+										options: [
+											{
+												name: '-',
+												value: ''
+											},
+											{
+												name: 'all',
+												value: 'all'
+											},
+											{
+												name: 'sameWorkflowStep',
+												value: 'sameWorkflowStep'
+											}
+										]
 									},
 									{
 										displayName: 'Include Pre Translated Strings Only',
