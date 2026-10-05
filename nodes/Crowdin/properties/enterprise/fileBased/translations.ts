@@ -2125,6 +2125,48 @@ export const translationsProperties: INodeProperties[] = [
 						description: 'Label Identifiers. Get via [List Labels](#operation/api.projects.labels.getMany)'
 					},
 					{
+						displayName: 'Label Match Rule',
+						name: 'labelMatchRule',
+						type: 'options',
+						default: '',
+						description: 'How a string is matched against `labelIds`. One of: `all` — the string carries every one of the labels, `any` — at least one of them. Default is `all`\n\n__Note:__ Must be used together with `labelIds`',
+						options: [
+							{
+								name: '-',
+								value: ''
+							},
+							{
+								name: 'all',
+								value: 'all'
+							},
+							{
+								name: 'any',
+								value: 'any'
+							}
+						]
+					},
+					{
+						displayName: 'Exclude Label Match Rule',
+						name: 'excludeLabelMatchRule',
+						type: 'options',
+						default: '',
+						description: 'How a string is matched against `excludeLabelIds`. One of: `all` — only a string carrying every one of the labels is skipped, `any` — a string carrying at least one of them is skipped. Default is `all`\n\n__Note:__ Must be used together with `excludeLabelIds`',
+						options: [
+							{
+								name: '-',
+								value: ''
+							},
+							{
+								name: 'all',
+								value: 'all'
+							},
+							{
+								name: 'any',
+								value: 'any'
+							}
+						]
+					},
+					{
 						displayName: 'Method',
 						name: 'method',
 						type: 'options',
@@ -2314,6 +2356,14 @@ export const translationsProperties: INodeProperties[] = [
 						type: 'boolean',
 						default: false,
 						description: 'Removes approval on existing translations when applying auto-translations. Default is `false`.\n\n__Note:__ Requires `scope` to be `translated` or `all`. Cannot be used together with `skipApprovedTranslations`, `autoApproveOption` (any value other than `none`), or when `replaceTranslationsOption` is `all` (replaced translations lose approval automatically). Cannot be used with `scope: "untranslated"` or `translateUntranslatedOnly: true`.'
+					},
+					{
+						displayName: 'Notify On Completion',
+						name: 'notifyOnCompletion',
+						type: 'boolean',
+						default: false,
+						description: 'If `true`, the user who started the Auto-Translation is notified when it finishes, fails or is canceled.\n\n__Note:__ The notification is sent only via the channels the user enabled for the Auto-Translation notification group',
+						placeholder: 'true'
 					},
 					{
 						displayName: 'Minimum Match Ratio',
@@ -2573,6 +2623,14 @@ export const translationsProperties: INodeProperties[] = [
 						type: 'boolean',
 						default: false,
 						description: 'Removes approval on existing translations when applying auto-translations. Default is `false`.\n\n__Note:__ Requires `scope` to be `translated` or `all`. Cannot be used together with `skipApprovedTranslations`, `autoApproveOption` (any value other than `none`), or when `replaceTranslationsOption` is `all` (replaced translations lose approval automatically). Cannot be used with `scope: "untranslated"` or `translateUntranslatedOnly: true`.'
+					},
+					{
+						displayName: 'Notify On Completion',
+						name: 'notifyOnCompletion',
+						type: 'boolean',
+						default: false,
+						description: 'If `true`, the user who started the Auto-Translation is notified when it finishes, fails or is canceled.\n\n__Note:__ The notification is sent only via the channels the user enabled for the Auto-Translation notification group',
+						placeholder: 'true'
 					},
 					{
 						displayName: 'Minimum Match Ratio',
