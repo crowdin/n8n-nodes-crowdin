@@ -1701,6 +1701,12 @@ function markEnumArraysInSpec(doc) {
 					if (items.$ref) {
 						items = resolveRef(doc, items.$ref);
 					}
+					// oneOf of string variants (an enum plus a free-form pattern, e.g. glossary exportFields):
+					// keep the enum as a multi-select, other values stay possible via an expression
+					if (items?.oneOf?.every((variant) => variant.type === 'string') && items.oneOf.some((variant) => variant.enum)) {
+						items = { type: 'string', enum: items.oneOf.flatMap((variant) => variant.enum || []) };
+						currentSchema.items = items;
+					}
 					if (items?.enum && Array.isArray(items.enum) && fieldName) {
 						// Store in global metadata map
 						const key = `${operation.operationId}:${fieldName}`;

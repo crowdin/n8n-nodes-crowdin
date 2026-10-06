@@ -2066,9 +2066,17 @@ export const glossariesProperties: INodeProperties[] = [
 	{
 		displayName: 'Export Fields',
 		name: 'exportFields',
-		description: 'Select configuration type',
-		default: {},
-		type: 'fixedCollection',
+		type: 'multiOptions',
+		default: [],
+		description: 'Array fields for export. A custom field is selected by its slug — `field_{%fieldSlug%}` for a term field, exported as one column per language, and `conceptField_{%fieldSlug%}` for a concept field, exported as a single column.\n\n__Note:__ Used for export CSV or XLSX format only',
+		routing: {
+			send: {
+				property: 'exportFields',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
 		displayOptions: {
 			show: {
 				resource: [
@@ -2081,43 +2089,58 @@ export const glossariesProperties: INodeProperties[] = [
 		},
 		options: [
 			{
-				displayName: 'Variant 0',
-				name: '_variant0',
-				values: [
-					{
-						displayName: 'JSON Data',
-						name: 'json:json',
-						type: 'json',
-						default: '{}',
-						description: 'Enter data as JSON'
-					}
-				]
+				name: 'term',
+				value: 'term'
 			},
 			{
-				displayName: 'Variant 0',
-				name: '_variant0',
-				values: [
-					{
-						displayName: 'JSON Data',
-						name: 'json:json',
-						type: 'json',
-						default: '{}',
-						description: 'Enter data as JSON'
-					}
-				]
+				name: 'description',
+				value: 'description'
+			},
+			{
+				name: 'partOfSpeech',
+				value: 'partOfSpeech'
+			},
+			{
+				name: 'type',
+				value: 'type'
+			},
+			{
+				name: 'status',
+				value: 'status'
+			},
+			{
+				name: 'gender',
+				value: 'gender'
+			},
+			{
+				name: 'note',
+				value: 'note'
+			},
+			{
+				name: 'url',
+				value: 'url'
+			},
+			{
+				name: 'conceptDefinition',
+				value: 'conceptDefinition'
+			},
+			{
+				name: 'conceptSubject',
+				value: 'conceptSubject'
+			},
+			{
+				name: 'conceptNote',
+				value: 'conceptNote'
+			},
+			{
+				name: 'conceptUrl',
+				value: 'conceptUrl'
+			},
+			{
+				name: 'conceptFigure',
+				value: 'conceptFigure'
 			}
-		],
-		routing: {
-			send: {
-				preSend: [
-					normalizeFieldBody
-				],
-				property: 'exportFields',
-				propertyInDotNotation: false,
-				type: 'body',
-				value: '={{ $value }}'
-			}
-		}
+		]
 	},
 	{
 		displayName: 'Glossary Id',
