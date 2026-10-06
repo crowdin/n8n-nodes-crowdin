@@ -21,7 +21,7 @@ export const glossariesProperties: INodeProperties[] = [
 				name: 'List Concepts',
 				value: 'api.glossaries.concepts.getMany',
 				action: 'List Concepts',
-				description: '**Required scopes:** `glossary` (Read only).',
+				description: '**Required scopes:** `glossary` (Read only).\n\nReturns a list of concepts in the glossary. A concept groups the terms that mean the same thing in different languages.',
 				routing: {
 					request: {
 						method: 'GET',
@@ -44,10 +44,10 @@ export const glossariesProperties: INodeProperties[] = [
 				}
 			},
 			{
-				name: 'Get concept',
+				name: 'Get Concept',
 				value: 'api.glossaries.concepts.get',
-				action: 'Get concept',
-				description: '**Required scopes:** `glossary` (Read only).',
+				action: 'Get Concept',
+				description: '**Required scopes:** `glossary` (Read only).\n\nReturns a single concept of the glossary, with the definition and note stored for each of its languages.',
 				routing: {
 					request: {
 						method: 'GET',
@@ -56,10 +56,10 @@ export const glossariesProperties: INodeProperties[] = [
 				}
 			},
 			{
-				name: 'Update concept',
+				name: 'Update Concept',
 				value: 'api.glossaries.concepts.put',
-				action: 'Update concept',
-				description: '**Required scopes:** `glossary` (Read and Write).\n\n__Note:__ There is no separate method for concept creation. Concepts are automatically created when adding a term without specifying a `conceptId`.',
+				action: 'Update Concept',
+				description: '**Required scopes:** `glossary` (Read and Write).\n\nUpdates the concept and the definition and note stored for each of its languages. `fields` writes the whole set of custom field values: a field the request omits, or whose value is empty, is cleared.\n\n__Note:__ There is no separate method for concept creation. Concepts are automatically created when adding a term without specifying a `conceptId`.',
 				routing: {
 					request: {
 						method: 'PUT',
@@ -71,7 +71,7 @@ export const glossariesProperties: INodeProperties[] = [
 				name: 'Delete Concept',
 				value: 'api.glossaries.concepts.delete',
 				action: 'Delete Concept',
-				description: '**Required scopes:** `glossary` (Read and Write).',
+				description: '**Required scopes:** `glossary` (Read and Write).\n\nDeletes the concept together with every term that belongs to it.',
 				routing: {
 					request: {
 						method: 'DELETE',
@@ -266,7 +266,7 @@ export const glossariesProperties: INodeProperties[] = [
 				name: 'List Terms',
 				value: 'api.glossaries.terms.getMany',
 				action: 'List Terms',
-				description: '**Required scopes:** `glossary` (Read only).',
+				description: '**Required scopes:** `glossary` (Read only).\n\nReturns a list of terms in the glossary, ordered by `id` unless `orderBy` says otherwise. Without a filter the terms of every language are returned.',
 				routing: {
 					request: {
 						method: 'GET',
@@ -304,7 +304,7 @@ export const glossariesProperties: INodeProperties[] = [
 				name: 'Clear Glossary',
 				value: 'api.glossaries.terms.deleteMany',
 				action: 'Clear Glossary',
-				description: '**Required scopes:** `glossary` (Read and Write).',
+				description: '**Required scopes:** `glossary` (Read and Write).\n\nDeletes the terms of the glossary. Without a filter every term is deleted; the query parameters narrow it to one language, one concept, or one term and its translations.',
 				routing: {
 					request: {
 						method: 'DELETE',
@@ -326,7 +326,7 @@ export const glossariesProperties: INodeProperties[] = [
 				name: 'Get Term',
 				value: 'api.glossaries.terms.get',
 				action: 'Get Term',
-				description: '**Required scopes:** `glossary` (Read only).',
+				description: '**Required scopes:** `glossary` (Read only).\n\nReturns a single term of the glossary.',
 				routing: {
 					request: {
 						method: 'GET',
@@ -338,7 +338,7 @@ export const glossariesProperties: INodeProperties[] = [
 				name: 'Delete Term',
 				value: 'api.glossaries.terms.delete',
 				action: 'Delete Term',
-				description: '**Required scopes:** `glossary` (Read and Write).',
+				description: '**Required scopes:** `glossary` (Read and Write).\n\nDeletes the term. When it was the last term of its concept, the concept is deleted as well.',
 				routing: {
 					request: {
 						method: 'DELETE',
@@ -360,7 +360,7 @@ export const glossariesProperties: INodeProperties[] = [
 				name: 'Edit Term',
 				value: 'api.glossaries.terms.patch',
 				action: 'Edit Term',
-				description: '**Required scopes:** `glossary` (Read and Write).',
+				description: '**Required scopes:** `glossary` (Read and Write).\n\nUpdates the term with a JSON Patch document. Only the paths listed in the request schema can be replaced.\n\n__Note:__ A `replace` on `/fields` writes the whole set of custom field values — a field the value omits, or whose value is empty, is cleared',
 				routing: {
 					request: {
 						method: 'PATCH',
@@ -1424,6 +1424,31 @@ export const glossariesProperties: INodeProperties[] = [
 		}
 	},
 	{
+		displayName: 'Is Shared',
+		name: 'isShared',
+		type: 'boolean',
+		default: false,
+		description: 'Whether the glossary should be shared across all projects within the group',
+		routing: {
+			send: {
+				property: 'isShared',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'glossaries'
+				],
+				operation: [
+					'api.glossaries.post'
+				]
+			}
+		}
+	},
+	{
 		displayName: 'Glossary Id',
 		name: 'glossaryId',
 		required: true,
@@ -1553,85 +1578,6 @@ export const glossariesProperties: INodeProperties[] = [
 				]
 			}
 		}
-	},
-	{
-		displayName: 'Export Fields',
-		name: 'exportFields',
-		type: 'multiOptions',
-		default: [],
-		description: 'Array fields for export.\n\n__Note:__ Used for export CSV or XLSX format only',
-		routing: {
-			send: {
-				property: 'exportFields',
-				propertyInDotNotation: false,
-				type: 'body',
-				value: '={{ $value }}'
-			}
-		},
-		displayOptions: {
-			show: {
-				resource: [
-					'glossaries'
-				],
-				operation: [
-					'api.glossaries.exports.post'
-				]
-			}
-		},
-		options: [
-			{
-				name: 'term',
-				value: 'term'
-			},
-			{
-				name: 'description',
-				value: 'description'
-			},
-			{
-				name: 'partOfSpeech',
-				value: 'partOfSpeech'
-			},
-			{
-				name: 'type',
-				value: 'type'
-			},
-			{
-				name: 'status',
-				value: 'status'
-			},
-			{
-				name: 'gender',
-				value: 'gender'
-			},
-			{
-				name: 'note',
-				value: 'note'
-			},
-			{
-				name: 'url',
-				value: 'url'
-			},
-			{
-				name: 'conceptDefinition',
-				value: 'conceptDefinition'
-			},
-			{
-				name: 'conceptSubject',
-				value: 'conceptSubject'
-			},
-			{
-				name: 'conceptNote',
-				value: 'conceptNote'
-			},
-			{
-				name: 'conceptUrl',
-				value: 'conceptUrl'
-			},
-			{
-				name: 'conceptFigure',
-				value: 'conceptFigure'
-			}
-		]
 	},
 	{
 		displayName: 'Export Type',
@@ -2118,6 +2064,85 @@ export const glossariesProperties: INodeProperties[] = [
 		placeholder: '2024-09-27T07:00:14+00:00'
 	},
 	{
+		displayName: 'Export Fields',
+		name: 'exportFields',
+		type: 'multiOptions',
+		default: [],
+		description: 'Array fields for export. A custom field is selected by its slug — `field_{%fieldSlug%}` for a term field, exported as one column per language, and `conceptField_{%fieldSlug%}` for a concept field, exported as a single column.\n\n__Note:__ Used for export CSV or XLSX format only',
+		routing: {
+			send: {
+				property: 'exportFields',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'glossaries'
+				],
+				operation: [
+					'api.glossaries.exports.post'
+				]
+			}
+		},
+		options: [
+			{
+				name: 'term',
+				value: 'term'
+			},
+			{
+				name: 'description',
+				value: 'description'
+			},
+			{
+				name: 'partOfSpeech',
+				value: 'partOfSpeech'
+			},
+			{
+				name: 'type',
+				value: 'type'
+			},
+			{
+				name: 'status',
+				value: 'status'
+			},
+			{
+				name: 'gender',
+				value: 'gender'
+			},
+			{
+				name: 'note',
+				value: 'note'
+			},
+			{
+				name: 'url',
+				value: 'url'
+			},
+			{
+				name: 'conceptDefinition',
+				value: 'conceptDefinition'
+			},
+			{
+				name: 'conceptSubject',
+				value: 'conceptSubject'
+			},
+			{
+				name: 'conceptNote',
+				value: 'conceptNote'
+			},
+			{
+				name: 'conceptUrl',
+				value: 'conceptUrl'
+			},
+			{
+				name: 'conceptFigure',
+				value: 'conceptFigure'
+			}
+		]
+	},
+	{
 		displayName: 'Glossary Id',
 		name: 'glossaryId',
 		required: true,
@@ -2246,17 +2271,17 @@ export const glossariesProperties: INodeProperties[] = [
 		}
 	},
 	{
-		displayName: 'Scheme',
-		name: 'scheme',
-		type: 'json',
-		default: '{\n  "term_en": 0,\n  "description_en": 1\n}',
-		description: 'Defines data columns mapping. Acceptable value is combination of following constants:\n * `term_{%language_code%}` – column with terms\n * `description_{%language_code%}` – column with terms description\n * `partOfSpeech_{%language_code%}` – column with terms part of speech\n * `status_{%language_code%}` – column with terms status\n * `type_{%language_code%}` – column with terms type\n * `gender_{%language_code%}` – column with terms gender\n * `url_{%language_code%}` – column with terms URL\n * `note_{%language_code%}` – column with terms note where `%language_code%` – placeholder for your language code\n * `conceptDefinition` – column with concepts definition\n * `conceptSubject` – column with concepts subject\n * `conceptNote` – column with concepts note\n * `conceptUrl` – column with concepts URL\n * `conceptFigure` – column with concepts figure\n\n__Note:__ Used for upload of CSV or XLS/XLSX files only',
+		displayName: 'First Line Contains Header',
+		name: 'firstLineContainsHeader',
+		type: 'boolean',
+		default: false,
+		description: 'Defines whether file includes first row header that should not be imported\n\n__Note:__  Used for upload of CSV or XLS/XLSX files only',
 		routing: {
 			send: {
-				property: 'scheme',
+				property: 'firstLineContainsHeader',
 				propertyInDotNotation: false,
 				type: 'body',
-				value: '={{ JSON.parse($value) }}'
+				value: '={{ $value }}'
 			}
 		},
 		displayOptions: {
@@ -2271,17 +2296,17 @@ export const glossariesProperties: INodeProperties[] = [
 		}
 	},
 	{
-		displayName: 'First Line Contains Header',
-		name: 'firstLineContainsHeader',
-		type: 'boolean',
-		default: false,
-		description: 'Defines whether file includes first row header that should not be imported\n\n__Note:__  Used for upload of CSV or XLS/XLSX files only',
+		displayName: 'Scheme',
+		name: 'scheme',
+		type: 'json',
+		default: '{\n  "term_en": 0,\n  "description_en": 1\n}',
+		description: 'Defines data columns mapping. Acceptable value is combination of following constants:\n * `term_{%language_code%}` – column with terms\n * `description_{%language_code%}` – column with terms description\n * `partOfSpeech_{%language_code%}` – column with terms part of speech\n * `status_{%language_code%}` – column with terms status\n * `type_{%language_code%}` – column with terms type\n * `gender_{%language_code%}` – column with terms gender\n * `url_{%language_code%}` – column with terms URL\n * `note_{%language_code%}` – column with terms note where `%language_code%` – placeholder for your language code\n * `conceptDefinition` – column with concepts definition\n * `conceptSubject` – column with concepts subject\n * `conceptNote` – column with concepts note\n * `conceptUrl` – column with concepts URL\n * `conceptFigure` – column with concepts figure\n * `field_{%fieldSlug%}_{%language_code%}` – column with a term custom field value\n * `conceptField_{%fieldSlug%}` – column with a concept custom field value\n\n__Note:__ Only the custom fields whose columns are mapped here are written — a field this scheme omits keeps its stored value, and a mapped but empty cell clears it\n\n__Note:__ Used for upload of CSV or XLS/XLSX files only',
 		routing: {
 			send: {
-				property: 'firstLineContainsHeader',
+				property: 'scheme',
 				propertyInDotNotation: false,
 				type: 'body',
-				value: '={{ $value }}'
+				value: '={{ JSON.parse($value) }}'
 			}
 		},
 		displayOptions: {
@@ -3435,6 +3460,13 @@ export const glossariesProperties: INodeProperties[] = [
 				typeOptions: {
 					loadOptionsMethod: 'getLanguages'
 				}
+			},
+			{
+				displayName: 'Is Shared',
+				name: 'isShared',
+				type: 'boolean',
+				default: false,
+				description: 'Whether the glossary should be shared across all projects within the group'
 			}
 		],
 		routing: {

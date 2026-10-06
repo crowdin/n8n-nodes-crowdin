@@ -499,6 +499,42 @@ export const aiProperties: INodeProperties[] = [
 				}
 			},
 			{
+				name: 'Export AI Request Logs',
+				value: 'api.ai.requestLogs.exports.post',
+				action: 'Export AI Request Logs',
+				description: '**Required scopes:** `ai.request-log` (Read only).\n\nStarts an [asynchronous operation](#section/Introduction/Asynchronous-Operations) that builds a file with the AI request logs matching the filters, and returns its `identifier`. Poll [Check AI Request Logs Export Status](#operation/api.ai.requestLogs.exports.get) until `status` is `finished`, then call [Download AI Request Logs Export](#operation/api.ai.requestLogs.exports.download) for a link to the file.\n\nPassing no filters exports every log entry of the organization, newest first. Columns and value formatting are identical to [List AI Request Logs](#operation/api.ai.requestLogs.getMany).',
+				routing: {
+					request: {
+						method: 'POST',
+						url: '=/ai/request-logs/exports'
+					}
+				}
+			},
+			{
+				name: 'Check AI Request Logs Export Status',
+				value: 'api.ai.requestLogs.exports.get',
+				action: 'Check AI Request Logs Export Status',
+				description: '**Required scopes:** `ai.request-log` (Read only).\n\nReturns the status of an export started by [Export AI Request Logs](#operation/api.ai.requestLogs.exports.post). The file can be downloaded once `status` is `finished`.',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/ai/request-logs/exports/{{$parameter["exportId"]}}'
+					}
+				}
+			},
+			{
+				name: 'Download AI Request Logs Export',
+				value: 'api.ai.requestLogs.exports.download',
+				action: 'Download AI Request Logs Export',
+				description: '**Required scopes:** `ai.request-log` (Read only).\n\nReturns a link to the exported file, which expires one hour after this call. The export has to be `finished`; until it is, this operation answers 404.',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/ai/request-logs/exports/{{$parameter["exportId"]}}/download'
+					}
+				}
+			},
+			{
 				name: 'Get AI Settings',
 				value: 'api.ai.settings.get',
 				action: 'Get AI Settings',
@@ -519,6 +555,44 @@ export const aiProperties: INodeProperties[] = [
 					request: {
 						method: 'POST',
 						url: '=/ai/translate'
+					}
+				}
+			},
+			{
+				name: 'List AI Usage Members',
+				value: 'api.ai.usage.members.getMany',
+				action: 'List AI Usage Members',
+				description: '**Required scopes:** `ai` (Read only).',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/ai/usage/members'
+					},
+					send: {
+						paginate: '={{$parameter["returnAll"]}}'
+					},
+					output: {
+						postReceive: [
+							{
+								type: 'rootProperty',
+								enabled: '={{!$parameter["returnAll"]}}',
+								properties: {
+									property: 'data'
+								}
+							}
+						]
+					}
+				}
+			},
+			{
+				name: 'Get AI Usage Member',
+				value: 'api.ai.usage.members.get',
+				action: 'Get AI Usage Member',
+				description: '**Required scopes:** `ai` (Read only).',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/ai/usage/members/{{$parameter["memberId"]}}'
 					}
 				}
 			},
@@ -1070,6 +1144,63 @@ export const aiProperties: INodeProperties[] = [
 		}
 	},
 	{
+		displayName: 'POST /ai/request-logs/exports',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.requestLogs.exports.post'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'GET /ai/request-logs/exports/{exportId}',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.requestLogs.exports.get'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'GET /ai/request-logs/exports/{exportId}/download',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.requestLogs.exports.download'
+				]
+			}
+		}
+	},
+	{
 		displayName: 'GET /ai/settings',
 		name: 'operation',
 		type: 'notice',
@@ -1103,6 +1234,44 @@ export const aiProperties: INodeProperties[] = [
 				],
 				operation: [
 					'api.ai.translate.strings.post'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'GET /ai/usage/members',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.usage.members.getMany'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'GET /ai/usage/members/{memberId}',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.usage.members.get'
 				]
 			}
 		}
@@ -3883,7 +4052,7 @@ export const aiProperties: INodeProperties[] = [
 						name: 'schema',
 						type: 'fixedCollection',
 						default: {},
-						description: 'The generated file holds one row per user: `userId`, `userFullName` and `totalCost`, their AI spend for the period in USD; users who made no AI calls in it are omitted. Pass a calendar day or month with no filters to get exactly the figures the AI Limits page shows',
+						description: 'The generated file holds one row per user: `userId`, `userFullName` and `totalCost`, their AI spend for the period in USD; users who made no AI calls in it are omitted. Pass a calendar day or month with no filters to get exactly the figures the AI Usage page shows',
 						options: [
 							{
 								displayName: 'General',
@@ -4461,6 +4630,511 @@ export const aiProperties: INodeProperties[] = [
 		placeholder: '2026-07-31T23:59:59+00:00'
 	},
 	{
+		displayName: 'Format',
+		name: 'format',
+		type: 'options',
+		default: '',
+		description: 'Format of the exported file. One of: `csv`. Default is `csv`',
+		options: [
+			{
+				name: '-',
+				value: ''
+			},
+			{
+				name: 'csv',
+				value: 'csv'
+			}
+		],
+		routing: {
+			send: {
+				property: 'format',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.requestLogs.exports.post'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Request Id',
+		name: 'requestId',
+		type: 'string',
+		default: '',
+		description: 'Filter results to the log entry with this request identifier',
+		routing: {
+			send: {
+				property: 'requestId',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.requestLogs.exports.post'
+				]
+			}
+		},
+		placeholder: '9d3b1c4e-2f3a-4b5c-8d6e-7f8a9b0c1d2e'
+	},
+	{
+		displayName: 'Project Id',
+		name: 'projectId',
+		type: 'options',
+		default: '',
+		description: 'Filter results to requests made in this project. Get via [List Projects](#operation/api.projects.getMany)',
+		routing: {
+			send: {
+				property: 'projectId',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ typeof $value === \'number\' ? $value : undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.requestLogs.exports.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjects'
+		}
+	},
+	{
+		displayName: 'User Id',
+		name: 'userId',
+		type: 'options',
+		default: '',
+		description: 'Filter results to requests attributed to this user. Get via [List Users](#operation/api.users.getMany)',
+		routing: {
+			send: {
+				property: 'userId',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ typeof $value === \'number\' ? $value : undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.requestLogs.exports.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getUsers'
+		}
+	},
+	{
+		displayName: 'Ai Provider Id',
+		name: 'aiProviderId',
+		type: 'options',
+		default: '',
+		description: 'Filter results to requests served by this AI provider. Get via [List AI Providers](#operation/api.ai.providers.getMany)',
+		routing: {
+			send: {
+				property: 'aiProviderId',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ typeof $value === \'number\' ? $value : undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.requestLogs.exports.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getAiProviders'
+		}
+	},
+	{
+		displayName: 'Model',
+		name: 'model',
+		type: 'string',
+		default: '',
+		description: 'Filter results to requests made with this AI model',
+		routing: {
+			send: {
+				property: 'model',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.requestLogs.exports.post'
+				]
+			}
+		},
+		placeholder: 'gpt-5.6-sol'
+	},
+	{
+		displayName: 'Source Action',
+		name: 'sourceAction',
+		type: 'options',
+		default: '',
+		description: 'Filter results to requests produced by this feature or channel',
+		options: [
+			{
+				name: '-',
+				value: ''
+			},
+			{
+				name: 'ai_proxy',
+				value: 'ai_proxy'
+			},
+			{
+				name: 'ai_gateway',
+				value: 'ai_gateway'
+			},
+			{
+				name: 'ai_translate_strings',
+				value: 'ai_translate_strings'
+			},
+			{
+				name: 'ai_file_translate',
+				value: 'ai_file_translate'
+			},
+			{
+				name: 'ai_prompt_completion',
+				value: 'ai_prompt_completion'
+			},
+			{
+				name: 'pre_translate:manual',
+				value: 'pre_translate:manual'
+			},
+			{
+				name: 'pre_translate:workflow',
+				value: 'pre_translate:workflow'
+			},
+			{
+				name: 'ai_alignment',
+				value: 'ai_alignment'
+			},
+			{
+				name: 'qa_check',
+				value: 'qa_check'
+			},
+			{
+				name: 'ai_suggestion',
+				value: 'ai_suggestion'
+			},
+			{
+				name: 'advisor',
+				value: 'advisor'
+			}
+		],
+		routing: {
+			send: {
+				property: 'sourceAction',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.requestLogs.exports.post'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Prompt Action',
+		name: 'promptAction',
+		type: 'string',
+		default: '',
+		description: 'Filter results to requests made for this prompt action, e.g. `pre_translate`, `qa_check`, `advisor_context_review`, or a `custom:`-prefixed value',
+		routing: {
+			send: {
+				property: 'promptAction',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.requestLogs.exports.post'
+				]
+			}
+		},
+		placeholder: 'qa_check'
+	},
+	{
+		displayName: 'Statuses',
+		name: 'statuses',
+		type: 'multiOptions',
+		default: [],
+		description: 'Filter results to requests in any of these statuses',
+		routing: {
+			send: {
+				property: 'statuses',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.requestLogs.exports.post'
+				]
+			}
+		},
+		options: [
+			{
+				name: 'pending',
+				value: 'pending'
+			},
+			{
+				name: 'success',
+				value: 'success'
+			},
+			{
+				name: 'error',
+				value: 'error'
+			},
+			{
+				name: 'timeout',
+				value: 'timeout'
+			}
+		]
+	},
+	{
+		displayName: 'Token Name',
+		name: 'tokenName',
+		type: 'string',
+		default: '',
+		description: 'Filter results to requests authenticated with a personal access token of this name',
+		routing: {
+			send: {
+				property: 'tokenName',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.requestLogs.exports.post'
+				]
+			}
+		},
+		placeholder: 'Token name'
+	},
+	{
+		displayName: 'Oauth Client Id',
+		name: 'oauthClientId',
+		type: 'string',
+		default: '',
+		description: 'Filter results to requests authenticated by the OAuth application with this `client_id`',
+		routing: {
+			send: {
+				property: 'oauthClientId',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.requestLogs.exports.post'
+				]
+			}
+		},
+		placeholder: 'gpbccUFxAKZDrLm5Nq8t'
+	},
+	{
+		displayName: 'System Credentials',
+		name: 'systemCredentials',
+		type: 'boolean',
+		default: true,
+		description: 'If `true`, only requests that used system-provided credentials are exported',
+		routing: {
+			send: {
+				property: 'systemCredentials',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.requestLogs.exports.post'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Is Auto Triggered',
+		name: 'isAutoTriggered',
+		type: 'boolean',
+		default: true,
+		description: 'If `true`, only requests triggered automatically rather than by an interactive user action are exported',
+		routing: {
+			send: {
+				property: 'isAutoTriggered',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.requestLogs.exports.post'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Created After',
+		name: 'dateTime:createdAfter',
+		type: 'dateTime',
+		default: '',
+		description: 'Filter results to requests logged after this date, in ISO 8601 format',
+		routing: {
+			send: {
+				property: 'createdAfter',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.requestLogs.exports.post'
+				]
+			}
+		},
+		placeholder: '2026-07-01T10:41:33+00:00'
+	},
+	{
+		displayName: 'Created Before',
+		name: 'dateTime:createdBefore',
+		type: 'dateTime',
+		default: '',
+		description: 'Filter results to requests logged before this date, in ISO 8601 format',
+		routing: {
+			send: {
+				property: 'createdBefore',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.requestLogs.exports.post'
+				]
+			}
+		},
+		placeholder: '2026-07-31T23:59:59+00:00'
+	},
+	{
+		displayName: 'Export Id',
+		name: 'exportId',
+		required: true,
+		description: 'ID of the AI request logs export, 36 characters. Get via [Export AI Request Logs](#operation/api.ai.requestLogs.exports.post)',
+		default: '',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.requestLogs.exports.get'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Export Id',
+		name: 'exportId',
+		required: true,
+		description: 'ID of the AI request logs export, 36 characters. Get via [Export AI Request Logs](#operation/api.ai.requestLogs.exports.post)',
+		default: '',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.requestLogs.exports.download'
+				]
+			}
+		}
+	},
+	{
 		displayName: 'Body',
 		name: '_body',
 		description: 'Select configuration type',
@@ -4764,6 +5438,112 @@ export const aiProperties: INodeProperties[] = [
 				type: 'body',
 				value: '={{ $value }}'
 			}
+		}
+	},
+	{
+		displayName: 'Limit',
+		name: 'limit',
+		description: 'Max number of results to return',
+		default: 50,
+		type: 'number',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'limit',
+				value: '={{ typeof $value === \'number\' ? $value : undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.usage.members.getMany'
+				],
+				returnAll: [
+					false
+				]
+			}
+		},
+		typeOptions: {
+			minValue: 1
+		}
+	},
+	{
+		displayName: 'User Ids',
+		name: 'userIds',
+		description: 'Filter by user identifier, comma-separated. Get via [List Users](#operation/api.users.getMany)',
+		default: [],
+		type: 'multiOptions',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'userIds',
+				value: '={{ $value.length ? $value.join(\',\') : undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.usage.members.getMany'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getUsersMulti'
+		}
+	},
+	{
+		displayName: 'Order By',
+		name: 'orderBy',
+		description: 'Read more about [sorting rules](#section/Introduction/Sorting)',
+		default: '',
+		type: 'string',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'orderBy',
+				value: '={{ $value || undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.usage.members.getMany'
+				]
+			}
+		},
+		placeholder: 'dailyCostSpent desc'
+	},
+	{
+		displayName: 'Member Id',
+		name: 'memberId',
+		required: true,
+		description: 'ID of the organization member. Get via [List Users](#operation/api.users.getMany) or via [Get Authenticated User](#operation/api.user.get) for own usage',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.usage.members.get'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getUsers'
 		}
 	},
 	{
@@ -6028,6 +6808,23 @@ export const aiProperties: INodeProperties[] = [
 				],
 				operation: [
 					'api.ai.requestLogs.getMany'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Return All',
+		name: 'returnAll',
+		type: 'boolean',
+		default: true,
+		description: 'Whether to return all results or only up to a given limit',
+		displayOptions: {
+			show: {
+				resource: [
+					'ai'
+				],
+				operation: [
+					'api.ai.usage.members.getMany'
 				]
 			}
 		}

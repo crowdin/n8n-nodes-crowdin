@@ -19,6 +19,7 @@ import { machineTranslationEnginesProperties } from './machineTranslationEngines
 import { screenshotsProperties } from './screenshots';
 import { labelsProperties } from './labels';
 import { dictionariesProperties } from './dictionaries';
+import { placeholdersProperties } from './placeholders';
 import { usersProperties } from './users';
 import { notificationsProperties } from './notifications';
 import { aiProperties } from './ai';
@@ -127,6 +128,11 @@ const resourceProperty: INodeProperties = {
 			description: '\nDictionaries allow you to create a storage of words that should be skipped by the spell checker.\n\nUse API to get the list of organization dictionaries and to edit a specific dictionary.\n'
 		},
 		{
+			name: 'Placeholders',
+			value: 'placeholders',
+			description: '\nPlaceholders are the parts of a string that carry a value instead of text — format specifiers, variables, and template constructs. Crowdin ships a fixed set of them, the system placeholders, and recognizes each one per project.\n\nUse API to get the system placeholders of a project and to turn them on or off.\n\nThe unified placeholder Crowdin writes when a project unifies placeholders — `[%s]` — is not on this list. It is governed by the `unifiedPlaceholders` QA check category of the project, not by a placeholder setting.\n\nSeveral of these placeholders match the same construct, so turning one off is not always enough on its own: a construct stays recognized — by the QA checks as well as the Editor — while any placeholder that matches it is still on. To stop a construct being reported, turn off every placeholder that matches it. The Editor is stricter still: it drops a construct only once nothing that stays could claim part of it.\n\nMachine Translation and Translation Memory always recognize every placeholder, whatever a project sets.\n\nSystem placeholder keys, and the syntax or file format each one comes from:\n\n- `wrappedAmpersand` — ampersand-wrapped variables; lowercase letters and underscores only between the ampersands (e.g. `&user_name&`)\n- `appleStringsdictPlural` — Apple plural variables in `.stringsdict` files and String Catalogs (e.g. `%1$#@variable@`)\n- `dollarInsideBraces` — `{$name}` variables in Smarty and PHP templates (e.g. `{$shop_name}`)\n- `dollarOutsideBraces` — `${name}` interpolation in JavaScript, Java EL, Gradle, and shell (e.g. `${user.name}`)\n- `wrappedColon` — colon-wrapped variables; needs a colon on both sides, so the single-colon Laravel `:name` is not covered (e.g. `:placeholder:`)\n- `wrappedDollar` — dollar-wrapped variables, used by Visual Studio templates (e.g. `$placeholder$`)\n- `dollarParentheses` — `$(name)` variables in MSBuild, Xcode build settings, and Make (e.g. `$(user_name)`)\n- `i18nextNesting` — i18next nesting: keys that reference other keys (e.g. `$t(common.nesting)`)\n- `i18nextLegacy` — i18next interpolation before v4 (e.g. `__count__`)\n- `rubyInterpolation` — Ruby-style interpolation in Ruby, Jakarta EL, and Thymeleaf (e.g. `#{value}`)\n- `mailchimpMergeTag` — Mailchimp merge tags in email campaigns (e.g. `*|Model.FullName|*`)\n- `swiftInterpolation` — Swift string interpolation in source strings (e.g. `\\(apples)`)\n- `bracesTriple` — Handlebars triple braces, the output that is not escaped (e.g. `{{{title}}}`)\n- `bracesDouble` — double braces in Mustache, Handlebars, Angular, and Vue (e.g. `{{name}}`)\n- `bracesSingle` — single braces in Python `str.format`, ICU, and Vue I18n (e.g. `{name}`)\n- `bracesDoubleFormatted` — i18next values with a format applied (e.g. `{{date, MM/DD/YYYY}}`, `{{text, uppercase}}`)\n- `dateTimePattern` — a date or time built from several `strftime` parts (e.g. `%Y-%m-%d`, `%H:%i:%s`)\n- `appleStringCatalogNamed` — Apple String Catalog substitutions (e.g. `%(name)@`)\n- `printfSpecifier` — C-style format specifiers in C, PHP, Java, Objective-C, and Android, plus the numbered form of Qt `tr()` (e.g. `%s`, `%1$d`, `%1`)\n- `pythonPercentFormat` — named specifiers in Python and gettext (e.g. `%(count)d`, `%(placeholder)s`)\n- `railsI18n` — Rails i18n values in Ruby on Rails and Vue I18n, and double braces holding a path in Mustache, Liquid, and Rails templates (e.g. `%{count}`, `{{ name.first }}`)\n- `javaMessageFormat` — Java MessageFormat in Java properties files and resource bundles (e.g. `{0}`, `{0,number,integer}`)\n- `dotNetCompositeFormat` — composite formatting in .NET and C# format strings (e.g. `{0}`, `{0,10:f}`)\n- `twig` — Twig tags and statements, the template logic rather than the text (e.g. `{{ data() }}`, `{% endif %}`)\n- `phpInterpolation` — PHP variables in source strings, bare or braced (e.g. `$variable`, `{$user->name}`)\n- `freemarkerDirective` — FreeMarker tags in `.ftl` templates (e.g. `<#if condition>`, `<#include /common/copyright.ftl>`)\n- `wrappedPercent` — percent-wrapped variables in Symfony and Windows environment variables (e.g. `%invitation_url%`)\n- `dateTimeSpecifier` — a single `strftime` date or time component (e.g. `%d`)\n'
+		},
+		{
 			name: 'Users',
 			value: 'users',
 			description: '\nUsers API gives you the possibility to get profile information about the currently authenticated user.\n'
@@ -200,6 +206,7 @@ export const properties: INodeProperties[] = [
 	...screenshotsProperties,
 	...labelsProperties,
 	...dictionariesProperties,
+	...placeholdersProperties,
 	...usersProperties,
 	...notificationsProperties,
 	...aiProperties,

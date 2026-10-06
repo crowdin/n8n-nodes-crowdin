@@ -87,6 +87,11 @@ export const PROJECT_EVENTS: WebhookEvent[] = [
 		description: 'Project are successfully built',
 	},
 	{
+		name: 'Pre Translation Completed',
+		value: 'preTranslation.completed',
+		description: 'Auto-Translation finishes, fails or is canceled',
+	},
+	{
 		name: 'Translation Updated',
 		value: 'translation.updated',
 		description: 'Final translation of string is updated (using Replace in suggestions feature)',

@@ -1588,6 +1588,14 @@ export const projectsProperties: INodeProperties[] = [
 						default: true,
 						description: undefined,
 						placeholder: 'true'
+					},
+					{
+						displayName: 'Unified Placeholders',
+						name: 'unifiedPlaceholders',
+						type: 'boolean',
+						default: true,
+						description: undefined,
+						placeholder: 'true'
 					}
 				]
 			}
@@ -1770,6 +1778,14 @@ export const projectsProperties: INodeProperties[] = [
 					{
 						displayName: 'Mdx',
 						name: 'mdx',
+						type: 'boolean',
+						default: false,
+						description: undefined,
+						placeholder: 'false'
+					},
+					{
+						displayName: 'Unified Placeholders',
+						name: 'unifiedPlaceholders',
 						type: 'boolean',
 						default: false,
 						description: undefined,
@@ -5217,6 +5233,13 @@ export const projectsProperties: INodeProperties[] = [
 										type: 'boolean',
 										default: false,
 										description: 'Сonvert simple line breaks (Enter) to \\n (e.g. New\\nLine).'
+									},
+									{
+										displayName: 'Export Context',
+										name: 'exportContext',
+										type: 'boolean',
+										default: true,
+										description: 'Export string context as a comment above each string (e.g. `/* Context */`).'
 									}
 								]
 							}
@@ -5844,6 +5867,14 @@ export const projectsProperties: INodeProperties[] = [
 								default: true,
 								description: undefined,
 								placeholder: 'true'
+							},
+							{
+								displayName: 'Unified Placeholders',
+								name: 'unifiedPlaceholders',
+								type: 'boolean',
+								default: true,
+								description: undefined,
+								placeholder: 'true'
 							}
 						]
 					}
@@ -6008,6 +6039,14 @@ export const projectsProperties: INodeProperties[] = [
 							{
 								displayName: 'Mdx',
 								name: 'mdx',
+								type: 'boolean',
+								default: false,
+								description: undefined,
+								placeholder: 'false'
+							},
+							{
+								displayName: 'Unified Placeholders',
+								name: 'unifiedPlaceholders',
 								type: 'boolean',
 								default: false,
 								description: undefined,

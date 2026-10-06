@@ -777,6 +777,31 @@ export const translationMemoryProperties: INodeProperties[] = [
 		}
 	},
 	{
+		displayName: 'Is Shared',
+		name: 'isShared',
+		type: 'boolean',
+		default: false,
+		description: 'Whether TM should be shared to all projects within the account',
+		routing: {
+			send: {
+				property: 'isShared',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translationMemory'
+				],
+				operation: [
+					'api.tms.post'
+				]
+			}
+		}
+	},
+	{
 		displayName: 'Tm Id',
 		name: 'tmId',
 		required: true,
@@ -1863,6 +1888,13 @@ export const translationMemoryProperties: INodeProperties[] = [
 				typeOptions: {
 					loadOptionsMethod: 'getLanguages'
 				}
+			},
+			{
+				displayName: 'Is Shared',
+				name: 'isShared',
+				type: 'boolean',
+				default: false,
+				description: 'Whether TM should be shared to all projects within the account'
 			}
 		],
 		routing: {

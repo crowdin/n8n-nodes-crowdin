@@ -155,6 +155,7 @@ const SINGLE_SELECT_OPTIONS = {
 	aiSnippetId: { method: 'getAiSnippets' },
 	teamId: { method: 'getTeams' },
 	teamMemberId: { method: 'getTeamMembers', dependsOn: ['teamId'], matchResource: 'teams', targetField: 'memberId' },
+	aiUsageMemberId: { method: 'getUsers', matchOperation: 'api.ai.usage.members.get', targetField: 'memberId' },
 	userId: { method: 'getUsers' },
 	authorId: { method: 'getUsers' },
 	installedBy: { method: 'getUsers' },
@@ -1699,6 +1700,12 @@ function markEnumArraysInSpec(doc) {
 					let items = currentSchema.items;
 					if (items.$ref) {
 						items = resolveRef(doc, items.$ref);
+					}
+					// oneOf of string variants (an enum plus a free-form pattern, e.g. glossary exportFields):
+					// keep the enum as a multi-select, other values stay possible via an expression
+					if (items?.oneOf?.every((variant) => variant.type === 'string') && items.oneOf.some((variant) => variant.enum)) {
+						items = { type: 'string', enum: items.oneOf.flatMap((variant) => variant.enum || []) };
+						currentSchema.items = items;
 					}
 					if (items?.enum && Array.isArray(items.enum) && fieldName) {
 						// Store in global metadata map

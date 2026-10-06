@@ -263,6 +263,14 @@ export const fieldsProperties: INodeProperties[] = [
 			{
 				name: 'string',
 				value: 'string'
+			},
+			{
+				name: 'term',
+				value: 'term'
+			},
+			{
+				name: 'concept',
+				value: 'concept'
 			}
 		],
 		routing: {
@@ -591,6 +599,14 @@ export const fieldsProperties: INodeProperties[] = [
 			{
 				name: 'string',
 				value: 'string'
+			},
+			{
+				name: 'term',
+				value: 'term'
+			},
+			{
+				name: 'concept',
+				value: 'concept'
 			}
 		]
 	},
@@ -738,6 +754,22 @@ export const fieldsProperties: INodeProperties[] = [
 											{
 												name: 'translationUnderContent',
 												value: 'translationUnderContent'
+											},
+											{
+												name: 'termDetails',
+												value: 'termDetails'
+											},
+											{
+												name: 'termEditModal',
+												value: 'termEditModal'
+											},
+											{
+												name: 'conceptDetails',
+												value: 'conceptDetails'
+											},
+											{
+												name: 'conceptEditModal',
+												value: 'conceptEditModal'
 											}
 										]
 									}
@@ -861,6 +893,22 @@ export const fieldsProperties: INodeProperties[] = [
 											{
 												name: 'translationUnderContent',
 												value: 'translationUnderContent'
+											},
+											{
+												name: 'termDetails',
+												value: 'termDetails'
+											},
+											{
+												name: 'termEditModal',
+												value: 'termEditModal'
+											},
+											{
+												name: 'conceptDetails',
+												value: 'conceptDetails'
+											},
+											{
+												name: 'conceptEditModal',
+												value: 'conceptEditModal'
 											}
 										]
 									}
@@ -963,6 +1011,22 @@ export const fieldsProperties: INodeProperties[] = [
 											{
 												name: 'translationUnderContent',
 												value: 'translationUnderContent'
+											},
+											{
+												name: 'termDetails',
+												value: 'termDetails'
+											},
+											{
+												name: 'termEditModal',
+												value: 'termEditModal'
+											},
+											{
+												name: 'conceptDetails',
+												value: 'conceptDetails'
+											},
+											{
+												name: 'conceptEditModal',
+												value: 'conceptEditModal'
 											}
 										]
 									}
@@ -1214,6 +1278,22 @@ export const fieldsProperties: INodeProperties[] = [
 													{
 														name: 'translationUnderContent',
 														value: 'translationUnderContent'
+													},
+													{
+														name: 'termDetails',
+														value: 'termDetails'
+													},
+													{
+														name: 'termEditModal',
+														value: 'termEditModal'
+													},
+													{
+														name: 'conceptDetails',
+														value: 'conceptDetails'
+													},
+													{
+														name: 'conceptEditModal',
+														value: 'conceptEditModal'
 													}
 												]
 											}
@@ -1337,6 +1417,22 @@ export const fieldsProperties: INodeProperties[] = [
 													{
 														name: 'translationUnderContent',
 														value: 'translationUnderContent'
+													},
+													{
+														name: 'termDetails',
+														value: 'termDetails'
+													},
+													{
+														name: 'termEditModal',
+														value: 'termEditModal'
+													},
+													{
+														name: 'conceptDetails',
+														value: 'conceptDetails'
+													},
+													{
+														name: 'conceptEditModal',
+														value: 'conceptEditModal'
 													}
 												]
 											}
@@ -1439,6 +1535,22 @@ export const fieldsProperties: INodeProperties[] = [
 													{
 														name: 'translationUnderContent',
 														value: 'translationUnderContent'
+													},
+													{
+														name: 'termDetails',
+														value: 'termDetails'
+													},
+													{
+														name: 'termEditModal',
+														value: 'termEditModal'
+													},
+													{
+														name: 'conceptDetails',
+														value: 'conceptDetails'
+													},
+													{
+														name: 'conceptEditModal',
+														value: 'conceptEditModal'
 													}
 												]
 											}
@@ -1480,6 +1592,14 @@ export const fieldsProperties: INodeProperties[] = [
 					{
 						name: 'string',
 						value: 'string'
+					},
+					{
+						name: 'term',
+						value: 'term'
+					},
+					{
+						name: 'concept',
+						value: 'concept'
 					}
 				]
 			}
