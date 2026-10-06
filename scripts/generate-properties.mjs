@@ -155,6 +155,7 @@ const SINGLE_SELECT_OPTIONS = {
 	aiSnippetId: { method: 'getAiSnippets' },
 	teamId: { method: 'getTeams' },
 	teamMemberId: { method: 'getTeamMembers', dependsOn: ['teamId'], matchResource: 'teams', targetField: 'memberId' },
+	aiUsageMemberId: { method: 'getUsers', matchOperation: 'api.ai.usage.members.get', targetField: 'memberId' },
 	userId: { method: 'getUsers' },
 	authorId: { method: 'getUsers' },
 	installedBy: { method: 'getUsers' },

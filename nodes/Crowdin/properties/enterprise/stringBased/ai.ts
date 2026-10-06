@@ -5543,10 +5543,7 @@ export const aiProperties: INodeProperties[] = [
 			}
 		},
 		typeOptions: {
-			loadOptionsMethod: 'getProjectMembers',
-			loadOptionsDependsOn: [
-				'projectId'
-			]
+			loadOptionsMethod: 'getUsers'
 		}
 	},
 	{
