@@ -921,6 +921,14 @@ export const applicationsProperties: INodeProperties[] = [
 						type: 'boolean',
 						default: false,
 						description: 'Assign Agent as a manager to all existing projects'
+					},
+					{
+						displayName: 'Manifest Hash',
+						name: 'manifestHash',
+						type: 'string',
+						default: '',
+						description: 'Hash of the app manifest as it was loaded for review before installation. If provided and the manifest currently served at `URL` differs, the installation is rejected with 409 and nothing is installed',
+						placeholder: '5536b952d54e0846b6fd69217f6eb7cfdcfba41774732926e1f0c1a158a6e405'
 					}
 				]
 			},
