@@ -2827,6 +2827,31 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 		}
 	},
 	{
+		displayName: 'External Qa Checks Ignorable',
+		name: 'externalQaChecksIgnorable',
+		type: 'json',
+		default: '{\n  "1": false\n}',
+		description: 'External QA check IDs mapped to whether a failure of the check can be ignored. `false` blocks saving a translation when the check fails, and only a synchronous check can be `false`. A check without an entry can be ignored. The entry is kept while the check is not enabled in `externalQaCheckIds`',
+		routing: {
+			send: {
+				property: 'externalQaChecksIgnorable',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ JSON.parse($value) }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'projectsAndGroups'
+				],
+				operation: [
+					'api.projects.post'
+				]
+			}
+		}
+	},
+	{
 		displayName: 'Language Mapping',
 		name: 'languageMapping',
 		type: 'fixedCollection',
@@ -4574,6 +4599,13 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 				default: 0,
 				description: 'Clear QA checks for translations with specific number of approvals',
 				placeholder: '1'
+			},
+			{
+				displayName: 'External Qa Checks Ignorable',
+				name: 'json:externalQaChecksIgnorable',
+				type: 'json',
+				default: '{\n  "1": false\n}',
+				description: 'External QA check IDs mapped to whether a failure of the check can be ignored. `false` blocks saving a translation when the check fails, and only a synchronous check can be `false`. A check without an entry can be ignored. The entry is kept while the check is not enabled in `externalQaCheckIds`'
 			},
 			{
 				displayName: 'Qa Check Categories',
