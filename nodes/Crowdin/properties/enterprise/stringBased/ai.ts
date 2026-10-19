@@ -4020,6 +4020,16 @@ export const aiProperties: INodeProperties[] = [
 										},
 										default: [],
 										description: 'Count only usage by these users; by default everyone in the organization is included'
+									},
+									{
+										displayName: 'Language Ids',
+										name: 'languageIds',
+										type: 'multiOptions',
+										typeOptions: {
+											loadOptionsMethod: 'getLanguagesMulti'
+										},
+										default: [],
+										description: 'Count only usage targeting these languages, ids via [List Supported Languages](#operation/api.languages.getMany). Usage without a target language drops out once this filter is set'
 									}
 								]
 							}

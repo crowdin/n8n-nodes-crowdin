@@ -82,6 +82,32 @@ export const teamsProperties: INodeProperties[] = [
 				}
 			},
 			{
+				name: 'List Project Teams',
+				value: 'api.projects.teams.getMany',
+				action: 'List Project Teams',
+				description: '**Required scopes:** `project.member` (Read only).\n\nReturns a list of teams that have access to the project, along with the permissions each of them holds in it. Teams are sorted by `id`.',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/projects/{{$parameter["projectId"]}}/teams'
+					},
+					send: {
+						paginate: '={{$parameter["returnAll"]}}'
+					},
+					output: {
+						postReceive: [
+							{
+								type: 'rootProperty',
+								enabled: '={{!$parameter["returnAll"]}}',
+								properties: {
+									property: 'data'
+								}
+							}
+						]
+					}
+				}
+			},
+			{
 				name: 'Add Team To Project',
 				value: 'api.projects.teams.post',
 				action: 'Add Team To Project',
@@ -320,6 +346,25 @@ export const teamsProperties: INodeProperties[] = [
 				],
 				operation: [
 					'api.teams.projects.permissions.getMany'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'GET /projects/{projectId}/teams',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'teams'
+				],
+				operation: [
+					'api.projects.teams.getMany'
 				]
 			}
 		}
@@ -676,6 +721,84 @@ export const teamsProperties: INodeProperties[] = [
 				],
 				operation: [
 					'api.teams.projects.permissions.getMany'
+				],
+				returnAll: [
+					false
+				]
+			}
+		},
+		typeOptions: {
+			minValue: 1
+		}
+	},
+	{
+		displayName: 'Project Id',
+		name: 'projectId',
+		required: true,
+		description: 'Project Identifier. Get via [List Projects](#operation/api.projects.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'teams'
+				],
+				operation: [
+					'api.projects.teams.getMany'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjects'
+		}
+	},
+	{
+		displayName: 'Order By',
+		name: 'orderBy',
+		description: 'Read more about [sorting rules](#section/Introduction/Sorting)',
+		default: '',
+		type: 'string',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'orderBy',
+				value: '={{ $value || undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'teams'
+				],
+				operation: [
+					'api.projects.teams.getMany'
+				]
+			}
+		},
+		placeholder: 'name desc,id'
+	},
+	{
+		displayName: 'Limit',
+		name: 'limit',
+		description: 'Max number of results to return',
+		default: 50,
+		type: 'number',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'limit',
+				value: '={{ typeof $value === \'number\' ? $value : undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'teams'
+				],
+				operation: [
+					'api.projects.teams.getMany'
 				],
 				returnAll: [
 					false
@@ -1461,6 +1584,23 @@ export const teamsProperties: INodeProperties[] = [
 				],
 				operation: [
 					'api.teams.projects.permissions.getMany'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Return All',
+		name: 'returnAll',
+		type: 'boolean',
+		default: true,
+		description: 'Whether to return all results or only up to a given limit',
+		displayOptions: {
+			show: {
+				resource: [
+					'teams'
+				],
+				operation: [
+					'api.projects.teams.getMany'
 				]
 			}
 		}
