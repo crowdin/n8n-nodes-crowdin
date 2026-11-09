@@ -165,7 +165,7 @@ export const glossariesProperties: INodeProperties[] = [
 				name: 'Edit Glossary',
 				value: 'api.glossaries.patch',
 				action: 'Edit Glossary',
-				description: '**Required scopes:** `glossary` (Read and Write).',
+				description: '**Required scopes:** `glossary` (Read and Write).\n\nUpdates the name, language, or sharing of a glossary. A `remove` on `/managerIds/{managerId}` with your own ID, sent as the only operation in the request, stops you managing the glossary instead. To change another manager\'s access to the glossary, use [Edit Manager](#operation/api.managers.patch).\n\n__Note:__ You can\'t stop managing the default glossary of a project you still manage; leave the project instead',
 				routing: {
 					request: {
 						method: 'PATCH',
