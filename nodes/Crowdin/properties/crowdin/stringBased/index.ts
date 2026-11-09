@@ -12,6 +12,7 @@ import { distributionsProperties } from './distributions';
 import { reportsProperties } from './reports';
 import { tasksProperties } from './tasks';
 import { stringCommentsProperties } from './stringComments';
+import { discussionsProperties } from './discussions';
 import { translationMemoryProperties } from './translationMemory';
 import { glossariesProperties } from './glossaries';
 import { styleGuidesProperties } from './styleGuides';
@@ -92,6 +93,11 @@ const resourceProperty: INodeProperties = {
 			description: 'Use API to list, add, edit or remove string comments.'
 		},
 		{
+			name: 'Discussions',
+			value: 'discussions',
+			description: '\nDiscussions are project-wide conversations where project members agree on terminology, style and other questions that are wider than a single string. Each discussion is shown as a topic in the project Discussions section. A new discussion notifies every project member, and replies notify the discussion participants who have not muted it.\n\nUse API to list, start, close, reopen, mute, and delete project discussions, and to manage their replies.\n'
+		},
+		{
 			name: 'Translation Memory',
 			value: 'translationMemory',
 			description: '\nTranslation Memory (TM) is a vault of translations that were previously made in other projects. Those translations can be reused to speed up the translation process. Every translation made in the project is automatically added to the project Translation Memory.\n\nUse API to create, upload, download, or remove specific TM. Translation Memory export and import are [asynchronous operations](#section/Introduction/Asynchronous-Operations) and shall be completed with sequence of API methods.\n'
@@ -134,7 +140,7 @@ const resourceProperty: INodeProperties = {
 		{
 			name: 'Users',
 			value: 'users',
-			description: '\nUsers API gives you the possibility to get profile information about the currently authenticated user.\n'
+			description: '\nUsers API gives you the possibility to get profile information about the currently authenticated user.\n\nUse API to manage the managers of your account: list them, add or invite new ones, change their access to your projects, TMs, glossaries, and style guides, or remove them.\n'
 		},
 		{
 			name: 'Notifications',
@@ -193,6 +199,7 @@ export const properties: INodeProperties[] = [
 	...reportsProperties,
 	...tasksProperties,
 	...stringCommentsProperties,
+	...discussionsProperties,
 	...translationMemoryProperties,
 	...glossariesProperties,
 	...styleGuidesProperties,
