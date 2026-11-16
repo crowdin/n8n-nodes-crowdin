@@ -657,6 +657,27 @@ export const tasksProperties: INodeProperties[] = [
 		}
 	},
 	{
+		displayName: 'User Id',
+		name: 'userId',
+		required: true,
+		description: 'User Identifier',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'tasks'
+				],
+				operation: [
+					'api.users.tasks.getMany'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getUsers'
+		}
+	},
+	{
 		displayName: 'Order By',
 		name: 'orderBy',
 		description: 'Read more about [sorting rules](#section/Introduction/Sorting)',
@@ -1715,6 +1736,10 @@ export const tasksProperties: INodeProperties[] = [
 											{
 												name: 'any',
 												value: 'any'
+											},
+											{
+												name: 'null',
+												value: null
 											}
 										]
 									},
@@ -1749,6 +1774,10 @@ export const tasksProperties: INodeProperties[] = [
 											{
 												name: 'any',
 												value: 'any'
+											},
+											{
+												name: 'null',
+												value: null
 											}
 										]
 									},
@@ -2359,6 +2388,10 @@ export const tasksProperties: INodeProperties[] = [
 											{
 												name: 'any',
 												value: 'any'
+											},
+											{
+												name: 'null',
+												value: null
 											}
 										]
 									},
@@ -2393,6 +2426,10 @@ export const tasksProperties: INodeProperties[] = [
 											{
 												name: 'any',
 												value: 'any'
+											},
+											{
+												name: 'null',
+												value: null
 											}
 										]
 									},
@@ -2603,6 +2640,10 @@ export const tasksProperties: INodeProperties[] = [
 											{
 												name: 'any',
 												value: 'any'
+											},
+											{
+												name: 'null',
+												value: null
 											}
 										]
 									},
@@ -2637,6 +2678,10 @@ export const tasksProperties: INodeProperties[] = [
 											{
 												name: 'any',
 												value: 'any'
+											},
+											{
+												name: 'null',
+												value: null
 											}
 										]
 									},

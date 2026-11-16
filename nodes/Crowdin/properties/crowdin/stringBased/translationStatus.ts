@@ -46,7 +46,7 @@ export const translationStatusProperties: INodeProperties[] = [
 				name: 'Get Language Progress',
 				value: 'api.projects.languages.files.progress.getMany',
 				action: 'Get Language Progress',
-				description: '**Required scopes:** `project.status.progress` (Read only).',
+				description: '**Required scopes:** `project.status.progress` (Read only).\n\nReturns translation progress of the specified language for each project file, or for each branch in string-based projects, in the order they were added.',
 				routing: {
 					request: {
 						method: 'GET',

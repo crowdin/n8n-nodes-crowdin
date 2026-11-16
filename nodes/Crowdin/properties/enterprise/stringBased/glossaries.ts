@@ -2121,6 +2121,10 @@ export const glossariesProperties: INodeProperties[] = [
 				value: 'url'
 			},
 			{
+				name: 'translatable',
+				value: 'translatable'
+			},
+			{
 				name: 'conceptDefinition',
 				value: 'conceptDefinition'
 			},

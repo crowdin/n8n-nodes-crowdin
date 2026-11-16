@@ -2243,6 +2243,7 @@ export const projectsProperties: INodeProperties[] = [
 												value: '={{ $value || undefined }}'
 											}
 										},
+										required: true,
 										typeOptions: {
 											loadOptionsMethod: 'getMTEngines'
 										}
@@ -2251,9 +2252,6 @@ export const projectsProperties: INodeProperties[] = [
 										displayName: 'Language Ids',
 										name: 'languageIds',
 										type: 'multiOptions',
-										typeOptions: {
-											loadOptionsMethod: 'getLanguagesMulti'
-										},
 										default: [],
 										description: 'Specify an array of languageIds to use specific languages, or use the string `all` to include all supported languages. Retrieve languageIds via the [List Supported Languages](#operation/api.languages.getMany) endpoint',
 										routing: {
@@ -2263,6 +2261,10 @@ export const projectsProperties: INodeProperties[] = [
 												type: 'body',
 												value: '={{ $value }}'
 											}
+										},
+										required: true,
+										typeOptions: {
+											loadOptionsMethod: 'getLanguagesMulti'
 										}
 									}
 								]
@@ -2343,6 +2345,7 @@ export const projectsProperties: INodeProperties[] = [
 												value: '={{ $value || undefined }}'
 											}
 										},
+										required: true,
 										typeOptions: {
 											loadOptionsMethod: 'getAiPrompts'
 										}
@@ -2351,9 +2354,6 @@ export const projectsProperties: INodeProperties[] = [
 										displayName: 'Language Ids',
 										name: 'languageIds',
 										type: 'multiOptions',
-										typeOptions: {
-											loadOptionsMethod: 'getLanguagesMulti'
-										},
 										default: [],
 										description: 'Specify an array of languageIds to use specific languages, or use the string `all` to include all supported languages. Retrieve languageIds via the [List Supported Languages](#operation/api.languages.getMany) endpoint',
 										routing: {
@@ -2363,6 +2363,10 @@ export const projectsProperties: INodeProperties[] = [
 												type: 'body',
 												value: '={{ $value }}'
 											}
+										},
+										required: true,
+										typeOptions: {
+											loadOptionsMethod: 'getLanguagesMulti'
 										}
 									}
 								]
@@ -4199,6 +4203,31 @@ export const projectsProperties: INodeProperties[] = [
 				description: 'Enable the transformation of the placeholders to the unified format to improve the work with TM suggestions'
 			},
 			{
+				displayName: 'Tags Detection',
+				name: 'tagsDetection',
+				type: 'options',
+				default: '',
+				description: 'Values available:\n * 0 - Auto\n * 1 - Count tags\n * 2 - Skip tags',
+				options: [
+					{
+						name: '-',
+						value: ''
+					},
+					{
+						name: '0',
+						value: 0
+					},
+					{
+						name: '1',
+						value: 1
+					},
+					{
+						name: '2',
+						value: 2
+					}
+				]
+			},
+			{
 				displayName: 'Language Mapping',
 				name: 'languageMapping',
 				type: 'fixedCollection',
@@ -4338,6 +4367,13 @@ export const projectsProperties: INodeProperties[] = [
 				description: 'Value for /assignedTms'
 			},
 			{
+				displayName: 'Tm Penalties',
+				name: 'json:tmPenalties',
+				type: 'json',
+				default: '{}',
+				description: 'Value for /tmPenalties'
+			},
+			{
 				displayName: 'Tm Pre Translate',
 				name: 'tmPreTranslate',
 				type: 'fixedCollection',
@@ -4466,6 +4502,7 @@ export const projectsProperties: INodeProperties[] = [
 														value: '={{ $value || undefined }}'
 													}
 												},
+												required: true,
 												typeOptions: {
 													loadOptionsMethod: 'getMTEngines'
 												}
@@ -4474,9 +4511,6 @@ export const projectsProperties: INodeProperties[] = [
 												displayName: 'Language Ids',
 												name: 'languageIds',
 												type: 'multiOptions',
-												typeOptions: {
-													loadOptionsMethod: 'getLanguagesMulti'
-												},
 												default: [],
 												description: 'Specify an array of languageIds to use specific languages, or use the string `all` to include all supported languages. Retrieve languageIds via the [List Supported Languages](#operation/api.languages.getMany) endpoint',
 												routing: {
@@ -4486,6 +4520,10 @@ export const projectsProperties: INodeProperties[] = [
 														type: 'body',
 														value: '={{ $value }}'
 													}
+												},
+												required: true,
+												typeOptions: {
+													loadOptionsMethod: 'getLanguagesMulti'
 												}
 											}
 										]
@@ -4545,6 +4583,7 @@ export const projectsProperties: INodeProperties[] = [
 														value: '={{ $value || undefined }}'
 													}
 												},
+												required: true,
 												typeOptions: {
 													loadOptionsMethod: 'getAiPrompts'
 												}
@@ -4553,9 +4592,6 @@ export const projectsProperties: INodeProperties[] = [
 												displayName: 'Language Ids',
 												name: 'languageIds',
 												type: 'multiOptions',
-												typeOptions: {
-													loadOptionsMethod: 'getLanguagesMulti'
-												},
 												default: [],
 												description: 'Specify an array of languageIds to use specific languages, or use the string `all` to include all supported languages. Retrieve languageIds via the [List Supported Languages](#operation/api.languages.getMany) endpoint',
 												routing: {
@@ -4565,6 +4601,10 @@ export const projectsProperties: INodeProperties[] = [
 														type: 'body',
 														value: '={{ $value }}'
 													}
+												},
+												required: true,
+												typeOptions: {
+													loadOptionsMethod: 'getLanguagesMulti'
 												}
 											}
 										]

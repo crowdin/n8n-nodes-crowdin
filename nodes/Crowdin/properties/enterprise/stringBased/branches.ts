@@ -1123,8 +1123,8 @@ export const branchesProperties: INodeProperties[] = [
 		}
 	},
 	{
-		displayName: 'Identifier',
-		name: 'identifier',
+		displayName: 'Job Identifier',
+		name: 'jobIdentifier',
 		required: true,
 		description: 'Delete operation identifier (UUID). Returned by the async DELETE (Prefer: respond-async).',
 		default: '',

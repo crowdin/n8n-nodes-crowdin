@@ -98,7 +98,7 @@ export const translationStatusProperties: INodeProperties[] = [
 				name: 'Get Language Progress',
 				value: 'api.projects.languages.files.progress.getMany',
 				action: 'Get Language Progress',
-				description: '**Required scopes:** `project.status.progress` (Read only).',
+				description: '**Required scopes:** `project.status.progress` (Read only).\n\nReturns translation progress of the specified language for each project file, or for each branch in string-based projects, in the order they were added.',
 				routing: {
 					request: {
 						method: 'GET',
@@ -691,6 +691,99 @@ export const translationStatusProperties: INodeProperties[] = [
 		},
 		typeOptions: {
 			loadOptionsMethod: 'getLanguages'
+		}
+	},
+	{
+		displayName: 'Branch Ids',
+		name: 'branchIds',
+		description: 'Filter results to files of the specified branches, including files in their nested directories. It can be one ID or a list of comma-separated ID values. Up to 50 values. Get via [List Branches](#operation/api.projects.branches.getMany)\n\n__Note:__ Can\'t be used with `directoryIds` or `fileIds` in the same request',
+		default: [],
+		type: 'multiOptions',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'branchIds',
+				value: '={{ $value.length ? $value.join(\',\') : undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translationStatus'
+				],
+				operation: [
+					'api.projects.languages.files.progress.getMany'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getBranchesMulti',
+			loadOptionsDependsOn: [
+				'projectId'
+			]
+		}
+	},
+	{
+		displayName: 'Directory Ids',
+		name: 'directoryIds',
+		description: 'Filter results to files of the specified directories, including files in their nested directories. It can be one ID or a list of comma-separated ID values. Up to 50 values. Get via [List Directories](#operation/api.projects.directories.getMany)\n\n__Note:__ Can\'t be used with `branchIds` or `fileIds` in the same request',
+		default: [],
+		type: 'multiOptions',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'directoryIds',
+				value: '={{ $value.length ? $value.join(\',\') : undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translationStatus'
+				],
+				operation: [
+					'api.projects.languages.files.progress.getMany'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjectDirectoriesMulti',
+			loadOptionsDependsOn: [
+				'projectId'
+			]
+		}
+	},
+	{
+		displayName: 'File Ids',
+		name: 'fileIds',
+		description: 'Filter results to the specified files. It can be one ID or a list of comma-separated ID values. Up to 50 values. Get via [List Files](#operation/api.projects.files.getMany)\n\n__Note:__ Can\'t be used with `branchIds` or `directoryIds` in the same request',
+		default: [],
+		type: 'multiOptions',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'fileIds',
+				value: '={{ $value.length ? $value.join(\',\') : undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translationStatus'
+				],
+				operation: [
+					'api.projects.languages.files.progress.getMany'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjectFilesMulti',
+			loadOptionsDependsOn: [
+				'projectId'
+			]
 		}
 	},
 	{

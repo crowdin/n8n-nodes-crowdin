@@ -138,6 +138,68 @@ export const sourceStringsProperties: INodeProperties[] = [
 						]
 					}
 				}
+			},
+			{
+				name: 'Replace Text in Source Strings',
+				value: 'api.projects.strings.replacements.post',
+				action: 'Replace Text in Source Strings',
+				description: '**Required scopes:** `project.source.string` (Read and Write).\n\nFinds a text in the project source strings and replaces it, as an [asynchronous operation](#section/Introduction/Asynchronous-Operations). Start with `dryRun` set to `true`, review the result via [Get String Replacement Summary](#operation/api.projects.strings.replacements.summary.get) and [List String Replacement Matches](#operation/api.projects.strings.replacements.matches.getMany), then run the replacement for real, optionally passing the chosen `stringIds`. Protected strings and strings of files that cannot be edited online are skipped and counted in the summary.\n\n__Note:__ Only one source string replacement that is not a dry run can run in a project at a time, and a replacement can match up to 10000 strings',
+				routing: {
+					request: {
+						method: 'POST',
+						url: '=/projects/{{$parameter["projectId"]}}/strings/replacements'
+					}
+				}
+			},
+			{
+				name: 'Get String Replacement Status',
+				value: 'api.projects.strings.replacements.get',
+				action: 'Get String Replacement Status',
+				description: '**Required scopes:** `project.source.string` (Read only).\n\nReturns the status and progress of a source string replacement started via [Replace Text in Source Strings](#operation/api.projects.strings.replacements.post).',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/projects/{{$parameter["projectId"]}}/strings/replacements/{{$parameter["replacementId"]}}'
+					}
+				}
+			},
+			{
+				name: 'List String Replacement Matches',
+				value: 'api.projects.strings.replacements.matches.getMany',
+				action: 'List String Replacement Matches',
+				description: '**Required scopes:** `project.source.string` (Read only).\n\nReturns the strings of a source string replacement, sorted by string ID. For a dry run, lists the strings a real run would change, each with its current text and the text the replacement would produce from it. For a real run, lists the strings that were changed, each with its current text. Skipped strings are not listed, and neither are strings deleted since the replacement, so a page can hold fewer items than `limit`.\n\n__Note:__ Matches are available as long as the replacement exists',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/projects/{{$parameter["projectId"]}}/strings/replacements/{{$parameter["replacementId"]}}/matches'
+					},
+					send: {
+						paginate: '={{$parameter["returnAll"]}}'
+					},
+					output: {
+						postReceive: [
+							{
+								type: 'rootProperty',
+								enabled: '={{!$parameter["returnAll"]}}',
+								properties: {
+									property: 'data'
+								}
+							}
+						]
+					}
+				}
+			},
+			{
+				name: 'Get String Replacement Summary',
+				value: 'api.projects.strings.replacements.summary.get',
+				action: 'Get String Replacement Summary',
+				description: '**Required scopes:** `project.source.string` (Read only).\n\nReturns the counters of a source string replacement: how many strings matched, how many were changed and how many were skipped, and why. Every matched string is either changed or skipped.\n\n__Note:__ The counters are final once the replacement status is `finished`',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/projects/{{$parameter["projectId"]}}/strings/replacements/{{$parameter["replacementId"]}}/summary'
+					}
+				}
 			}
 		],
 		default: 'api.projects.strings.getMany'
@@ -271,6 +333,82 @@ export const sourceStringsProperties: INodeProperties[] = [
 				],
 				operation: [
 					'api.strings.getMany'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'POST /projects/{projectId}/strings/replacements',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceStrings'
+				],
+				operation: [
+					'api.projects.strings.replacements.post'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'GET /projects/{projectId}/strings/replacements/{replacementId}',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceStrings'
+				],
+				operation: [
+					'api.projects.strings.replacements.get'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'GET /projects/{projectId}/strings/replacements/{replacementId}/matches',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceStrings'
+				],
+				operation: [
+					'api.projects.strings.replacements.matches.getMany'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'GET /projects/{projectId}/strings/replacements/{replacementId}/summary',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceStrings'
+				],
+				operation: [
+					'api.projects.strings.replacements.summary.get'
 				]
 			}
 		}
@@ -1609,6 +1747,430 @@ export const sourceStringsProperties: INodeProperties[] = [
 		}
 	},
 	{
+		displayName: 'Project Id',
+		name: 'projectId',
+		required: true,
+		description: 'Project Identifier. Get via [List Projects](#operation/api.projects.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceStrings'
+				],
+				operation: [
+					'api.projects.strings.replacements.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjects'
+		}
+	},
+	{
+		displayName: 'Text',
+		required: true,
+		name: 'text',
+		type: 'string',
+		default: '',
+		description: 'Text to find in the source strings, 1 to 128 characters. Matched literally, without regular expressions\n\n__Note:__ In plural strings, only the main form is searched. On a match, file-based projects get the text replaced in every form, string-based projects in the main form only',
+		routing: {
+			send: {
+				property: 'text',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceStrings'
+				],
+				operation: [
+					'api.projects.strings.replacements.post'
+				]
+			}
+		},
+		placeholder: 'Workspace'
+	},
+	{
+		displayName: 'Replace With',
+		required: true,
+		name: 'replaceWith',
+		type: 'string',
+		default: '',
+		description: 'Text that replaces every match, up to 10000 characters. Inserted literally: `$1` or `\\0` stay as typed. An empty string removes the matches',
+		routing: {
+			send: {
+				property: 'replaceWith',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceStrings'
+				],
+				operation: [
+					'api.projects.strings.replacements.post'
+				]
+			}
+		},
+		placeholder: 'Space'
+	},
+	{
+		displayName: 'Match Mode',
+		name: 'matchMode',
+		type: 'options',
+		default: '',
+		description: 'How `text` is matched. One of: `phrase` finds the whole phrase anywhere in a string, `allWords` finds strings that contain every word of `text` and replaces each of these words, `entireText` finds strings whose whole text equals `text`. Default is `phrase`',
+		options: [
+			{
+				name: '-',
+				value: ''
+			},
+			{
+				name: 'phrase',
+				value: 'phrase'
+			},
+			{
+				name: 'allWords',
+				value: 'allWords'
+			},
+			{
+				name: 'entireText',
+				value: 'entireText'
+			}
+		],
+		routing: {
+			send: {
+				property: 'matchMode',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceStrings'
+				],
+				operation: [
+					'api.projects.strings.replacements.post'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Case Sensitive',
+		name: 'caseSensitive',
+		type: 'boolean',
+		default: false,
+		description: 'If `true`, the letter case of `text` must match. Default is `false`',
+		routing: {
+			send: {
+				property: 'caseSensitive',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceStrings'
+				],
+				operation: [
+					'api.projects.strings.replacements.post'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Branch Ids',
+		name: 'branchIds',
+		type: 'multiOptions',
+		default: [],
+		description: 'Limit the replacement to the strings of the given branches. Get via [List Branches](#operation/api.projects.branches.getMany). All project branches by default',
+		routing: {
+			send: {
+				property: 'branchIds',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceStrings'
+				],
+				operation: [
+					'api.projects.strings.replacements.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getBranchesMulti',
+			loadOptionsDependsOn: [
+				'projectId'
+			]
+		}
+	},
+	{
+		displayName: 'String Ids',
+		name: 'stringIds',
+		type: 'multiOptions',
+		default: [],
+		description: 'Limit the replacement to the given strings, for example to the matches of a dry run that should really be replaced. Get via [List String Replacement Matches](#operation/api.projects.strings.replacements.matches.getMany). Up to 10000 IDs',
+		routing: {
+			send: {
+				property: 'stringIds',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceStrings'
+				],
+				operation: [
+					'api.projects.strings.replacements.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjectStringsMulti',
+			loadOptionsDependsOn: [
+				'projectId'
+			]
+		}
+	},
+	{
+		displayName: 'Update Option',
+		name: 'updateOption',
+		type: 'options',
+		default: '',
+		description: 'What happens to the translations of the changed strings. One of: `keep_translations_and_approvals`, `keep_translations` (approvals are removed), `clear_translations_and_approvals`. Default is `keep_translations_and_approvals`',
+		options: [
+			{
+				name: '-',
+				value: ''
+			},
+			{
+				name: 'keep_translations_and_approvals',
+				value: 'keep_translations_and_approvals'
+			},
+			{
+				name: 'keep_translations',
+				value: 'keep_translations'
+			},
+			{
+				name: 'clear_translations_and_approvals',
+				value: 'clear_translations_and_approvals'
+			}
+		],
+		routing: {
+			send: {
+				property: 'updateOption',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceStrings'
+				],
+				operation: [
+					'api.projects.strings.replacements.post'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Dry Run',
+		name: 'dryRun',
+		type: 'boolean',
+		default: false,
+		description: 'If `true`, the matches are found and listed, but no string is changed. Default is `false`',
+		routing: {
+			send: {
+				property: 'dryRun',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceStrings'
+				],
+				operation: [
+					'api.projects.strings.replacements.post'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Project Id',
+		name: 'projectId',
+		required: true,
+		description: 'Project Identifier. Get via [List Projects](#operation/api.projects.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceStrings'
+				],
+				operation: [
+					'api.projects.strings.replacements.get'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjects'
+		}
+	},
+	{
+		displayName: 'Replacement Id',
+		name: 'replacementId',
+		required: true,
+		description: 'ID of the source string replacement. Get via [Replace Text in Source Strings](#operation/api.projects.strings.replacements.post)',
+		default: '',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceStrings'
+				],
+				operation: [
+					'api.projects.strings.replacements.get'
+				]
+			}
+		},
+		placeholder: '50fb3506-4127-4ba8-8296-f97dc7e3e0c3'
+	},
+	{
+		displayName: 'Project Id',
+		name: 'projectId',
+		required: true,
+		description: 'Project Identifier. Get via [List Projects](#operation/api.projects.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceStrings'
+				],
+				operation: [
+					'api.projects.strings.replacements.matches.getMany'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjects'
+		}
+	},
+	{
+		displayName: 'Replacement Id',
+		name: 'replacementId',
+		required: true,
+		description: 'ID of the source string replacement. Get via [Replace Text in Source Strings](#operation/api.projects.strings.replacements.post)',
+		default: '',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceStrings'
+				],
+				operation: [
+					'api.projects.strings.replacements.matches.getMany'
+				]
+			}
+		},
+		placeholder: '50fb3506-4127-4ba8-8296-f97dc7e3e0c3'
+	},
+	{
+		displayName: 'Limit',
+		name: 'limit',
+		description: 'Max number of results to return',
+		default: 50,
+		type: 'number',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'limit',
+				value: '={{ typeof $value === \'number\' ? $value : undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceStrings'
+				],
+				operation: [
+					'api.projects.strings.replacements.matches.getMany'
+				],
+				returnAll: [
+					false
+				]
+			}
+		},
+		typeOptions: {
+			minValue: 1
+		}
+	},
+	{
+		displayName: 'Project Id',
+		name: 'projectId',
+		required: true,
+		description: 'Project Identifier. Get via [List Projects](#operation/api.projects.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceStrings'
+				],
+				operation: [
+					'api.projects.strings.replacements.summary.get'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjects'
+		}
+	},
+	{
+		displayName: 'Replacement Id',
+		name: 'replacementId',
+		required: true,
+		description: 'ID of the source string replacement. Get via [Replace Text in Source Strings](#operation/api.projects.strings.replacements.post)',
+		default: '',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceStrings'
+				],
+				operation: [
+					'api.projects.strings.replacements.summary.get'
+				]
+			}
+		},
+		placeholder: '50fb3506-4127-4ba8-8296-f97dc7e3e0c3'
+	},
+	{
 		displayName: 'Return All',
 		name: 'returnAll',
 		type: 'boolean',
@@ -1638,6 +2200,23 @@ export const sourceStringsProperties: INodeProperties[] = [
 				],
 				operation: [
 					'api.strings.getMany'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Return All',
+		name: 'returnAll',
+		type: 'boolean',
+		default: true,
+		description: 'Whether to return all results or only up to a given limit',
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceStrings'
+				],
+				operation: [
+					'api.projects.strings.replacements.matches.getMany'
 				]
 			}
 		}

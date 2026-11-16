@@ -382,7 +382,7 @@ export const translationsProperties: INodeProperties[] = [
 				name: 'Import Translations',
 				value: 'api.projects.translations.imports',
 				action: 'Import Translations',
-				description: '**Required scopes:** `project.translation` (Read and Write).',
+				description: '**Required scopes:** `project.translation` (Read and Write).\n\nStarts an [asynchronous operation](#section/Introduction/Asynchronous-Operations) that imports translations from a file uploaded to storage, and returns its `identifier`. Poll [Import Translations Status](#operation/api.projects.translations.imports.get) for its `status`.\n\n__Note:__ Up to 10 imports can run at once in a project, and up to 20 across all projects of the account. A request over the limit returns `429`; wait at least the number of seconds in the `Retry-After` header before retrying.',
 				routing: {
 					request: {
 						method: 'POST',
@@ -411,6 +411,130 @@ export const translationsProperties: INodeProperties[] = [
 					request: {
 						method: 'GET',
 						url: '=/projects/{{$parameter["projectId"]}}/translations/imports/{{$parameter["importTranslationId"]}}/report'
+					}
+				}
+			},
+			{
+				name: 'Replace Text in Translations',
+				value: 'api.projects.translations.replacements.post',
+				action: 'Replace Text in Translations',
+				description: '**Required scopes:** `project.translation` (Read and Write).\n\nFinds a text in the project translations and replaces it, as an [asynchronous operation](#section/Introduction/Asynchronous-Operations). Start with `dryRun` set to `true`, review the result via [Get Translation Replacement Summary](#operation/api.projects.translations.replacements.summary.get) and [List Translation Replacement Matches](#operation/api.projects.translations.replacements.matches.getMany), then run the replacement for real, optionally passing the chosen `translationIds`. A finished replacement can be undone via [Revert Translation Replacement](#operation/api.projects.translations.replacements.reverts.post). In the languages you proofread, any translation is replaced, approved ones included. In the languages you only translate, only your own translations without approvals are replaced. Translations of protected strings are skipped and counted in the summary.\n\n__Note:__ Only one translation replacement that is not a dry run, or one revert, can run in a project at a time, and a replacement can match up to 10000 translations',
+				routing: {
+					request: {
+						method: 'POST',
+						url: '=/projects/{{$parameter["projectId"]}}/translations/replacements'
+					}
+				}
+			},
+			{
+				name: 'Get Translation Replacement Status',
+				value: 'api.projects.translations.replacements.get',
+				action: 'Get Translation Replacement Status',
+				description: '**Required scopes:** `project.translation` (Read only).\n\nReturns the status and progress of a translation replacement started via [Replace Text in Translations](#operation/api.projects.translations.replacements.post). Only the user who started the replacement can get it.',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/projects/{{$parameter["projectId"]}}/translations/replacements/{{$parameter["replacementId"]}}'
+					}
+				}
+			},
+			{
+				name: 'List Translation Replacement Matches',
+				value: 'api.projects.translations.replacements.matches.getMany',
+				action: 'List Translation Replacement Matches',
+				description: '**Required scopes:** `project.translation` (Read only).\n\nReturns the translations of a translation replacement, sorted by translation ID. For a dry run, lists the translations a real run would change, each with its current text and the text the replacement would produce from it. For a real run, lists the translations that were changed, each with its text before the replacement and its current text. Skipped translations are not listed, and neither are translations deleted since the replacement, so a page can hold fewer items than `limit`.\n\n__Note:__ Matches are available as long as the replacement exists',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/projects/{{$parameter["projectId"]}}/translations/replacements/{{$parameter["replacementId"]}}/matches'
+					},
+					send: {
+						paginate: '={{$parameter["returnAll"]}}'
+					},
+					output: {
+						postReceive: [
+							{
+								type: 'rootProperty',
+								enabled: '={{!$parameter["returnAll"]}}',
+								properties: {
+									property: 'data'
+								}
+							}
+						]
+					}
+				}
+			},
+			{
+				name: 'List Translation Replacement Reverts',
+				value: 'api.projects.translations.replacements.reverts.getMany',
+				action: 'List Translation Replacement Reverts',
+				description: '**Required scopes:** `project.translation` (Read only).\n\nReturns the reverts of a translation replacement, oldest first. A revert that failed or was canceled can be started again, so the list holds every attempt. Only the user who started the replacement can list its reverts.',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/projects/{{$parameter["projectId"]}}/translations/replacements/{{$parameter["replacementId"]}}/reverts'
+					},
+					send: {
+						paginate: '={{$parameter["returnAll"]}}'
+					},
+					output: {
+						postReceive: [
+							{
+								type: 'rootProperty',
+								enabled: '={{!$parameter["returnAll"]}}',
+								properties: {
+									property: 'data'
+								}
+							}
+						]
+					}
+				}
+			},
+			{
+				name: 'Revert Translation Replacement',
+				value: 'api.projects.translations.replacements.reverts.post',
+				action: 'Revert Translation Replacement',
+				description: '**Required scopes:** `project.translation` (Read and Write).\n\nRestores the translations a finished replacement changed to their text before the replacement, as an [asynchronous operation](#section/Introduction/Asynchronous-Operations). Exactly the translations the replacement changed are restored. Translations changed or deleted after the replacement, for example by an undo, are left as they are and counted as skipped in [Get Translation Replacement Revert Summary](#operation/api.projects.translations.replacements.reverts.summary.get). The request body can be omitted or empty.\n\n__Note:__ A replacement can be reverted within 7 days after it finished. A revert that failed or was canceled can be started again',
+				routing: {
+					request: {
+						method: 'POST',
+						url: '=/projects/{{$parameter["projectId"]}}/translations/replacements/{{$parameter["replacementId"]}}/reverts'
+					}
+				}
+			},
+			{
+				name: 'Get Translation Replacement Revert Status',
+				value: 'api.projects.translations.replacements.reverts.get',
+				action: 'Get Translation Replacement Revert Status',
+				description: '**Required scopes:** `project.translation` (Read only).\n\nReturns the status and progress of a translation replacement revert started via [Revert Translation Replacement](#operation/api.projects.translations.replacements.reverts.post). The counters of the revert are returned by [Get Translation Replacement Revert Summary](#operation/api.projects.translations.replacements.reverts.summary.get).',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/projects/{{$parameter["projectId"]}}/translations/replacements/{{$parameter["replacementId"]}}/reverts/{{$parameter["revertId"]}}'
+					}
+				}
+			},
+			{
+				name: 'Get Translation Replacement Revert Summary',
+				value: 'api.projects.translations.replacements.reverts.summary.get',
+				action: 'Get Translation Replacement Revert Summary',
+				description: '**Required scopes:** `project.translation` (Read only).\n\nReturns the counters of a translation replacement revert: how many translations were restored and how many were left as they are. Every translation the replacement changed is either restored or skipped.\n\n__Note:__ The counters are final once the revert status is `finished`',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/projects/{{$parameter["projectId"]}}/translations/replacements/{{$parameter["replacementId"]}}/reverts/{{$parameter["revertId"]}}/summary'
+					}
+				}
+			},
+			{
+				name: 'Get Translation Replacement Summary',
+				value: 'api.projects.translations.replacements.summary.get',
+				action: 'Get Translation Replacement Summary',
+				description: '**Required scopes:** `project.translation` (Read only).\n\nReturns the counters of a translation replacement: how many translations matched, how many were changed and how many were skipped, and why. Every matched translation is either changed or skipped.\n\n__Note:__ The counters are final once the replacement status is `finished`',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/projects/{{$parameter["projectId"]}}/translations/replacements/{{$parameter["replacementId"]}}/summary'
 					}
 				}
 			}
@@ -907,6 +1031,158 @@ export const translationsProperties: INodeProperties[] = [
 				],
 				operation: [
 					'api.projects.translations.imports.report.get'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'POST /projects/{projectId}/translations/replacements',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.translations.replacements.post'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'GET /projects/{projectId}/translations/replacements/{replacementId}',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.translations.replacements.get'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'GET /projects/{projectId}/translations/replacements/{replacementId}/matches',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.translations.replacements.matches.getMany'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'GET /projects/{projectId}/translations/replacements/{replacementId}/reverts',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.translations.replacements.reverts.getMany'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'POST /projects/{projectId}/translations/replacements/{replacementId}/reverts',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.translations.replacements.reverts.post'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'GET /projects/{projectId}/translations/replacements/{replacementId}/reverts/{revertId}',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.translations.replacements.reverts.get'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'GET /projects/{projectId}/translations/replacements/{replacementId}/reverts/{revertId}/summary',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.translations.replacements.reverts.summary.get'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'GET /projects/{projectId}/translations/replacements/{replacementId}/summary',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.translations.replacements.summary.get'
 				]
 			}
 		}
@@ -4201,6 +4477,821 @@ export const translationsProperties: INodeProperties[] = [
 		}
 	},
 	{
+		displayName: 'Project Id',
+		name: 'projectId',
+		required: true,
+		description: 'Project Identifier. Get via [List Projects](#operation/api.projects.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.translations.replacements.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjects'
+		}
+	},
+	{
+		displayName: 'Text',
+		required: true,
+		name: 'text',
+		type: 'string',
+		default: '',
+		description: 'Text to find in the translations, 1 to 128 characters. Matched literally, without regular expressions',
+		routing: {
+			send: {
+				property: 'text',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.translations.replacements.post'
+				]
+			}
+		},
+		placeholder: 'Робочий простір'
+	},
+	{
+		displayName: 'Replace With',
+		required: true,
+		name: 'replaceWith',
+		type: 'string',
+		default: '',
+		description: 'Text that replaces every match, up to 10000 characters. Inserted literally: `$1` or `\\0` stay as typed. A translation that would become empty is skipped',
+		routing: {
+			send: {
+				property: 'replaceWith',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.translations.replacements.post'
+				]
+			}
+		},
+		placeholder: 'Простір'
+	},
+	{
+		displayName: 'Match Mode',
+		name: 'matchMode',
+		type: 'options',
+		default: '',
+		description: 'How `text` is matched. One of: `phrase` finds the whole phrase anywhere in a translation, `allWords` finds translations that contain every word of `text` and replaces each of these words, `entireText` finds translations whose whole text equals `text`. Default is `phrase`',
+		options: [
+			{
+				name: '-',
+				value: ''
+			},
+			{
+				name: 'phrase',
+				value: 'phrase'
+			},
+			{
+				name: 'allWords',
+				value: 'allWords'
+			},
+			{
+				name: 'entireText',
+				value: 'entireText'
+			}
+		],
+		routing: {
+			send: {
+				property: 'matchMode',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.translations.replacements.post'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Case Sensitive',
+		name: 'caseSensitive',
+		type: 'boolean',
+		default: false,
+		description: 'If `true`, the letter case of `text` must match. Default is `false`',
+		routing: {
+			send: {
+				property: 'caseSensitive',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.translations.replacements.post'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Language Ids',
+		required: true,
+		name: 'languageIds',
+		type: 'multiOptions',
+		default: [],
+		description: 'Target languages to replace the translations in. Get via [Project Target Languages](#operation/api.projects.get)',
+		routing: {
+			send: {
+				property: 'languageIds',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.translations.replacements.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getLanguagesMulti'
+		}
+	},
+	{
+		displayName: 'File Ids',
+		name: 'fileIds',
+		type: 'multiOptions',
+		default: [],
+		description: 'Limit the replacement to the translations of the given files. Get via [List Files](#operation/api.projects.files.getMany). All project files by default\n\n__Note:__ Can\'t be used with `directoryIds` or `branchIds` in the same request',
+		routing: {
+			send: {
+				property: 'fileIds',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.translations.replacements.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjectFilesMulti',
+			loadOptionsDependsOn: [
+				'projectId'
+			]
+		}
+	},
+	{
+		displayName: 'Directory Ids',
+		name: 'directoryIds',
+		type: 'multiOptions',
+		default: [],
+		description: 'Limit the replacement to the translations of the files in the given directories, nested directories included. Get via [List Directories](#operation/api.projects.directories.getMany)\n\n__Note:__ Can\'t be used with `fileIds` or `branchIds` in the same request',
+		routing: {
+			send: {
+				property: 'directoryIds',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.translations.replacements.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjectDirectoriesMulti',
+			loadOptionsDependsOn: [
+				'projectId'
+			]
+		}
+	},
+	{
+		displayName: 'Branch Ids',
+		name: 'branchIds',
+		type: 'multiOptions',
+		default: [],
+		description: 'Limit the replacement to the translations of the files in the given branches. Get via [List Branches](#operation/api.projects.branches.getMany)\n\n__Note:__ Can\'t be used with `fileIds` or `directoryIds` in the same request',
+		routing: {
+			send: {
+				property: 'branchIds',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.translations.replacements.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getBranchesMulti',
+			loadOptionsDependsOn: [
+				'projectId'
+			]
+		}
+	},
+	{
+		displayName: 'Task Id',
+		name: 'taskId',
+		type: 'options',
+		default: '',
+		description: 'Limit the replacement to the strings of the given task. Get via [List Tasks](#operation/api.projects.tasks.getMany)',
+		routing: {
+			send: {
+				property: 'taskId',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ typeof $value === \'number\' ? $value : undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.translations.replacements.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjectTasks',
+			loadOptionsDependsOn: [
+				'projectId'
+			]
+		}
+	},
+	{
+		displayName: 'Label Ids',
+		name: 'labelIds',
+		type: 'multiOptions',
+		default: [],
+		description: 'Limit the replacement to the translations of the strings with the given labels, matched as `labelMatchRule` sets. Get via [List Labels](#operation/api.projects.labels.getMany)',
+		routing: {
+			send: {
+				property: 'labelIds',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.translations.replacements.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjectLabelsMulti',
+			loadOptionsDependsOn: [
+				'projectId'
+			]
+		}
+	},
+	{
+		displayName: 'Label Match Rule',
+		name: 'labelMatchRule',
+		type: 'options',
+		default: '',
+		description: 'How a string is matched against `labelIds`. One of: `all` — the string carries every one of the labels, `any` — at least one of them. Default is `all`\n\n__Note:__ Must be used together with `labelIds`',
+		options: [
+			{
+				name: '-',
+				value: ''
+			},
+			{
+				name: 'all',
+				value: 'all'
+			},
+			{
+				name: 'any',
+				value: 'any'
+			}
+		],
+		routing: {
+			send: {
+				property: 'labelMatchRule',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.translations.replacements.post'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Translation Ids',
+		name: 'translationIds',
+		type: 'fixedCollection',
+		default: {},
+		description: 'Limit the replacement to the given translations, for example to the matches of a dry run that should really be replaced. Get via [List Translation Replacement Matches](#operation/api.projects.translations.replacements.matches.getMany) or [List Language Translations](#operation/api.projects.languages.translations.getMany). Up to 10000 IDs',
+		routing: {
+			send: {
+				property: 'translationIds',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value.items?.map(i => i._value) || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.translations.replacements.post'
+				]
+			}
+		},
+		typeOptions: {
+			multipleValues: true
+		},
+		placeholder: 'Add Item',
+		options: [
+			{
+				displayName: 'Items',
+				name: 'items',
+				values: [
+					{
+						displayName: 'Value',
+						name: '_value',
+						type: 'number',
+						default: 0,
+						placeholder: '0'
+					}
+				]
+			}
+		]
+	},
+	{
+		displayName: 'Dry Run',
+		name: 'dryRun',
+		type: 'boolean',
+		default: false,
+		description: 'If `true`, the matches are found and listed, but no translation is changed. Default is `false`',
+		routing: {
+			send: {
+				property: 'dryRun',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.translations.replacements.post'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Project Id',
+		name: 'projectId',
+		required: true,
+		description: 'Project Identifier. Get via [List Projects](#operation/api.projects.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.translations.replacements.get'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjects'
+		}
+	},
+	{
+		displayName: 'Replacement Id',
+		name: 'replacementId',
+		required: true,
+		description: 'ID of the translation replacement. Get via [Replace Text in Translations](#operation/api.projects.translations.replacements.post)',
+		default: '',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.translations.replacements.get'
+				]
+			}
+		},
+		placeholder: '6c1e5d0a-2b47-4f06-9d0e-3c8d1f6b2a11'
+	},
+	{
+		displayName: 'Project Id',
+		name: 'projectId',
+		required: true,
+		description: 'Project Identifier. Get via [List Projects](#operation/api.projects.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.translations.replacements.matches.getMany'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjects'
+		}
+	},
+	{
+		displayName: 'Replacement Id',
+		name: 'replacementId',
+		required: true,
+		description: 'ID of the translation replacement. Get via [Replace Text in Translations](#operation/api.projects.translations.replacements.post)',
+		default: '',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.translations.replacements.matches.getMany'
+				]
+			}
+		},
+		placeholder: '6c1e5d0a-2b47-4f06-9d0e-3c8d1f6b2a11'
+	},
+	{
+		displayName: 'Limit',
+		name: 'limit',
+		description: 'Max number of results to return',
+		default: 50,
+		type: 'number',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'limit',
+				value: '={{ typeof $value === \'number\' ? $value : undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.translations.replacements.matches.getMany'
+				],
+				returnAll: [
+					false
+				]
+			}
+		},
+		typeOptions: {
+			minValue: 1
+		}
+	},
+	{
+		displayName: 'Project Id',
+		name: 'projectId',
+		required: true,
+		description: 'Project Identifier. Get via [List Projects](#operation/api.projects.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.translations.replacements.reverts.getMany'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjects'
+		}
+	},
+	{
+		displayName: 'Replacement Id',
+		name: 'replacementId',
+		required: true,
+		description: 'ID of the translation replacement. Get via [Replace Text in Translations](#operation/api.projects.translations.replacements.post)',
+		default: '',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.translations.replacements.reverts.getMany'
+				]
+			}
+		},
+		placeholder: '6c1e5d0a-2b47-4f06-9d0e-3c8d1f6b2a11'
+	},
+	{
+		displayName: 'Limit',
+		name: 'limit',
+		description: 'Max number of results to return',
+		default: 50,
+		type: 'number',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'limit',
+				value: '={{ typeof $value === \'number\' ? $value : undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.translations.replacements.reverts.getMany'
+				],
+				returnAll: [
+					false
+				]
+			}
+		},
+		typeOptions: {
+			minValue: 1
+		}
+	},
+	{
+		displayName: 'Project Id',
+		name: 'projectId',
+		required: true,
+		description: 'Project Identifier. Get via [List Projects](#operation/api.projects.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.translations.replacements.reverts.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjects'
+		}
+	},
+	{
+		displayName: 'Replacement Id',
+		name: 'replacementId',
+		required: true,
+		description: 'ID of the translation replacement. Get via [Replace Text in Translations](#operation/api.projects.translations.replacements.post)',
+		default: '',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.translations.replacements.reverts.post'
+				]
+			}
+		},
+		placeholder: '6c1e5d0a-2b47-4f06-9d0e-3c8d1f6b2a11'
+	},
+	{
+		displayName: 'Project Id',
+		name: 'projectId',
+		required: true,
+		description: 'Project Identifier. Get via [List Projects](#operation/api.projects.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.translations.replacements.reverts.get'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjects'
+		}
+	},
+	{
+		displayName: 'Replacement Id',
+		name: 'replacementId',
+		required: true,
+		description: 'ID of the translation replacement. Get via [Replace Text in Translations](#operation/api.projects.translations.replacements.post)',
+		default: '',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.translations.replacements.reverts.get'
+				]
+			}
+		},
+		placeholder: '6c1e5d0a-2b47-4f06-9d0e-3c8d1f6b2a11'
+	},
+	{
+		displayName: 'Revert Id',
+		name: 'revertId',
+		required: true,
+		description: 'ID of the translation replacement revert. Get via [List Translation Replacement Reverts](#operation/api.projects.translations.replacements.reverts.getMany)',
+		default: '',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.translations.replacements.reverts.get'
+				]
+			}
+		},
+		placeholder: '0f3b8f14-9c1a-4b1e-8e3a-5d2f7c9a6b40'
+	},
+	{
+		displayName: 'Project Id',
+		name: 'projectId',
+		required: true,
+		description: 'Project Identifier. Get via [List Projects](#operation/api.projects.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.translations.replacements.reverts.summary.get'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjects'
+		}
+	},
+	{
+		displayName: 'Replacement Id',
+		name: 'replacementId',
+		required: true,
+		description: 'ID of the translation replacement. Get via [Replace Text in Translations](#operation/api.projects.translations.replacements.post)',
+		default: '',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.translations.replacements.reverts.summary.get'
+				]
+			}
+		},
+		placeholder: '6c1e5d0a-2b47-4f06-9d0e-3c8d1f6b2a11'
+	},
+	{
+		displayName: 'Revert Id',
+		name: 'revertId',
+		required: true,
+		description: 'ID of the translation replacement revert. Get via [List Translation Replacement Reverts](#operation/api.projects.translations.replacements.reverts.getMany)',
+		default: '',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.translations.replacements.reverts.summary.get'
+				]
+			}
+		},
+		placeholder: '0f3b8f14-9c1a-4b1e-8e3a-5d2f7c9a6b40'
+	},
+	{
+		displayName: 'Project Id',
+		name: 'projectId',
+		required: true,
+		description: 'Project Identifier. Get via [List Projects](#operation/api.projects.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.translations.replacements.summary.get'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjects'
+		}
+	},
+	{
+		displayName: 'Replacement Id',
+		name: 'replacementId',
+		required: true,
+		description: 'ID of the translation replacement. Get via [Replace Text in Translations](#operation/api.projects.translations.replacements.post)',
+		default: '',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.translations.replacements.summary.get'
+				]
+			}
+		},
+		placeholder: '6c1e5d0a-2b47-4f06-9d0e-3c8d1f6b2a11'
+	},
+	{
 		displayName: 'Update Fields',
 		name: 'updateFields',
 		type: 'collection',
@@ -4302,6 +5393,14 @@ export const translationsProperties: INodeProperties[] = [
 				type: 'boolean',
 				default: false,
 				description: 'Add project source language to bundle'
+			},
+			{
+				displayName: 'Source Language Export Pattern',
+				name: 'sourceLanguageExportPattern',
+				type: 'string',
+				default: '',
+				description: 'Source language export pattern. Works only when `includeProjectSourceLanguage` is enabled.\n\n__Note:__ Can\'t contain `: * ? " < > |` symbols',
+				placeholder: 'strings-%two_letter_code%.resx'
 			},
 			{
 				displayName: 'Include In Context Pseudo Language',
@@ -4508,6 +5607,40 @@ export const translationsProperties: INodeProperties[] = [
 				],
 				operation: [
 					'api.projects.translations.builds.getMany'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Return All',
+		name: 'returnAll',
+		type: 'boolean',
+		default: true,
+		description: 'Whether to return all results or only up to a given limit',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.translations.replacements.matches.getMany'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Return All',
+		name: 'returnAll',
+		type: 'boolean',
+		default: true,
+		description: 'Whether to return all results or only up to a given limit',
+		displayOptions: {
+			show: {
+				resource: [
+					'translations'
+				],
+				operation: [
+					'api.projects.translations.replacements.reverts.getMany'
 				]
 			}
 		}

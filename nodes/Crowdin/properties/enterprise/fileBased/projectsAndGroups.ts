@@ -6450,6 +6450,31 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 				description: 'Enable the transformation of the placeholders to the unified format to improve the work with TM suggestions'
 			},
 			{
+				displayName: 'Tags Detection',
+				name: 'tagsDetection',
+				type: 'options',
+				default: '',
+				description: 'Values available:\n * 0 - Auto\n * 1 - Count tags\n * 2 - Skip tags',
+				options: [
+					{
+						name: '-',
+						value: ''
+					},
+					{
+						name: '0',
+						value: 0
+					},
+					{
+						name: '1',
+						value: 1
+					},
+					{
+						name: '2',
+						value: 2
+					}
+				]
+			},
+			{
 				displayName: 'Save Meta Info In Source',
 				name: 'saveMetaInfoInSource',
 				type: 'boolean',
@@ -6670,6 +6695,16 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 						]
 					}
 				]
+			},
+			{
+				displayName: 'External Qa Check Ids',
+				name: 'externalQaCheckIds',
+				type: 'multiOptions',
+				default: [],
+				description: 'Value for /externalQaCheckIds',
+				typeOptions: {
+					loadOptionsMethod: 'getExternalQaChecksMulti'
+				}
 			},
 			{
 				displayName: 'External Qa Checks Ignorable',
@@ -6992,6 +7027,13 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 				type: 'json',
 				default: '{}',
 				description: 'Value for /assignedTms'
+			},
+			{
+				displayName: 'Tm Penalties',
+				name: 'json:tmPenalties',
+				type: 'json',
+				default: '{}',
+				description: 'Value for /tmPenalties'
 			},
 			{
 				displayName: 'Tm Context Type',
