@@ -2389,7 +2389,7 @@ export const aiProperties: INodeProperties[] = [
 		name: 'action',
 		type: 'options',
 		default: 'pre_translate',
-		description: 'AI prompt action. __Note:__ `assist` is deprecated',
+		description: undefined,
 		options: [
 			{
 				name: 'pre_translate',
@@ -2402,6 +2402,10 @@ export const aiProperties: INodeProperties[] = [
 			{
 				name: 'qa_check',
 				value: 'qa_check'
+			},
+			{
+				name: 'advisor_context_review',
+				value: 'advisor_context_review'
 			}
 		],
 		routing: {
@@ -2794,6 +2798,34 @@ export const aiProperties: INodeProperties[] = [
 						type: 'boolean',
 						default: false,
 						description: 'Include organization name and internal description into the prompt context.'
+					}
+				]
+			},
+			{
+				displayName: 'Basic mode (advisor context review action)',
+				name: '_basicModeAdvisorContextReviewAction',
+				values: [
+					{
+						displayName: 'Mode',
+						name: 'mode',
+						type: 'options',
+						default: 'basic',
+						description: undefined,
+						required: true,
+						options: [
+							{
+								name: 'basic',
+								value: 'basic'
+							}
+						]
+					},
+					{
+						displayName: 'Public Project Description',
+						name: 'publicProjectDescription',
+						type: 'boolean',
+						default: false,
+						description: undefined,
+						placeholder: 'true'
 					}
 				]
 			},
@@ -5654,27 +5686,9 @@ export const aiProperties: INodeProperties[] = [
 			{
 				displayName: 'Action',
 				name: 'action',
-				type: 'options',
+				type: 'string',
 				default: '',
-				description: 'AI prompt action. __Note:__ `assist` is deprecated',
-				options: [
-					{
-						name: '-',
-						value: ''
-					},
-					{
-						name: 'pre_translate',
-						value: 'pre_translate'
-					},
-					{
-						name: 'alignment',
-						value: 'alignment'
-					},
-					{
-						name: 'qa_check',
-						value: 'qa_check'
-					}
-				]
+				description: 'AI prompt action, a built-in one or a custom one'
 			},
 			{
 				displayName: 'Ai Provider Id',
@@ -5982,6 +5996,34 @@ export const aiProperties: INodeProperties[] = [
 								type: 'boolean',
 								default: false,
 								description: 'Include organization name and internal description into the prompt context.'
+							}
+						]
+					},
+					{
+						name: '_basicModeAdvisorContextReviewAction',
+						displayName: 'Basic mode (advisor context review action)',
+						values: [
+							{
+								displayName: 'Mode',
+								name: 'mode',
+								type: 'options',
+								default: 'basic',
+								description: undefined,
+								required: true,
+								options: [
+									{
+										name: 'basic',
+										value: 'basic'
+									}
+								]
+							},
+							{
+								displayName: 'Public Project Description',
+								name: 'publicProjectDescription',
+								type: 'boolean',
+								default: false,
+								description: undefined,
+								placeholder: 'true'
 							}
 						]
 					},

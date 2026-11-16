@@ -510,7 +510,7 @@ export const sourceFilesProperties: INodeProperties[] = [
 				name: 'List File Revisions',
 				value: 'api.projects.files.revisions.getMany',
 				action: 'List File Revisions',
-				description: '**Required scopes:** `project.source.file` (Read only).',
+				description: '**Required scopes:** `project.source.file` (Read only).\n\nReturns the revisions of a file, each with the user who created it and the number of strings and words it added, updated and deleted. Pass `userId` to get only the revisions that user created. Revisions are sorted by revision number.',
 				routing: {
 					request: {
 						method: 'GET',
@@ -1569,8 +1569,8 @@ export const sourceFilesProperties: INodeProperties[] = [
 		}
 	},
 	{
-		displayName: 'Identifier',
-		name: 'identifier',
+		displayName: 'Job Identifier',
+		name: 'jobIdentifier',
 		required: true,
 		description: 'Delete operation identifier (UUID). Returned by the async DELETE (Prefer: respond-async).',
 		default: '',
@@ -2300,8 +2300,8 @@ export const sourceFilesProperties: INodeProperties[] = [
 		}
 	},
 	{
-		displayName: 'Identifier',
-		name: 'identifier',
+		displayName: 'Job Identifier',
+		name: 'jobIdentifier',
 		required: true,
 		description: 'Delete operation identifier (UUID). Returned by the async DELETE (Prefer: respond-async).',
 		default: '',
@@ -6944,8 +6944,8 @@ export const sourceFilesProperties: INodeProperties[] = [
 		}
 	},
 	{
-		displayName: 'Identifier',
-		name: 'identifier',
+		displayName: 'Job Identifier',
+		name: 'jobIdentifier',
 		required: true,
 		description: 'Delete operation identifier (UUID). Returned by the async DELETE (Prefer: respond-async).',
 		default: '',
@@ -7524,6 +7524,34 @@ export const sourceFilesProperties: INodeProperties[] = [
 			loadOptionsDependsOn: [
 				'projectId'
 			]
+		}
+	},
+	{
+		displayName: 'User Id',
+		name: 'userId',
+		description: 'Project Member Identifier. Get via [List Project Members](#operation/api.projects.members.getMany)',
+		default: '',
+		type: 'options',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'userId',
+				value: '={{ typeof $value === \'number\' ? $value : undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'sourceFiles'
+				],
+				operation: [
+					'api.projects.files.revisions.getMany'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getUsers'
 		}
 	},
 	{

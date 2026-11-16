@@ -2791,7 +2791,7 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 		displayName: 'External Qa Checks Ignorable',
 		name: 'externalQaChecksIgnorable',
 		type: 'json',
-		default: '{\n  "1": false\n}',
+		default: '{}',
 		description: 'External QA check IDs mapped to whether a failure of the check can be ignored. `false` blocks saving a translation when the check fails, and only a synchronous check can be `false`. A check without an entry can be ignored. The entry is kept while the check is not enabled in `externalQaCheckIds`',
 		routing: {
 			send: {
@@ -2810,7 +2810,8 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 					'api.projects.post'
 				]
 			}
-		}
+		},
+		placeholder: '{"1":false}'
 	},
 	{
 		displayName: 'Language Mapping',
@@ -6450,6 +6451,31 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 				description: 'Enable the transformation of the placeholders to the unified format to improve the work with TM suggestions'
 			},
 			{
+				displayName: 'Tags Detection',
+				name: 'tagsDetection',
+				type: 'options',
+				default: '',
+				description: 'Values available:\n * 0 - Auto\n * 1 - Count tags\n * 2 - Skip tags',
+				options: [
+					{
+						name: '-',
+						value: ''
+					},
+					{
+						name: '0',
+						value: 0
+					},
+					{
+						name: '1',
+						value: 1
+					},
+					{
+						name: '2',
+						value: 2
+					}
+				]
+			},
+			{
 				displayName: 'Save Meta Info In Source',
 				name: 'saveMetaInfoInSource',
 				type: 'boolean',
@@ -6672,11 +6698,22 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 				]
 			},
 			{
+				displayName: 'External Qa Check Ids',
+				name: 'externalQaCheckIds',
+				type: 'multiOptions',
+				default: [],
+				description: 'Value for /externalQaCheckIds',
+				typeOptions: {
+					loadOptionsMethod: 'getExternalQaChecksMulti'
+				}
+			},
+			{
 				displayName: 'External Qa Checks Ignorable',
 				name: 'json:externalQaChecksIgnorable',
 				type: 'json',
-				default: '{\n  "1": false\n}',
-				description: 'External QA check IDs mapped to whether a failure of the check can be ignored. `false` blocks saving a translation when the check fails, and only a synchronous check can be `false`. A check without an entry can be ignored. The entry is kept while the check is not enabled in `externalQaCheckIds`'
+				default: '{}',
+				description: 'External QA check IDs mapped to whether a failure of the check can be ignored. `false` blocks saving a translation when the check fails, and only a synchronous check can be `false`. A check without an entry can be ignored. The entry is kept while the check is not enabled in `externalQaCheckIds`',
+				placeholder: '{"1":false}'
 			},
 			{
 				displayName: 'Qa Checks Ignorable Categories',
@@ -6983,8 +7020,9 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 				displayName: 'Assigned Glossaries',
 				name: 'json:assignedGlossaries',
 				type: 'json',
-				default: '[\n  2\n]',
-				description: 'Value for /assignedGlossaries'
+				default: '[]',
+				description: 'Value for /assignedGlossaries',
+				placeholder: '[2]'
 			},
 			{
 				displayName: 'Assigned Tms',
@@ -6992,6 +7030,13 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 				type: 'json',
 				default: '{}',
 				description: 'Value for /assignedTms'
+			},
+			{
+				displayName: 'Tm Penalties',
+				name: 'json:tmPenalties',
+				type: 'json',
+				default: '{}',
+				description: 'Value for /tmPenalties'
 			},
 			{
 				displayName: 'Tm Context Type',

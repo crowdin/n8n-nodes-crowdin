@@ -7270,6 +7270,13 @@ export const reportsProperties: INodeProperties[] = [
 				placeholder: 'Default template'
 			},
 			{
+				displayName: 'Is Public',
+				name: 'isPublic',
+				type: 'boolean',
+				default: false,
+				description: 'Defines report public'
+			},
+			{
 				displayName: 'Currency',
 				name: 'currency',
 				type: 'options',

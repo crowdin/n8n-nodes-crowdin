@@ -2667,6 +2667,10 @@ export const aiProperties: INodeProperties[] = [
 			{
 				name: 'qa_check',
 				value: 'qa_check'
+			},
+			{
+				name: 'advisor_context_review',
+				value: 'advisor_context_review'
 			}
 		],
 		routing: {
@@ -3001,6 +3005,34 @@ export const aiProperties: INodeProperties[] = [
 						type: 'boolean',
 						default: false,
 						description: undefined
+					}
+				]
+			},
+			{
+				displayName: 'Basic mode (advisor context review action)',
+				name: '_basicModeAdvisorContextReviewAction',
+				values: [
+					{
+						displayName: 'Mode',
+						name: 'mode',
+						type: 'options',
+						default: 'basic',
+						description: undefined,
+						required: true,
+						options: [
+							{
+								name: 'basic',
+								value: 'basic'
+							}
+						]
+					},
+					{
+						displayName: 'Public Project Description',
+						name: 'publicProjectDescription',
+						type: 'boolean',
+						default: false,
+						description: undefined,
+						placeholder: 'true'
 					}
 				]
 			},
@@ -6323,23 +6355,9 @@ export const aiProperties: INodeProperties[] = [
 			{
 				displayName: 'Action',
 				name: 'action',
-				type: 'options',
+				type: 'string',
 				default: '',
-				description: 'Value for /action',
-				options: [
-					{
-						name: '-',
-						value: ''
-					},
-					{
-						name: 'pre_translate',
-						value: 'pre_translate'
-					},
-					{
-						name: 'qa_check',
-						value: 'qa_check'
-					}
-				]
+				description: 'AI prompt action, a built-in one or a custom one'
 			},
 			{
 				displayName: 'Ai Provider Id',
@@ -6589,6 +6607,34 @@ export const aiProperties: INodeProperties[] = [
 								type: 'boolean',
 								default: false,
 								description: undefined
+							}
+						]
+					},
+					{
+						name: '_basicModeAdvisorContextReviewAction',
+						displayName: 'Basic mode (advisor context review action)',
+						values: [
+							{
+								displayName: 'Mode',
+								name: 'mode',
+								type: 'options',
+								default: 'basic',
+								description: undefined,
+								required: true,
+								options: [
+									{
+										name: 'basic',
+										value: 'basic'
+									}
+								]
+							},
+							{
+								displayName: 'Public Project Description',
+								name: 'publicProjectDescription',
+								type: 'boolean',
+								default: false,
+								description: undefined,
+								placeholder: 'true'
 							}
 						]
 					},

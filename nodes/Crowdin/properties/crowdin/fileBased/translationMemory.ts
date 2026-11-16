@@ -93,7 +93,7 @@ export const translationMemoryProperties: INodeProperties[] = [
 				name: 'Edit TM',
 				value: 'api.tms.patch',
 				action: 'Edit TM',
-				description: '**Required scopes:** `tm` (Read and Write).',
+				description: '**Required scopes:** `tm` (Read and Write).\n\nUpdates the name, language, or sharing of a TM. A `remove` on `/managerIds/{managerId}` with your own ID, sent as the only operation in the request, stops you managing the TM instead. To change another manager\'s access to the TM, use [Edit Manager](#operation/api.managers.patch).\n\n__Note:__ You can\'t stop managing the default TM of a project you still manage; leave the project instead',
 				routing: {
 					request: {
 						method: 'PATCH',
@@ -1704,7 +1704,7 @@ export const translationMemoryProperties: INodeProperties[] = [
 		displayName: 'Scheme',
 		name: 'scheme',
 		type: 'json',
-		default: '{\n  "en": 0,\n  "de": 1,\n  "pl": 2,\n  "uk": 4\n}',
+		default: '{}',
 		description: 'Defines data columns mapping. The passed value should be an associative array containing both language id and column number:\n* `{languageId}` – Crowdin id for the specified language. Get via [List Supported Languages](#operation/api.languages.getMany)\n* `{columnNumber}` – a column number. Please note, that column numbering starts at 0\n\n__Note:__ Required for CSV or XLS/XLSX files',
 		routing: {
 			send: {
@@ -1723,7 +1723,8 @@ export const translationMemoryProperties: INodeProperties[] = [
 					'api.tms.imports.post'
 				]
 			}
-		}
+		},
+		placeholder: '{"en":0,"de":1,"pl":2,"uk":4}'
 	},
 	{
 		displayName: 'Tm Id',

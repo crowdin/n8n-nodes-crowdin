@@ -2121,6 +2121,10 @@ export const glossariesProperties: INodeProperties[] = [
 				value: 'url'
 			},
 			{
+				name: 'translatable',
+				value: 'translatable'
+			},
+			{
 				name: 'conceptDefinition',
 				value: 'conceptDefinition'
 			},
@@ -2299,7 +2303,7 @@ export const glossariesProperties: INodeProperties[] = [
 		displayName: 'Scheme',
 		name: 'scheme',
 		type: 'json',
-		default: '{\n  "term_en": 0,\n  "description_en": 1\n}',
+		default: '{}',
 		description: 'Defines data columns mapping. Acceptable value is combination of following constants:\n * `term_{%language_code%}` – column with terms\n * `description_{%language_code%}` – column with terms description\n * `partOfSpeech_{%language_code%}` – column with terms part of speech\n * `status_{%language_code%}` – column with terms status\n * `type_{%language_code%}` – column with terms type\n * `gender_{%language_code%}` – column with terms gender\n * `url_{%language_code%}` – column with terms URL\n * `note_{%language_code%}` – column with terms note where `%language_code%` – placeholder for your language code\n * `conceptDefinition` – column with concepts definition\n * `conceptSubject` – column with concepts subject\n * `conceptNote` – column with concepts note\n * `conceptUrl` – column with concepts URL\n * `conceptFigure` – column with concepts figure\n * `field_{%fieldSlug%}_{%language_code%}` – column with a term custom field value\n * `conceptField_{%fieldSlug%}` – column with a concept custom field value\n\n__Note:__ Only the custom fields whose columns are mapped here are written — a field this scheme omits keeps its stored value, and a mapped but empty cell clears it\n\n__Note:__ Used for upload of CSV or XLS/XLSX files only',
 		routing: {
 			send: {
@@ -2318,7 +2322,8 @@ export const glossariesProperties: INodeProperties[] = [
 					'api.glossaries.imports.post'
 				]
 			}
-		}
+		},
+		placeholder: '{"term_en":0,"description_en":1}'
 	},
 	{
 		displayName: 'Glossary Id',

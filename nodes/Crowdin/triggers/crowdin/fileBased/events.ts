@@ -104,6 +104,31 @@ export const PROJECT_EVENTS: WebhookEvent[] = [
 		description: 'Source string is deleted',
 	},
 	{
+		name: 'String Labels Assigned',
+		value: 'string.labelsAssigned',
+		description: 'Labels are assigned to source string',
+	},
+	{
+		name: 'String Labels Unassigned',
+		value: 'string.labelsUnassigned',
+		description: 'Labels are unassigned from source string',
+	},
+	{
+		name: 'Label Created',
+		value: 'label.created',
+		description: 'Label is created',
+	},
+	{
+		name: 'Label Updated',
+		value: 'label.updated',
+		description: 'Label is updated',
+	},
+	{
+		name: 'Label Deleted',
+		value: 'label.deleted',
+		description: 'Label is deleted',
+	},
+	{
 		name: 'String Comment Created',
 		value: 'stringComment.created',
 		description: 'String comment/issue is added',

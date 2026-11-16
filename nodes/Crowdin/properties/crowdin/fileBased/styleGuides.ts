@@ -93,7 +93,7 @@ export const styleGuidesProperties: INodeProperties[] = [
 				name: 'Edit Style Guide',
 				value: 'api.style-guides.patch',
 				action: 'Edit Style Guide',
-				description: '**Required scopes:** `style-guide` (Read and Write).',
+				description: '**Required scopes:** `style-guide` (Read and Write).\n\nUpdates a style guide. A `remove` on `/managerIds/{managerId}` with your own ID, sent as the only operation in the request, stops you managing the style guide instead. If you created the style guide, the account owner becomes its author. To change another manager\'s access to the style guide, use [Edit Manager](#operation/api.managers.patch).\n\n__Note:__ If you still manage a project that uses the style guide, you can keep reading it there',
 				routing: {
 					request: {
 						method: 'PATCH',

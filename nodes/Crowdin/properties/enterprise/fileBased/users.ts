@@ -1954,6 +1954,13 @@ export const usersProperties: INodeProperties[] = [
 				type: 'boolean',
 				default: false,
 				description: 'Grant admin access to an organization'
+			},
+			{
+				displayName: 'Fields',
+				name: 'fields',
+				type: 'string',
+				default: '',
+				description: 'Value for /fields'
 			}
 		],
 		routing: {

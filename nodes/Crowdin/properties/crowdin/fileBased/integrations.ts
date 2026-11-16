@@ -907,7 +907,7 @@ export const integrationsProperties: INodeProperties[] = [
 		required: true,
 		name: 'files',
 		type: 'json',
-		default: '{\n  "102": [\n    "de",\n    "fr"\n  ],\n  "999": [\n    "uk"\n  ]\n}',
+		default: '{}',
 		description: '- **{fileId}** _(integer)_: Crowdin File Id. Get via [List Crowdin Files](#operation/api.applications.integrations.crowdin.files)\n- **[{languageCode}]** _(array of strings)_: List Of  Language Id. Get via [List Supported Languages](https://support.crowdin.com/developer/api/v2/#tag/Languages/operation/api.languages.getMany)\n\n**Example:**\n  ```json\n  {\n   102: ["de", "fr"],\n   999: ["uk"]\n  }\n  ```\n',
 		routing: {
 			send: {
@@ -926,7 +926,8 @@ export const integrationsProperties: INodeProperties[] = [
 					'api.applications.integrations.integration.update'
 				]
 			}
-		}
+		},
+		placeholder: '{"102":["de","fr"],"999":["uk"]}'
 	},
 	{
 		displayName: 'Application Identifier',
@@ -1268,7 +1269,7 @@ export const integrationsProperties: INodeProperties[] = [
 		required: true,
 		name: 'config',
 		type: 'json',
-		default: '{\n  "schedule": 0,\n  "condition": 0\n}',
+		default: '{}',
 		description: undefined,
 		routing: {
 			send: {
@@ -1287,7 +1288,8 @@ export const integrationsProperties: INodeProperties[] = [
 					'api.applications.integrations.settings.update'
 				]
 			}
-		}
+		},
+		placeholder: '{"schedule":0,"condition":0}'
 	},
 	{
 		displayName: 'Application Identifier',
@@ -1647,7 +1649,7 @@ export const integrationsProperties: INodeProperties[] = [
 		required: true,
 		name: 'credentials',
 		type: 'json',
-		default: '{\n  "email": "user@crowdin.com",\n  "password": "password"\n}',
+		default: '{}',
 		description: 'Login Form Fields. Get via [Integration Login Form Fields](#operation/api.applications.integrations.integration.fields)',
 		routing: {
 			send: {
@@ -1666,7 +1668,8 @@ export const integrationsProperties: INodeProperties[] = [
 					'api.applications.integrations.integration.login'
 				]
 			}
-		}
+		},
+		placeholder: '{"email":"user@crowdin.com","password":"password"}'
 	},
 	{
 		displayName: 'Return All',
