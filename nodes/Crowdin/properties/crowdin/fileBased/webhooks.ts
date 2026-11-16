@@ -811,7 +811,7 @@ export const webhooksProperties: INodeProperties[] = [
 		displayName: 'Headers',
 		name: 'headers',
 		type: 'json',
-		default: '{\n  "Authorization": "Bearer <ACCESS_TOKEN>"\n}',
+		default: '{}',
 		description: 'Webhook headers',
 		routing: {
 			send: {
@@ -830,13 +830,14 @@ export const webhooksProperties: INodeProperties[] = [
 					'api.projects.webhooks.post'
 				]
 			}
-		}
+		},
+		placeholder: '{"Authorization":"Bearer <ACCESS_TOKEN>"}'
 	},
 	{
 		displayName: 'Payload',
 		name: 'payload',
 		type: 'json',
-		default: '{\n  "string.added": {\n    "event": "{{event}}",\n    "string": {\n      "id": "{{stringId}}",\n      "identifier": "{{stringIdentifier}}",\n      "key": "{{stringKey}}",\n      "text": "{{stringText}}",\n      "type": "{{stringType}}",\n      "context": "{{stringContext}}",\n      "maxLength": "{{stringMaxLength}}",\n      "isHidden": "{{stringIsHidden}}",\n      "isDuplicate": "{{stringIsDuplicate}}",\n      "masterStringId": "{{stringMasterStringId}}",\n      "revision": "{{stringRevision}}",\n      "hasPlurals": "{{stringHasPlurals}}",\n      "plurals": "{{stringPlurals}}",\n      "labelIds": "{{stringLabelIds}}",\n      "url": "{{stringUrl}}",\n      "createdAt": "{{stringCreatedAt}}",\n      "updatedAt": "{{stringUpdatedAt}}",\n      "file": {\n        "id": "{{fileId}}",\n        "name": "{{fileName}}",\n        "title": "{{fileTitle}}",\n        "type": "{{fileType}}",\n        "path": "{{filePath}}",\n        "status": "{{fileStatus}}",\n        "revision": "{{fileRevision}}",\n        "branchId": "{{branchId}}",\n        "directoryId": "{{directoryId}}"\n      },\n      "project": {\n        "id": "{{projectId}}",\n        "userId": "{{projectUserId}}",\n        "sourceLanguageId": "{{projectSourceLanguageId}}",\n        "targetLanguageIds": "{{projectTargetLanguageIds}}",\n        "identifier": "{{projectIdentifier}}",\n        "name": "{{projectName}}",\n        "createdAt": "{{projectCreatedAt}}",\n        "updatedAt": "{{projectUpdatedAt}}",\n        "lastActivity": "{{projectLastActivity}}",\n        "description": "{{projectDescription}}",\n        "url": "{{projectUrl}}",\n        "cname": "{{projectCname}}",\n        "logo": "{{projectLogo}}"\n      }\n    },\n    "user": {\n      "id": "{{userId}}",\n      "username": "{{userUsername}}",\n      "fullName": "{{userFullName}}",\n      "avatarUrl": "{{userAvatarUrl}}"\n    }\n  }\n}',
+		default: '{}',
 		description: 'Custom webhook payload. Read more about [Events payload examples](https://developer.crowdin.com/webhooks). Additionally, you can check out Events payloads while creating webhooks via UI in your Crowdin project > Tools tab > Webhooks section > click Add webhook.',
 		routing: {
 			send: {
@@ -855,7 +856,8 @@ export const webhooksProperties: INodeProperties[] = [
 					'api.projects.webhooks.post'
 				]
 			}
-		}
+		},
+		placeholder: '{"string.added":{"event":"{{event}}","string":{"id":"{{stringId}}","identifier":"{{stringIdentifier}}","key":"{{stringKey}}","text":"{{stringText}}","type":"{{stringType}}","context":"{{stringContext}}","maxLength":"{{stringMaxLength}}","isHidden":"{{stringIsHidden}}","isDuplicate":"{{stringIsDuplicate}}","masterStringId":"{{stringMasterStringId}}","revision":"{{stringRevision}}","hasPlurals":"{{stringHasPlurals}}","plurals":"{{stringPlurals}}","labelIds":"{{stringLabelIds}}","url":"{{stringUrl}}","createdAt":"{{stringCreatedAt}}","updatedAt":"{{stringUpdatedAt}}","file":{"id":"{{fileId}}","name":"{{fileName}}","title":"{{fileTitle}}","type":"{{fileType}}","path":"{{filePath}}","status":"{{fileStatus}}","revision":"{{fileRevision}}","branchId":"{{branchId}}","directoryId":"{{directoryId}}"},"project":{"id":"{{projectId}}","userId":"{{projectUserId}}","sourceLanguageId":"{{projectSourceLanguageId}}","targetLanguageIds":"{{projectTargetLanguageIds}}","identifier":"{{projectIdentifier}}","name":"{{projectName}}","createdAt":"{{projectCreatedAt}}","updatedAt":"{{projectUpdatedAt}}","lastActivity":"{{projectLastActivity}}","description":"{{projectDescription}}","url":"{{projectUrl}}","cname":"{{projectCname}}","logo":"{{projectLogo}}"}},"user":{"id":"{{userId}}","username":"{{userUsername}}","fullName":"{{userFullName}}","avatarUrl":"{{userAvatarUrl}}"}}}'
 	},
 	{
 		displayName: 'Project Id',
@@ -1792,8 +1794,9 @@ export const webhooksProperties: INodeProperties[] = [
 				displayName: 'Headers',
 				name: 'json:headers',
 				type: 'json',
-				default: '{\n  "Authorization": "Bearer <ACCESS_TOKEN>"\n}',
-				description: 'Webhook headers'
+				default: '{}',
+				description: 'Webhook headers',
+				placeholder: '{"Authorization":"Bearer <ACCESS_TOKEN>"}'
 			},
 			{
 				displayName: 'Request Type',
@@ -1820,8 +1823,9 @@ export const webhooksProperties: INodeProperties[] = [
 				displayName: 'Payload',
 				name: 'json:payload',
 				type: 'json',
-				default: '{\n  "string.added": {\n    "event": "{{event}}",\n    "string": {\n      "id": "{{stringId}}",\n      "identifier": "{{stringIdentifier}}",\n      "key": "{{stringKey}}",\n      "text": "{{stringText}}",\n      "type": "{{stringType}}",\n      "context": "{{stringContext}}",\n      "maxLength": "{{stringMaxLength}}",\n      "isHidden": "{{stringIsHidden}}",\n      "isDuplicate": "{{stringIsDuplicate}}",\n      "masterStringId": "{{stringMasterStringId}}",\n      "revision": "{{stringRevision}}",\n      "hasPlurals": "{{stringHasPlurals}}",\n      "plurals": "{{stringPlurals}}",\n      "labelIds": "{{stringLabelIds}}",\n      "url": "{{stringUrl}}",\n      "createdAt": "{{stringCreatedAt}}",\n      "updatedAt": "{{stringUpdatedAt}}",\n      "file": {\n        "id": "{{fileId}}",\n        "name": "{{fileName}}",\n        "title": "{{fileTitle}}",\n        "type": "{{fileType}}",\n        "path": "{{filePath}}",\n        "status": "{{fileStatus}}",\n        "revision": "{{fileRevision}}",\n        "branchId": "{{branchId}}",\n        "directoryId": "{{directoryId}}"\n      },\n      "project": {\n        "id": "{{projectId}}",\n        "userId": "{{projectUserId}}",\n        "sourceLanguageId": "{{projectSourceLanguageId}}",\n        "targetLanguageIds": "{{projectTargetLanguageIds}}",\n        "identifier": "{{projectIdentifier}}",\n        "name": "{{projectName}}",\n        "createdAt": "{{projectCreatedAt}}",\n        "updatedAt": "{{projectUpdatedAt}}",\n        "lastActivity": "{{projectLastActivity}}",\n        "description": "{{projectDescription}}",\n        "url": "{{projectUrl}}",\n        "cname": "{{projectCname}}",\n        "logo": "{{projectLogo}}"\n      }\n    },\n    "user": {\n      "id": "{{userId}}",\n      "username": "{{userUsername}}",\n      "fullName": "{{userFullName}}",\n      "avatarUrl": "{{userAvatarUrl}}"\n    }\n  }\n}',
-				description: 'Custom webhook payload. Read more about [Events payload examples](https://developer.crowdin.com/webhooks). Additionally, you can check out Events payloads while creating webhooks via UI in your Crowdin project > Tools tab > Webhooks section > click Add webhook.'
+				default: '{}',
+				description: 'Custom webhook payload. Read more about [Events payload examples](https://developer.crowdin.com/webhooks). Additionally, you can check out Events payloads while creating webhooks via UI in your Crowdin project > Tools tab > Webhooks section > click Add webhook.',
+				placeholder: '{"string.added":{"event":"{{event}}","string":{"id":"{{stringId}}","identifier":"{{stringIdentifier}}","key":"{{stringKey}}","text":"{{stringText}}","type":"{{stringType}}","context":"{{stringContext}}","maxLength":"{{stringMaxLength}}","isHidden":"{{stringIsHidden}}","isDuplicate":"{{stringIsDuplicate}}","masterStringId":"{{stringMasterStringId}}","revision":"{{stringRevision}}","hasPlurals":"{{stringHasPlurals}}","plurals":"{{stringPlurals}}","labelIds":"{{stringLabelIds}}","url":"{{stringUrl}}","createdAt":"{{stringCreatedAt}}","updatedAt":"{{stringUpdatedAt}}","file":{"id":"{{fileId}}","name":"{{fileName}}","title":"{{fileTitle}}","type":"{{fileType}}","path":"{{filePath}}","status":"{{fileStatus}}","revision":"{{fileRevision}}","branchId":"{{branchId}}","directoryId":"{{directoryId}}"},"project":{"id":"{{projectId}}","userId":"{{projectUserId}}","sourceLanguageId":"{{projectSourceLanguageId}}","targetLanguageIds":"{{projectTargetLanguageIds}}","identifier":"{{projectIdentifier}}","name":"{{projectName}}","createdAt":"{{projectCreatedAt}}","updatedAt":"{{projectUpdatedAt}}","lastActivity":"{{projectLastActivity}}","description":"{{projectDescription}}","url":"{{projectUrl}}","cname":"{{projectCname}}","logo":"{{projectLogo}}"}},"user":{"id":"{{userId}}","username":"{{userUsername}}","fullName":"{{userFullName}}","avatarUrl":"{{userAvatarUrl}}"}}}'
 			}
 		],
 		routing: {

@@ -4356,8 +4356,9 @@ export const projectsProperties: INodeProperties[] = [
 				displayName: 'Assigned Glossaries',
 				name: 'json:assignedGlossaries',
 				type: 'json',
-				default: '[\n  2\n]',
-				description: 'Value for /assignedGlossaries'
+				default: '[]',
+				description: 'Value for /assignedGlossaries',
+				placeholder: '[2]'
 			},
 			{
 				displayName: 'Assigned Tms',

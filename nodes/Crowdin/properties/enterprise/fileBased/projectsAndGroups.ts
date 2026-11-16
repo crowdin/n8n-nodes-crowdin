@@ -2791,7 +2791,7 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 		displayName: 'External Qa Checks Ignorable',
 		name: 'externalQaChecksIgnorable',
 		type: 'json',
-		default: '{\n  "1": false\n}',
+		default: '{}',
 		description: 'External QA check IDs mapped to whether a failure of the check can be ignored. `false` blocks saving a translation when the check fails, and only a synchronous check can be `false`. A check without an entry can be ignored. The entry is kept while the check is not enabled in `externalQaCheckIds`',
 		routing: {
 			send: {
@@ -2810,7 +2810,8 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 					'api.projects.post'
 				]
 			}
-		}
+		},
+		placeholder: '{"1":false}'
 	},
 	{
 		displayName: 'Language Mapping',
@@ -6710,8 +6711,9 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 				displayName: 'External Qa Checks Ignorable',
 				name: 'json:externalQaChecksIgnorable',
 				type: 'json',
-				default: '{\n  "1": false\n}',
-				description: 'External QA check IDs mapped to whether a failure of the check can be ignored. `false` blocks saving a translation when the check fails, and only a synchronous check can be `false`. A check without an entry can be ignored. The entry is kept while the check is not enabled in `externalQaCheckIds`'
+				default: '{}',
+				description: 'External QA check IDs mapped to whether a failure of the check can be ignored. `false` blocks saving a translation when the check fails, and only a synchronous check can be `false`. A check without an entry can be ignored. The entry is kept while the check is not enabled in `externalQaCheckIds`',
+				placeholder: '{"1":false}'
 			},
 			{
 				displayName: 'Qa Checks Ignorable Categories',
@@ -7018,8 +7020,9 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 				displayName: 'Assigned Glossaries',
 				name: 'json:assignedGlossaries',
 				type: 'json',
-				default: '[\n  2\n]',
-				description: 'Value for /assignedGlossaries'
+				default: '[]',
+				description: 'Value for /assignedGlossaries',
+				placeholder: '[2]'
 			},
 			{
 				displayName: 'Assigned Tms',

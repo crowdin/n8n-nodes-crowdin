@@ -1762,10 +1762,6 @@ export const tasksProperties: INodeProperties[] = [
 											{
 												name: 'any',
 												value: 'any'
-											},
-											{
-												name: 'null',
-												value: null
 											}
 										]
 									},
@@ -1800,10 +1796,6 @@ export const tasksProperties: INodeProperties[] = [
 											{
 												name: 'any',
 												value: 'any'
-											},
-											{
-												name: 'null',
-												value: null
 											}
 										]
 									},
@@ -2440,10 +2432,6 @@ export const tasksProperties: INodeProperties[] = [
 											{
 												name: 'any',
 												value: 'any'
-											},
-											{
-												name: 'null',
-												value: null
 											}
 										]
 									},
@@ -2478,10 +2466,6 @@ export const tasksProperties: INodeProperties[] = [
 											{
 												name: 'any',
 												value: 'any'
-											},
-											{
-												name: 'null',
-												value: null
 											}
 										]
 									},
@@ -2692,10 +2676,6 @@ export const tasksProperties: INodeProperties[] = [
 											{
 												name: 'any',
 												value: 'any'
-											},
-											{
-												name: 'null',
-												value: null
 											}
 										]
 									},
@@ -2730,10 +2710,6 @@ export const tasksProperties: INodeProperties[] = [
 											{
 												name: 'any',
 												value: 'any'
-											},
-											{
-												name: 'null',
-												value: null
 											}
 										]
 									},

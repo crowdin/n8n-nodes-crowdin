@@ -2920,6 +2920,32 @@ function removeDeprecatedProperties(doc) {
 }
 
 /**
+ * Remove null from enum values in the whole OpenAPI document.
+ * Nullable enums list null as a value (enum: [all, any, null]), which would turn into
+ * a { name: 'null', value: null } option that n8n option types don't allow.
+ *
+ * @param {object} doc - OpenAPI document (will be modified in place)
+ */
+function removeNullEnumValues(doc) {
+	const visited = new Set();
+
+	function walk(node) {
+		if (!node || typeof node !== 'object' || visited.has(node)) return;
+		visited.add(node);
+
+		if (Array.isArray(node.enum)) {
+			node.enum = node.enum.filter(value => value !== null);
+		}
+
+		for (const value of Object.values(node)) {
+			walk(value);
+		}
+	}
+
+	walk(doc);
+}
+
+/**
  * Remove deprecated parameters from all operations in OpenAPI document.
  * This prevents n8n-openapi-node from generating fields for deprecated query/path parameters.
  * 
@@ -3411,6 +3437,20 @@ function moveDefaultsToPlaceholder(properties) {
 			if (defaultVal) {
 				prop.placeholder = defaultVal;
 				prop.default = '';
+			}
+		}
+
+		// Handle JSON fields - the default is the OpenAPI example serialized by n8n-openapi-node
+		else if (prop.type === 'json' && typeof prop.default === 'string') {
+			let example;
+			try {
+				example = JSON.parse(prop.default);
+			} catch {
+				example = undefined;
+			}
+			if (example && typeof example === 'object' && Object.keys(example).length > 0) {
+				prop.placeholder = JSON.stringify(example);
+				prop.default = Array.isArray(example) ? '[]' : '{}';
 			}
 		}
 
@@ -6071,9 +6111,12 @@ async function processConfig(config) {
 	// Flatten allOf schemas first (this propagates deprecated flags from parent to child)
 	doc = flattenAllOf(doc);
 	
+	// Remove null from enum values (nullable enums)
+	removeNullEnumValues(doc);
+
 	// Remove deprecated properties after flattening (so inherited deprecated flags are processed)
 	removeDeprecatedProperties(doc);
-	
+
 	// Remove deprecated parameters from operations (query/path parameters)
 	removeDeprecatedParameters(doc);
 	

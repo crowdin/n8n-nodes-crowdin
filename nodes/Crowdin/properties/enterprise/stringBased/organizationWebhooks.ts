@@ -649,7 +649,7 @@ export const organizationWebhooksProperties: INodeProperties[] = [
 		displayName: 'Headers',
 		name: 'headers',
 		type: 'json',
-		default: '{\n  "Accept": "application/xml"\n}',
+		default: '{}',
 		description: 'Webhook headers',
 		routing: {
 			send: {
@@ -668,7 +668,8 @@ export const organizationWebhooksProperties: INodeProperties[] = [
 					'api.webhooks.post'
 				]
 			}
-		}
+		},
+		placeholder: '{"Accept":"application/xml"}'
 	},
 	{
 		displayName: 'Payload',
@@ -1337,8 +1338,9 @@ export const organizationWebhooksProperties: INodeProperties[] = [
 				displayName: 'Headers',
 				name: 'json:headers',
 				type: 'json',
-				default: '{\n  "Accept": "application/xml"\n}',
-				description: 'Webhook headers'
+				default: '{}',
+				description: 'Webhook headers',
+				placeholder: '{"Accept":"application/xml"}'
 			},
 			{
 				displayName: 'Request Type',
