@@ -301,7 +301,7 @@ export const sourceFilesProperties: INodeProperties[] = [
 				name: 'Add File',
 				value: 'api.projects.files.post',
 				action: 'Add File',
-				description: '**Required scopes:** `project.source.file` (Read and Write).',
+				description: '**Required scopes:** `project.source.file` (Read and Write).\n\nAdds a file from storage to the project as a source file. For a bilingual file, such as XLIFF or PO, only the source text is imported. To add the translations it contains, use [Import Translations](#operation/api.projects.translations.imports).\n\n__Note:__ Upload the file to storage first with [Add Storage](#operation/api.storages.post).',
 				routing: {
 					request: {
 						method: 'POST',
@@ -325,7 +325,7 @@ export const sourceFilesProperties: INodeProperties[] = [
 				name: 'Update or Restore File',
 				value: 'api.projects.files.put',
 				action: 'Update or Restore File',
-				description: '**Required scopes:** `project.source.file` (Read and Write).\n\nUpdate your current file with a new one or restore it to one of the previous revisions',
+				description: '**Required scopes:** `project.source.file` (Read and Write).\n\nUpdates the file with a new version from storage or restores it to one of its previous revisions. When the file is updated, translations and approvals of the changed strings are removed by default. To keep them, set `updateOption` to `keep_translations` or `keep_translations_and_approvals` (not supported for DOCX, IDML, MIF, DITA, and SVG files). For a bilingual file, such as XLIFF or PO, only the source text is updated.',
 				routing: {
 					request: {
 						method: 'PUT',
@@ -3158,7 +3158,7 @@ export const sourceFilesProperties: INodeProperties[] = [
 						name: 'firstLineContainsHeader',
 						type: 'boolean',
 						default: false,
-						description: 'Defines whether the file includes a first-row header that should not be imported',
+						description: 'If `true`, the first row of the file is treated as a header and is not imported',
 						placeholder: 'false'
 					},
 					{
@@ -3166,7 +3166,7 @@ export const sourceFilesProperties: INodeProperties[] = [
 						name: 'importHiddenSheets',
 						type: 'boolean',
 						default: true,
-						description: 'Defines whether hidden sheets that should be imported',
+						description: 'If `true`, hidden sheets are imported',
 						placeholder: 'false'
 					},
 					{
@@ -3174,7 +3174,7 @@ export const sourceFilesProperties: INodeProperties[] = [
 						name: 'importHiddenRows',
 						type: 'boolean',
 						default: true,
-						description: 'Defines whether hidden rows that should be imported',
+						description: 'If `true`, hidden rows are imported',
 						placeholder: 'false'
 					},
 					{
@@ -3182,7 +3182,7 @@ export const sourceFilesProperties: INodeProperties[] = [
 						name: 'importEqSuggestions',
 						type: 'boolean',
 						default: false,
-						description: 'Defines whether to import translations identical to sources',
+						description: 'If `true`, translations identical to the source strings are imported. Applies only when adding a file with `importTranslations` set to `true`',
 						placeholder: 'true'
 					},
 					{
@@ -3190,7 +3190,7 @@ export const sourceFilesProperties: INodeProperties[] = [
 						name: 'autoApproveImported',
 						type: 'boolean',
 						default: false,
-						description: 'Defines whether to auto-approve imported translations',
+						description: 'If `true`, the imported translations are approved automatically. Applies only when adding a file with `importTranslations` set to `true`',
 						placeholder: 'true'
 					},
 					{
@@ -3198,15 +3198,15 @@ export const sourceFilesProperties: INodeProperties[] = [
 						name: 'translateHidden',
 						type: 'boolean',
 						default: false,
-						description: 'Defines whether to import translations for hidden strings',
+						description: 'If `true`, translations of hidden strings are imported. Applies only when adding a file with `importTranslations` set to `true`',
 						placeholder: 'false'
 					},
 					{
 						displayName: 'Add To Tm',
 						name: 'addToTm',
 						type: 'boolean',
-						default: true,
-						description: 'Defines whether to add imported translations to TM',
+						default: false,
+						description: 'If `true`, the imported translations are added to Translation Memory. Applies only when adding a file with `importTranslations` set to `true`',
 						placeholder: 'true'
 					},
 					{
@@ -3214,7 +3214,7 @@ export const sourceFilesProperties: INodeProperties[] = [
 						name: 'contentSegmentation',
 						type: 'boolean',
 						default: false,
-						description: 'Defines whether to split long texts into smaller text segments.\n\n  __Important!__ This option disables the possibility to upload existing translations for Spreadsheet files when enabled.'
+						description: 'If `true`, long texts are split into smaller text segments.\n\n__Note:__ When this option is enabled, translations from the language columns may not be imported for texts split into several segments'
 					},
 					{
 						displayName: 'Srx Storage Id',
@@ -3231,7 +3231,7 @@ export const sourceFilesProperties: INodeProperties[] = [
 						name: 'importTranslations',
 						type: 'boolean',
 						default: false,
-						description: 'Defines whether to import translations from the file',
+						description: 'If `true`, translations from the language columns defined in `scheme` are imported along with the source strings',
 						placeholder: 'true'
 					},
 					{
@@ -4298,14 +4298,14 @@ export const sourceFilesProperties: INodeProperties[] = [
 						name: 'importKeyAsSource',
 						type: 'boolean',
 						default: true,
-						description: 'Determines whether to import the key as source string if it does not exist.'
+						description: 'If `true`, the key is imported as the source string for strings that have no source text. If not set, the value from the String Catalog [file format settings](#operation/api.projects.file-format-settings.getMany) of the project is used (Parser configuration in the UI)'
 					},
 					{
 						displayName: 'Import Translations',
 						name: 'importTranslations',
 						type: 'boolean',
 						default: false,
-						description: 'Defines whether to import translations from the file'
+						description: 'If `true`, the translations stored in the file are imported along with the source strings. If not set, the value from the String Catalog [file format settings](#operation/api.projects.file-format-settings.getMany) of the project is used (Parser configuration in the UI)'
 					}
 				]
 			},
@@ -5103,7 +5103,7 @@ export const sourceFilesProperties: INodeProperties[] = [
 										name: 'firstLineContainsHeader',
 										type: 'boolean',
 										default: false,
-										description: 'Defines whether the file includes a first-row header that should not be imported',
+										description: 'If `true`, the first row of the file is treated as a header and is not imported',
 										placeholder: 'false'
 									},
 									{
@@ -5111,7 +5111,7 @@ export const sourceFilesProperties: INodeProperties[] = [
 										name: 'importHiddenSheets',
 										type: 'boolean',
 										default: true,
-										description: 'Defines whether hidden sheets that should be imported',
+										description: 'If `true`, hidden sheets are imported',
 										placeholder: 'false'
 									},
 									{
@@ -5119,7 +5119,7 @@ export const sourceFilesProperties: INodeProperties[] = [
 										name: 'importHiddenRows',
 										type: 'boolean',
 										default: true,
-										description: 'Defines whether hidden rows that should be imported',
+										description: 'If `true`, hidden rows are imported',
 										placeholder: 'false'
 									},
 									{
@@ -5127,7 +5127,7 @@ export const sourceFilesProperties: INodeProperties[] = [
 										name: 'importEqSuggestions',
 										type: 'boolean',
 										default: false,
-										description: 'Defines whether to import translations identical to sources',
+										description: 'If `true`, translations identical to the source strings are imported. Applies only when adding a file with `importTranslations` set to `true`',
 										placeholder: 'true'
 									},
 									{
@@ -5135,7 +5135,7 @@ export const sourceFilesProperties: INodeProperties[] = [
 										name: 'autoApproveImported',
 										type: 'boolean',
 										default: false,
-										description: 'Defines whether to auto-approve imported translations',
+										description: 'If `true`, the imported translations are approved automatically. Applies only when adding a file with `importTranslations` set to `true`',
 										placeholder: 'true'
 									},
 									{
@@ -5143,15 +5143,15 @@ export const sourceFilesProperties: INodeProperties[] = [
 										name: 'translateHidden',
 										type: 'boolean',
 										default: false,
-										description: 'Defines whether to import translations for hidden strings',
+										description: 'If `true`, translations of hidden strings are imported. Applies only when adding a file with `importTranslations` set to `true`',
 										placeholder: 'false'
 									},
 									{
 										displayName: 'Add To Tm',
 										name: 'addToTm',
 										type: 'boolean',
-										default: true,
-										description: 'Defines whether to add imported translations to TM',
+										default: false,
+										description: 'If `true`, the imported translations are added to Translation Memory. Applies only when adding a file with `importTranslations` set to `true`',
 										placeholder: 'true'
 									},
 									{
@@ -5159,7 +5159,7 @@ export const sourceFilesProperties: INodeProperties[] = [
 										name: 'contentSegmentation',
 										type: 'boolean',
 										default: false,
-										description: 'Defines whether to split long texts into smaller text segments.\n\n  __Important!__ This option disables the possibility to upload existing translations for Spreadsheet files when enabled.'
+										description: 'If `true`, long texts are split into smaller text segments.\n\n__Note:__ When this option is enabled, translations from the language columns may not be imported for texts split into several segments'
 									},
 									{
 										displayName: 'Srx Storage Id',
@@ -5176,7 +5176,7 @@ export const sourceFilesProperties: INodeProperties[] = [
 										name: 'importTranslations',
 										type: 'boolean',
 										default: false,
-										description: 'Defines whether to import translations from the file',
+										description: 'If `true`, translations from the language columns defined in `scheme` are imported along with the source strings',
 										placeholder: 'true'
 									},
 									{

@@ -95,18 +95,6 @@ export const applicationsProperties: INodeProperties[] = [
 				}
 			},
 			{
-				name: 'Upload Application Bundle',
-				value: 'api.applications.installations.bundles.post',
-				action: 'Upload Application Bundle',
-				description: '**Required scopes:** `application.installation` (Read and Write).\n\nUpload a bundle archive for a serverless app installed from manifest content. The bundle must be a ZIP archive that contains a non-empty `app.js` entry point at its root.',
-				routing: {
-					request: {
-						method: 'POST',
-						url: '=/applications/installations/{{$parameter["identifier"]}}/bundles'
-					}
-				}
-			},
-			{
 				name: 'List Application Installations',
 				value: 'api.applications.installations.getMany',
 				action: 'List Application Installations',
@@ -136,7 +124,7 @@ export const applicationsProperties: INodeProperties[] = [
 				name: 'Install Application',
 				value: 'api.applications.installations.post',
 				action: 'Install Application',
-				description: '**Required scopes:** `application.installation` (Read and Write).\n\nInstall an application either from a hosted manifest URL or from its manifest content.<br><br>**Note:** Any application - with or without a backend, and regardless of whether it is published to the Crowdin Store - can be installed from a manifest URL (the manifest only needs to be reachable at that URL). Installing from manifest content is supported only for serverless apps - apps that run entirely in the browser with no backend (no `baseUrl`).',
+				description: '**Required scopes:** `application.installation` (Read and Write).\n\nInstalls an application from a hosted manifest URL or from its app file (`.crowdinapp`). Installing from manifest content is deprecated: use an app file, which carries the manifest together with the build.\n\n__Note:__ Any application - with or without a backend, and regardless of whether it is published to the Crowdin Store - can be installed from a manifest URL (the manifest only needs to be reachable at that URL). Installing from an app file or from manifest content is supported only for serverless apps - apps that run entirely in the browser with no backend (no `baseUrl`).',
 				routing: {
 					request: {
 						method: 'POST',
@@ -182,11 +170,23 @@ export const applicationsProperties: INodeProperties[] = [
 				name: 'Edit Application Installation',
 				value: 'api.applications.installations.patch',
 				action: 'Edit Application Installation',
-				description: '**Required scopes:** `application.installation` (Read and Write).',
+				description: '**Required scopes:** `application.installation` (Read and Write).\n\nChanges the permissions of an installed application and of its modules. For a serverless app installed from an app file or from manifest content, it also replaces the app file and switches development mode.',
 				routing: {
 					request: {
 						method: 'PATCH',
 						url: '=/applications/installations/{{$parameter["identifier"]}}'
+					}
+				}
+			},
+			{
+				name: 'Download Application File',
+				value: 'api.applications.installations.download.get',
+				action: 'Download Application File',
+				description: '**Required scopes:** `application.installation` (Read only).\n\nDownload a serverless app installed from manifest content or an app file as an app file (`.crowdinapp`): a ZIP archive with the app\'s current `manifest.json` and its uploaded build. Install the file in another organization with [Install Application](#operation/api.applications.installations.post). The manifest leaves out `identifier` and `bundle`, because every installation gets its own.<br><br>Not available for apps installed from a manifest URL, apps with a backend (`baseUrl`), and apps whose build was never uploaded.',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/applications/installations/{{$parameter["identifier"]}}/download'
 					}
 				}
 			},
@@ -298,6 +298,154 @@ export const applicationsProperties: INodeProperties[] = [
 						]
 					}
 				}
+			},
+			{
+				name: 'Get Application Credit Settings',
+				value: 'api.applications.credits.settings.get',
+				action: 'Get Application Credit Settings',
+				description: '**Required scopes:** `application.credits` (Read only).\n\nSpending limits for paid actions of installed applications: the overall limits, the default limits of each user and per-user overrides. `null` means no limit, `0` blocks spending. Until the overall limits are set, both are `0`, so applications cannot spend',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/applications/credits/settings'
+					}
+				}
+			},
+			{
+				name: 'List Application Credit Transactions',
+				value: 'api.applications.credits.transactions.getMany',
+				action: 'List Application Credit Transactions',
+				description: '**Required scopes:** `application.transaction` (Read only).\n\nCrowdin Credits transactions of installed applications, newest first. An access token of an installed application sees only the transactions of that application',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/applications/credits/transactions'
+					},
+					send: {
+						paginate: '={{$parameter["returnAll"]}}'
+					},
+					output: {
+						postReceive: [
+							{
+								type: 'rootProperty',
+								enabled: '={{!$parameter["returnAll"]}}',
+								properties: {
+									property: 'data'
+								}
+							}
+						]
+					}
+				}
+			},
+			{
+				name: 'Add Application Credit Transaction',
+				value: 'api.applications.credits.transactions.post',
+				action: 'Add Application Credit Transaction',
+				description: '**Required scopes:** `application.transaction` (Read and Write).\n\nWithdraws Crowdin Credits from the organization balance for a paid action the application performed for a user, and records the transaction.\n\nThe transaction is rejected with `402` when the amount is more than the balance, the user is blocked, or the amount does not fit a daily or monthly limit of the organization or the user. To avoid an unpaid action, check the limits of the user with `GET /applications/credits/usage/members/{memberId}` (scope `application.credits`, read) before starting it.\n\nSend a unique `Idempotency-Key` header with every new transaction. A retry with the same key and the same body returns the original transaction without a second withdrawal. The same key with a different body returns `409`.\n\n__Note:__ Requires the application\'s own access token - personal access tokens are not supported',
+				routing: {
+					request: {
+						method: 'POST',
+						url: '=/applications/credits/transactions'
+					}
+				}
+			},
+			{
+				name: 'Get Application Credit Transaction',
+				value: 'api.applications.credits.transactions.get',
+				action: 'Get Application Credit Transaction',
+				description: '**Required scopes:** `application.transaction` (Read only).\n\nAn access token of an installed application sees only the transactions of that application',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/applications/credits/transactions/{{$parameter["transactionId"]}}'
+					}
+				}
+			},
+			{
+				name: 'Export Application Credit Transactions',
+				value: 'api.applications.credits.transactions.exports.post',
+				action: 'Export Application Credit Transactions',
+				description: '**Required scopes:** `application.transaction` (Read only).\n\nStarts building a file with the transactions that match the filters, newest first. Poll the export status and download the file when it is `finished`. An access token of an installed application sees only the transactions of that application',
+				routing: {
+					request: {
+						method: 'POST',
+						url: '=/applications/credits/transactions/exports'
+					}
+				}
+			},
+			{
+				name: 'Check Application Credit Transactions Export Status',
+				value: 'api.applications.credits.transactions.exports.get',
+				action: 'Check Application Credit Transactions Export Status',
+				description: '**Required scopes:** `application.transaction` (Read only).\n\nReturns the status of an export. The file can be downloaded once `status` is `finished`',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/applications/credits/transactions/exports/{{$parameter["exportId"]}}'
+					}
+				}
+			},
+			{
+				name: 'Download Application Credit Transactions Export',
+				value: 'api.applications.credits.transactions.exports.download.download',
+				action: 'Download Application Credit Transactions Export',
+				description: '**Required scopes:** `application.transaction` (Read only).\n\nReturns a link to the exported file, which expires one hour after this call. The export has to be `finished`; until it is, this operation answers 404',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/applications/credits/transactions/exports/{{$parameter["exportId"]}}/download'
+					}
+				}
+			},
+			{
+				name: 'Get Application Credit Usage',
+				value: 'api.applications.credits.usage.get',
+				action: 'Get Application Credit Usage',
+				description: '**Required scopes:** `application.credits` (Read only).\n\nWhat installed applications spent in the current calendar day and month against the limits. `effectiveDailyCostLimit` and `effectiveMonthlyCostLimit` are the limits that actually apply to the user',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/applications/credits/usage'
+					}
+				}
+			},
+			{
+				name: 'List Application Credit Usage Members',
+				value: 'api.applications.credits.usage.members.getMany',
+				action: 'List Application Credit Usage Members',
+				description: '**Required scopes:** `application.credits` (Read only).\n\nMembers with the limits that apply to them and what installed applications spent for them in the current calendar day and month',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/applications/credits/usage/members'
+					},
+					send: {
+						paginate: '={{$parameter["returnAll"]}}'
+					},
+					output: {
+						postReceive: [
+							{
+								type: 'rootProperty',
+								enabled: '={{!$parameter["returnAll"]}}',
+								properties: {
+									property: 'data'
+								}
+							}
+						]
+					}
+				}
+			},
+			{
+				name: 'Get Application Credit Usage Member',
+				value: 'api.applications.credits.usage.members.get',
+				action: 'Get Application Credit Usage Member',
+				description: '**Required scopes:** `application.credits` (Read only).\n\nLimits that apply to the member and what installed applications spent for them in the current calendar day and month. Check it before a paid action: a withdrawal that does not fit the limits or the balance is rejected',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/applications/credits/usage/members/{{$parameter["memberId"]}}'
+					}
+				}
 			}
 		],
 		default: 'api.applications.consents.getMany'
@@ -374,25 +522,6 @@ export const applicationsProperties: INodeProperties[] = [
 				],
 				operation: [
 					'api.applications.consents.patch'
-				]
-			}
-		}
-	},
-	{
-		displayName: 'POST /applications/installations/{identifier}/bundles',
-		name: 'operation',
-		type: 'notice',
-		typeOptions: {
-			theme: 'info'
-		},
-		default: '',
-		displayOptions: {
-			show: {
-				resource: [
-					'applications'
-				],
-				operation: [
-					'api.applications.installations.bundles.post'
 				]
 			}
 		}
@@ -488,6 +617,25 @@ export const applicationsProperties: INodeProperties[] = [
 				],
 				operation: [
 					'api.applications.installations.patch'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'GET /applications/installations/{identifier}/download',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.installations.download.get'
 				]
 			}
 		}
@@ -621,6 +769,196 @@ export const applicationsProperties: INodeProperties[] = [
 				],
 				operation: [
 					'api.applications.api.patch'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'GET /applications/credits/settings',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.credits.settings.get'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'GET /applications/credits/transactions',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.credits.transactions.getMany'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'POST /applications/credits/transactions',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.credits.transactions.post'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'GET /applications/credits/transactions/{transactionId}',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.credits.transactions.get'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'POST /applications/credits/transactions/exports',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.credits.transactions.exports.post'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'GET /applications/credits/transactions/exports/{exportId}',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.credits.transactions.exports.get'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'GET /applications/credits/transactions/exports/{exportId}/download',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.credits.transactions.exports.download.download'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'GET /applications/credits/usage',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.credits.usage.get'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'GET /applications/credits/usage/members',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.credits.usage.members.getMany'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'GET /applications/credits/usage/members/{memberId}',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.credits.usage.members.get'
 				]
 			}
 		}
@@ -887,56 +1225,6 @@ export const applicationsProperties: INodeProperties[] = [
 		},
 		typeOptions: {
 			loadOptionsMethod: 'getApplicationConsents'
-		}
-	},
-	{
-		displayName: 'Identifier',
-		name: 'identifier',
-		required: true,
-		description: 'Application Identifier. Get via [List Applications](#operation/api.applications.getMany)',
-		default: '',
-		type: 'options',
-		displayOptions: {
-			show: {
-				resource: [
-					'applications'
-				],
-				operation: [
-					'api.applications.installations.bundles.post'
-				]
-			}
-		},
-		typeOptions: {
-			loadOptionsMethod: 'getApplicationInstallations'
-		}
-	},
-	{
-		displayName: 'Storage Id',
-		required: true,
-		name: 'storageId',
-		type: 'options',
-		default: '',
-		description: 'Storage Identifier. Get via [List Storages](#operation/api.storages.getMany).<br><br>Storage file must be a ZIP archive containing the application bundle',
-		routing: {
-			send: {
-				property: 'storageId',
-				propertyInDotNotation: false,
-				type: 'body',
-				value: '={{ $value }}'
-			}
-		},
-		displayOptions: {
-			show: {
-				resource: [
-					'applications'
-				],
-				operation: [
-					'api.applications.installations.bundles.post'
-				]
-			}
-		},
-		typeOptions: {
-			loadOptionsMethod: 'getStorages'
 		}
 	},
 	{
@@ -1846,6 +2134,368 @@ export const applicationsProperties: INodeProperties[] = [
 						]
 					}
 				]
+			},
+			{
+				displayName: 'Install an application from an app file',
+				name: '_installAnApplicationFromAnAppFile',
+				values: [
+					{
+						displayName: 'Storage Id',
+						name: 'storageId',
+						type: 'options',
+						default: '',
+						description: 'Storage Identifier of the app file. Get via [List Storages](#operation/api.storages.getMany)',
+						required: true,
+						typeOptions: {
+							loadOptionsMethod: 'getStorages'
+						}
+					},
+					{
+						displayName: 'Application bundle',
+						name: 'bundle',
+						type: 'fixedCollection',
+						default: {},
+						description: 'Where the app is loaded from. Either Crowdin hosts the app in its own storage (`internal`) or the app is served from an external URL such as a local dev server (`external`).',
+						options: [
+							{
+								displayName: 'Internal application bundle',
+								name: '_applicationBundleInternal',
+								values: [
+									{
+										displayName: 'Mode',
+										name: 'mode',
+										type: 'options',
+										default: '',
+										description: 'The app is hosted by Crowdin in its own storage (no external URL).',
+										options: [
+											{
+												name: '-',
+												value: ''
+											},
+											{
+												name: 'internal',
+												value: 'internal'
+											}
+										],
+										placeholder: 'internal',
+										required: true
+									}
+								]
+							},
+							{
+								displayName: 'External application bundle',
+								name: '_applicationBundleExternal',
+								values: [
+									{
+										displayName: 'Mode',
+										name: 'mode',
+										type: 'options',
+										default: '',
+										description: 'The app is served from an external URL (e.g. a local dev server).',
+										options: [
+											{
+												name: '-',
+												value: ''
+											},
+											{
+												name: 'external',
+												value: 'external'
+											}
+										],
+										placeholder: 'external',
+										required: true
+									},
+									{
+										displayName: 'Url',
+										name: 'url',
+										type: 'string',
+										default: '',
+										description: 'URL the app is served from; for local development this is your dev server, e.g. `http://localhost:8080/`.',
+										required: true
+									}
+								]
+							}
+						]
+					},
+					{
+						displayName: 'Permissions',
+						name: 'permissions',
+						type: 'fixedCollection',
+						default: {},
+						description: undefined,
+						placeholder: 'Add Field',
+						options: [
+							{
+								displayName: 'Fields',
+								name: 'fields',
+								values: [
+									{
+										displayName: 'User',
+										name: 'user',
+										type: 'fixedCollection',
+										default: {},
+										description: 'Use modules permissions instead',
+										placeholder: 'Add Field',
+										options: [
+											{
+												displayName: 'Fields',
+												name: 'fields',
+												values: [
+													{
+														displayName: 'Value',
+														name: 'value',
+														type: 'options',
+														default: '',
+														description: undefined,
+														options: [
+															{
+																name: '-',
+																value: ''
+															},
+															{
+																name: 'owner',
+																value: 'owner'
+															},
+															{
+																name: 'managers',
+																value: 'managers'
+															},
+															{
+																name: 'all',
+																value: 'all'
+															},
+															{
+																name: 'guests',
+																value: 'guests'
+															},
+															{
+																name: 'restricted',
+																value: 'restricted'
+															}
+														],
+														placeholder: 'restricted'
+													},
+													{
+														displayName: 'Ids',
+														name: 'ids',
+														type: 'fixedCollection',
+														typeOptions: {
+															multipleValues: true
+														},
+														default: {},
+														description: 'Ids is available only for restricted value',
+														placeholder: 'Add Item',
+														options: [
+															{
+																displayName: 'Items',
+																name: 'items',
+																values: [
+																	{
+																		displayName: 'Value',
+																		name: '_value',
+																		type: 'number',
+																		default: 0,
+																		description: undefined,
+																		placeholder: '0'
+																	}
+																]
+															}
+														]
+													}
+												]
+											}
+										]
+									},
+									{
+										displayName: 'Project',
+										name: 'project',
+										type: 'fixedCollection',
+										default: {},
+										description: undefined,
+										placeholder: 'Add Field',
+										options: [
+											{
+												displayName: 'Fields',
+												name: 'fields',
+												values: [
+													{
+														displayName: 'Value',
+														name: 'value',
+														type: 'options',
+														default: '',
+														description: undefined,
+														options: [
+															{
+																name: '-',
+																value: ''
+															},
+															{
+																name: 'own',
+																value: 'own'
+															},
+															{
+																name: 'restricted',
+																value: 'restricted'
+															}
+														],
+														placeholder: 'restricted'
+													},
+													{
+														displayName: 'Ids',
+														name: 'ids',
+														type: 'fixedCollection',
+														typeOptions: {
+															multipleValues: true
+														},
+														default: {},
+														description: undefined,
+														placeholder: 'Add Item',
+														options: [
+															{
+																displayName: 'Items',
+																name: 'items',
+																values: [
+																	{
+																		displayName: 'Value',
+																		name: '_value',
+																		type: 'number',
+																		default: 0,
+																		description: undefined,
+																		placeholder: '0'
+																	}
+																]
+															}
+														]
+													}
+												]
+											}
+										]
+									}
+								]
+							}
+						]
+					},
+					{
+						displayName: 'Modules',
+						name: 'modules',
+						type: 'fixedCollection',
+						typeOptions: {
+							multipleValues: true
+						},
+						default: {},
+						description: undefined,
+						placeholder: 'Add Item',
+						options: [
+							{
+								displayName: 'Item',
+								name: 'items',
+								values: [
+									{
+										displayName: 'Key',
+										name: 'key',
+										type: 'string',
+										default: '',
+										description: undefined,
+										placeholder: 'some-module-key'
+									},
+									{
+										displayName: 'Permissions',
+										name: 'permissions',
+										type: 'fixedCollection',
+										default: {},
+										description: undefined,
+										placeholder: 'Add Field',
+										options: [
+											{
+												displayName: 'Fields',
+												name: 'fields',
+												values: [
+													{
+														displayName: 'User',
+														name: 'user',
+														type: 'fixedCollection',
+														default: {},
+														description: undefined,
+														placeholder: 'Add Field',
+														options: [
+															{
+																displayName: 'Fields',
+																name: 'fields',
+																values: [
+																	{
+																		displayName: 'Value',
+																		name: 'value',
+																		type: 'options',
+																		default: '',
+																		description: '\n\n __Note__: For exporters, the `all` value will be set',
+																		options: [
+																			{
+																				name: '-',
+																				value: ''
+																			},
+																			{
+																				name: 'owner',
+																				value: 'owner'
+																			},
+																			{
+																				name: 'managers',
+																				value: 'managers'
+																			},
+																			{
+																				name: 'all',
+																				value: 'all'
+																			},
+																			{
+																				name: 'guests',
+																				value: 'guests'
+																			},
+																			{
+																				name: 'restricted',
+																				value: 'restricted'
+																			}
+																		],
+																		placeholder: 'restricted'
+																	},
+																	{
+																		displayName: 'Ids',
+																		name: 'ids',
+																		type: 'fixedCollection',
+																		typeOptions: {
+																			multipleValues: true
+																		},
+																		default: {},
+																		description: 'Ids is only available for restricted value',
+																		placeholder: 'Add Item',
+																		options: [
+																			{
+																				displayName: 'Items',
+																				name: 'items',
+																				values: [
+																					{
+																						displayName: 'Value',
+																						name: '_value',
+																						type: 'number',
+																						default: 0,
+																						description: undefined,
+																						placeholder: '0'
+																					}
+																				]
+																			}
+																		]
+																	}
+																]
+															}
+														]
+													}
+												]
+											}
+										]
+									}
+								]
+							}
+						]
+					}
+				]
 			}
 		],
 		routing: {
@@ -1968,6 +2618,27 @@ export const applicationsProperties: INodeProperties[] = [
 					'api.applications.installations.patch'
 				]
 			}
+		}
+	},
+	{
+		displayName: 'Identifier',
+		name: 'identifier',
+		required: true,
+		description: 'Application Identifier. Get via [List Applications](#operation/api.applications.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.installations.download.get'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getApplicationInstallations'
 		}
 	},
 	{
@@ -2235,6 +2906,704 @@ export const applicationsProperties: INodeProperties[] = [
 		}
 	},
 	{
+		displayName: 'Application Identifier',
+		name: 'applicationIdentifier',
+		description: 'Only transactions of this application. Required with an access token of an installed application, where it must name the calling application',
+		default: '',
+		type: 'options',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'applicationIdentifier',
+				value: '={{ $value || undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.credits.transactions.getMany'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getApplicationInstallations'
+		}
+	},
+	{
+		displayName: 'User Id',
+		name: 'userId',
+		description: 'Only transactions charged for this user',
+		default: '',
+		type: 'options',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'userId',
+				value: '={{ typeof $value === \'number\' ? $value : undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.credits.transactions.getMany'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getUsers'
+		}
+	},
+	{
+		displayName: 'Created After',
+		name: 'dateTime:createdAfter',
+		description: 'Only transactions created at or after this date, in ISO 8601 format',
+		default: '',
+		type: 'dateTime',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'createdAfter',
+				value: '={{ $value || undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.credits.transactions.getMany'
+				]
+			}
+		},
+		placeholder: '2026-09-01T00:00:00+00:00'
+	},
+	{
+		displayName: 'Created Before',
+		name: 'dateTime:createdBefore',
+		description: 'Only transactions created at or before this date, in ISO 8601 format',
+		default: '',
+		type: 'dateTime',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'createdBefore',
+				value: '={{ $value || undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.credits.transactions.getMany'
+				]
+			}
+		},
+		placeholder: '2026-09-30T23:59:59+00:00'
+	},
+	{
+		displayName: 'Limit',
+		name: 'limit',
+		description: 'Max number of results to return',
+		default: 50,
+		type: 'number',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'limit',
+				value: '={{ typeof $value === \'number\' ? $value : undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.credits.transactions.getMany'
+				],
+				returnAll: [
+					false
+				]
+			}
+		},
+		typeOptions: {
+			minValue: 1
+		}
+	},
+	{
+		displayName: 'Idempotency Key',
+		name: 'Idempotency-Key',
+		required: true,
+		description: 'Unique key of the transaction, 1-255 printable ASCII characters',
+		default: '',
+		type: 'string',
+		routing: {
+			request: {
+				headers: {
+					'Idempotency-Key': '={{ $value }}'
+				}
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.credits.transactions.post'
+				]
+			}
+		},
+		placeholder: 'automation-a1b2c3-run-42'
+	},
+	{
+		displayName: 'Application Identifier',
+		required: true,
+		name: 'applicationIdentifier',
+		type: 'options',
+		default: '',
+		description: 'Identifier of the calling application. Several applications can share one OAuth client, so the token alone does not tell which one calls. It must be an application installed with the OAuth client and by the user of the token',
+		routing: {
+			send: {
+				property: 'applicationIdentifier',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.credits.transactions.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getApplicationInstallations'
+		}
+	},
+	{
+		displayName: 'Amount',
+		required: true,
+		name: 'amount',
+		type: 'number',
+		default: undefined,
+		description: 'Amount to withdraw in USD. Greater than 0, at most 999999.999999, up to 6 decimal places',
+		routing: {
+			send: {
+				property: 'amount',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.credits.transactions.post'
+				]
+			}
+		},
+		placeholder: '0.1'
+	},
+	{
+		displayName: 'User Id',
+		required: true,
+		name: 'userId',
+		type: 'options',
+		default: '',
+		description: 'Identifier of the user the paid action is performed for. The user must be a member of the organization',
+		routing: {
+			send: {
+				property: 'userId',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.credits.transactions.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getUsers'
+		}
+	},
+	{
+		displayName: 'Description',
+		required: true,
+		name: 'description',
+		type: 'string',
+		default: '',
+		description: 'What the credits are spent on. Shown to the organization in the billing transactions',
+		routing: {
+			send: {
+				property: 'description',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.credits.transactions.post'
+				]
+			}
+		},
+		placeholder: 'Automation run: Weekly German pre-translate'
+	},
+	{
+		displayName: 'Metadata',
+		name: 'metadata',
+		type: 'json',
+		default: '{}',
+		description: 'Any JSON object the application wants to keep with the transaction, up to 8192 bytes when serialized',
+		routing: {
+			send: {
+				property: 'metadata',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ JSON.parse($value) }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.credits.transactions.post'
+				]
+			}
+		},
+		placeholder: '{"automationId":"a1b2c3"}'
+	},
+	{
+		displayName: 'Application Identifier',
+		name: 'applicationIdentifier',
+		description: 'Identifier of the calling application. Required with an access token of an installed application, where it must name the calling application',
+		default: '',
+		type: 'options',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'applicationIdentifier',
+				value: '={{ $value || undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.credits.transactions.get'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getApplicationInstallations'
+		}
+	},
+	{
+		displayName: 'Transaction Id',
+		name: 'transactionId',
+		required: true,
+		description: 'ID of the transaction. Get via [List Application Credit Transactions](#operation/api.applications.credits.transactions.getMany)',
+		default: undefined,
+		type: 'number',
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.credits.transactions.get'
+				]
+			}
+		},
+		placeholder: '0'
+	},
+	{
+		displayName: 'Format',
+		name: 'format',
+		type: 'options',
+		default: '',
+		description: 'Format of the exported file. Default is `csv`',
+		options: [
+			{
+				name: '-',
+				value: ''
+			},
+			{
+				name: 'csv',
+				value: 'csv'
+			},
+			{
+				name: 'json',
+				value: 'json'
+			}
+		],
+		routing: {
+			send: {
+				property: 'format',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.credits.transactions.exports.post'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Application Identifier',
+		name: 'applicationIdentifier',
+		type: 'options',
+		default: '',
+		description: 'Only transactions of this application. Required with an access token of an installed application, where it must name the calling application',
+		routing: {
+			send: {
+				property: 'applicationIdentifier',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.credits.transactions.exports.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getApplicationInstallations'
+		}
+	},
+	{
+		displayName: 'User Id',
+		name: 'userId',
+		type: 'options',
+		default: '',
+		description: 'Only transactions charged for this user',
+		routing: {
+			send: {
+				property: 'userId',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ typeof $value === \'number\' ? $value : undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.credits.transactions.exports.post'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getUsers'
+		}
+	},
+	{
+		displayName: 'Created After',
+		name: 'dateTime:createdAfter',
+		type: 'dateTime',
+		default: '',
+		description: 'Only transactions created at or after this date, in ISO 8601 format',
+		routing: {
+			send: {
+				property: 'createdAfter',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.credits.transactions.exports.post'
+				]
+			}
+		},
+		placeholder: '2026-09-01T00:00:00+00:00'
+	},
+	{
+		displayName: 'Created Before',
+		name: 'dateTime:createdBefore',
+		type: 'dateTime',
+		default: '',
+		description: 'Only transactions created at or before this date, in ISO 8601 format',
+		routing: {
+			send: {
+				property: 'createdBefore',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value || undefined }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.credits.transactions.exports.post'
+				]
+			}
+		},
+		placeholder: '2026-09-30T23:59:59+00:00'
+	},
+	{
+		displayName: 'Application Identifier',
+		name: 'applicationIdentifier',
+		description: 'Identifier of the calling application. Required with an access token of an installed application, where it must name the calling application',
+		default: '',
+		type: 'options',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'applicationIdentifier',
+				value: '={{ $value || undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.credits.transactions.exports.get'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getApplicationInstallations'
+		}
+	},
+	{
+		displayName: 'Export Id',
+		name: 'exportId',
+		required: true,
+		description: 'ID of the export. Get via [Export Application Credit Transactions](#operation/api.applications.credits.transactions.exports.post)',
+		default: '',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.credits.transactions.exports.get'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Application Identifier',
+		name: 'applicationIdentifier',
+		description: 'Identifier of the calling application. Required with an access token of an installed application, where it must name the calling application',
+		default: '',
+		type: 'options',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'applicationIdentifier',
+				value: '={{ $value || undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.credits.transactions.exports.download.download'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getApplicationInstallations'
+		}
+	},
+	{
+		displayName: 'Export Id',
+		name: 'exportId',
+		required: true,
+		description: 'ID of the export. Get via [Export Application Credit Transactions](#operation/api.applications.credits.transactions.exports.post)',
+		default: '',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.credits.transactions.exports.download.download'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Limit',
+		name: 'limit',
+		description: 'Max number of results to return',
+		default: 50,
+		type: 'number',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'limit',
+				value: '={{ typeof $value === \'number\' ? $value : undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.credits.usage.members.getMany'
+				],
+				returnAll: [
+					false
+				]
+			}
+		},
+		typeOptions: {
+			minValue: 1
+		}
+	},
+	{
+		displayName: 'User Ids',
+		name: 'userIds',
+		description: 'Filter by user identifier, comma-separated',
+		default: [],
+		type: 'multiOptions',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'userIds',
+				value: '={{ $value.length ? $value.join(\',\') : undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.credits.usage.members.getMany'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getUsersMulti'
+		}
+	},
+	{
+		displayName: 'Order By',
+		name: 'orderBy',
+		description: 'Read more about [sorting rules](#section/Introduction/Sorting)',
+		default: '',
+		type: 'string',
+		routing: {
+			send: {
+				type: 'query',
+				property: 'orderBy',
+				value: '={{ $value || undefined }}',
+				propertyInDotNotation: false
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.credits.usage.members.getMany'
+				]
+			}
+		},
+		placeholder: 'dailyCostSpent desc'
+	},
+	{
+		displayName: 'Member Id',
+		name: 'memberId',
+		required: true,
+		description: 'Member Identifier',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.credits.usage.members.get'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjectMembers',
+			loadOptionsDependsOn: [
+				'projectId'
+			]
+		}
+	},
+	{
 		displayName: 'Update Fields',
 		name: 'updateFields',
 		type: 'collection',
@@ -2389,6 +3758,40 @@ export const applicationsProperties: INodeProperties[] = [
 				],
 				operation: [
 					'api.applications.installations.getMany'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Return All',
+		name: 'returnAll',
+		type: 'boolean',
+		default: true,
+		description: 'Whether to return all results or only up to a given limit',
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.credits.transactions.getMany'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'Return All',
+		name: 'returnAll',
+		type: 'boolean',
+		default: true,
+		description: 'Whether to return all results or only up to a given limit',
+		displayOptions: {
+			show: {
+				resource: [
+					'applications'
+				],
+				operation: [
+					'api.applications.credits.usage.members.getMany'
 				]
 			}
 		}
