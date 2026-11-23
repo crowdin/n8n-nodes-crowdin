@@ -99,6 +99,9 @@ const SKIP_OPERATIONS = [
 	'api.applications.storage.kv.records.get',
 	'api.applications.storage.kv.records.patch',
 	'api.applications.storage.kv.records.delete',
+	// Application credit transactions: require the application's own access token,
+	// personal access tokens are not supported.
+	'api.applications.credits.transactions.post',
 ];
 
 // ============================================================================

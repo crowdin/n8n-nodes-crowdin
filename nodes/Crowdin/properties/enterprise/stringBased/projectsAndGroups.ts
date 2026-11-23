@@ -18,6 +18,52 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 		},
 		options: [
 			{
+				name: 'Get Crowdsourcing Page',
+				value: 'api.projects.crowdsourcing-page.get',
+				action: 'Get Crowdsourcing Page',
+				description: '**Required scopes:** `project.settings` (Read only).\n\nReturns the public crowdsourcing page of the project: its URL, publication status, and the name, description, readme and logo shown on it.\n\n__Note:__ Available only for projects whose workflow has a Crowdsource step',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/projects/{{$parameter["projectId"]}}/crowdsourcing-page'
+					}
+				}
+			},
+			{
+				name: 'Upload Crowdsourcing Page Logo',
+				value: 'api.projects.crowdsourcing-page.logo.put',
+				action: 'Upload Crowdsourcing Page Logo',
+				description: '**Required scopes:** `project.settings` (Read and Write).\n\nReplaces the logo of the public crowdsourcing page with an image uploaded via [Add Storage](#operation/api.storages.post). Supported formats: JPEG, PNG, GIF, WebP. Maximum file size is 10 MB.\n\n__Note:__ Available only for projects whose workflow has a Crowdsource step',
+				routing: {
+					request: {
+						method: 'PUT',
+						url: '=/projects/{{$parameter["projectId"]}}/crowdsourcing-page/logo'
+					}
+				}
+			},
+			{
+				name: 'Delete Crowdsourcing Page Logo',
+				value: 'api.projects.crowdsourcing-page.logo.delete',
+				action: 'Delete Crowdsourcing Page Logo',
+				description: '**Required scopes:** `project.settings` (Read and Write).\n\nRemoves the logo of the public crowdsourcing page. The page then shows a generated image with the project initials.\n\n__Note:__ Available only for projects whose workflow has a Crowdsource step',
+				routing: {
+					request: {
+						method: 'DELETE',
+						url: '=/projects/{{$parameter["projectId"]}}/crowdsourcing-page/logo'
+					},
+					output: {
+						postReceive: [
+							{
+								type: 'set',
+								properties: {
+									value: '={{ { "success": true } }}'
+								}
+							}
+						]
+					}
+				}
+			},
+			{
 				name: 'List Groups',
 				value: 'api.groups.getMany',
 				action: 'List Groups',
@@ -102,6 +148,40 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 					send: {
 						preSend: [
 							transformToJsonPatch
+						]
+					}
+				}
+			},
+			{
+				name: 'Upload Project Logo',
+				value: 'api.projects.logo.put',
+				action: 'Upload Project Logo',
+				description: '**Required scopes:** `project.settings` (Read and Write).\n\nReplaces the project logo with an image uploaded via [Add Storage](#operation/api.storages.post). Supported formats: JPEG, PNG, GIF, WebP. Maximum file size is 10 MB.',
+				routing: {
+					request: {
+						method: 'PUT',
+						url: '=/projects/{{$parameter["projectId"]}}/logo'
+					}
+				}
+			},
+			{
+				name: 'Delete Project Logo',
+				value: 'api.projects.logo.delete',
+				action: 'Delete Project Logo',
+				description: '**Required scopes:** `project.settings` (Read and Write).\n\nRemoves the project logo. The project then shows a generated image with the project initials.',
+				routing: {
+					request: {
+						method: 'DELETE',
+						url: '=/projects/{{$parameter["projectId"]}}/logo'
+					},
+					output: {
+						postReceive: [
+							{
+								type: 'set',
+								properties: {
+									value: '={{ { "success": true } }}'
+								}
+							}
 						]
 					}
 				}
@@ -400,7 +480,64 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 				}
 			}
 		],
-		default: 'api.groups.getMany'
+		default: 'api.projects.crowdsourcing-page.get'
+	},
+	{
+		displayName: 'GET /projects/{projectId}/crowdsourcing-page',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'projectsAndGroups'
+				],
+				operation: [
+					'api.projects.crowdsourcing-page.get'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'PUT /projects/{projectId}/crowdsourcing-page/logo',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'projectsAndGroups'
+				],
+				operation: [
+					'api.projects.crowdsourcing-page.logo.put'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'DELETE /projects/{projectId}/crowdsourcing-page/logo',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'projectsAndGroups'
+				],
+				operation: [
+					'api.projects.crowdsourcing-page.logo.delete'
+				]
+			}
+		}
 	},
 	{
 		displayName: 'GET /groups',
@@ -493,6 +630,44 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 				],
 				operation: [
 					'api.groups.patch'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'PUT /projects/{projectId}/logo',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'projectsAndGroups'
+				],
+				operation: [
+					'api.projects.logo.put'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'DELETE /projects/{projectId}/logo',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'projectsAndGroups'
+				],
+				operation: [
+					'api.projects.logo.delete'
 				]
 			}
 		}
@@ -821,6 +996,98 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 		}
 	},
 	{
+		displayName: 'Project Id',
+		name: 'projectId',
+		required: true,
+		description: 'Project Identifier. Get via [List Projects](#operation/api.projects.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'projectsAndGroups'
+				],
+				operation: [
+					'api.projects.crowdsourcing-page.get'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjects'
+		}
+	},
+	{
+		displayName: 'Project Id',
+		name: 'projectId',
+		required: true,
+		description: 'Project Identifier. Get via [List Projects](#operation/api.projects.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'projectsAndGroups'
+				],
+				operation: [
+					'api.projects.crowdsourcing-page.logo.put'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjects'
+		}
+	},
+	{
+		displayName: 'Storage Id',
+		required: true,
+		name: 'storageId',
+		type: 'options',
+		default: '',
+		description: 'A unique identifier for the storage. Storage is where you add files, before they can be added to your organization. [More about Storage](#tag/Storage).',
+		routing: {
+			send: {
+				property: 'storageId',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'projectsAndGroups'
+				],
+				operation: [
+					'api.projects.crowdsourcing-page.logo.put'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getStorages'
+		}
+	},
+	{
+		displayName: 'Project Id',
+		name: 'projectId',
+		required: true,
+		description: 'Project Identifier. Get via [List Projects](#operation/api.projects.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'projectsAndGroups'
+				],
+				operation: [
+					'api.projects.crowdsourcing-page.logo.delete'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjects'
+		}
+	},
+	{
 		displayName: 'Order By',
 		name: 'orderBy',
 		description: 'Read more about [sorting rules](#section/Introduction/Sorting)',
@@ -1100,6 +1367,77 @@ export const projectsAndGroupsProperties: INodeProperties[] = [
 		},
 		typeOptions: {
 			loadOptionsMethod: 'getGroups'
+		}
+	},
+	{
+		displayName: 'Project Id',
+		name: 'projectId',
+		required: true,
+		description: 'Project Identifier. Get via [List Projects](#operation/api.projects.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'projectsAndGroups'
+				],
+				operation: [
+					'api.projects.logo.put'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjects'
+		}
+	},
+	{
+		displayName: 'Storage Id',
+		required: true,
+		name: 'storageId',
+		type: 'options',
+		default: '',
+		description: 'A unique identifier for the storage. Storage is where you add files, before they can be added to your organization. [More about Storage](#tag/Storage).',
+		routing: {
+			send: {
+				property: 'storageId',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'projectsAndGroups'
+				],
+				operation: [
+					'api.projects.logo.put'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getStorages'
+		}
+	},
+	{
+		displayName: 'Project Id',
+		name: 'projectId',
+		required: true,
+		description: 'Project Identifier. Get via [List Projects](#operation/api.projects.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'projectsAndGroups'
+				],
+				operation: [
+					'api.projects.logo.delete'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjects'
 		}
 	},
 	{

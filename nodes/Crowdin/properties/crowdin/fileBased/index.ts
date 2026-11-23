@@ -28,6 +28,7 @@ import { languagesProperties } from './languages';
 import { webhooksProperties } from './webhooks';
 import { organizationWebhooksProperties } from './organizationWebhooks';
 import { applicationsProperties } from './applications';
+import { oAuthClientsProperties } from './oAuthClients';
 import { integrationsProperties } from './integrations';
 import { advisorProperties } from './advisor';
 import { securityLogsProperties } from './securityLogs';
@@ -174,6 +175,11 @@ const resourceProperty: INodeProperties = {
 			description: '\nCrowdin Apps are web applications that can be integrated with Crowdin to extend its functionality.\n\nUse the API to manage the necessary app data.\n'
 		},
 		{
+			name: 'OAuth Clients',
+			value: 'oAuthClients',
+			description: '\nOAuth clients identify the applications and integrations that call the Crowdin API on behalf of users.\n\nUse the API to register OAuth clients, for example when deploying a Crowdin app, and to view them.\n'
+		},
+		{
 			name: 'Integrations',
 			value: 'integrations',
 			description: '\nIntegration applications provide synchronization between Crowdin and external content management systems.\n\nUse the API to manage integration files, jobs, settings, and authentication.\n'
@@ -221,6 +227,7 @@ export const properties: INodeProperties[] = [
 	...webhooksProperties,
 	...organizationWebhooksProperties,
 	...applicationsProperties,
+	...oAuthClientsProperties,
 	...integrationsProperties,
 	...advisorProperties,
 	...securityLogsProperties,

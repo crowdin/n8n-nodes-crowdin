@@ -18,6 +18,40 @@ export const projectsProperties: INodeProperties[] = [
 		},
 		options: [
 			{
+				name: 'Upload Project Logo',
+				value: 'api.projects.logo.put',
+				action: 'Upload Project Logo',
+				description: '**Required scopes:** `project.settings` (Read and Write).\n\nReplaces the project logo with an image uploaded via [Add Storage](#operation/api.storages.post). Supported formats: JPEG, PNG, GIF, WebP. Maximum file size is 10 MB.',
+				routing: {
+					request: {
+						method: 'PUT',
+						url: '=/projects/{{$parameter["projectId"]}}/logo'
+					}
+				}
+			},
+			{
+				name: 'Delete Project Logo',
+				value: 'api.projects.logo.delete',
+				action: 'Delete Project Logo',
+				description: '**Required scopes:** `project.settings` (Read and Write).\n\nRemoves the project logo. The `logo` field of the project then returns `null`.',
+				routing: {
+					request: {
+						method: 'DELETE',
+						url: '=/projects/{{$parameter["projectId"]}}/logo'
+					},
+					output: {
+						postReceive: [
+							{
+								type: 'set',
+								properties: {
+									value: '={{ { "success": true } }}'
+								}
+							}
+						]
+					}
+				}
+			},
+			{
 				name: 'List Projects',
 				value: 'api.projects.getMany',
 				action: 'List Projects',
@@ -311,7 +345,45 @@ export const projectsProperties: INodeProperties[] = [
 				}
 			}
 		],
-		default: 'api.projects.getMany'
+		default: 'api.projects.logo.put'
+	},
+	{
+		displayName: 'PUT /projects/{projectId}/logo',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'projects'
+				],
+				operation: [
+					'api.projects.logo.put'
+				]
+			}
+		}
+	},
+	{
+		displayName: 'DELETE /projects/{projectId}/logo',
+		name: 'operation',
+		type: 'notice',
+		typeOptions: {
+			theme: 'info'
+		},
+		default: '',
+		displayOptions: {
+			show: {
+				resource: [
+					'projects'
+				],
+				operation: [
+					'api.projects.logo.delete'
+				]
+			}
+		}
 	},
 	{
 		displayName: 'GET /projects',
@@ -634,6 +706,77 @@ export const projectsProperties: INodeProperties[] = [
 					'api.projects.strings-exporter-settings.patch'
 				]
 			}
+		}
+	},
+	{
+		displayName: 'Project Id',
+		name: 'projectId',
+		required: true,
+		description: 'Project Identifier. Get via [List Projects](#operation/api.projects.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'projects'
+				],
+				operation: [
+					'api.projects.logo.put'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjects'
+		}
+	},
+	{
+		displayName: 'Storage Id',
+		required: true,
+		name: 'storageId',
+		type: 'options',
+		default: '',
+		description: 'A unique identifier for the storage. Storage is where you add files, before they can be added to your organization. [More about Storage](#tag/Storage).',
+		routing: {
+			send: {
+				property: 'storageId',
+				propertyInDotNotation: false,
+				type: 'body',
+				value: '={{ $value }}'
+			}
+		},
+		displayOptions: {
+			show: {
+				resource: [
+					'projects'
+				],
+				operation: [
+					'api.projects.logo.put'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getStorages'
+		}
+	},
+	{
+		displayName: 'Project Id',
+		name: 'projectId',
+		required: true,
+		description: 'Project Identifier. Get via [List Projects](#operation/api.projects.getMany)',
+		default: '',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: [
+					'projects'
+				],
+				operation: [
+					'api.projects.logo.delete'
+				]
+			}
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getProjects'
 		}
 	},
 	{
